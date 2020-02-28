@@ -6,13 +6,9 @@ include(CheckCCompilerFlag)
 include(SGSPlatform)
 
 macro(check_and_use_cxx_option opt var)
-    set(CMAKE_REQUIRED_QUIET ON)
-    if($ENV{VERBOSE})
-      set(CMAKE_REQUIRED_QUIET OFF)
-    endif()
     check_cxx_compiler_flag(${opt} ${var})
     if(${var})
-      debug_message(STATUS "   C++ uses \"${opt}\"")
+      message(STATUS "   C++ uses \"${opt}\"")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${opt}"
           CACHE STRING "Flags used by the compiler during all build types."
           FORCE)
@@ -23,7 +19,7 @@ endmacro()
 macro(check_and_use_c_option opt var)
     check_c_compiler_flag(${opt} ${var})
     if(${var})
-      debug_message(STATUS "   C uses \"${opt}\"")
+      message(STATUS "   C uses \"${opt}\"")
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${opt}"
           CACHE STRING "Flags used by the compiler during all build types."
           FORCE)
@@ -99,7 +95,6 @@ if((SGS_COMP STREQUAL "clang") OR (SGS_COMP STREQUAL "llvm"))
   SET (CMAKE_RANLIB        "${LLVM_RANLIB}")
 endif()
 
-
 if(NOT BUILD_PREFIX_NAME)
   set(BUILD_PREFIX_NAME "build" CACHE STRING "Prefix name for the build directory" FORCE)
 endif()
@@ -132,7 +127,7 @@ set(CYTHON_FLAGS "" CACHE STRING
 # Special defaults
 if ( (SGS_COMP STREQUAL gcc AND ( (NOT SGS_COMPVERS VERSION_LESS "47") OR (SGS_COMPVERS MATCHES "max") ))
     OR (SGS_COMP STREQUAL clang AND (NOT SGS_COMPVERS VERSION_LESS "30") )
-    OR (SGS_COMP STREQUAL llvm))
+    OR (SGS_COMP STREQUAL llvm) OR (SGS_COMP STREQUAL x86_64-conda_cos6-linux-gnu-gcc))
 
   # C++11 is enable by default on gcc47 and gcc48
   set(ELEMENTS_CPP11_DEFAULT ON)
@@ -230,10 +225,6 @@ option(FLOAT_EQUAL_WARNING
        "Enable the -Wfloat-equal warning"
        OFF)
 
-option(CONVERSION_WARNING
-       "Enable the -Wconversion warning"
-       OFF)
-
 option(SQUEEZED_INSTALL
        "Enable the squeezing of the installation into a prefix directory"
        ON)
@@ -241,7 +232,7 @@ option(SQUEEZED_INSTALL
 option(SANITIZE_OPTIONS
        "Activate the Sanitizing options"
        OFF)
-       
+
 if(NOT SANITIZE_STYLE)
   set(SANITIZE_STYLE "undefined" CACHE STRING "Style used for the -fsanitize= option" FORCE)
 endif()
@@ -262,10 +253,6 @@ option(TEST_HTML_REPORT
        "Enable the conversion of the CTest XML reports into HTML"
        ON)
 
-option(TEST_JUNIT_REPORT
-       "Enable the conversion of the CTest XML reports into JUnit XML reports"
-       ON)
-
 option(WITH_DATASYNC_TEST
        "Enable the test which require a specific DataSync connection"
        OFF)
@@ -282,19 +269,9 @@ if(NOT ELEMENTS_DEFAULT_LOGLEVEL)
   if(USE_LOCAL_INSTALLAREA)
     set(ELEMENTS_DEFAULT_LOGLEVEL "INFO" CACHE STRING "Set the default loglevel for the framework messages" FORCE)
   else()
-    set(ELEMENTS_DEFAULT_LOGLEVEL "DEBUG" CACHE STRING "Set the default loglevel for the framework messages" FORCE)  
+    set(ELEMENTS_DEFAULT_LOGLEVEL "DEBUG" CACHE STRING "Set the default loglevel for the framework messages" FORCE)
   endif()
 endif()
-
-
-option(INSTALL_TESTS
-       "Enable the installation of the binary tests"
-       OFF)
-
-option(USE_VERSIONED_LIBRARIES "Generate versioned shared libraries" ON)
-
-option(USE_TIMESTAMP_RPM_VERSION "Use timestamp for the RPM version in non-squeezed mode" OFF)
-
 
 #--- Compilation Flags ---------------------------------------------------------
 if(NOT ELEMENTS_FLAGS_SET)
@@ -316,53 +293,20 @@ if(NOT ELEMENTS_FLAGS_SET)
   endif()
 
   set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -fmessage-length=0 -pipe -pthread -pedantic -fPIC"
+      "${CMAKE_CXX_FLAGS} -fmessage-length=0 -pipe -Wall -Wextra -Werror=return-type -pthread -pedantic -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-long-long -Wno-unknown-pragmas -fPIC"
       CACHE STRING "Flags used by the compiler during all build types."
       FORCE)
-
-  check_and_use_cxx_option(-Wall CXX_HAS_ALL)
-  check_and_use_cxx_option(-Wextra CXX_HAS_EXTRA)
-  check_and_use_cxx_option(-Wwrite-strings CXX_HAS_WRITE_STRINGS)
-  check_and_use_cxx_option(-Wpointer-arith CXX_HAS_POINTER_ARITH)
-  check_and_use_cxx_option(-Wno-long-long CXX_HAS_NO_LONG_LONG)
-  check_and_use_cxx_option(-Wno-unknown-pragmas CXX_HAS_NO_UNKNOWN_PRAGMAS)
-  check_and_use_cxx_option(-Wformat-security CXX_HAS_FORMAT_SECURITY)
-  check_and_use_cxx_option(-Wduplicated-cond CXX_HAS_DUPLICATED_COND)
-  check_and_use_cxx_option(-Wshadow CXX_HAS_SHADOW)
-  check_and_use_cxx_option(-Wlogical-not-parentheses CXX_HAS_LOGICAL_NOT_PARENTHESES)
-  check_and_use_cxx_option(-Wnull-dereference CXX_HAS_NULL_DEREFERENCE)
-
-  check_and_use_cxx_option(-Woverloaded-virtual CXX_HAS_OVERLOADED_VIRTUAL)
-
-  check_and_use_cxx_option(-Werror=return-type CXX_HAS_ERROR_RETURN_TYPE)
 
   if(USE_ENV_FLAGS)
     set(CMAKE_C_FLAGS $ENV{CFLAGS})
   else()
     set(CMAKE_C_FLAGS)
   endif()
-      
+
   set(CMAKE_C_FLAGS
-      "${CMAKE_C_FLAGS} -fmessage-length=0 -pipe -pthread -pedantic -fPIC"
+      "${CMAKE_C_FLAGS} -fmessage-length=0 -pipe -Wall -Wextra -Werror=return-type -pthread -pedantic -Wwrite-strings -Wpointer-arith -Wno-long-long -Wno-unknown-pragmas -Wno-unused-parameter -fPIC"
       CACHE STRING "Flags used by the compiler during all build types."
       FORCE)
-
-  check_and_use_c_option(-Wall C_HAS_ALL)
-  check_and_use_c_option(-Wextra C_HAS_EXTRA)
-  check_and_use_c_option(-Wwrite-strings C_HAS_WRITE_STRINGS)
-  check_and_use_c_option(-Wpointer-arith C_HAS_POINTER_ARITH)
-  check_and_use_c_option(-Wno-long-long C_HAS_NO_LONG_LONG)
-  check_and_use_c_option(-Wno-unknown-pragmas C_HAS_NO_UNKNOWN_PRAGMAS)
-  check_and_use_c_option(-Wformat-security C_HAS_FORMAT_SECURITY)
-  check_and_use_c_option(-Wduplicated-cond C_HAS_DUPLICATED_COND)
-  check_and_use_c_option(-Wshadow C_HAS_SHADOW)
-  check_and_use_c_option(-Wlogical-not-parentheses C_HAS_LOGICAL_NOT_PARENTHESES)
-  check_and_use_c_option(-Wnull-dereference C_HAS_NULL_DEREFERENCE)
-
-  check_and_use_c_option(-Wjump-misses-init C_HAS_JUMP_MISSES_INIT)
-  check_and_use_c_option(-Wno-unused-parameter C_HAS_NO_UNUSED_PARAMETER)
-
-  check_and_use_c_option(-Werror=return-type C_HAS_ERROR_RETURN_TYPE)
 
   if((NOT SGS_COMP STREQUAL clang) OR (SGS_COMPVERS VERSION_GREATER "40") )
     check_and_use_cxx_option(-ansi CXX_HAS_ANSI)
@@ -378,11 +322,6 @@ if(NOT ELEMENTS_FLAGS_SET)
     check_and_use_cxx_option(-Wfloat-equal CXX_HAS_FLOAT_EQUAL)
     check_and_use_c_option(-Wfloat-equal C_HAS_FLOAT_EQUAL)
   endif()
-  
-  if(CONVERSION_WARNING)
-    check_and_use_cxx_option(-Wconversion CXX_HAS_CONVERSION)
-    check_and_use_c_option(-Wconversion C_HAS_CONVERSION)
-  endif()
 
   if(CXX_SUGGEST_OVERRIDE AND (SGS_COMP STREQUAL gcc))
     check_and_use_cxx_option(-Wsuggest-override CXX_HAS_SUGGEST_OVERRIDE)
@@ -392,7 +331,9 @@ if(NOT ELEMENTS_FLAGS_SET)
     check_and_use_cxx_option(-Wcast-function-type CXX_HAS_CAST_FUNCTION_TYPE)
   endif()
 
-  check_cxx_compiler_flag(-Wmissing-field-initializers CXX_HAS_MISSING_FIELD_INITIALIZERS)
+  if(SGS_COMP STREQUAL gcc)
+    check_cxx_compiler_flag(-Wmissing-field-initializers CXX_HAS_MISSING_FIELD_INITIALIZERS)
+  endif()
 
   if(SGS_COMP STREQUAL clang)
     check_cxx_compiler_flag(-Wunused-function CXX_HAS_UNUSED_FUNCTION)
@@ -516,10 +457,10 @@ if(NOT ELEMENTS_FLAGS_SET)
   endif()
 
   if (CMAKE_SYSTEM_NAME MATCHES Linux)
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -Wl,--no-undefined"
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -Wl,--no-undefined  -Wl,-z,max-page-size=0x1000"
         CACHE STRING "Flags used by the linker during the creation of dll's."
         FORCE)
-    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -Wl,--no-undefined"
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -Wl,--no-undefined  -Wl,-z,max-page-size=0x1000"
         CACHE STRING "Flags used by the linker during the creation of modules."
         FORCE)
     if(CMAKE_BUILD_TYPE STREQUAL "Profile" AND SGS_COMPVERS VERSION_LESS "50")
@@ -529,7 +470,7 @@ if(NOT ELEMENTS_FLAGS_SET)
     else()
       set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -pie"
           CACHE STRING "Flags used by the linker during the creation of exe's."
-          FORCE)    
+          FORCE)
     endif()
   endif()
 
@@ -637,6 +578,11 @@ if ( APPLE AND ( (SGS_COMP STREQUAL "clang") OR (SGS_COMP STREQUAL "llvm")))
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isystem ${macport_inc}")
     endif()
   endif()
+endif()
+
+if(SGS_COMP STREQUAL x86_64-conda_cos6-linux-gnu-gcc)
+  check_and_use_cxx_option("-isystem $ENV{CONDA_PREFIX}" CXX_ISYSTEM_CONDA)
+  check_and_use_c_option("-isystem $ENV{CONDA_PREFIX}" C_ISYSTEM_CONDA)
 endif()
 
 if ( ELEMENTS_PARALLEL AND (SGS_COMP STREQUAL gcc AND ( (SGS_COMPVERS VERSION_GREATER "41") OR (SGS_COMPVERS MATCHES "max") )) )

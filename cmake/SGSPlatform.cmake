@@ -27,7 +27,7 @@ function(getShortBuildType short_type long_type)
   # Convert CMAKE_BUILD_TYPE to SGS_BUILD_TYPE
 
   string(TOLOWER "${long_type}" lower_long_type)
-  
+
   if(${lower_long_type} STREQUAL "release")
     set(${short_type} opt PARENT_SCOPE)
   elseif(${lower_long_type} STREQUAL "debug")
@@ -44,11 +44,11 @@ function(getShortBuildType short_type long_type)
     message(FATAL_ERROR "Build type ${lower_long_type} not supported.")
   endif()
 
-  
+
 endfunction()
 
 function(getLongBuildType long_type short_type)
-  
+
   # Convert SGS_BUILD_TYPE to CMAKE_BUILD_TYPE
 
   if(${short_type} STREQUAL "opt")
@@ -107,6 +107,12 @@ function(sgs_find_host_os)
                       COMMAND cut -d . -f 1-2
                       OUTPUT_VARIABLE osvers OUTPUT_STRIP_TRAILING_WHITESPACE)
       string(REPLACE "." "" osvers ${osvers})
+    elseif(DEFINED ENV{HOST})
+       # Conda
+       string(REGEX MATCHALL "[^-]+" out $ENV{HOST})
+       list(GET out 1 fullos)
+       string(REGEX MATCH "[0-9]+" osvers ${fullos})
+       string(REGEX MATCH "[^0-9]+" os ${fullos})
     else()
       set(issue_file_list /etc/redhat-release /etc/system-release /etc/SuSE-release /etc/issue /etc/issue.net)
       foreach(issue_file ${issue_file_list})
@@ -154,18 +160,30 @@ endfunction()
 function(sgs_find_host_compiler)
   if(NOT SGS_HOST_COMP OR NOT SGS_HOST_COMPVERS)
     if(APPLE)
-      find_program(SGS_HOST_C_COMPILER   NAMES clang gcc cc clang icc bcc xlc
+      find_program(SGS_HOST_C_COMPILER   NAMES x86_64-conda_cos6-linux-gnu-gcc clang gcc cc clang icc bcc xlc
                    DOC "Host C compiler")
-      find_program(SGS_HOST_CXX_COMPILER NAMES clang++ c++ g++ clang++ icpc CC aCC bcc xlC
+      find_program(SGS_HOST_CXX_COMPILER NAMES x86_64-conda_cos6-linux-gnu-g++ clang++ c++ g++ clang++ icpc CC aCC bcc xlC
                    DOC "Host C++ compiler")
     else()
-      find_program(SGS_HOST_C_COMPILER   NAMES gcc cc clang icc bcc xlc
+      find_program(SGS_HOST_C_COMPILER   NAMES x86_64-conda_cos6-linux-gnu-gcc gcc cc clang icc bcc xlc
                    DOC "Host C compiler")
-      find_program(SGS_HOST_CXX_COMPILER NAMES c++ g++ clang++ icpc CC aCC bcc xlC
+      find_program(SGS_HOST_CXX_COMPILER NAMES x86_64-conda_cos6-linux-gnu-g++ c++ g++ clang++ icpc CC aCC bcc xlC
                    DOC "Host C++ compiler")
     endif()
     mark_as_advanced(SGS_HOST_C_COMPILER SGS_HOST_CXX_COMPILER)
-    if(SGS_HOST_C_COMPILER MATCHES /gcc)
+    if(SGS_HOST_C_COMPILER MATCHES /x86_64-conda_cos6-linux-gnu-gcc)
+      set(compiler x86_64-conda_cos6-linux-gnu-gcc)
+      execute_process(COMMAND ${SGS_HOST_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+      string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})
+      list(LENGTH GCC_VERSION_COMPONENTS GCC_VERSION_COMPONENTS_NB)
+        if(GCC_VERSION_COMPONENTS_NB LESS "2")
+          execute_process(COMMAND ${SGS_HOST_C_COMPILER} --version OUTPUT_VARIABLE GCC_VERSION)
+          string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})
+        endif()
+        list(GET GCC_VERSION_COMPONENTS 0 GCC_MAJOR)
+        list(GET GCC_VERSION_COMPONENTS 1 GCC_MINOR)
+        set(cvers ${GCC_MAJOR}${GCC_MINOR})
+    elseif(SGS_HOST_C_COMPILER MATCHES /gcc)
       if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(compiler clang)
       else()
@@ -175,7 +193,7 @@ function(sgs_find_host_compiler)
         list(LENGTH GCC_VERSION_COMPONENTS GCC_VERSION_COMPONENTS_NB)
         if(GCC_VERSION_COMPONENTS_NB LESS "2")
           execute_process(COMMAND ${SGS_HOST_C_COMPILER} --version OUTPUT_VARIABLE GCC_VERSION)
-          string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})  
+          string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})
         endif()
         list(GET GCC_VERSION_COMPONENTS 0 GCC_MAJOR)
         list(GET GCC_VERSION_COMPONENTS 1 GCC_MINOR)
@@ -234,8 +252,14 @@ function(sgs_detect_host_platform)
   sgs_find_host_arch()
   sgs_find_host_os()
   sgs_find_host_compiler()
-  set(SGS_HOST_SYSTEM ${SGS_HOST_ARCH}-${SGS_HOST_OS}${SGS_HOST_OSVERS}-${SGS_HOST_COMP}${SGS_HOST_COMPVERS}
-      CACHE STRING "Platform id of the system.")
+
+  if (SGS_HOST_OS STREQUAL "conda_cos")
+    set(SGS_HOST_SYSTEM ${SGS_HOST_COMP}${SGS_HOST_COMPVERS}
+        CACHE STRING "Platform id of the system.")
+  else()
+    set(SGS_HOST_SYSTEM ${SGS_HOST_ARCH}-${SGS_HOST_OS}${SGS_HOST_OSVERS}-${SGS_HOST_COMP}${SGS_HOST_COMPVERS}
+        CACHE STRING "Platform id of the system.")
+  endif()
   mark_as_advanced(SGS_HOST_SYSTEM)
 endfunction()
 
@@ -270,8 +294,13 @@ function(sgs_get_target_platform)
   string(REGEX MATCHALL "[^-]+" out ${BINARY_TAG})
   list(GET out 0 arch)
   list(GET out 1 os)
-  list(GET out 2 comp)
-  list(GET out 3 type)
+  list(GET out -1 type)
+  # Allow '-' in compiler name
+  list(REMOVE_AT out -1)
+  list(REMOVE_AT out 0)
+  list(REMOVE_AT out 0)
+  list(JOIN out - comp)
+
 
   set(SGS_BUILD_TYPE ${type} CACHE STRING "Type of build (SGS id).")
 
@@ -284,23 +313,12 @@ function(sgs_get_target_platform)
   # but transient
   set(SGS_ARCH  ${arch})
 
-  if (os MATCHES "([^0-9.]+)([0-9.]+)")    
-    set(SGS_OS     "${CMAKE_MATCH_1}")
-    set(SGS_OSVERS "${CMAKE_MATCH_2}")
+  if (os MATCHES "([^0-9.]+)([0-9.]+)")
+    set(SGS_OS     ${CMAKE_MATCH_1})
+    set(SGS_OSVERS ${CMAKE_MATCH_2})
   else()
     set(SGS_OS     ${os})
     set(SGS_OSVERS "")
-  endif()
-
-  set(SGS_SUBOS)
-  if(SGS_OS MATCHES "^conda_(.*)")
-    set(SGS_SUBOS ${CMAKE_MATCH_1})
-  endif()
-
-  if(SGS_SUBOS)
-    set(SGS_COREOS ${SGS_SUBOS})
-  else()
-    set(SGS_COREOS ${SGS_OS})  
   endif()
 
   if (comp MATCHES "([^0-9.]+)([0-9.]+|max)")
@@ -311,8 +329,11 @@ function(sgs_get_target_platform)
     set(SGS_COMPVERS "")
   endif()
 
+  if( SGS_OS STREQUAL "conda_cos")
+    set(SGS_COMP ${SGS_ARCH}-${SGS_OS}${SGS_OSVERS}-${SGS_COMP})
+  endif()
   getLongBuildType(type SGS_BUILD_TYPE)
-  
+
   set(CMAKE_BUILD_TYPE ${type} CACHE STRING
       "Choose the type of build, options are: empty, Debug, Release, Coverage, Profile, RelWithDebInfo, MinSizeRel." FORCE)
 
@@ -322,17 +343,15 @@ function(sgs_get_target_platform)
   set(CMAKE_SYSTEM_PROCESSOR ${SGS_ARCH} PARENT_SCOPE)
 
   # system name
-  if(SGS_COREOS STREQUAL "winxp")
+  if(SGS_OS STREQUAL "winxp")
     set(CMAKE_SYSTEM_NAME Windows PARENT_SCOPE)
-  elseif(SGS_COREOS STREQUAL "mac" OR SGS_COREOS STREQUAL "osx")
+  elseif(SGS_OS STREQUAL "mac" OR SGS_OS STREQUAL "osx")
     set(CMAKE_SYSTEM_NAME Darwin PARENT_SCOPE)
-  elseif(SGS_COREOS STREQUAL "slc" OR SGS_COREOS STREQUAL "sl" OR SGS_COREOS STREQUAL "ub" 
-         OR SGS_COREOS STREQUAL "fc" OR SGS_COREOS STREQUAL "co" OR SGS_COREOS STREQUAL "cos" 
-         OR SGS_COREOS STREQUAL "linux")
+  elseif(SGS_OS STREQUAL "slc" OR SGS_OS STREQUAL "sl" OR SGS_OS STREQUAL "ub" OR SGS_OS STREQUAL "fc" OR SGS_OS STREQUAL "co" OR SGS_OS STREQUAL "linux" OR SGS_OS STREQUAL "conda_cos")
     set(CMAKE_SYSTEM_NAME Linux PARENT_SCOPE)
   else()
     set(CMAKE_SYSTEM_NAME ${CMAKE_HOST_SYSTEM_NAME})
-    message(WARNING "OS ${SGS_COREOS} is not a known platform, assuming it's a ${CMAKE_SYSTEM_NAME}.")
+    message(WARNING "OS ${SGS_OS} is not a known platform, assuming it's a ${CMAKE_SYSTEM_NAME}.")
   endif()
 
   # set default platform ids
