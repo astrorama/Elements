@@ -17,7 +17,7 @@
 ################################################################################
 
 include_guard()
-
+include(ElementsUtils)
 ################################################################################
 # Helper function for the platform build type
 ################################################################################
@@ -299,8 +299,7 @@ function(sgs_get_target_platform)
   list(REMOVE_AT out -1)
   list(REMOVE_AT out 0)
   list(REMOVE_AT out 0)
-  list(JOIN out - comp)
-
+  JOIN("${out}" - comp) # We avoid list(JOIN ...) to keep compat with 2.8
 
   set(SGS_BUILD_TYPE ${type} CACHE STRING "Type of build (SGS id).")
 
