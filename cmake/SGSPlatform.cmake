@@ -56,24 +56,24 @@ function(getCompVersionNumbers compiler_name comp_major_var comp_minor_var)
   if (DEFINED ENV{CC})
     set(compiler_exe $ENV{CC})
   else()
-    find_program(compiler_exe NAMES ${compiler_name} 
+    find_program(compiler_exe NAMES ${compiler_name}
                DOC "Host C compiler")
   endif()
-               
+
   if("${compiler_name}" STREQUAL "gcc")
-    
+
     execute_process(COMMAND ${compiler_exe} -dumpversion OUTPUT_VARIABLE compiler_version)
     string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})
     list(LENGTH compiler_version_components compiler_version_components_nb)
     if(compiler_version_components_nb LESS "2")
       execute_process(COMMAND ${compiler_exe} --version OUTPUT_VARIABLE compiler_version)
-      string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})  
+      string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})
     endif()
     list(GET compiler_version_components 0 compiler_major)
     list(GET compiler_version_components 1 compiler_minor)
-    
+
   elseif("${compiler_name}" STREQUAL "icc")
-    
+
     execute_process(COMMAND ${compiler_exe} -dumpversion OUTPUT_VARIABLE compiler_version)
     string(REGEX MATCHALL "[0-9]+" compiler_version_components ${compiler_version})
     list(GET compiler_version_components 0 compiler_major)
@@ -97,13 +97,13 @@ function(getCompVersionNumbers compiler_name comp_major_var comp_minor_var)
       list(GET compiler_version_components 0 compiler_major)
       list(GET compiler_version_components 1 compiler_minor)
     endif()
-    
+
   else()
-  
+
     message(WARNING "Unknown host C compiler ${compiler_name}")
     set(compiler_major)
     set(compiler_minor)
-  
+
   endif()
 
   set(${comp_major_var} ${compiler_major} PARENT_SCOPE)
@@ -114,7 +114,7 @@ endfunction()
 
 
 function(getLongBuildType long_type short_type)
-  
+
   # Convert SGS_BUILD_TYPE to CMAKE_BUILD_TYPE
 
   if("${short_type}" STREQUAL "opt")
@@ -245,7 +245,7 @@ function(sgs_find_host_compiler)
         endif()
         list(GET GCC_VERSION_COMPONENTS 0 GCC_MAJOR)
         list(GET GCC_VERSION_COMPONENTS 1 GCC_MINOR)
-        set(cvers ${GCC_MAJOR}${GCC_MINOR})
+        set(cvers ${GCC_MAJOR})
       endif()
     elseif(SGS_HOST_C_COMPILER MATCHES /icc)
       set(compiler icc)
@@ -279,7 +279,7 @@ function(sgs_find_host_compiler)
         list(GET CLANG_VERSION_COMPONENTS 0 CLANG_MAJOR)
         list(GET CLANG_VERSION_COMPONENTS 1 CLANG_MINOR)
       endif()
-      set(cvers ${CLANG_MAJOR}${CLANG_MINOR})
+      set(cvers ${CLANG_MAJOR})
     endif()
 
 
