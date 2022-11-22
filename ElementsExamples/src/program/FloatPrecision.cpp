@@ -57,6 +57,13 @@ void printTitle<double>() {
   cout << "--------------------------------------------------------------------------------" << endl;
 }
 
+template <>
+void printTitle<long double>() {
+  cout << "================================================================================" << endl;
+  cout << "Long Double:" << endl;
+  cout << "--------------------------------------------------------------------------------" << endl;
+}
+
 template <typename T>
 constexpr T Zero() {
   return 0.0f;
@@ -65,6 +72,11 @@ constexpr T Zero() {
 template <>
 constexpr double Zero<double>() {
   return 0.0;
+}
+
+template <>
+constexpr long double Zero<long double>() {
+  return 0.0l;
 }
 
 template <typename T>
@@ -77,6 +89,11 @@ constexpr double One<double>() {
   return 1.0;
 }
 
+template <>
+constexpr long double One<long double>() {
+  return 1.0l;
+}
+
 template <typename T>
 constexpr T Two() {
   return 2.0f;
@@ -85,6 +102,11 @@ constexpr T Two() {
 template <>
 constexpr double Two<double>() {
   return 2.0;
+}
+
+template <>
+constexpr long double Two<long double>() {
+  return 2.0l;
 }
 
 template <typename T>
@@ -97,6 +119,11 @@ constexpr double Seven<double>() {
   return 7.0;
 }
 
+template <>
+constexpr long double Seven<long double>() {
+  return 7.0l;
+}
+
 template <typename T>
 constexpr T Ten() {
   return 10.0f;
@@ -105,6 +132,11 @@ constexpr T Ten() {
 template <>
 constexpr double Ten<double>() {
   return 10.0;
+}
+
+template <>
+constexpr long double Ten<long double>() {
+  return 10.0l;
 }
 
 template <typename T>
@@ -169,6 +201,8 @@ public:
     printFloatPrecision<float>();
 
     printFloatPrecision<double>();
+
+    printFloatPrecision<long double>();
 
     return ExitCode::OK;
   }
