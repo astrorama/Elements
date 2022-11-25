@@ -243,8 +243,8 @@ endif()
 find_package(Eigen3 QUIET)
 if(EIGEN3_FOUND)
 elements_add_executable(EigenExample src/program/Eigen.cpp
-                        LINK_LIBRARIES Eigen3 ElementsExamples
-                        INCLUDE_DIRS Eigen3 ElementsExamples)
+                        LINK_LIBRARIES Eigen3::eigen3 ElementsExamples
+                        INCLUDE_DIRS Eigen3::eigen3 ElementsExamples)
 elements_add_test(EigenWorks COMMAND EigenExample LABELS Eigen Build)
 endif()
 
