@@ -9,6 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [6.1.2] - 2022-11-29
+
+### Added
+- Add the rpm build github workflows actions
+    - copied from Alexandria (thx to Alejandro Álvarez Ayllón)
+- Add the which package as a rpm dependency
+
+### Changed
+- Reimplement FinxXsd.cmake to be less verbose
+    - use a cached variable for the verbosity
+    - defines a target
+- Implementation of the memorycheck run of the tests
+    - It has to be enabled with the `-DUSE_MEMORYCHECK=ON` CMake
+      switch
+
+### Fixed
+- Comment ou the rpm build on CentOS 7 temporarily
+    - the build on CentOS failed because of a missing CMake 3 version
+
+
 ## [6.1.1] - 2022-10-19
 
 ### Changed
