@@ -43,29 +43,41 @@ namespace Path {
 
 const string PATH_SEP{":"};
 
-const map<Type, const string> VARIABLE{{Type::executable, "PATH"},
-                                       {Type::library, System::SHLIB_VAR_NAME},
-                                       {Type::python, "PYTHONPATH"},
-                                       {Type::configuration, "ELEMENTS_CONF_PATH"},
-                                       {Type::auxiliary, "ELEMENTS_AUX_PATH"}};
+// clang-format off
 
-const map<Type, const vector<string>> SUFFIXES{{Type::executable, {"scripts", "bin"}},
-                                               {Type::library, {"lib"}},
-                                               {Type::python, {"python"}},
-                                               {Type::configuration, {"conf", "share/conf"}},
-                                               {Type::auxiliary, {"auxdir", "aux", "share/auxdir", "share/aux"}}};
+const map<Type, const string> VARIABLE{
+  {Type::executable,    "PATH"},
+  {Type::library,       System::SHLIB_VAR_NAME},
+  {Type::python,        "PYTHONPATH"},
+  {Type::configuration, "ELEMENTS_CONF_PATH"},
+  {Type::auxiliary,     "ELEMENTS_AUX_PATH"}
+};
 
-const map<Type, const vector<string>> DEFAULT_LOCATIONS{{Type::executable, {}},
-                                                        {Type::library, {"/usr/lib64", "/usr/lib"}},
-                                                        {Type::python, {}},
-                                                        {Type::configuration, {"/usr/share/conf"}},
-                                                        {Type::auxiliary, {"/usr/share/auxdir", "/usr/share/aux"}}};
+const map<Type, const vector<string>> SUFFIXES{
+  {Type::executable,    {"scripts", "bin"}},
+  {Type::library,       {"lib"}},
+  {Type::python,        {"python"}},
+  {Type::configuration, {"conf", "share/conf"}},
+  {Type::auxiliary,     {"auxdir", "aux", "share/auxdir", "share/aux"}}
+};
 
-const std::map<Type, const bool> HAS_SUBLEVELS{{Type::executable, false},
-                                               {Type::library, false},
-                                               {Type::python, true},
-                                               {Type::configuration, true},
-                                               {Type::auxiliary, true}};
+const map<Type, const vector<string>> DEFAULT_LOCATIONS{
+  {Type::executable,    {}},
+  {Type::library,       {"/usr/lib64", "/usr/lib"}},
+  {Type::python,        {}},
+  {Type::configuration, {"/usr/share/conf"}},
+  {Type::auxiliary,     {"/usr/share/auxdir", "/usr/share/aux"}}
+};
+
+const std::map<Type, const bool> HAS_SUBLEVELS{
+  {Type::executable,    false},
+  {Type::library,       false},
+  {Type::python,        true},
+  {Type::configuration, true},
+  {Type::auxiliary,     true}
+};
+
+// clang-format on
 
 vector<Item> getLocationsFromEnv(const string& path_variable, bool exist_only) {
 
