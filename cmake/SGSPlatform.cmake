@@ -391,7 +391,8 @@ function(sgs_get_target_platform)
   elseif("${SGS_COREOS}" STREQUAL "mac" OR "${SGS_COREOS}" STREQUAL "osx")
     set(CMAKE_SYSTEM_NAME Darwin PARENT_SCOPE)
   elseif("${SGS_COREOS}" STREQUAL "slc" OR "${SGS_COREOS}" STREQUAL "sl" OR "${SGS_COREOS}" STREQUAL "ub" 
-         OR "${SGS_COREOS}" STREQUAL "fc" OR "${SGS_COREOS}" STREQUAL "co" OR "${SGS_COREOS}" STREQUAL "cos" 
+         OR "${SGS_COREOS}" STREQUAL "fc" OR "${SGS_COREOS}" STREQUAL "co" OR "${SGS_COREOS}" STREQUAL "ry" 
+         OR "${SGS_COREOS}" STREQUAL "cos" 
          OR "${SGS_COREOS}" STREQUAL "linux")
     set(CMAKE_SYSTEM_NAME Linux PARENT_SCOPE)
   else()
