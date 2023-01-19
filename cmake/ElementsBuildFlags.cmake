@@ -250,6 +250,9 @@ set(DEBUG_FORMAT "" CACHE STRING "Set the -g debug format")
 
 set(DEBUG_LEVEL "" CACHE STRING "Set the -g debug level")
 
+set(EXTRA_DEBUG_ARGS "-fno-omit-frame-pointer" CACHE STRING "Add extra debug compile arguments")
+
+
 option(ELEMENTS_LINKOPT
        "Enable Link Time Optimisation"
        OFF)
@@ -558,10 +561,10 @@ if(NOT ELEMENTS_FLAGS_SET)
   endif()
 
 
-  set(CMAKE_CXX_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL}"
+  set(CMAKE_CXX_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS}"
       CACHE STRING "Flags used by the compiler during Debug builds."
       FORCE)
-  set(CMAKE_C_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL}"
+  set(CMAKE_C_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS}"
       CACHE STRING "Flags used by the compiler during Debug builds."
       FORCE)
   if(OPT_DEBUG)
