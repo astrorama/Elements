@@ -1,5 +1,5 @@
 ################################################################################
-# Astro CMake toolchain
+# SGS Platform
 #-------------------------------------------------------------------------------
 # The Astro CMake toolchain is required to build a project using the libraries and
 # tools provided by SPI/SFT (a.k.a. SGSCMT).
@@ -184,7 +184,7 @@ function(sgs_find_host_os)
               string(REGEX REPLACE ".*Ubuntu ([0-9]+)[.]([0-9]+).*" "\\1" osvers "${issue}")
             endif()
             break()
-          elseif(issue MATCHES "Scientific Linux|SLC|Fedora|CentOS Linux|CentOS") # RedHat-like distributions
+          elseif(issue MATCHES "Scientific Linux|SLC|Fedora|CentOS Linux|CentOS|Rocky Linux") # RedHat-like distributions
             string(TOLOWER "${CMAKE_MATCH_0}" os)
             if("${os}" STREQUAL fedora)
               set(os fc) # we use an abbreviation for Fedora
@@ -193,7 +193,10 @@ function(sgs_find_host_os)
               set(os sl) # we use an abbreviation for Scientific Linux
             endif()
             if(("${os}" STREQUAL "centos linux") OR ("${os}" STREQUAL "centos"))
-              set(os co) # we use an abbreviation for Scientific Linux
+              set(os co) # we use an abbreviation for CentOS
+            endif()
+            if(("${os}" STREQUAL "rocky linux") OR ("${os}" STREQUAL "rocky"))
+              set(os ry) # we use an abbreviation for Rocky Linux
             endif()
             if(issue MATCHES ".*release ([0-9]+)[. ].*")
               string(REGEX REPLACE ".*release ([0-9]+)[. ].*" "\\1" osvers "${issue}")
