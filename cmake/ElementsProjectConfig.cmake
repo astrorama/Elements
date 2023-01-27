@@ -1131,17 +1131,10 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
 
   if(proj_has_python)
 
-    if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-      if(NOT (PYTHON_VERSION_MAJOR VERSION_LESS 3))
-        if(NOT (SQUEEZED_INSTALL AND NOT PYTHON_HAS_STD_LOCATION))
-          set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)
-        endif()
-      endif()
-    else()
-      if(SQUEEZED_INSTALL AND NOT (PYTHON_VERSION_MAJOR VERSION_LESS 3)
-         AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
-        set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)      
-      endif()
+
+    if(SQUEEZED_INSTALL AND NOT (PYTHON_VERSION_MAJOR VERSION_LESS 3)
+       AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
+      set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)      
     endif()
 
     get_property(regular_python_objects GLOBAL PROPERTY REGULAR_PYTHON_OBJECTS)
