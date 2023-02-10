@@ -1,5 +1,5 @@
 /**
- * @file Deprecated.h
+ * @file ElementsKernel/Deprecated.h
  * @brief define the ELEMENTS_DEPRECATED macros for API evolution
  * @author Hubert Degaudenzi - The Euclid Consortium
  * @date Nov 4, 2013

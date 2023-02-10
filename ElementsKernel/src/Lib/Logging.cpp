@@ -34,6 +34,7 @@
 #include <log4cpp/PatternLayout.hh>    // for PatternLayout
 #include <log4cpp/Priority.hh>         // for Priority, Priority::::INFO, etc
 
+#include "ElementsKernel/Compat.h"     // NON_REDUNDANT_MOVE
 #include "ElementsKernel/Exception.h"  // for Exception
 #include "ElementsKernel/Memory.h"     // for make_unique
 #include "ElementsKernel/Path.h"       // for Path::Item
@@ -46,16 +47,22 @@ using std::unique_ptr;
 
 namespace Elements {
 
-static const std::map<string, const int> LOG_LEVEL{{"FATAL", Priority::FATAL},
-                                                   {"ERROR", Priority::ERROR},
-                                                   {"WARN", Priority::WARN},
-                                                   {"INFO", Priority::INFO},
-                                                   {"DEBUG", Priority::DEBUG}};
+// clang-format off
+
+static const std::map<string, const int> LOG_LEVEL{
+  {"FATAL", Priority::FATAL},
+  {"ERROR", Priority::ERROR},
+  {"WARN",  Priority::WARN},
+  {"INFO",  Priority::INFO},
+  {"DEBUG", Priority::DEBUG}
+};
+
+// clang-format on
 
 unique_ptr<Layout> getLogLayout() {
   auto layout = make_unique<log4cpp::PatternLayout>();
   layout->setConversionPattern("%d{%FT%T%Z} %c %5p : %m%n");
-  return layout;
+  return NON_REDUNDANT_MOVE(layout);
 }
 
 Logging::Logging(Category& log4cppLogger) : m_log4cppLogger(log4cppLogger) {}
