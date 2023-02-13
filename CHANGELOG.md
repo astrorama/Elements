@@ -8,13 +8,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [6.2.0] - 2023-02-13
+
+### Added
+-  Add the long double type example
+- Use clang-format guards for free formatting
+- Add the ry symbol for Rocky Linux
+- Add the EXTRA_DEBUG_ARGS CMake cache variable
+    - it can be tuned by on the command line with `-DEXTRA_DEBUG_ARGS=...`
+    - its default value is `EXTRA_DEBUG_ARGS="-fno-omit-frame-pointer`
+    - In order to debug C++ code with CDT (eclipse), `EXTRA_DEBUG_ARGS="-
+      gdwarf-4 -fno-omit-frame-pointer` is recommended since the dwarf-5
+      format is not supported.
+
 ### Changed
 - Move from Py.Test to PyTest
     - pytest 7.2.0 no longer depends on py module which means that the import of py.test will no longer work.
     - Change the executable from py.test to pytest
     - Rename py.test into pytest in the python files
     - Change the comments and documentation from Py.Test to PyTest
+- Move the optimisation flag from `-O2` to `-O3` in release mode
+- Modernize the Eigen3 CMake find library
 
+### Fixed
+- Fix the usage of the `Xsd::xsd` target
+- Use only the major version number for the compiler of the detected platform
+  i.e: when the BINARY_TAG is not provided
+- Package the `__pycache__` directory for CentOS7. This is triggered by the 
+  RPMBUILD_VERSION < 4.12 condition.
 
 
 ## [6.1.2] - 2022-11-29
