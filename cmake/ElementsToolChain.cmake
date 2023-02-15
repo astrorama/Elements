@@ -6,7 +6,7 @@ message(STATUS "----------------------------------------------------------------
 
 if (CMAKE_GENERATOR MATCHES "Ninja")
     file(
-        WRITE "${CMAKE_BINARY_DIR}/GNUMakeRulesOverwrite.cmake" 
+        WRITE "${CMAKE_BINARY_DIR}/GNUMakeRulesOverwrite.cmake"
             "STRING(REPLACE \"-MD\" \"-MMD\" CMAKE_DEPFILE_FLAGS_C \"\${CMAKE_DEPFILE_FLAGS_C}\")\n"
             "STRING(REPLACE \"-MD\" \"-MMD\" CMAKE_DEPFILE_FLAGS_CXX \"\${CMAKE_DEPFILE_FLAGS_CXX}\")\n"
     )

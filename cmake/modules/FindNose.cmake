@@ -1,13 +1,13 @@
 if (NOT NOSE_FOUND)
 
     find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
-    
+
     set(explicit_nose)
     if(PYTHON_EXPLICIT_VERSION)
       set(explicit_nose nosetests-${PYTHON_EXPLICIT_VERSION})
     endif()
-    
-    
+
+
     if(PYTHONINTERP_FOUND)
         get_filename_component(_python_path ${PYTHON_EXECUTABLE} PATH)
         find_program(NOSE_EXECUTABLE

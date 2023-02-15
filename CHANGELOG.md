@@ -17,9 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add the ry symbol for Rocky Linux
 - Add the EXTRA_DEBUG_ARGS CMake cache variable
     - it can be tuned by on the command line with `-DEXTRA_DEBUG_ARGS=...`
-    - its default value is `EXTRA_DEBUG_ARGS="-fno-omit-frame-pointer`
+    - its default value is `EXTRA_DEBUG_ARGS="-fno-omit-frame-pointer"`
     - In order to debug C++ code with CDT (eclipse), `EXTRA_DEBUG_ARGS="-
-      gdwarf-4 -fno-omit-frame-pointer` is recommended since the dwarf-5
+      gdwarf-4 -fno-omit-frame-pointer"` is recommended since the dwarf-5
       format is not supported.
 
 ### Changed

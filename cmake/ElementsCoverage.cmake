@@ -56,7 +56,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
                       COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/cov/lcov
                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
                       COMMENT "Create the lcov output directory" VERBATIM)
-  
+
     add_dependencies(lcov lcov_dir)
 
     add_custom_command(TARGET lcov POST_BUILD
@@ -67,7 +67,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
     find_package(GCovr QUIET)
 
     if(GCOVR_EXECUTABLE)
-    
+
       set(GCOVR_OPTIONS)
       set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="/usr/include/.*")
       set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${PROJECT_BINARY_DIR}/.*")
@@ -77,17 +77,17 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
         set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${ELEMENTS_BASE_PREFIX_DIR}/lib/gcc/.*")
         set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${ELEMENTS_BASE_PREFIX_DIR}/x86_64-conda.*")
       endif()
-      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude=".*/InstallArea/.*")        
-      
+      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude=".*/InstallArea/.*")
+
       if(GCOVR_EXCLUDE_UNREACHABLE)
         set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude-unreachable-branches)
       endif()
-    
+
       if(GCOVR_EXCLUDE_THROW)
         set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude-throw-branches)
       endif()
 
-      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} ${GCOVR_EXTRA_OPTIONS})        
+      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} ${GCOVR_EXTRA_OPTIONS})
 
       add_custom_target(gcovr
                         COMMAND ${GCOVR_EXECUTABLE} -x -r ${CMAKE_SOURCE_DIR} ${GCOVR_OPTIONS} -o ${PROJECT_NAME}.xml
@@ -95,14 +95,14 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
                         COMMENT "Produce Cobertura output" VERBATIM)
 
       add_dependencies(cov gcovr)
-    
+
       add_dependencies(lcov gcovr)
 
       add_custom_target(gcovr_dir
                         COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/cov/gcovr
                         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
                         COMMENT "Create the gcovr output directory" VERBATIM)
-  
+
       add_dependencies(gcovr gcovr_dir)
 
       add_custom_command(TARGET gcovr POST_BUILD
@@ -112,7 +112,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
 
      endif()
    endif()
-   
+
    # The pytest directory has to be created at configure time
    find_python_module(pytest_cov)
    if (PY_PYTEST_COV AND "${PYFRMK_NAME}" STREQUAL "PyTest")
@@ -137,7 +137,7 @@ find_file(ctest2junit_xsl_file
           PATHS ${CMAKE_MODULE_PATH}
           PATH_SUFFIXES auxdir/test auxdir
           NO_DEFAULT_PATH)
-          
+
 add_custom_command(TARGET cov POST_BUILD
                    COMMAND ${ctest2junit_cmd} ${PROJECT_BINARY_DIR} ${ctest2junit_xsl_file}
                    )

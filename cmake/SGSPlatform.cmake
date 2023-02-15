@@ -27,7 +27,7 @@ function(getShortBuildType short_type long_type)
   # Convert CMAKE_BUILD_TYPE to SGS_BUILD_TYPE
 
   string(TOLOWER "${long_type}" lower_long_type)
-  
+
   if("${lower_long_type}" STREQUAL "release")
     set(${short_type} opt PARENT_SCOPE)
   elseif("${lower_long_type}" STREQUAL "debug")
@@ -44,7 +44,7 @@ function(getShortBuildType short_type long_type)
     message(FATAL_ERROR "Build type ${lower_long_type} not supported.")
   endif()
 
-  
+
 endfunction()
 
 ################################################################################
@@ -108,7 +108,7 @@ function(getCompVersionNumbers compiler_name comp_major_var comp_minor_var)
 
   set(${comp_major_var} ${compiler_major} PARENT_SCOPE)
   set(${comp_minor_var} ${compiler_minor} PARENT_SCOPE)
-  
+
 
 endfunction()
 
@@ -244,7 +244,7 @@ function(sgs_find_host_compiler)
         list(LENGTH GCC_VERSION_COMPONENTS GCC_VERSION_COMPONENTS_NB)
         if(GCC_VERSION_COMPONENTS_NB LESS "2")
           execute_process(COMMAND ${SGS_HOST_C_COMPILER} --version OUTPUT_VARIABLE GCC_VERSION)
-          string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})  
+          string(REGEX MATCHALL "[0-9]+" GCC_VERSION_COMPONENTS ${GCC_VERSION})
         endif()
         list(GET GCC_VERSION_COMPONENTS 0 GCC_MAJOR)
         list(GET GCC_VERSION_COMPONENTS 1 GCC_MINOR)
@@ -348,7 +348,7 @@ function(sgs_get_target_platform)
   # but transient
   set(SGS_ARCH  ${arch})
 
-  if (os MATCHES "([^0-9.]+)([0-9.]+)")    
+  if (os MATCHES "([^0-9.]+)([0-9.]+)")
     set(SGS_OS     "${CMAKE_MATCH_1}")
     set(SGS_OSVERS "${CMAKE_MATCH_2}")
   else()
@@ -364,7 +364,7 @@ function(sgs_get_target_platform)
   if(SGS_SUBOS)
     set(SGS_COREOS ${SGS_SUBOS})
   else()
-    set(SGS_COREOS ${SGS_OS})  
+    set(SGS_COREOS ${SGS_OS})
   endif()
 
   if (comp MATCHES "([^0-9.]+)([0-9.]+|max)")
@@ -376,7 +376,7 @@ function(sgs_get_target_platform)
   endif()
 
   getLongBuildType(type ${SGS_BUILD_TYPE})
-  
+
   set(CMAKE_BUILD_TYPE ${type} CACHE STRING
       "Choose the type of build, options are: empty, Debug, Release, Coverage, Profile, RelWithDebInfo, MinSizeRel." FORCE)
 

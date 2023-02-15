@@ -2,15 +2,15 @@
 ElementsDefaults
 -----------------
 
-This file set the default values for various CMake cache variables used by Elements itself. The default 
+This file set the default values for various CMake cache variables used by Elements itself. The default
 values for a new project are stored in the `ElementsBuildFlags` module.
 
 .. cmake:variable:: ELEMENTS_HIDE_SYMBOLS
-   
+
    Enable explicit symbol visibility on gcc-4. Set to ``ON``
 
 .. cmake:variable:: CXX_SUGGEST_OVERRIDE
-   
+
    Enable the -Wsuggest-override warning. Set to ``ON``
 
 

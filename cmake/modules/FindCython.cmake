@@ -2,13 +2,13 @@ if (NOT CYTHON_FOUND)
 
     find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
     find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION})
-    
+
     set(explicit_cython)
     if(PYTHON_EXPLICIT_VERSION)
       set(explicit_cython cython${PYTHON_EXPLICIT_VERSION})
     endif()
-    
-    
+
+
     if(PYTHONINTERP_FOUND)
         get_filename_component(_python_path ${PYTHON_EXECUTABLE} PATH)
         find_program(CYTHON_EXECUTABLE

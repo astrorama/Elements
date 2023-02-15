@@ -6,7 +6,7 @@ include(SGSPlatform)
 include(ElementsBuildFlags)
 
 if(HIDE_SYSINC_WARNINGS)
-  set(CMAKE_NO_SYSTEM_FROM_IMPORTED FALSE)  
+  set(CMAKE_NO_SYSTEM_FROM_IMPORTED FALSE)
 else()
   set(CMAKE_NO_SYSTEM_FROM_IMPORTED TRUE)
 endif()
@@ -15,7 +15,7 @@ if(NOT DEFINED SQUEEZED_INSTALL)
     set(SQUEEZED_INSTALL ON
         CACHE STRING "Enable the squeezing of the installation into a prefix directory"
         FORCE)
-    message(STATUS "Sets the default value for SQUEEZED_INSTALL to ${SQUEEZED_INSTALL}")     
+    message(STATUS "Sets the default value for SQUEEZED_INSTALL to ${SQUEEZED_INSTALL}")
 endif()
 
 # Install Area business
@@ -47,15 +47,15 @@ if(NOT SQUEEZED_INSTALL)
         message(STATUS "${ELEMENTS_BASE_VAR} is not empty: Setting ELEMENTS_BASE_DIR to \"${ELEMENTS_BASE_DIR_TMP}\"")
       else()
         set(ELEMENTS_BASE_DIR "/opt" CACHE STRING "Elements Base Install Directory" FORCE)
-        message(STATUS "${ELEMENTS_BASE_VAR} is empty. Setting ELEMENTS_BASE_DIR to default /opt")    
+        message(STATUS "${ELEMENTS_BASE_VAR} is empty. Setting ELEMENTS_BASE_DIR to default /opt")
       endif()
     else()
       set(ELEMENTS_BASE_DIR "/opt" CACHE STRING "Elements Base Install Directory" FORCE)
-      message(STATUS "${ELEMENTS_BASE_VAR} is not defined. Setting ELEMENTS_BASE_DIR to default /opt")    
+      message(STATUS "${ELEMENTS_BASE_VAR} is not defined. Setting ELEMENTS_BASE_DIR to default /opt")
     endif()
   else()
     set(ELEMENTS_BASE_DIR "/opt" CACHE STRING "Elements Base Install Directory" FORCE)
-    message(STATUS "ELEMENTS_BASE_VAR is empty. Setting ELEMENTS_BASE_DIR to default /opt")      
+    message(STATUS "ELEMENTS_BASE_VAR is empty. Setting ELEMENTS_BASE_DIR to default /opt")
   endif()
   message(STATUS "The ELEMENTS_BASE_DIR is set to \"${ELEMENTS_BASE_DIR}\"")
 
@@ -86,7 +86,7 @@ set(lib_install_suff lib)
 set(bin_install_suff bin)
 
 if(SQUEEZED_INSTALL)
-  
+
   set(lib_install_suff ${CMAKE_INSTALL_LIBDIR})
   set(bin_install_suff ${CMAKE_INSTALL_BINDIR})
 
@@ -202,7 +202,7 @@ endif()
 set(current_cmake_prefix_path ${CMAKE_PREFIX_PATH})
 
 set(ELEMENTS_DEFAULT_SEARCH_PATH)
-foreach(_ds ${current_cmake_prefix_path})  
+foreach(_ds ${current_cmake_prefix_path})
   list(APPEND ELEMENTS_DEFAULT_SEARCH_PATH ${_ds}/${CMAKE_LIB_INSTALL_SUFFIX}/cmake/ElementsProject)
 endforeach()
 

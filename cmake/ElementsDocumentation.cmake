@@ -5,7 +5,7 @@ include_guard(GLOBAL)
                       COMMENT "Generating API documentation" VERBATIM)
   else()
     add_custom_target(doc
-                      COMMENT "Generating API documentation" VERBATIM)  
+                      COMMENT "Generating API documentation" VERBATIM)
   endif()
 
 #===========================================================================================================
@@ -33,14 +33,14 @@ include_guard(GLOBAL)
     message(STATUS "Doxygen version: ${DOXYGEN_VERSION}")
 
     find_package(PlantUML QUIET)
-    
+
     if(NOT PLANTUML_JARFILE)
       set(PLANTUML_JARFILE "")
     endif()
-    
-    set(DOXYGEN_EXTRA_FILE_PATTERNS) 
+
+    set(DOXYGEN_EXTRA_FILE_PATTERNS)
     if(USE_PYTHON_DOXYGEN)
-        set(DOXYGEN_EXTRA_FILE_PATTERNS "*.py") 
+        set(DOXYGEN_EXTRA_FILE_PATTERNS "*.py")
     endif()
 
 
@@ -67,13 +67,13 @@ include_guard(GLOBAL)
            TRUE)
 
     if(DOXYGEN_WITH_CPPREFERENCE_LINKS)
-    
+
       find_file(GET_CPPREF_TAGS_SCRIPT
               get_cppreference_tags.cmake
               PATHS ${CMAKE_MODULE_PATH}
               PATH_SUFFIXES doc)
-    
-    
+
+
       # download Doxygen tags from cppreference.com
       add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doc/doxygen/cppreference-doxygen-web.tag.xml
                          COMMAND ${CMAKE_COMMAND}
@@ -87,15 +87,15 @@ include_guard(GLOBAL)
     endif()
 
     # Generation of the Doxygen Main Page
-    
+
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/doc/mainpage.dox)
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox)
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/doc/${PROJECT_NAME}.dox)
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.dox)
 
-    set(maindox_file)    
+    set(maindox_file)
     find_first_file("${maindox_list}" maindox_file)
-    
+
     if(NOT maindox_file)
       message(STATUS "No doxygen main page (${maindox_list}) can be found.")
       find_file_to_configure(mainpage.dox.in
@@ -144,7 +144,7 @@ include_guard(GLOBAL)
   else()
     set(SPHINX_HTML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc/sphinx/html)
   endif()
-  
+
 
 
   find_package(Sphinx REQUIRED)
@@ -194,12 +194,12 @@ include_guard(GLOBAL)
         endif()
       endforeach()
     endif()
-    
+
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/doc")
       copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/doc ${PROJECT_BINARY_DIR}/doc/sphinx)
     endif()
-    
-                      
+
+
     add_custom_target(sphinx
                       COMMAND  ${CMAKE_COMMAND} -E make_directory ${SPHINX_HTML_OUTPUT_DIR}
                       COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/_static
@@ -327,7 +327,7 @@ Python Package
         set(SPHINX_EL_MODULES "${SPHINX_EL_MODULES}
    ${_el_pack_short}/index")
       endif()
-    
+
     endforeach()
 
     # Generation of the cmake index.rst file for the cmake directory
@@ -342,7 +342,7 @@ Python Package
          set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../index.html>`_.")
        else()
          set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../../doxygen/html/index.html>`_.")
-       endif()     
+       endif()
      else()
        set(SPHINX_ORIGINAL_DOX "")
      endif()
@@ -361,28 +361,28 @@ Python Package
                      "${sphinx_main_cmake_index_file}"
                      "${PROJECT_BINARY_DIR}/doc/sphinx/cmake/index.rst"
                      COPYONLY
-                    ) 
+                    )
       set(SPHINX_CMAKE_MODULES "cmake/index")
     else()
-    
+
        file(GLOB cm_list RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/*.cmake)
        foreach(cm ${cm_list})
           set(sphinx_cmake_module_lines "${sphinx_cmake_module_lines}
 .. cmake-module:: ../../../../${cm}")
 
        endforeach()
-    
+
       find_file_to_configure(index_cmake.rst.in
                              FILETYPE "Sphinx index"
                              OUTPUTDIR "${PROJECT_BINARY_DIR}/doc/sphinx/cmake"
                              OUTPUTNAME "index.rst"
                              PATHS ${CMAKE_MODULE_PATH}
                              PATH_SUFFIXES doc)
-                             
+
       if(sphinx_cmake_module_lines)
         set(SPHINX_CMAKE_MODULES "cmake/index")
       endif()
-      
+
     endif()
 
 
@@ -414,9 +414,9 @@ Python Package
 * :ref:`genindex`
 * :ref:`search`
 "
-        )      
+        )
       endif()
-    
+
       find_file_to_configure(index.rst.in
                              FILETYPE "Sphinx index"
                              OUTPUTDIR "${PROJECT_BINARY_DIR}/doc/sphinx"
@@ -461,5 +461,4 @@ Python Package
     endforeach()
 
   endif()
-  
-  
+

@@ -4,13 +4,13 @@ if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_LESS 3.1 OR USE_DEBUG_
 
     set(_EXTRA_ARGS ${ARGN})
     list(LENGTH _EXTRA_ARGS _EXTRA_ARGS_LENGTH)
-    
+
     set(GUARD_RANGE "GLOBAL")
     if(_EXTRA_ARGS_LENGTH GREATER 0)
       set(GUARD_RANGE ${ARGV0})
     endif()
-    
-    
+
+
     get_filename_component(file_to_include ${CMAKE_CURRENT_LIST_FILE} NAME_WE)
     get_filename_component(file_to_include_dir ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
     get_filename_component(file_to_include_name ${CMAKE_CURRENT_LIST_FILE} NAME)
@@ -41,7 +41,7 @@ macro(reset_include_guards)
 
     set(_EXTRA_ARGS ${ARGN})
     list(LENGTH _EXTRA_ARGS _EXTRA_ARGS_LENGTH)
-    
+
     set(GUARD_RANGE "GLOBAL")
     if(_EXTRA_ARGS_LENGTH GREATER 0)
       set(GUARD_RANGE ${ARGV0})
@@ -113,7 +113,7 @@ endfunction()
 
 
 function(get_all_sys_includes inc_list)
-    
+
   set(full_list)
   foreach(d ${CMAKE_PREFIX_PATH})
     if(NOT "${d}" STREQUAL "/")
@@ -138,7 +138,7 @@ function(get_all_sys_includes inc_list)
   endif()
 
   set(${inc_list} ${full_list} PARENT_SCOPE)
-  
+
 endfunction()
 
 
@@ -148,7 +148,7 @@ function(is_sys_include is_sys dir)
   get_all_sys_includes(inc_list)
 
   list(FIND inc_list ${dir} _index)
-   
+
   if(_index GREATER -1)
     set(${is_sys} TRUE PARENT_SCOPE)
   endif()
@@ -298,7 +298,7 @@ endmacro()
 macro(elements_recurse_dirs VAR)
   set(${VAR})
   foreach(fp ${ARGN})
-  
+
     file(GLOB_RECURSE files ${fp}/*)
     set(dir_list)
     foreach(file_path ${files})
@@ -306,14 +306,14 @@ macro(elements_recurse_dirs VAR)
       set(dir_list ${dir_list} ${dir_path})
     endforeach()
     list(REMOVE_DUPLICATES dir_list)
-    set(${VAR} ${${VAR}} ${dir_list})  
+    set(${VAR} ${${VAR}} ${dir_list})
   endforeach()
 endmacro()
 
 macro(elements_recurse_cython_include_dirs VAR)
   set(${VAR})
   foreach(fp ${ARGN})
-  
+
     file(GLOB_RECURSE files ${fp}/*.px[di])
     set(dir_list)
     foreach(file_path ${files})
@@ -323,21 +323,21 @@ macro(elements_recurse_cython_include_dirs VAR)
     if(dir_list)
       list(REMOVE_DUPLICATES dir_list)
     endif()
-    set(${VAR} ${${VAR}} ${dir_list})  
+    set(${VAR} ${${VAR}} ${dir_list})
   endforeach()
 endmacro()
 
 function(elements_recurse result)
 
   CMAKE_PARSE_ARGUMENTS(ARG "" "PATTERN" "" ${ARGN})
-    
-    
+
+
   if(NOT ARG_PATTERN)
     set(ARG_PATTERN "*")
   endif()
-  
+
   set(total_dir_list)
-  
+
   foreach(fp ${ARG_UNPARSED_ARGUMENTS})
     file(GLOB_RECURSE files ${fp}/${ARG_PATTERN})
     set(dir_list)
@@ -348,13 +348,13 @@ function(elements_recurse result)
     if(dir_list)
       list(REMOVE_DUPLICATES dir_list)
     endif()
-    set(total_dir_list ${total_dir_list} ${dir_list})  
+    set(total_dir_list ${total_dir_list} ${dir_list})
   endforeach()
-  
+
   if(total_dir_list)
     list(REMOVE_DUPLICATES total_dir_list)
   endif()
-  
+
   set(${result} ${total_dir_list} PARENT_SCOPE)
 
 endfunction()
@@ -722,7 +722,7 @@ endfunction()
 
 
 function(get_rpm_dep_list project_use package_suffix squeezed_install output_var)
-  
+
   set(output_str_list)
 
   set(ARGN_ ${project_use})
@@ -748,8 +748,8 @@ function(get_rpm_dep_list project_use package_suffix squeezed_install output_var
 	set(output_str_list "${output_str_list}, ${other_project}_${other_project_version}")
       endif()
     endif()
-    
-    
+
+
     list(REMOVE_AT ARGN_ 0 1)
   endwhile()
 
@@ -759,18 +759,18 @@ function(get_rpm_dep_list project_use package_suffix squeezed_install output_var
 #      set(output_str_list "${output_str_list}, EuclidEnv")
 #    endif()
 #  endif()
-    
+
   set(${output_var} ${output_str_list} PARENT_SCOPE)
 
 endfunction()
 
 
 function(get_rpm_dep_lines project_use package_suffix squeezed_install line_prefix output_var)
-  
+
   set(output_str_lines)
 
   set(ARGN_ ${project_use})
-    
+
   while(ARGN_)
     list(LENGTH ARGN_ len)
     if(len LESS 2)
@@ -785,7 +785,7 @@ function(get_rpm_dep_lines project_use package_suffix squeezed_install line_pref
     else()
       set(other_proj_pack_name "${other_project}_${other_project_version}")
     endif()
-    
+
     if(package_suffix)
       set(other_proj_pack_name "${other_proj_pack_name}-${package_suffix}")
     endif()
@@ -797,7 +797,7 @@ function(get_rpm_dep_lines project_use package_suffix squeezed_install line_pref
     endif()
 
     if(line_prefix)
-      set(other_proj_pack_line "${line_prefix}: ${other_proj_pack_line}")  
+      set(other_proj_pack_line "${line_prefix}: ${other_proj_pack_line}")
     endif()
 
 
@@ -805,7 +805,7 @@ function(get_rpm_dep_lines project_use package_suffix squeezed_install line_pref
       set(output_str_lines "${other_proj_pack_line}")
     else()
       set(output_str_lines "${output_str_lines}
-${other_proj_pack_line}")    
+${other_proj_pack_line}")
     endif()
 
     list(REMOVE_AT ARGN_ 0 1)
@@ -816,26 +816,26 @@ ${other_proj_pack_line}")
 endfunction()
 
 function(get_rpm_sys_dep_lines dep_list line_prefix output_var)
-  
+
   set(output_str_lines)
-  
+
   list(REMOVE_DUPLICATES dep_list)
-  
+
   foreach(other_sys_pack_line ${dep_list})
 
     if(line_prefix)
-      set(other_sys_pack_line "${line_prefix}: ${other_sys_pack_line}")  
+      set(other_sys_pack_line "${line_prefix}: ${other_sys_pack_line}")
     endif()
-    
+
     if( "${output_str_lines}" STREQUAL "")
       set(output_str_lines "${other_sys_pack_line}")
     else()
       set(output_str_lines "${output_str_lines}
-${other_sys_pack_line}")    
+${other_sys_pack_line}")
     endif()
 
   endforeach()
-  
+
   set(${output_var} ${output_str_lines} PARENT_SCOPE)
 
 endfunction()
@@ -855,7 +855,7 @@ function(find_python_module module)
 
     string(TOUPPER ${module} module_upper_tmp)
     string(REPLACE "." "_" module_upper ${module_upper_tmp})
-    
+
     if(NOT PY_${module_upper})
         if(ARGC GREATER 1 AND "${ARGV1}" STREQUAL "REQUIRED")
             set(${module}_FIND_REQUIRED TRUE)
@@ -898,13 +898,13 @@ function(elements_include_directories)
     if(_is_this)
       set(_is_loc TRUE)
     endif()
-   
+
     set(use_sys FALSE)
     if(HIDE_SYSINC_WARNINGS)
       if(_is_loc)
         set(use_sys FALSE)
       else()
-        set(use_sys TRUE)      
+        set(use_sys TRUE)
       endif()
     else()
       set(use_sys FALSE)
@@ -914,7 +914,7 @@ function(elements_include_directories)
       if(_is_this)
         set(use_sys FALSE)
       else()
-        set(use_sys TRUE)      
+        set(use_sys TRUE)
       endif()
     endif()
 
@@ -961,7 +961,7 @@ function(find_first_file file_list first_file)
      if(EXISTS "${f}")
        set(first_f ${f})
        break()
-     endif()  
+     endif()
   endforeach()
 
   set(${first_file} ${first_f} PARENT_SCOPE)

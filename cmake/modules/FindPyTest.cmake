@@ -1,15 +1,15 @@
 if (NOT PYTEST_FOUND)
 
     find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
-    
+
     set(explicit_pytest)
     set(implicit_pytest pytest)
 
     if(PYTHON_EXPLICIT_VERSION)
       set(explicit_pytest ${implicit_pytest}-${PYTHON_EXPLICIT_VERSION})
     endif()
-    
-    
+
+
     if(PYTHONINTERP_FOUND)
         get_filename_component(_python_path ${PYTHON_EXECUTABLE} PATH)
         find_program(PYTEST_EXECUTABLE

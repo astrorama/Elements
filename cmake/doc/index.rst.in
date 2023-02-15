@@ -4,7 +4,7 @@
 @PROJECT_NAME@ Documentation
 ================================================================
 * @PROJECT_DESCRIPTION@
-* Version: @CMAKE_PROJECT_VERSION@ 
+* Version: @CMAKE_PROJECT_VERSION@
 
 Project Overview
 ================
@@ -14,7 +14,7 @@ Project Overview
    :caption: Table of Contents
 
    doc_project
-  
+
    @SPHINX_CMAKE_MODULES@
 
 Modules
@@ -32,7 +32,7 @@ API Documentation
    :maxdepth: 5
 
    @SPHINX_CPP_MODULES@
-   
+
 Legacy
 ======
 

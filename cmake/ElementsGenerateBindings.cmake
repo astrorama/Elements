@@ -24,9 +24,9 @@ function(get_xsd_files xsd_dir xsd_files)
        RELATIVE ${xsd_dir}
        ${xsd_dir}/*.xsd
        ${xsd_dir}/*.XSD)
-       
+
    set(${xsd_files} ${xsd_files_tmp} PARENT_SCOPE)
-   
+
 endfunction()
 
 
@@ -37,7 +37,7 @@ function(generate_python_bindings xsd_dir ns_prefix)
   if(PYBINDGEN_MODULE_NAME)
     set(module_name ${PYBINDGEN_MODULE_NAME})
   else()
-    set(module_name ${package}) 
+    set(module_name ${package})
     message(STATUS "Python Bindings Generation: no module name provided. Using the default ${package}")
   endif()
 
@@ -48,7 +48,7 @@ function(generate_python_bindings xsd_dir ns_prefix)
   if(NOT PYXB_FOUND)
     message(FATAL_ERROR "Cannot find the PyXB generator executable")
   endif()
-  
+
   set(xsd_files_full ${xsd_files})
   list(TRANSFORM xsd_files_full PREPEND ${xsd_dir}/)
 
@@ -75,19 +75,19 @@ function(generate_cpp_bindings xsd_dir ns_prefix)
   if(CPPBINDGEN_INCLUDE_PREFIX)
     set(include_prefix ${CPPBINDGEN_INCLUDE_PREFIX})
   else()
-    set(include_prefix ${package}) 
+    set(include_prefix ${package})
     message(STATUS "C++ Bindings Generation: no include prefix provided. Using the default ${package}")
   endif()
 
   if(CPPBINDGEN_LIBRARY_NAME)
     set(library_name ${CPPBINDGEN_LIBRARY_NAME})
   else()
-    set(library_name ${package}) 
+    set(library_name ${package})
     message(STATUS "C++ Bindings Generation: no library name provided. Using the default ${package}")
   endif()
 
   get_xsd_files(${xsd_dir} xsd_files)
- 
+
   # get the cpp files (generated from XSD)
   set(xsd_generated_cpp_files ${xsd_files})
   set(cpp_bindings_dir ${CMAKE_CURRENT_BINARY_DIR}/cpp_bindings)
@@ -109,13 +109,13 @@ function(generate_cpp_bindings xsd_dir ns_prefix)
     message(STATUS "treating XSD file : ${xsd_file}")
     set(xsd_file_full "${xsd_dir}/${xsd_file}")
     string(REPLACE ".xsd" "" xsd_base "${xsd_file}")
-    
+
     set(xsd_generated_cpp_file "${cpp_bindings_dir}/src/${package}/${xsd_base}.cpp")
     set(xsd_generated_d_file "${cpp_bindings_dir}/src/${package}/${xsd_base}.d")
     set(xsd_generated_h_file "${cpp_bindings_dir}/include/${include_prefix}/${xsd_base}.h")
-    set_source_files_properties(${xsd_generated_cpp_file} ${xsd_generated_h_file} ${xsd_generated_d_file} 
+    set_source_files_properties(${xsd_generated_cpp_file} ${xsd_generated_h_file} ${xsd_generated_d_file}
                                 PROPERTIES GENERATED TRUE)
-    
+
     if (USED_CMAKE_GENERATOR STREQUAL "Ninja")
       add_custom_command(OUTPUT ${xsd_generated_cpp_file} ${xsd_generated_h_file}
                          MAIN_DEPENDENCY ${xsd_file_full}
@@ -127,7 +127,7 @@ function(generate_cpp_bindings xsd_dir ns_prefix)
                          COMMAND ${generate_cppbinding_cmd} --xsd-executable ${XSDCXX_EXECUTABLE} --dm-dir ${xsd_dir} --h-file ${xsd_generated_h_file} --cpp-file ${xsd_generated_cpp_file} --d-file ${xsd_generated_d_file} --incl-pref ${include_prefix} --namespace-prefix=${ns_prefix} ${xsd_file_full}
                          DEPENDS ${xsd_full_files})
     endif()
-    
+
   endforeach()
 
 
@@ -140,7 +140,7 @@ function(generate_cpp_bindings xsd_dir ns_prefix)
                        NO_PUBLIC_HEADERS)
 
   include_directories(${cpp_bindings_dir}/include)
-  elements_install_headers(${cpp_bindings_dir}/include/${include_prefix} NO_EXIST_CHECK) 
+  elements_install_headers(${cpp_bindings_dir}/include/${include_prefix} NO_EXIST_CHECK)
   set_property(GLOBAL APPEND PROPERTY PROJ_HAS_INCLUDE TRUE)
   set_property(GLOBAL APPEND PROPERTY REGULAR_INCLUDE_OBJECTS ${include_prefix})
 
@@ -154,25 +154,25 @@ function(generate_bindings xsd_dir ns_prefix)
   if(BINDGEN_CPP_INCLUDE_PREFIX)
     set(cpp_include_prefix ${BINDGEN_CPP_INCLUDE_PREFIX})
   else()
-    set(cpp_include_prefix ${package}) 
+    set(cpp_include_prefix ${package})
     message(STATUS "Bindings Generation: no C++ include prefix provided. Using the default ${package}")
   endif()
 
   if(BINDGEN_CPP_LIBRARY_NAME)
     set(cpp_library_name ${BINDGEN_CPP_LIBRARY_NAME})
   else()
-    set(cpp_library_name ${package}) 
+    set(cpp_library_name ${package})
     message(STATUS "Bindings Generation: no C++ library name provided. Using the default ${package}")
   endif()
 
   generate_cpp_bindings(${xsd_dir} ${ns_prefix}
                         INCLUDE_PREFIX ${cpp_include_prefix}
                         LIBRARY_NAME ${cpp_library_name})
-  
+
   if(BINDGEN_PYTHON_MODULE_NAME)
     set(python_module_name ${BINDGEN_PYTHON_MODULE_NAME})
   else()
-    set(python_module_name ${package}) 
+    set(python_module_name ${package})
     message(STATUS "Bindings Generation: no python module name provided. Using the default ${package}")
   endif()
 

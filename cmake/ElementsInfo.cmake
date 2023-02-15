@@ -16,7 +16,7 @@ find_file_to_configure(cmake_info.cmake.in
                        OUTPUTDIR "${CMAKE_CURRENT_BINARY_DIR}"
                        OUTPUTNAME cmake_info.cmake
                        PATHS ${CMAKE_MODULE_PATH})
-                       
-                       
+
+
 add_custom_target(info
                   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_info.cmake)
