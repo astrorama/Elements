@@ -310,6 +310,17 @@ macro(elements_recurse_dirs VAR)
   endforeach()
 endmacro()
 
+macro(elements_recurse_include_files VAR)
+  set(${VAR})
+  foreach(fp ${ARGN})
+    file(GLOB_RECURSE files ${fp}/*.[hH] ${fp}/*.hxx ${fp}/*.hpp)
+    if(files)
+      set(${VAR} ${${VAR}} ${files})
+    endif()
+  endforeach()
+endmacro()
+
+
 macro(elements_recurse_cython_include_dirs VAR)
   set(${VAR})
   foreach(fp ${ARGN})
