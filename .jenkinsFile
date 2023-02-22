@@ -1,8 +1,8 @@
 #!groovy
-@Library('integration-library@release-9') _
+@Library('integration-library@release-10') _
 pipelineElements(
-	artifactId:"Elements",
-	groupId:"CT",
-	component:'eden.3.0',
+	name:"Elements",
+	group:"CT",
+	component:'eden.3.1',
 	skipTest: false,
 )
