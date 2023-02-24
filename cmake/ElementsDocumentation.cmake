@@ -246,10 +246,23 @@ include_guard(GLOBAL)
 
       if(USE_SPHINX_APIDOC)
         if(NOT TARGET sphinx_apidoc_${_py_pack_short})
-          add_custom_target(sphinx_apidoc_${_py_pack_short}
-                            COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}
-                            COMMAND  ${SPHINX_APIDOC_CMD} ${SPHINX_APIDOC_OPTIONS} -o ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short} ${_py_pack_dir}
-                            COMMENT "Generating Sphinx API documentation for ${_py_pack_short}" VERBATIM)
+          file(GLOB_RECURSE _py_pack_dir_files LIST_DIRECTORIES false RELATIVE  ${_py_pack_dir} CONFIGURE_DEPENDS  ${_py_pack_dir}/*)
+          set(_py_pack_dir_files_full ${_py_pack_dir_files})
+          list(TRANSFORM _py_pack_dir_files_full PREPEND ${_py_pack_dir}/)
+          
+          add_custom_command(
+            OUTPUT ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}/modules.rst
+            DEPENDS ${_py_pack_dir_files_full}
+            COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}
+            COMMAND  ${SPHINX_APIDOC_CMD} ${SPHINX_APIDOC_OPTIONS} -f -o ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short} ${_py_pack_dir}
+            COMMENT "Generating Sphinx API documentation for ${_py_pack_short}"
+            VERBATIM
+          )
+
+          add_custom_target(
+            sphinx_apidoc_${_py_pack_short}
+            DEPENDS  ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}/modules.rst
+          )
 
           set(${_el_pack_short}_api_modules_line modules)
           list(APPEND EL_MODULE_INDEX ${_el_pack_short})
