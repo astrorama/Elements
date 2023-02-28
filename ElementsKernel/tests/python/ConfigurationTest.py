@@ -17,7 +17,7 @@
 #
 
 '''
-:data: Apr 29, 2016
+:data: 2023-02-28
 
 :author: Hubert Degaudenzi
 
@@ -27,10 +27,10 @@ import os
 import unittest
 
 from ElementsKernel.Temporary import TempDir, TempEnv
-from ElementsKernel.Auxiliary import configure, getAuxiliaryPath, getPath
+from ElementsKernel.Configuration import getConfigurationPath, getPath
 
 
-class AuxiliaryTest(unittest.TestCase):
+class ConfigurationTest(unittest.TestCase):
 
     class TestFile(object):
 
@@ -58,31 +58,31 @@ class AuxiliaryTest(unittest.TestCase):
 
     def setUp(self):
         unittest.TestCase.setUp(self)
-        self._tmpdir = TempDir(suffix="aux_tempdir")
+        self._tmpdir = TempDir(suffix="conf_tempdir")
         self._tmpenv = TempEnv()
         self._exiting_dir = os.path.join(self._tmpdir.path(), "ThisDir")
         os.mkdir(self._exiting_dir)
-        self._tmpenv["ELEMENTS_AUX_PATH"] = self._tmpdir.path()
+        self._tmpenv["ELEMENTS_CONF_PATH"] = self._tmpdir.path()
         self._test_files = []
-        self._test_files.append(AuxiliaryTest.TestFile(os.path.join(self._tmpdir.path(),
+        self._test_files.append(ConfigurationTest.TestFile(os.path.join(self._tmpdir.path(),
                                                                     "file1"),
                                                        "That content no replacement"))
-        self._test_files.append(AuxiliaryTest.TestFile(os.path.join(self._tmpdir.path(),
+        self._test_files.append(ConfigurationTest.TestFile(os.path.join(self._tmpdir.path(),
                                                                     "tata", "file1"),
                                                        "This content no replacement"))
 
-        self._test_files.append(AuxiliaryTest.TestFile(os.path.join(self._tmpdir.path(),
+        self._test_files.append(ConfigurationTest.TestFile(os.path.join(self._tmpdir.path(),
                                                                     "tata", "tutu", "file1"),
                                                        "This content no replacement"))
 
-        self._test_files.append(AuxiliaryTest.TestFile(os.path.join(self._tmpdir.path(),
+        self._test_files.append(ConfigurationTest.TestFile(os.path.join(self._tmpdir.path(),
                                                                     "file2"),
                                                        "That content %(bla)s %(blu)s"))
-        self._test_files.append(AuxiliaryTest.TestFile(os.path.join(self._tmpdir.path(),
+        self._test_files.append(ConfigurationTest.TestFile(os.path.join(self._tmpdir.path(),
                                                                     "tata", "file2"),
                                                        "This content %(bla)s %(blu)s"))
 
-        self._test_files.append(AuxiliaryTest.TestFile(os.path.join(self._tmpdir.path(),
+        self._test_files.append(ConfigurationTest.TestFile(os.path.join(self._tmpdir.path(),
                                                                     "tata", "tutu", "file2"),
                                                        "This content %(bla)s %(blu)s"))
 
@@ -91,20 +91,20 @@ class AuxiliaryTest(unittest.TestCase):
         del self._tmpenv
         del self._tmpdir
 
-    def testAuxPathEnv(self):
-        self.assertEqual(self._tmpenv["ELEMENTS_AUX_PATH"], self._tmpdir.path())
-        self.assertEqual(getAuxiliaryPath("file1"), os.path.join(self._tmpdir.path(), "file1"))
-        self.assertEqual(getAuxiliaryPath("tata/file1"), os.path.join(self._tmpdir.path(), "tata", "file1"))
-        self.assertEqual(getAuxiliaryPath("tata/tutu/file1"),
+    def testConfPathEnv(self):
+        self.assertEqual(self._tmpenv["ELEMENTS_CONF_PATH"], self._tmpdir.path())
+        self.assertEqual(getConfigurationPath("file1"), os.path.join(self._tmpdir.path(), "file1"))
+        self.assertEqual(getConfigurationPath("tata/file1"), os.path.join(self._tmpdir.path(), "tata", "file1"))
+        self.assertEqual(getConfigurationPath("tata/tutu/file1"),
                          os.path.join(self._tmpdir.path(), "tata", "tutu", "file1"))
-        self.assertEqual(getAuxiliaryPath("file2"),
+        self.assertEqual(getConfigurationPath("file2"),
                          os.path.join(self._tmpdir.path(), "file2"))
-        self.assertEqual(getAuxiliaryPath("tata/file2"), os.path.join(self._tmpdir.path(), "tata", "file2"))
-        self.assertEqual(getAuxiliaryPath("tata/tutu/file2"),
+        self.assertEqual(getConfigurationPath("tata/file2"), os.path.join(self._tmpdir.path(), "tata", "file2"))
+        self.assertEqual(getConfigurationPath("tata/tutu/file2"),
                          os.path.join(self._tmpdir.path(), "tata", "tutu", "file2"))
 
-    def testAuxShortPathEnv(self):
-        self.assertEqual(self._tmpenv["ELEMENTS_AUX_PATH"], self._tmpdir.path())
+    def testConfShortPathEnv(self):
+        self.assertEqual(self._tmpenv["ELEMENTS_CONF_PATH"], self._tmpdir.path())
         self.assertEqual(getPath("file1"), os.path.join(self._tmpdir.path(), "file1"))
         self.assertEqual(getPath("tata/file1"), os.path.join(self._tmpdir.path(), "tata", "file1"))
         self.assertEqual(getPath("tata/tutu/file1"),
@@ -114,14 +114,6 @@ class AuxiliaryTest(unittest.TestCase):
         self.assertEqual(getPath("tata/file2"), os.path.join(self._tmpdir.path(), "tata", "file2"))
         self.assertEqual(getPath("tata/tutu/file2"),
                          os.path.join(self._tmpdir.path(), "tata", "tutu", "file2"))
-
-    def testConfigure(self):
-        configure("file1", self._exiting_dir)
-        self.assertTrue(os.path.exists(os.path.join(self._exiting_dir, "file1")))
-        configure("file2", self._exiting_dir, configuration={"bla":"foo", "blu":"bar"})
-        target_file = os.path.join(self._exiting_dir, "file2")
-        self.assertTrue(os.path.exists(target_file))
-        self.assertEqual(open(target_file).read(), "That content foo bar")
 
 
 if __name__ == "__main__":

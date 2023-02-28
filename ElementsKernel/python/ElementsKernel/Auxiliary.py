@@ -26,21 +26,25 @@
 import shutil
 import os
 
-from ElementsKernel.Path import getLocations, getPath, getTargetPath
+from ElementsKernel import Path
+
+
+def getAuxiliaryVariableName():
+    return Path.VARIABLE["auxiliary"]
 
 
 def getAuxiliaryLocations(exist_only=False):
     """
     Get all the auxiliary locations -- including the default ones
     """
-    return getLocations("auxiliary", exist_only)
+    return Path.getLocations("auxiliary", exist_only)
 
 
 def getAuxiliaryPath(file_name, raise_exception=True):
     """
     Get full path to the file name searched in the auxiliary path
     """
-    return getPath(file_name, "auxiliary", raise_exception)
+    return Path.getPath(file_name, "auxiliary", raise_exception)
 
 
 def configure(file_name, target_dir, target_name=None, use_stem=False,
@@ -56,7 +60,7 @@ def configure(file_name, target_dir, target_name=None, use_stem=False,
     :return: the final target path for the copy/configuration.
     """
     file_path = getAuxiliaryPath(file_name)
-    target_path = getTargetPath(file_name, target_dir, target_name, use_stem)
+    target_path = Path.getTargetPath(file_name, target_dir, target_name, use_stem)
 
     if create_missing_dir:
         parent_path = os.path.dirname(target_path)
@@ -72,3 +76,7 @@ def configure(file_name, target_dir, target_name=None, use_stem=False,
 
     return target_path
 
+
+getVariableName = getAuxiliaryVariableName
+getLocations = getAuxiliaryLocations
+getPath = getAuxiliaryPath

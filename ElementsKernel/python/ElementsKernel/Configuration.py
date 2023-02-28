@@ -23,19 +23,27 @@
 
 '''
 
-from ElementsKernel.Path import getLocations, getPath
+from ElementsKernel import Path
+
+
+def getConfigurationVariableName():
+    return Path.VARIABLE["configuration"]
 
 
 def getConfigurationLocations(exist_only=False):
     """
     Get all the configuration locations -- including the default ones
     """
-    return getLocations("configuration", exist_only)
+    return Path.getLocations("configuration", exist_only)
 
 
 def getConfigurationPath(file_name, raise_exception=True):
     """
     Get full path to the file name searched in the Configuration path
     """
-    return getPath(file_name, "configuration", raise_exception)
+    return Path.getPath(file_name, "configuration", raise_exception)
 
+
+getVariableName = getConfigurationVariableName
+getLocations = getConfigurationLocations
+getPath = getConfigurationPath
