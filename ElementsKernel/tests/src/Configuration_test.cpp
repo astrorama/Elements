@@ -134,6 +134,24 @@ BOOST_FIXTURE_TEST_CASE(getFromLocationsExist_test, Configuration_Fixture) {
                                 m_target_real_item_list.end());
 }
 
+BOOST_FIXTURE_TEST_CASE(NamespaceAlias_test, Configuration_Fixture) {
+
+  {
+    auto env = TempEnv();
+
+    env["ELEMENTS_CONF_PATH"] = Path::join(m_real_item_list);
+
+    auto locations = Configuration::getLocations(true);
+
+    BOOST_CHECK_EQUAL_COLLECTIONS(locations.begin(), locations.end(), m_target_real_item_list.begin(),
+                                  m_target_real_item_list.end());
+  }
+
+  BOOST_CHECK_EQUAL(Configuration::getVariableName(), "ELEMENTS_AUX_PATH");
+
+  Path::Item make_template = Configuration::getPath("ElementsKernel/templates/Makefile.in");
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 
 //-----------------------------------------------------------------------------
