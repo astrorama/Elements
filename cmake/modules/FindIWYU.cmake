@@ -1,6 +1,6 @@
 if (NOT IWYU_FOUND)
 
-    find_program(IWYU_EXECUTABLE include-what-you-use
+    find_program(IWYU_EXECUTABLE NAMES include-what-you-use iwyu
                  HINTS ENV IWYU_INSTALL_DIR
                  PATH_SUFFIXES bin)
     set(IWYU_EXECUTABLE ${IWYU_EXECUTABLE} CACHE STRING "")
