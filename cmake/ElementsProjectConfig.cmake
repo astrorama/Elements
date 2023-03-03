@@ -2552,6 +2552,9 @@ Provide source files and the NO_PUBLIC_HEADERS option for a plugin/module librar
   endif()
 
   set_target_properties(${library} PROPERTIES BASENAME "${CMAKE_SHARED_LIBRARY_PREFIX}${library}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  if(USE_IWYU)
+    set_target_properties(${library} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_EXECUTABLE}")
+  endif()
 
   if(ARG_LINKER_LANGUAGE)
     set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
@@ -3261,6 +3264,11 @@ function(elements_add_executable executable)
   else()
     set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
   endif()
+
+  if(USE_IWYU)
+    set_target_properties(${executable} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_EXECUTABLE}")
+  endif()
+
 
   #----Installation details-------------------------------------------------------
 

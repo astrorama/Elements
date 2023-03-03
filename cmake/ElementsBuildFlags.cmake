@@ -406,6 +406,11 @@ set(NOSE_EXTRA_OPTIONS "" CACHE STRING "Extra option to be appended to the noset
 set(EXTRA_SPHINX_FILES "" CACHE STRING "List of extra doc files for the sphinx generation")
 
 
+option(USE_IWYU
+       "Use the include-what-you-use checker"
+       OFF)
+
+
 #--- Compilation Flags ---------------------------------------------------------
 if(NOT ELEMENTS_FLAGS_SET)
   message(STATUS "Setting cached build flags")
@@ -887,6 +892,10 @@ add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
 
 if(("${SGS_COMP}" STREQUAL "gcc") OR ELEMENTS_CPP11)
   set(GCCXML_CXX_FLAGS "${GCCXML_CXX_FLAGS} -D__STRICT_ANSI__")
+endif()
+
+if(USE_IWYU)
+  find_package(IWYU)
 endif()
 
 include(LocalBuildFlags OPTIONAL)
