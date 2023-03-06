@@ -410,6 +410,8 @@ option(USE_IWYU
        "Use the include-what-you-use checker"
        OFF)
 
+set(IWYU_OPTIONS "" CACHE STRING "List of options to be passed to includ-what-you-use")
+
 
 #--- Compilation Flags ---------------------------------------------------------
 if(NOT ELEMENTS_FLAGS_SET)
@@ -896,6 +898,13 @@ endif()
 
 if(USE_IWYU)
   find_package(IWYU)
+  set(IWYU_COMMAND "${IWYU_EXECUTABLE}")
+  if(IWYU_OPTIONS)
+    string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
+    foreach(iwyu_o ${iwyu_list})
+      set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;${iwyu_o}")
+    endforeach()
+  endif()
 endif()
 
 include(LocalBuildFlags OPTIONAL)
