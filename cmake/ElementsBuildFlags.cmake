@@ -900,8 +900,10 @@ if(("${SGS_COMP}" STREQUAL "gcc") OR ELEMENTS_CPP11)
   set(GCCXML_CXX_FLAGS "${GCCXML_CXX_FLAGS} -D__STRICT_ANSI__")
 endif()
 
+
+find_package(IWYU)
+
 if(USE_IWYU)
-  find_package(IWYU)
   set(IWYU_COMMAND "${IWYU_EXECUTABLE}")
   if(IWYU_OPTIONS)
     string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
@@ -909,6 +911,14 @@ if(USE_IWYU)
       set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;${iwyu_o}")
     endforeach()
   endif()
+endif()
+
+if(CMAKE_EXPORT_COMPILE_COMMANDS AND IWYU_FOUND)
+  add_custom_target(iwyu
+    COMMAND "${IWYU_TOOL_EXECUTABLE}" -p "${CMAKE_BINARY_DIR}"
+    COMMENT "Running include-what-you-use tool"
+    VERBATIM
+  )
 endif()
 
 include(LocalBuildFlags OPTIONAL)
