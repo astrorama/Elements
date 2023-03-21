@@ -3068,6 +3068,12 @@ function(_generate_cython_cpp)
                  PROPERTY COMPILE_FLAGS " -Wno-cast-function-type")
   endif()
 
+  if(CXX_HAS_NO_UNUSED_PARAMETER)
+    set_property(SOURCE ${ARG_OUTFILE} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-unused-parameter")
+  endif()
+
+
 endfunction()
 
 

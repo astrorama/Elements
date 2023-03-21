@@ -443,6 +443,8 @@ if(NOT ELEMENTS_FLAGS_SET)
   check_and_use_cxx_option(-Wlogical-not-parentheses CXX_HAS_LOGICAL_NOT_PARENTHESES)
   check_and_use_cxx_option(-Wnull-dereference CXX_HAS_NULL_DEREFERENCE)
 
+  check_cxx_compiler_flag(-Wno-unused-parameter CXX_HAS_NO_UNUSED_PARAMETER)
+
   check_and_use_cxx_option(-Woverloaded-virtual CXX_HAS_OVERLOADED_VIRTUAL)
 
   check_and_use_cxx_option(-Werror=return-type CXX_HAS_ERROR_RETURN_TYPE)
