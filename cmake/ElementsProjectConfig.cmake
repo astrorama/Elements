@@ -3142,6 +3142,11 @@ function(elements_add_cython_module)
                  PROPERTY COMPILE_FLAGS " -Wno-unused-function")
   endif()
 
+  if(CXX_HAS_NO_UNUSED_PARAMETER)
+    set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-unused-parameter")
+  endif()
+
   if(CXX_HAS_NO_UNNEEDED_INTERNAL_DECLARATION)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
                  PROPERTY COMPILE_FLAGS " -Wno-unneeded-internal-declaration")
