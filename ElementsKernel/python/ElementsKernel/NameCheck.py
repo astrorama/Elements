@@ -114,19 +114,19 @@ def mainMethod(args):
     Main
     """
 
-    exit_code = Exit.Code["NOT_OK"]
+    exit_code = Exit.Code["OK"]
 
     entity_name = args.entity_name
 
     if not checkDataBaseUrl(args.url):
         LOGGER.critical("The Elements Naming DB URL is not valid")
-        exit_code = Exit.Code["INVALID_URL"]
+        exit_code = Exit.Code["UNAVAILABLE"]
     else:
         info = getInfo(entity_name, args.url, args.type)
 
         if info["error"]:
             LOGGER.error("There was an error querying the DB: %s", info["message"])
-            exit_code = Exit.Code["DB_ERROR"]
+            exit_code = Exit.Code["SOFTWARE"]
         else:
             if info["exists"]:
                 LOGGER.warning("The \"%s\" name for the %s type already exists", entity_name, args.type)
@@ -134,7 +134,6 @@ def mainMethod(args):
                             entity_name, info["url"])
                 LOGGER.info("The full information for the \"%s\" name of type %s: %s", entity_name,
                             args.type, info["private_url"])
-                exit_code = Exit.Code["OK"]
             else:
                 LOGGER.warning("The \"%s\" name of type %s doesn't exist", entity_name, args.type)
                 exit_code = Exit.Code["NOT_OK"]

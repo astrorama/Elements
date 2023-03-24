@@ -78,6 +78,7 @@ def mergeFiles(frag_file_names, merged_file_name, comment_char,
 
     return 0
 
+
 if __name__ == "__main__":
 
     from optparse import OptionParser
@@ -125,7 +126,7 @@ if __name__ == "__main__":
         action="store",
         default=None,
         help="Create the stamp file in the specified directory. If not specified"
-        + " the directory of the source file is used."
+        +" the directory of the source file is used."
     )
     parser.add_option(
         "--no-stamp",
@@ -152,9 +153,8 @@ if __name__ == "__main__":
         options.frag_file_names += args[:-1]
 
     sc = 1
-    if not options.frag_file_names or \
-       not options.merged_file_name:
-        str(parser.print_help() or "")
+    if not options.frag_file_names or not options.merged_file_name:
+        parser.print_help()
         print("*** ERROR ***", sys.argv)
         sys.exit(sc)
 
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     else:
         stampFileName = lambda x: os.path.join(options.stamp_dir,
                                                os.path.basename(x)
-                                               + ".stamp")
+                                               +".stamp")
     # Configure Python logging
     import logging
     logging.basicConfig(level=logging.INFO)
@@ -174,14 +174,13 @@ if __name__ == "__main__":
     else:
         globalLock = None
 
-    if True:  # try:
-        sc = mergeFiles(options.frag_file_names, options.merged_file_name,
-                        options.comment_char,
-                        do_merge=options.do_merge,
-                        ignore_missing=options.ignore_missing)
-        if not options.no_stamp:
-            for stamp in map(stampFileName, options.frag_file_names):
-                open(stamp, 'w')
+    sc = mergeFiles(options.frag_file_names, options.merged_file_name,
+                    options.comment_char,
+                    do_merge=options.do_merge,
+                    ignore_missing=options.ignore_missing)
+    if not options.no_stamp:
+        for stamp in map(stampFileName, options.frag_file_names):
+            open(stamp, 'w')
 
     del globalLock
 
