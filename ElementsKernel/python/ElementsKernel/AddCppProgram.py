@@ -36,6 +36,8 @@ from ElementsKernel import Logging
 
 from ElementsKernel import Exit
 
+__updated__ = "2023-03-30"
+
 LOGGER = Logging.getLogger(__name__)
 
 # Define constants
@@ -101,7 +103,7 @@ def substituteAuxFiles(module_dir, program_name):
 ################################################################################
 
 
-def updateCmakeListsFile(module_dir, module_name, program_name,
+def updateCmakeListsFile(module_dir, program_name,
                          module_dep_list, library_dep_list):
     """
     Update CMakeLists.txt file
@@ -158,14 +160,14 @@ def updateCmakeListsFile(module_dir, module_name, program_name,
 ################################################################################
 
 
-def createCppProgram(module_dir, module_name, program_name, module_dep_list, library_dep_list):
+def createCppProgram(module_dir, program_name, module_dep_list, library_dep_list):
     """
     Creates all necessary files for a program
     """
     createDirectories(module_dir)
     substituteAuxFiles(module_dir, program_name)
     addConfFile(module_dir, program_name)
-    updateCmakeListsFile(module_dir, module_name, program_name,
+    updateCmakeListsFile(module_dir, program_name,
                          module_dep_list, library_dep_list)
 
 ################################################################################
@@ -237,12 +239,10 @@ def mainMethod(args):
 
         LOGGER.info('Current directory : %s', current_dir)
         LOGGER.info('')
-        # We absolutely need a Elements cmake file
-        module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
         # make some checks
         makeChecks(current_dir, program_name)
         # Create CPP program
-        createCppProgram(current_dir, module_name, program_name, module_list, library_list)
+        createCppProgram(current_dir, program_name, module_list, library_list)
 
         location = os.path.join(current_dir, 'src', 'program')
         LOGGER.info('< %s > program successfully created in < %s >.', program_name, location)
