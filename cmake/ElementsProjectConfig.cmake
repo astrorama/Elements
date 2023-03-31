@@ -146,6 +146,11 @@ macro(elements_project project version)
     message(FATAL_ERROR "Wrong arguments.")
   endif()
 
+  message(STATUS "=======================================================================")
+  message(STATUS "                  --- Building ${project} ${version} ---               ")
+  message(STATUS "=======================================================================")
+
+
   if(NOT CMAKE_PROJECT_VERSION MATCHES "^HEAD.*")
     string(REGEX MATCH ${version_regex} _version ${CMAKE_PROJECT_VERSION})
     set(CMAKE_PROJECT_VERSION_MAJOR ${CMAKE_MATCH_1} CACHE INTERNAL "Major version of project")
