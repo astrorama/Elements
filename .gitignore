@@ -64,6 +64,8 @@
 ## gnome builder
 /.buildconfig
 
+## VS Code
+/.vscode
 
 #####=== Python ===#####
 __pycache__/
