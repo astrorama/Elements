@@ -1,5 +1,5 @@
 #!groovy
-@Library('integration-library@release-10') _
+@Library('integration-library@develop') _
 pipelineElements(
 	name:"Elements",
 	group:"CT",
