@@ -152,30 +152,30 @@ void printFloatPrecision() {
 
   printTitle<T>();
 
-  auto zero           = Zero<T>();
-  auto zeroplus       = float_next(zero);
-  auto nextafterzero  = nextafter(zero, Two<T>());
-  auto nextzerotoward = nexttoward(zero, Two<T>());
+  auto zero             = Zero<T>();
+  auto zero_plus        = float_next(zero);
+  auto next_after_zero  = nextafter(zero, Two<T>());
+  auto next_zero_toward = nexttoward(zero, Two<T>());
 
   cout << "zero: " << zero << endl;
-  cout << "next to zero: " << zeroplus << endl;
-  cout << "next after zero: " << nextafterzero << endl;
-  cout << "next after zero toward two: " << nextzerotoward << endl;
+  cout << "next to zero: " << zero_plus << endl;
+  cout << "next after zero: " << next_after_zero << endl;
+  cout << "next after zero toward two: " << next_zero_toward << endl;
 
   auto one                    = One<T>();
-  auto oneplus                = float_next(one);
-  auto nextafterone           = nextafter(one, Two<T>());
-  auto nextonetoward          = nexttoward(one, Two<T>());
-  auto cospiover7             = cos(pi<T>() / Seven<T>());
+  auto one_plus               = float_next(one);
+  auto next_after_one         = nextafter(one, Two<T>());
+  auto next_one_toward        = nexttoward(one, Two<T>());
+  auto cos_pi_over_7          = cos(pi<T>() / Seven<T>());
   auto default_test_tolerance = pow(Ten<T>(), -numeric_limits<T>::digits10);
 
   cout << "one: " << one << endl;
-  cout << "next to one: " << oneplus << endl;
-  cout << "next after one: " << nextafterone << endl;
-  cout << "next after one toward two: " << nextonetoward << endl;
+  cout << "next to one: " << one_plus << endl;
+  cout << "next after one: " << next_after_one << endl;
+  cout << "next after one toward two: " << next_one_toward << endl;
 
   cout << "pi: " << pi<T>() << endl;
-  cout << "the Cosine of pi/7: " << cospiover7 << endl;
+  cout << "the Cosine of pi/7: " << cos_pi_over_7 << endl;
   cout << "the default test tolerance: " << default_test_tolerance << endl;
 
   cout << "The mantissa digits: " << numeric_limits<T>::digits << endl;
