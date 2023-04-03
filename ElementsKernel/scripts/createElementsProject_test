@@ -78,6 +78,22 @@ if [ ! -e $User_area/$project_name/$version/doc/mainpage.dox ]; then
    echo "Error: <$User_area/$project_name/$version/doc/mainpage.dox> file not found" 1>&2
    local_clean_exit 1
 fi
+if [ ! -e $User_area/$project_name/$version/doc/doc_project.rst ]; then
+   echo "Error: <$User_area/$project_name/$version/doc/doc_project.rst> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/.clang-format ]; then
+   echo "Error: <$User_area/$project_name/$version/.clang-format> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/CHANGELOG.md ]; then
+   echo "Error: <$User_area/$project_name/$version/CHANGELOG.md> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/.pre-commit-config.yaml ]; then
+   echo "Error: <$User_area/$project_name/$version/.pre-commit-config.yaml> file not found" 1>&2
+   local_clean_exit 1
+fi
 
 # Make sure <Project_test> is there
 result=$( grep "$project_name $version" $User_area/$project_name/$version/CMakeLists.txt )
