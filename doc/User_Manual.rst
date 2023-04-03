@@ -52,7 +52,7 @@ time, the ``PATH`` and ``LD_LIBRARY_PATH`` environment variables need to
 be updated to accommodate the extra directories:
 
 ===================== ===================== ===================
-The Standard Location **Custom Location**   
+The Standard Location **Custom Location**
 ===================== ===================== ===================
 Path Entry            Path Entry            Environment
 ``/usr/lib``          ``/opt/<vendor>/lib`` ``LD_LIBRARY_PATH``
@@ -67,7 +67,7 @@ This is also true at build time. Some extra parameters (``-I`` and
 software:
 
 ===================== =========================== ==========
-The Standard Location **Custom Location**         
+The Standard Location **Custom Location**
 ===================== =========================== ==========
 Path Entry            Path Entry                  G Settings
 ``/usr/lib``          ``-L/opt/<vendor>/lib``     linker
@@ -524,7 +524,7 @@ following (bash) shell command:
 
    export CMAKEFLAGS="${CMAKEFLAGS} -DOPT_DEBUG=OFF"
 
-| 
+|
 | removes the default optimization used for the debug build. It removes
   the ``-Og`` option from the ``g++`` command line in order to ease the
   debugging. All of these options starts with a ``-D`` and are either
@@ -643,7 +643,7 @@ should see that banner
        /opt/euclid
    --------------------------------------------------------------------------------
 
-| 
+|
 | at login time. This means that everything has been setup for you.
 
 If it is not the case and that you have installed the EuclidEnv package
@@ -653,14 +653,14 @@ by hand, you might have to call (for bash):
 
    [hubert@degauden:~] . ELogin.sh
 
-| 
+|
 | or (for csh)
 
 ::
 
    [hubert@degauden:~] source `which ELogin.csh`
 
-| 
+|
 | After that the 3 variables should be defined.
 
 The Build Commands
@@ -720,7 +720,7 @@ underlying executable through the make call with the ``ARGS`` parameter:
    make ARGS="-R ElementsKernel" test
    make ARGS="-L PyTest" test
 
-| 
+|
 | Here the ``-R`` option is using a regular expression to filter the
   tests according to their name and the ``-L`` option is using a regular
   expression to filter the tests according to one of their label. One
@@ -730,7 +730,7 @@ underlying executable through the make call with the ``ARGS`` parameter:
 
    ctest -h
 
-| 
+|
 | For example, in order to increase the verbosity of the tests, one can
   run
 
@@ -844,9 +844,9 @@ If we have, say, a built executable in the current project (i.e.
 ::
 
    [hubert@degauden] cd $User_area/MyProject # or "cd $User_area/MyProject/1.0" if it has a version directory
-   [hubert@degauden] ./build.${BINARY_TAG}/run MyExecutable 
+   [hubert@degauden] ./build.${BINARY_TAG}/run MyExecutable
 
-| 
+|
 | The ``run`` script wrapper will provide the needed environment for the
   MyExecutable execution (``PATH``, ``LD_LIBRARY_PATH``, ``PYTHONPATH``,
   ``ELEMENTS_CONF_PATH``, ``ELEMENTS_AUX_PATH``)
@@ -871,7 +871,7 @@ procedure.
    [degauden@piecld00] which E-Run
    /usr/bin/E-Run
 
-| 
+|
 | The ``E-Run`` command will only use the contents of the chained
   InstallArea of the involved project. Thus, the “``make install``” has
   to have been run and the ``build.${BINARY_TAG}`` directories will be
@@ -881,7 +881,7 @@ procedure.
 
    [hubert@degauden] E-Run MyProject 1.0 MyExecutable
 
-| 
+|
 | or
 
 ::
@@ -1055,7 +1055,7 @@ look like:
 
    ${EUCLID_BASE}/<project2>/<version2>/InstallArea/${BINARY_TAG}/bin:${EUCLID_BASE}/<project1>/<version1>/InstallArea/${BINARY_TAG}/bin
 
-| 
+|
 | In this example, we are looking for executable in the ``<project2>``
   environment setup. Since that project depends on the project, a second
   component is added to the ``PATH``. If we don’t want to shadow the
@@ -1093,7 +1093,7 @@ preprocessor:
    #include "MyModule/ThatHeader.h"
    </code>
 
-| 
+|
 | Here the ``MyModule`` is the namespace. Since the build include
   options look like:
 
@@ -1101,7 +1101,7 @@ preprocessor:
 
    -I${EUCLID_BASE}/<project2>/<version2>/InstallArea/${BINARY_TAG}/include -I${EUCLID_BASE}/<project1>/<version1>/InstallArea/${BINARY_TAG}/include
 
-| 
+|
 | it is recommended to create another ``MyModule`` directory in the
   project source tree
 
@@ -1288,10 +1288,10 @@ Helper Scripts - Creating New Source Files
 
 ::
 
-   1- CreateElementsProject 
+   1- CreateElementsProject
    2- AddElementsModule
    3- AddCppClass
-   4- AddCppProgram 
+   4- AddCppProgram
    5- AddPythonModule
    6- AddPythonProgram
    7- RemoveCppClass, RemoveCppProgram
@@ -1397,7 +1397,7 @@ Options available:
 ::
 
    > ERun Elements 3.9 AddCppClass <Class_Name>
-   where 
+   where
    <Class_Name> : your class name
 
 Options available:
@@ -1442,7 +1442,7 @@ Options available:
 ::
 
    > ERun Elements 3.9 AddCppProgram <Program_Name>
-   where 
+   where
    <Program_Name> : your program name
 
 Options available:
@@ -1490,7 +1490,7 @@ Options available:
 ::
 
    > ERun Elements 3.9 AddPythonModule <Py_Module_Name>
-   where 
+   where
    <Py_Module_Name> : your python module name
 
 *Python Module Example*:
@@ -1537,7 +1537,7 @@ Options available:
 ::
 
    > ERun Elements 3.9 AddPythonProgram <Py_Program_Name>
-   where 
+   where
    <Py_Program_Name> : your python program name
 
 *Python Program Example*:
@@ -1587,7 +1587,7 @@ Options available:
 ::
 
    > ERun Elements 5.0 AddScript <Script_Name>
-   where 
+   where
    <Script_Name> : your script name
 
 *Script Example*:
@@ -1929,7 +1929,7 @@ CMakeLists.txt file is close to the one for a library :
                            LINK_LIBRARIES library1 library2 ...
                            INCLUDE_DIRS dir1 module2 ...)
 
-| 
+|
 | Except for the ``LINKER_LANGUAGE``, ``PUBLIC_HEADERS`` and
   ``NO_PUBLIC_HEADERS`` options that make no sense for an executable.
 
@@ -1999,7 +1999,7 @@ module CMakeLists.txt file is :
                           [TIMEOUT seconds]
                           [TYPE Boost|CppUnit])
 
-| 
+|
 | It is the same syntax as the one to create an executable with some
   extra options.
 
@@ -2487,7 +2487,7 @@ only the suite has to be written:
    BOOST_AUTO_TEST_SUITE_END()
    </code>
 
-| 
+|
 | Remarks:
 
 -  The test source files are located by convention in the tests/src
@@ -2713,7 +2713,7 @@ example:
 
    [hubert@degauden:~/Work/Space/Euclid/Elements(git)-[develop]] make test
    rm -f -r /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg/Testing /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg/html
-   cd /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg && ctest -T test 
+   cd /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg && ctest -T test
       Site: degauden.isdc.unige.ch
       Build name: Linux-c++
    Create new tag: 20180524-1301 - Experimental
@@ -2738,7 +2738,7 @@ setting the ``CTEST_OUPUT_ON_FAILURE`` environment variable:
 ::
 
    hubert@degauden:~/Work/Space/Euclid/Elements(git)-[develop]] export CTEST_OUTPUT_ON_FAILURE=1
-   [hubert@degauden:~/Work/Space/Euclid/Elements(git)-[develop]] make ARGS="-R ElementsKernel.PyTest" test 
+   [hubert@degauden:~/Work/Space/Euclid/Elements(git)-[develop]] make ARGS="-R ElementsKernel.PyTest" test
    rm -f -r /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg/Testing /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg/html
    cd /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg && ctest -T test -R ElementsKernel.PyTest
       Site: degauden.isdc.unige.ch
@@ -2760,7 +2760,7 @@ setting the ``CTEST_OUPUT_ON_FAILURE`` environment variable:
    ../ElementsKernel/tests/python/ProgramTest.py .
    ../ElementsKernel/tests/python/TempTest.py .......
 
-    generated xml file: /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg/Testing/Temporary/ElementsKernel.PyTest.xml 
+    generated xml file: /home/hubert/Work/Space/Euclid/Elements/build.x86_64-fc27-gcc73-dbg/Testing/Temporary/ElementsKernel.PyTest.xml
    =================================== FAILURES ===================================
    ____________________________ PathTest.testJoinPath _____________________________
 
@@ -2850,7 +2850,7 @@ Typically the gcc compiler will issue a warning:
     int myFunc(int a, int b) {
                           ^
 
-| 
+|
 | Because the ``b`` argument is not used.
 
 In order to silence the compiler (and because we *must* have this
@@ -2867,7 +2867,7 @@ argument:
 
    </code>
 
-| 
+|
 | This might not however be perfect. Typically depending on the editor
   you are using, the comments might appears very pale and the
   information that the name of the parameter could provide is pretty
@@ -2973,7 +2973,7 @@ function by adding a custom message. This can be done with the
    #endif // EXAMPLE_MYFUNC_H_
    </code>
 
-| 
+|
 | This will then produce the following warning when compiling:
 
 ::
@@ -3294,7 +3294,7 @@ different name scheme with the usage of a template pattern:
    TempDir two{"This-new-scheme-%%%%%%"};
    </code>
 
-| 
+|
 | The ``%`` are placeholders that will be replaced by a random sequence
   of letters and digits.
 
@@ -3795,7 +3795,7 @@ Declare the dependency of each test suite to the tool module
 ::
 
    <code class="xml">
-   elements_add_unit_test(<TestSuiteName> tests/src/<TestSuiteName>_test.cpp 
+   elements_add_unit_test(<TestSuiteName> tests/src/<TestSuiteName>_test.cpp
                         EXECUTABLE <ModuleName>_<TestSuiteName>_test
                         LINK_LIBRARIES <ModuleName> ElementsServices
                         TYPE Boost)

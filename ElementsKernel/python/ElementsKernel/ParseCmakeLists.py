@@ -364,4 +364,3 @@ class CMakeLists(object):
         result = self._add_elements_macro_contents(result)
 
         return result
-

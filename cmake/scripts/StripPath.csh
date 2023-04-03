@@ -8,4 +8,3 @@ set scriptdir=${ELEMENTS_PROJECT_ROOT}/cmake/scripts
   unset tmpfile
   unset scriptdir
 endif
-

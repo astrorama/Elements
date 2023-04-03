@@ -177,9 +177,9 @@ elements_add_unit_test(TemplatedDataSourceUser_test_suite tests/src/GMock/Templa
 if(CXX_HAS_SUGGEST_OVERRIDE)
   set_property(SOURCE tests/src/GMock/DataSourceUser_test.cpp tests/src/GMock/TemplatedDataSourceUser_test.cpp
                APPEND_STRING PROPERTY COMPILE_FLAGS " -Wno-suggest-override")
-endif() 
-                
-                       
+endif()
+
+
 endif(GMOCK_FOUND)
 
 #====== Build Tests =================================================================
@@ -285,7 +285,7 @@ elements_add_swig_binding(SwigExample ElementsExamples/SwigExample.i
                           LINK_LIBRARIES ElementsExamples
                           INCLUDE_DIRS ElementsExamples
                           PUBLIC_HEADERS ElementsExamples)
-                          
+
 find_package(NumPy)
 if(NUMPY_FOUND)
 elements_add_swig_binding(NumPyExample  ElementsExamples/NumPyExample.i
@@ -300,7 +300,7 @@ find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET)
 if(CYTHON_FOUND AND PYTHONLIBS_FOUND)
 elements_add_cython_module(src/Cython/lib/PiCalculator.pyx
                            LINK_LIBRARIES ElementsExamples
-                           INCLUDE_DIRS ElementsExamples 
+                           INCLUDE_DIRS ElementsExamples
                            NO_PUBLIC_HEADERS)
 elements_add_cython_module(src/Cython/lib/Rect.pyx
                            LINK_LIBRARIES ElementsExamples
@@ -312,7 +312,7 @@ find_package(pybind11)
 if(pybind11_FOUND AND PYTHONLIBS_FOUND)
   elements_add_pybind11_module(testCallBack src/pybind11/callback.cpp
                                INCLUDE_DIRS ElementsExamples
-                               LINK_LIBRARIES ElementsExamples)  
+                               LINK_LIBRARIES ElementsExamples)
 endif()
 
 #---Python modules, Scripts, conf and aux files ------------------------------------------------------------
@@ -371,4 +371,3 @@ elements_add_test(OptionPrecedence COMMAND OptionPrecedence_test)
 
 elements_install_conf_files()
 elements_install_aux_files()
-

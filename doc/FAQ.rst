@@ -183,7 +183,7 @@ Usually the tests are run by calling:
 
    make test
 
-| 
+|
 | from the main directory of the project. If one would like to see more
   details, for a failing test for example, the verbosity can be
   increased by doing

@@ -15,4 +15,3 @@ if (NOT DISTCC_FOUND)
 
 
 endif (NOT DISTCC_FOUND)
-

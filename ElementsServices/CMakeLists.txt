@@ -67,7 +67,7 @@ elements_add_unit_test(DataSynchronizer tests/src/DataSync/DataSynchronizer_test
                        EXECUTABLE ElementsServices_DataSynchronizer_test
                        LINK_LIBRARIES ElementsServices
                        TYPE Boost)
-elements_add_unit_test(DataSynchronizerMaker tests/src/DataSync/DataSynchronizerMaker_test.cpp 
+elements_add_unit_test(DataSynchronizerMaker tests/src/DataSync/DataSynchronizerMaker_test.cpp
                        EXECUTABLE ElementsServices_DataSynchronizerMaker_test
                        LINK_LIBRARIES ElementsServices
                        TYPE Boost)

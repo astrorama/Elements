@@ -27,6 +27,3 @@ namespace %(MODULENAME)s {
 %(TEMPLATE_COM_CPP)s
 %(TEMPLATE_CLASS_CPP)s
 }  // namespace %(MODULENAME)s
-
-
-

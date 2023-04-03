@@ -14,4 +14,3 @@ if (NOT RPM_FOUND)
 
 
 endif (NOT RPM_FOUND)
-

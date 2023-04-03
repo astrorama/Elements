@@ -22,7 +22,7 @@
  */
 
 #ifndef %(TEMPLATE_TPP_DEFWORDS)s
-#error "This file should not be included directly! Use Module/MyClass.h instead." 
+#error "This file should not be included directly! Use Module/MyClass.h instead."
 #else
 
 #include "%(MODULENAME_SUBDIR)s%(OSSEP)s%(CLASSNAME)s.h"
@@ -31,7 +31,7 @@ namespace %(MODULENAME)s {
 
 // template<typename T>
 // void %(CLASSNAME)s<T>::fakeFunc(const T& t) {
-// 
+//
 // }
 
 }  // namespace Module

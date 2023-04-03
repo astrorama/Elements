@@ -20,5 +20,3 @@ if (NOT IRODS_FOUND)
 
 
 endif (NOT IRODS_FOUND)
-
-

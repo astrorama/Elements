@@ -121,4 +121,3 @@ class ConnectionConfiguration(object):
         else:
             return
             # TODO: raise error
-

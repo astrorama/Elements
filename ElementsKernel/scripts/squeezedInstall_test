@@ -101,7 +101,7 @@ mkdir -p ${User_area}
 
 cd ${User_area}
 
-CreateElementsProject -n --yes ${projectB_name} ${projectB_version} 
+CreateElementsProject -n --yes ${projectB_name} ${projectB_version}
 if [ $? -ne 0 ]; then
    echo "Error: <CreateElementsProject $projectB_name $projectB_version> command failed!" 1>&2
    local_clean_exit 1

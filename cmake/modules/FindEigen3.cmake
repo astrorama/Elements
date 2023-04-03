@@ -101,5 +101,3 @@ if(EIGEN3_FOUND)
     message(STATUS "  Import target: Eigen3::eigen3")
   endif()
 endif()
-
-

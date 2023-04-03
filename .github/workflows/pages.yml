@@ -49,8 +49,8 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           path: ${{ runner.workspace }}/build/doc/html
-       
-  deploy: 
+
+  deploy:
     needs: build
     environment:
       name: github-pages
@@ -60,4 +60,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
- 

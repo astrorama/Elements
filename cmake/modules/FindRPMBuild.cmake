@@ -176,4 +176,3 @@ rm -rf build_tree
   endif(NOT RPMBUILD_FOUND)
 
 ENDIF (UNIX)
-

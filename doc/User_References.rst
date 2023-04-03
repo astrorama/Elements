@@ -901,7 +901,7 @@ CMakeLists.txt file has to be edited** in the following way.
        CACHE STRING "enable explicit symbol visibility on gcc-4"
        FORCE)
 
-| 
+|
 | This enables for the current project (and the current project only),
   the symbols hiding in the generated libraries.
 

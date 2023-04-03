@@ -29,22 +29,22 @@ elements_add_unit_test(Logging tests/src/Logging_test.cpp
 # Path_test
 elements_add_unit_test(PathSearch tests/src/PathSearch_test.cpp
                        EXECUTABLE PathSearch_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 elements_add_unit_test(Path tests/src/Path_test.cpp
                        EXECUTABLE Path_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 elements_add_unit_test(Configuration tests/src/Configuration_test.cpp
                        EXECUTABLE BasicConfiguration_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 elements_add_unit_test(Auxiliary tests/src/Auxiliary_test.cpp
                        EXECUTABLE Auxiliary_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 #-----------------------
@@ -210,19 +210,19 @@ elements_add_test(AddPythonModule COMMAND addPythonModule_test LABELS Creation)
 elements_add_test(AddPythonProgram COMMAND addPythonProgram_test LABELS Creation)
 elements_add_test(AddScript COMMAND addScript_test LABELS Creation)
 
-elements_add_test(CreateDependentElementsProjects 
-                  COMMAND createDependentElementsProjects_test  
+elements_add_test(CreateDependentElementsProjects
+                  COMMAND createDependentElementsProjects_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
 
 elements_add_test(CheckElementsProjectsTree
-                  COMMAND checkElementsProjectsTree_test  
+                  COMMAND checkElementsProjectsTree_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
 
 if (NOT SQUEEZED_INSTALL)
   elements_add_test(CheckProjectDependencyFailure
-                    COMMAND checkProjectDependencyFailure_test  
+                    COMMAND checkProjectDependencyFailure_test
                     ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                     LABELS Creation)
 endif()
@@ -231,17 +231,17 @@ elements_add_test(HEADVersionProject
                   COMMAND HEADVersionProject_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
-                  
+
 elements_add_test(PatchVersionProject
                   COMMAND patchVersionProject_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
-                  
-elements_add_test(CMakeOverride 
-                  COMMAND cmakeOverride_test  
+
+elements_add_test(CMakeOverride
+                  COMMAND cmakeOverride_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation Override)
-                  
+
 elements_add_test(MissingElementsProjectVersion
                   COMMAND missingElementsProjectVersion_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake

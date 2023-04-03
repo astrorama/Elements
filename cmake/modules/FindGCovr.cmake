@@ -20,4 +20,3 @@ if (NOT GCOVR_FOUND)
 
 
 endif (NOT GCOVR_FOUND)
-
