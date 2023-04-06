@@ -28,6 +28,10 @@ def main():
 #ifndef _%(proj)s_EXPORT_H_
 #define _%(proj)s_EXPORT_H_
 
+#ifndef __GNUC__
+#define __attribute__(x)
+#endif
+
 // ---------------------------------- Symbol visibility macros (begin)
 #if defined(%(proj)s_HIDE_SYMBOLS)
 /// These macros will allow selection on exported symbols
