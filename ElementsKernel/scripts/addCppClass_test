@@ -211,7 +211,7 @@ if [ $? -ne 0 ]  ;then
 fi
 
 #
-# Test the template option 
+# Test the template option
 #
 class_name_temp="ClassTemplateTest"
 file_h="${MODULE_NAME}/${class_name_temp}.h"
@@ -246,7 +246,7 @@ if [ $? -ne 0 ]  ;then
    clean_and_exit 1
 fi
 
-# Check several patterns in the *.h file 
+# Check several patterns in the *.h file
 pattern_str="#include \"${MODULE_NAME}/_impl/${class_name_temp}.tpp\""
 result=$( grep "${pattern_str}" "${file_h}" )
 if [ $? -ne 0 ]  ;then
@@ -303,7 +303,7 @@ file_h="${MODULE_NAME}/${subdir}/${class_name_temp_subdir}.h"
 file_tpp="${MODULE_NAME}/${subdir}/_impl/${class_name_temp_subdir}.tpp"
 file_cpp="src/lib/${subdir}/${class_name_temp_subdir}.cpp"
 
-AddCppClass ${subdir}/${class_name_temp_subdir} -t 
+AddCppClass ${subdir}/${class_name_temp_subdir} -t
 
 # Make sure the .tpp file is created
 if [ ! -e "${file_tpp}" ]; then

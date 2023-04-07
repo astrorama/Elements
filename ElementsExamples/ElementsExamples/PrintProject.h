@@ -1,8 +1,8 @@
-/*
- * @file ElementsExamples/_impl/TemplateDataSourceUser.tpp
- *
- * @date 2015-09-23
- * @author: Florian Dubath
+/**
+ * @file PrintProject.h
+ * @brief function that displays the current project properties
+ * @date 2020-05-14
+ * @author hubert
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -16,29 +16,27 @@
  *
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ *
  */
 
-#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
-#error "This file should not be included directly! Use ElementsExamples/TemplatedDataSourceUser.h instead"
-#else
+/**
+ * @addtogroup ElementsExamples ElementsExamples
+ * @{
+ */
 
-#include <cstddef>  // for std::size_t
+#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_PRINTPROJECT_H_
+#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_PRINTPROJECT_H_
+
+#include "ElementsKernel/Export.h"
 
 namespace Elements {
 namespace Examples {
 
-template <typename T>
-double TemplatedDataSourceUser::sumRecords(const T& data_source) {
-  double      sum            = 0.;
-  std::size_t records_number = data_source.countRecords();
-  for (std::size_t index = 0; index < records_number; ++index) {
-    sum += data_source.getRecordValue(index);
-  }
-
-  return sum;
-}
+ELEMENTS_API void printProject();
 
 }  // namespace Examples
 }  // namespace Elements
 
-#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
+#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_PRINTPROJECT_H_
+
+/**@}*/

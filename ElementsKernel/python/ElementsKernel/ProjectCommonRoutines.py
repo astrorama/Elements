@@ -219,12 +219,8 @@ def getAuthor():
     """
     Get the contents of the <USER> environment variables
     """
-    try:
-        author_str = os.environ['USER']
-    except KeyError:
-        author_str = ''
 
-    return author_str
+    return os.environ.get('USER', '')
 
 ################################################################################
 

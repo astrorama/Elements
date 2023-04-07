@@ -21,7 +21,7 @@ local_clean_exit() {
   if [ -z "${KEEPTEMPDIR}" ]; then
     rm -rf ${tmploc}
   fi
-  
+
   exit $1
 }
 

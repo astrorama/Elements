@@ -1,10 +1,10 @@
 /**
  * @file ElementsKernel/_impl/Path.tpp
  * @brief implementation of the templates declared in ElementsKernel/Path.h
- * @date May 17, 2016
+ * @date 2016-05-17
  * @author Hubert Degaudenzi
  *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)

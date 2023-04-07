@@ -87,4 +87,3 @@ class DataSynchronizer(object):
     def createDownloadCommand (self, distant_file, local_file):
         """Create the command to download a file.
         """
-

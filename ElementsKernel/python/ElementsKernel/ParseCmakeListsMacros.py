@@ -194,4 +194,3 @@ class ElementsAddUnitTest(object):
             result += '\n                     TYPE ' + self.key_type
         result = result.strip() + ')'
         return result
-

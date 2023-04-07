@@ -37,6 +37,8 @@ try:
 except ImportError:
     from __builtin__ import input
 
+__updated__ = "2023-04-03"
+
 LOGGER = Logging.getLogger(__name__)
 
 AUX_CMAKE_LIST_IN = "CMakeLists.txt.in"
@@ -47,15 +49,19 @@ AUX_GITIGNORE_IN = "gitignore_template.in"
 AUX_GITATTRIBUTES_IN = "gitattributes_template.in"
 AUX_EDITOR_CONFIG = "editorconfig"
 AUX_CLANG_FORMAT = "clang-format"
+AUX_CHANGELOG = "CHANGELOG.md"
+PRE_COMMIT_CONFIG = "pre-commit-config.yaml"
 
-target_locations = { AUX_CMAKE_LIST_IN: "CMakeLists.txt",
+TARGET_LOCATIONS = { AUX_CMAKE_LIST_IN: "CMakeLists.txt",
                      AUX_MAKE_FILE_IN: "Makefile",
                      AUX_PROJ_RST_IN: "doc/doc_project.rst",
                      AUX_PROJ_MAINPAGE_IN: "doc/mainpage.dox",
                      AUX_GITIGNORE_IN: ".gitignore",
                      AUX_GITATTRIBUTES_IN: ".gitattributes",
                      AUX_EDITOR_CONFIG: ".editorconfig",
-                     AUX_CLANG_FORMAT: ".clang-format"
+                     AUX_CLANG_FORMAT: ".clang-format",
+                     AUX_CHANGELOG: "CHANGELOG.md",
+                     PRE_COMMIT_CONFIG: ".pre-commit-config.yaml"
                    }
 
 ################################################################################
@@ -160,9 +166,9 @@ def createProject(project_dir, proj_name, proj_version, dep_projects, standalone
 
     configuration = getSubstituteConfiguration(proj_name, proj_version, dep_projects, standalone, visibility)
 
-    for src in target_locations:
+    for src in TARGET_LOCATIONS:
         file_name = os.path.join("ElementsKernel", "templates", src)
-        tgt = target_locations[src]
+        tgt = TARGET_LOCATIONS[src]
         Auxiliary.configure(file_name, project_dir, tgt,
                             configuration=configuration,
                             create_missing_dir=True)

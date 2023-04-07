@@ -20,4 +20,3 @@ if (NOT LCOV_FOUND)
 
 
 endif (NOT LCOV_FOUND)
-

@@ -239,4 +239,3 @@ set(SPEC_XMLDIR "%{_prefix}/${XML_INSTALL_SUFFIX}")
 foreach(_do LIB PY PYDYN SCRIPTS CMAKE MAKE CONF AUX DOC XML)
   dir_strip_end(SPEC_${_do}DIR)
 endforeach()
-

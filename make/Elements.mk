@@ -133,7 +133,7 @@ BUILD_CMD := $(CMAKE) --build $(BUILD_SUBDIR) --target
 
 # Use environment variable for extra flags
 
-# Replace the ":" from eclipse variable list to spaces  
+# Replace the ":" from eclipse variable list to spaces
 ifneq ($(EXPAND_FLAGS),)
   CMAKEFLAGS := $(subst :-, -,$(CMAKEFLAGS))
 endif
@@ -176,7 +176,7 @@ endif
 
 ifndef CTEST_ARGS
   CTEST_ARGS = -T test --output-junit $(BUILDDIR)/Testing/JUnitTestReport.xml $(CTEST_EXTRA_ARGS)
-endif 
+endif
 
 # This wrapping around the test target is used to ensure the generation of
 # the XML output from ctest.
@@ -217,4 +217,3 @@ $(BUILDDIR)/$(BUILD_CONF_FILE): | $(BUILDDIR)
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
-

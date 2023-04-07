@@ -44,7 +44,7 @@ public:
   virtual ~%(CLASSNAME)s() = default;
 
   %(TEMPLATE_FUNC)s
-  
+
 private:
 
 };  // End of %(CLASSNAME)s class

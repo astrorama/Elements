@@ -6,8 +6,8 @@ Project Overview <----------------- TO BE WRITTEN ------------------------>
 .. important:: Please modify ./doc/doc_project.rst to complete this section.
    Adjust title when done.
 
-.. The following sections can be replaced or updated. 
-   Consider using a toctree directive to split larger documents. 
+.. The following sections can be replaced or updated.
+   Consider using a toctree directive to split larger documents.
 
 Introduction
 ------------
@@ -19,7 +19,7 @@ What does it do?
 Architecture overview
 ---------------------
 
-Highlevel overview of the Project. 
+Highlevel overview of the Project.
 
 How is it done?
 

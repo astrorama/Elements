@@ -30,4 +30,3 @@ if (NOT NOSE_FOUND)
 
 
 endif (NOT NOSE_FOUND)
-

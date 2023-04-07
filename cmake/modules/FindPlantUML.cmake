@@ -27,4 +27,3 @@ if (NOT PLANTUML_FOUND)
 
 
 endif (NOT PLANTUML_FOUND)
-

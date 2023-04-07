@@ -1,10 +1,10 @@
 /**
- * @file printProject.h
+ * @file ElementsExamples/TemplateFunction.h
+ * @brief Example of a template function
+ * @date 2023-04-07
+ * @author Hubert Degaudenzi
  *
- * @date May 14, 2020
- * @author hubert
- *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
@@ -24,19 +24,32 @@
  * @{
  */
 
-#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_PRINTPROJECT_H_
-#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_PRINTPROJECT_H_
+#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_H_
+#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_H_
 
 #include "ElementsKernel/Export.h"
 
 namespace Elements {
 namespace Examples {
 
-ELEMENTS_API void printProject();
+template <typename T>
+ELEMENTS_API void templateFunction();
+
+// template instance declaration
+extern template ELEMENTS_API void templateFunction<int>();
+extern template ELEMENTS_API void templateFunction<double>();
 
 }  // namespace Examples
 }  // namespace Elements
 
-#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_PRINTPROJECT_H_
+/**
+ * @def ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
+ * @brief Macro to prevent the direct inclusion of the implementation file
+ */
+#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
+#include "ElementsExamples/_impl/TemplateFunction.tpp"
+#undef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
+
+#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_H_
 
 /**@}*/

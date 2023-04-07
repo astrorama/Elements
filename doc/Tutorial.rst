@@ -457,21 +457,21 @@ Copy the following code
 ::
 
    class ExampleClass(object):
-       """ 
+       """
        @class ExampleClass
        @brief This is an example of the most basic Python class
-       """ 
+       """
        def __init__(self, list):
-           """ 
+           """
            @brief Constructor
-           """ 
+           """
            self._m_i = 5
            self._m_list = list
 
        def sumListValues(self):
-           """ 
+           """
            @brief Method summing the elements of the list
-           """ 
+           """
            sum = 0
            for element in self._m_list:
                sum += element
@@ -479,7 +479,7 @@ Copy the following code
 
        @staticmethod
        def product(first, second):
-           """ 
+           """
            @brief Procuct
            @details This is an example static method
            @param first
@@ -488,7 +488,7 @@ Copy the following code
            The second number
            @returns
            The product of the two numbers
-           """ 
+           """
            return first * second
 
 Move to the Python test directory, i.e.,
@@ -554,7 +554,7 @@ add in the defineSpecificProgramOptions() method, the following code
 ::
 
        parser.add_argument('--float-option', type=float, help='A float option')
-       parser.add_argument('--int-list-option', nargs='+', type=int, default=[], 
+       parser.add_argument('--int-list-option', nargs='+', type=int, default=[],
                            help='A integer list option')
 
 in the mainMethod(args) add

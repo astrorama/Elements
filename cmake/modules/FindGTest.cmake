@@ -22,4 +22,3 @@ find_package_handle_standard_args(GTest  DEFAULT_MSG
 mark_as_advanced(GTEST_FOUND GTEST_INCLUDE_DIRS GTEST_LIBRARIES)
 
 endif()
-

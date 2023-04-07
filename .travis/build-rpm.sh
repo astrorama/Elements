@@ -28,4 +28,3 @@ mkdir -p /build
 cd /build
 cmake -DCMAKE_INSTALL_PREFIX=/usr $CMAKEFLAGS /src
 make $MAKEFLAGS rpm
-

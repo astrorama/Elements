@@ -3,10 +3,10 @@
  *
  * @brief provide functions to retrieve resources
  *   pointed by environment variables
- * @date May 13, 2016
+ * @date 2016-05-13
  * @author Hubert Degaudenzi
  *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the
  * terms of the GNU Lesser General Public License as published by the Free Software
@@ -276,6 +276,10 @@ extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vecto
 }  // namespace Kernel
 }  // namespace Elements
 
+/**
+ * @def ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_IMPL_
+ * @brief Macro to prevent the direct inclusion of the implementation file
+ */
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_IMPL_
 #include "ElementsKernel/_impl/Path.tpp"
 #undef ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_IMPL_

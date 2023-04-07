@@ -225,7 +225,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 find_package(ElementsProject)
 
 elements_project(ProjectC 1.3 USE ProjectA ProjectB 1.2)
-                                                                                                         
+
 EOF
 
 make configure > configure.failed.log 2>&1

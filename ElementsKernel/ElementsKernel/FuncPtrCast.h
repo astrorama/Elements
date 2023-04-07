@@ -1,13 +1,11 @@
 /**
  * @file ElementsKernel/FuncPtrCast.h
- *
  * @brief defines a Small helper function that allows the cast
  *   from void * to function pointer
- *
- * @date Dec 1, 2014
+ * @date 2014-12-01
  * @author Hubert Degaudenzi
  *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
@@ -29,6 +27,9 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_FUNCPTRCAST_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_FUNCPTRCAST_H_
 
+#include <cstring>      // for memcpy
+#include <type_traits>  // for is_pointer
+
 namespace Elements {
 namespace System {
 
@@ -36,33 +37,21 @@ namespace System {
  * @brief Cast from void * to function pointer
  * @ingroup ElementsKernel
  * @details
- *   Small helper function that allows the cast from void * to function pointer
- *   and vice versa without the message
- *   @verbatim
- *   warning: ISO C++ forbids casting between pointer-to-function and pointer-to-object
- *   @endverbatim
- *   It is an ugly trick but works.
- *   See:
- *   - http://www.trilithium.com/johan/2004/12/problem-with-dlsym/
- *   - http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#573
- *   - http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#195
- * @param ptr pointer address to convert
- * @tparam SRCPTR source pointer type
+ *   Small helper function that performs the cast from void * to function pointer
+ *   in a standards compliant way. For more information on this type of 'type punning, see
+ *   https://github.com/CppCon/CppCon2017/blob/master/Presentations/Type%20Punning%20In%20C%2B%2B17%20-%20Avoiding%20Pun-defined%20Behavior/Type%20Punning%20In%20C%2B%2B17%20-%20Avoiding%20Pun-defined%20Behavior%20-%20Scott%20Schurr%20-%20CppCon%202017.pdf
+ *   and https://www.youtube.com/watch?v=sCjZuvtJd-k
+ * @param src_p pointer address to convert
+ * @tparam SRC source pointer type
  * @tparam DESTPTR destination pointer type
  * @return destination pointer
  */
-template <typename DESTPTR, typename SRCPTR>
-inline DESTPTR FuncPtrCast(SRCPTR ptr) {
-#ifdef __GNUC__
-  union {
-    SRCPTR  src;
-    DESTPTR dst;
-  } p2p;
-  p2p.src = ptr;
-  return p2p.dst;
-#else
-  return reinterpret_cast<DESTPTR>(ptr);
-#endif
+template <typename DESTPTR, typename SRC>
+constexpr DESTPTR FuncPtrCast(SRC* const src_p) noexcept {
+  static_assert(std::is_pointer<DESTPTR>::value, "must be a pointer");
+  DESTPTR dst_p = nullptr;  // must initialize to be a valid constexpr...
+  std::memcpy(&dst_p, &src_p, sizeof(dst_p));
+  return dst_p;
 }
 
 }  // namespace System

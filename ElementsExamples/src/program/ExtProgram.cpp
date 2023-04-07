@@ -1,6 +1,6 @@
 /**
  * @file ExtProgram.cpp
- * @date January 6th, 2015
+ * @date 2015-01-06
  * @author Pierre Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -25,7 +25,6 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "ElementsExamples/ClassExample.h"
 #include <boost/current_function.hpp>  // for BOOST_CURRENT_FUNCTION
 #include <boost/program_options.hpp>   // for program options from configuration file of command line arguments
 
@@ -34,8 +33,9 @@
 #include "ElementsKernel/Project.h"         // for Project
 #include "ElementsKernel/ThisModule.h"      // for getThisExecutableInfo
 
+#include "ElementsExamples/ClassExample.h"
+#include "ElementsExamples/PrintProject.h"
 #include "ElementsExamples/functionExample.h"
-#include "ElementsExamples/printProject.h"
 
 using std::map;
 using std::string;

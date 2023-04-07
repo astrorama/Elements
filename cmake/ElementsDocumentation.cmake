@@ -249,7 +249,7 @@ include_guard(GLOBAL)
           file(GLOB_RECURSE _py_pack_dir_files LIST_DIRECTORIES false RELATIVE  ${_py_pack_dir} CONFIGURE_DEPENDS  ${_py_pack_dir}/*)
           set(_py_pack_dir_files_full ${_py_pack_dir_files})
           list(TRANSFORM _py_pack_dir_files_full PREPEND ${_py_pack_dir}/)
-          
+
           add_custom_command(
             OUTPUT ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}/modules.rst
             DEPENDS ${_py_pack_dir_files_full}
@@ -474,4 +474,3 @@ Python Package
     endforeach()
 
   endif()
-

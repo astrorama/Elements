@@ -304,6 +304,3 @@ endmacro()
 # find_projects(projects ${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt)
 #
 # set_paths_from_projects(${projects})
-
-
-

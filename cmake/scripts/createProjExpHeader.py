@@ -2,6 +2,7 @@ import os
 import re
 from optparse import OptionParser
 
+
 def main():
     parser = OptionParser(
         usage="ERROR: Usage %prog <project> <outputfile>")
@@ -26,6 +27,10 @@ def main():
     outputdata = """
 #ifndef _%(proj)s_EXPORT_H_
 #define _%(proj)s_EXPORT_H_
+
+#ifndef __GNUC__
+#define __attribute__(x)
+#endif
 
 // ---------------------------------- Symbol visibility macros (begin)
 #if defined(%(proj)s_HIDE_SYMBOLS)
@@ -76,6 +81,7 @@ def main():
     # Overwrite the file only if there are changes
     if outputdata != olddata:
         open(outputfile, "w").write(outputdata)
+
 
 if __name__ == "__main__":
     main()

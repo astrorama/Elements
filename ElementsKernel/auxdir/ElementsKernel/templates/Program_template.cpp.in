@@ -31,9 +31,9 @@ class %(PROGRAMNAME)s : public Elements::Program {
 public:
 
   OptionsDescription defineSpecificProgramOptions() override {
-  
+
     OptionsDescription options {};
-    
+
     //
     // !!! Implement the program options here !!!
     //
@@ -62,6 +62,3 @@ public:
 };
 
 MAIN_FOR(%(PROGRAMNAME)s)
-
-
-

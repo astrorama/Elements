@@ -1,10 +1,10 @@
-/*
- * @file ElementsExamples/_impl/TemplateDataSourceUser.tpp
+/**
+ * @file ElementsExamples/_impl/TemplateFunction.tpp
+ * @brief Implementation of the TemplateFunction
+ * @date 2023-04-07
+ * @author Hubert Degaudenzi
  *
- * @date 2015-09-23
- * @author: Florian Dubath
- *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
@@ -16,29 +16,24 @@
  *
  * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ *
  */
 
-#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
-#error "This file should not be included directly! Use ElementsExamples/TemplatedDataSourceUser.h instead"
+#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
+#error "This file should not be included directly! Use ElementsExamples/TemplateFunction.h instead"
 #else
 
-#include <cstddef>  // for std::size_t
+#include <iostream>
 
 namespace Elements {
 namespace Examples {
 
 template <typename T>
-double TemplatedDataSourceUser::sumRecords(const T& data_source) {
-  double      sum            = 0.;
-  std::size_t records_number = data_source.countRecords();
-  for (std::size_t index = 0; index < records_number; ++index) {
-    sum += data_source.getRecordValue(index);
-  }
-
-  return sum;
+void templateFunction() {
+  std::cout << "foo!" << static_cast<T>(3.14f) << std::endl;
 }
 
 }  // namespace Examples
 }  // namespace Elements
 
-#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
+#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_

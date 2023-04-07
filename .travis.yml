@@ -29,4 +29,3 @@ after_success: |
         done;;
     esac
   fi
-

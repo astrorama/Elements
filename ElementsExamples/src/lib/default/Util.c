@@ -1,10 +1,7 @@
 /**
- * @file cutout.c
+ * @file util.c
  *
- * @date Oct 13, 2016
- * @author hubert
- *
- * @date January 9, 2015
+ * @date 2015-01-09
  * @author Pierre Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -22,17 +19,10 @@
  *
  */
 
+#include "ElementsExamples/Util.h"
 
-#include <stdio.h>
+int MY_CONST = 42;
 
-#include "ElementsExamples/util.h"
-
-
-int main(int argc, char *argv[]) {
-
-    printf("This is a constant: %d\n", MY_CONST);
-    printf("This is the function result: %d\n", myFunc());
-
-    return 0;
+int myFunc() {
+  return 1;
 }
-

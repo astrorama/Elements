@@ -4,7 +4,7 @@
 Elements Documentation
 ======================
 * A C++ base framework for the Euclid Software.
-* Version: 6.1 
+* Version: 6.1
 
 Project Overview
 ================
@@ -18,16 +18,16 @@ Project Overview
    cmake/index
 
    User_Manual
-   
+
    User_References
 
 .. toctree::
-   :maxdepth: 1   
+   :maxdepth: 1
 
    Tutorial
 
    FAQ
-   
+
    CHANGELOG.md
    LICENSE.md
 
@@ -52,17 +52,17 @@ Contributors to This Document
 =============================
 - Manuel Grizonnet
 - Téo Bouvard
-- Nikos Apostolakos  
-- Antoine Basset 
-- Jennifer Pollack  
-- Adrien Calvayrac  
+- Nikos Apostolakos
+- Antoine Basset
+- Jennifer Pollack
+- Adrien Calvayrac
 - Elina Keihänen
-- Nicolas Morisset  
-- Pierre Dubath  
-- Stanislas Bruhiere  
-- Tristan Grégoire  
+- Nicolas Morisset
+- Pierre Dubath
+- Stanislas Bruhiere
+- Tristan Grégoire
 - Alexandre Diaz
-- Hubert Degaudenzi  
+- Hubert Degaudenzi
 
 
 Indices and tables
@@ -72,4 +72,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

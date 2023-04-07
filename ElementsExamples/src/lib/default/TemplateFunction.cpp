@@ -1,13 +1,10 @@
 /**
- * @file util.c
+ * @file TemplateFunction.cpp
+ * @brief Instanciation of some types for the TemplateFunction
+ * @date 2023-04-07
+ * @author Hubert Degaudenzi
  *
- * @date Oct 13, 2016
- * @author hubert
- *
- * @date January 9, 2015
- * @author Pierre Dubath
- *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
@@ -22,10 +19,13 @@
  *
  */
 
-#include "ElementsExamples/util.h"
+#include "ElementsExamples/TemplateFunction.h"
 
-int MY_CONST = 42;
+namespace Elements {
+namespace Examples {
 
-int myFunc() {
-  return 1;
-}
+template void templateFunction<int>();
+template void templateFunction<double>();
+
+}  // namespace Examples
+}  // namespace Elements

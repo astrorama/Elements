@@ -180,4 +180,3 @@ function(generate_bindings xsd_dir ns_prefix)
                            MODULE_NAME ${python_module_name})
 
 endfunction()
-
