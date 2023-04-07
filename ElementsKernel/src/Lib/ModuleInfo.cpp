@@ -2,7 +2,7 @@
  * @file ElementsKernel/src/Lib/ModuleInfo.cpp
  * @brief OS specific details to access at run-time the module
  * configuration of the process.
- * @date Dec 1, 2014
+ * @date 2014-12-01
  * @author hubert
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -95,7 +95,7 @@ ImageHandle s_module_handle = nullptr;
 const string& moduleName() {
   static string module{};
   if (module.empty()) {
-    if ((processHandle() != nullptr) and (moduleHandle() != nullptr)) {
+    if ((processHandle() != nullptr) && (moduleHandle() != nullptr)) {
       string mod = ::basename(const_cast<char*>((reinterpret_cast<Dl_info*>(moduleHandle()))->dli_fname));
       module     = mod.substr(static_cast<string::size_type>(0), mod.find('.'));
     }
