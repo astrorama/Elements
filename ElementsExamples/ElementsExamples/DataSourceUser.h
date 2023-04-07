@@ -1,7 +1,7 @@
 /**
- * @file DataSourceUser.h
+ * @file ElementsExamples/DataSourceUser.h
  *
- * @date Sep 23, 2015
+ * @date 2015-09-23
  * @author Florian Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -43,7 +43,7 @@ namespace Examples {
  * @details
  * Note that as we test the call to this interface, no implementation is provided.
  */
-class DataSourceInterface {
+class ELEMENTS_API DataSourceInterface {
 
 public:
   /**

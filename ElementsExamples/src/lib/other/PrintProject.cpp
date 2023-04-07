@@ -1,10 +1,10 @@
 /**
- * @file printProject.cpp
- *
- * @date May 14, 2020
+ * @file PrintProject.cpp
+ * @brief implementation of the printProject function
+ * @date 2020-05-14
  * @author Hubert Degaudenzi
  *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
@@ -19,11 +19,11 @@
  *
  */
 
+#include "ElementsExamples/PrintProject.h"
+
 #include <iostream>
 
 #include "ElementsKernel/Project.h"  // for Project
-
-#include "ElementsExamples/printProject.h"
 
 namespace Elements {
 namespace Examples {

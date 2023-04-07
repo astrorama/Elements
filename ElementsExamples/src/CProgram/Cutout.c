@@ -1,13 +1,9 @@
 /**
- * @file cutout.c
- *
- * @date Oct 13, 2016
- * @author hubert
- *
- * @date January 9, 2015
+ * @file ElementsExamples/src/CProgram/Cutout.c
+ * @date 2015-01-09
  * @author Pierre Dubath
  *
- * @copyright 2012-2020 Euclid Science Ground Segment
+ * @copyright 2012-2023 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
  * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
@@ -22,16 +18,14 @@
  *
  */
 
-
 #include <stdio.h>
 
-#include "ElementsExamples/util.h"
+#include "ElementsExamples/Util.h"
 
+int main(int argc, char* argv[]) {
 
-int main(int argc, char *argv[]) {
+  printf("This is a constant: %d\n", MY_CONST);
+  printf("This is the function result: %d\n", myFunc());
 
-    printf("This is a constant: %d\n", MY_CONST);
-    printf("This is the function result: %d\n", myFunc());
-
-    return 0;
+  return 0;
 }

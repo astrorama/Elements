@@ -1,8 +1,8 @@
 /*
- * @file ElementsExamples/TemplateDataSourceUser.tpp
+ * @file ElementsExamples/_impl/TemplateDataSourceUser.tpp
  *
- *  Created on: Sep 23, 2015
- *      Author: fdubath
+ * @date 2015-09-23
+ * @author: Florian Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *

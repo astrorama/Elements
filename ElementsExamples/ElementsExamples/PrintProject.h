@@ -1,7 +1,7 @@
 /**
- * @file printProject.h
- *
- * @date May 14, 2020
+ * @file PrintProject.h
+ * @brief function that displays the current project properties
+ * @date 2020-05-14
  * @author hubert
  *
  * @copyright 2012-2020 Euclid Science Ground Segment

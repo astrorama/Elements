@@ -1,7 +1,7 @@
 /**
  * @file TemplatedDataSourceUser.h
- *
- * @date Sep 23, 2015
+ * @brief Unit testing demonstration
+ * @date 2015-09-23
  * @author Florian Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -59,6 +59,10 @@ public:
 }  // namespace Examples
 }  // namespace Elements
 
+/**
+ * @def ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
+ * @brief Macro to prevent the direct inclusion of the implementation file
+ */
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
 #include "ElementsExamples/_impl/TemplatedDataSourceUser.tpp"
 #undef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_

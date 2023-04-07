@@ -1,10 +1,7 @@
 /**
  * @file util.c
  *
- * @date Oct 13, 2016
- * @author hubert
- *
- * @date January 9, 2015
+ * @date 2015-01-09
  * @author Pierre Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -22,7 +19,7 @@
  *
  */
 
-#include "ElementsExamples/util.h"
+#include "ElementsExamples/Util.h"
 
 int MY_CONST = 42;
 
