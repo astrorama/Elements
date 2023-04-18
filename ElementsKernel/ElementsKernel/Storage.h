@@ -26,6 +26,7 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_STORAGE_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_STORAGE_H_
 
+#include <cstddef>  // for size_t
 #include <cstdint>  // for int64_t
 #include <map>      // for map
 #include <string>   // for string

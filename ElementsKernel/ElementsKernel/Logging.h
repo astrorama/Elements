@@ -26,11 +26,12 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_H_
 
-#include <map>
-#include <string>
+#include <iosfwd>   // for stringstream
+#include <string>   // for string
 #include <utility>  // for forward
 
-#include <log4cpp/Category.hh>
+#include <log4cpp/Category.hh>  // for category
+#include <log4cpp/Priority.hh>  // for Priority
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 #include "ElementsKernel/Path.h"    // for Item

@@ -65,7 +65,7 @@ Environment::Variable& Environment::Variable::operator=(const Environment::Varia
 Environment::Variable& Environment::Variable::operator=(Environment::Variable&& other) {
   checkCompatibility(other);
 
-  m_env = move(other.m_env);
+  m_env = std::move(other.m_env);
 
   return *this;
 }

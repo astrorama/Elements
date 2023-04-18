@@ -21,7 +21,8 @@
 
 #include "ElementsKernel/SimpleProgram.h"
 
-#include <iostream>  // for cerr
+#include <exception>  // for exception
+#include <iostream>   // for cerr
 
 #include "ElementsKernel/Exit.h"    // for ExitCode
 #include "ElementsKernel/Path.h"    // for Path::Item
