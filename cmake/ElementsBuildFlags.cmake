@@ -411,6 +411,7 @@ option(USE_IWYU
        OFF)
 
 set(IWYU_OPTIONS "" CACHE STRING "List of options to be passed to includ-what-you-use")
+set(IWYU_TOOL_OPTIONS "" CACHE STRING "List of options to be passed to includ-what-you-use tool")
 
 
 #--- Compilation Flags ---------------------------------------------------------
@@ -906,20 +907,41 @@ endif()
 find_package(IWYU)
 
 if(USE_IWYU)
-  set(IWYU_COMMAND "${IWYU_EXECUTABLE}")
-  if(IWYU_OPTIONS)
-    string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
-    foreach(iwyu_o ${iwyu_list})
-      set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;${iwyu_o}")
-    endforeach()
+  if(IWYU_FOUND)
+    set(IWYU_COMMAND "${IWYU_EXECUTABLE}")
+    if(IWYU_OPTIONS)
+      string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
+      foreach(iwyu_o ${iwyu_list})
+        set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;${iwyu_o}")
+      endforeach()
+    endif()
   endif()
 endif()
 
 if(CMAKE_EXPORT_COMPILE_COMMANDS AND IWYU_FOUND)
+  set(IWYU_EXTRA)
+  set(IWYU_TOOL_COMMAND ${IWYU_TOOL_EXECUTABLE})
+  
+  if(IWYU_TOOL_OPTIONS)
+    string(REPLACE " " ";" iwyu_tool_list ${IWYU_TOOL_OPTIONS})
+    foreach(iwyu_o ${iwyu_tool_list})
+      set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} ${iwyu_o})
+    endforeach()
+  endif()
+  
+  set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -p ${CMAKE_BINARY_DIR})
+  
+  if(IWYU_OPTIONS)
+    set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -- )
+    string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
+    foreach(iwyu_o ${iwyu_list})
+      set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -Xiwyu ${iwyu_o})
+    endforeach()
+  endif()
+
   add_custom_target(iwyu
-    COMMAND "${IWYU_TOOL_EXECUTABLE}" -p "${CMAKE_BINARY_DIR}"
+    COMMAND ${IWYU_TOOL_COMMAND}
     COMMENT "Running include-what-you-use tool"
-    VERBATIM
   )
 endif()
 
