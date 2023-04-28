@@ -85,3 +85,4 @@ gmon.out
 /sonar-project.properties
 /.checkstyle
 /.pylintrc
+/.justfile
