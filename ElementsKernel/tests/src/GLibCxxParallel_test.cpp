@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(GLibCxxParallelWorks) {
 
   auto   squared  = std::accumulate(vals.begin(), vals.end(), 0.0, [](const double& tot, const double& vA) {
     return tot + vA * vA;
-     });
+  });
   double squared2 = 0.0;
   for (const auto& v : vals) {
     squared2 += v * v;

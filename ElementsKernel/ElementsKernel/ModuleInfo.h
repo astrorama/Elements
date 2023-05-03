@@ -48,8 +48,8 @@ public:
   const std::string name() const;
   const std::string libraryName() const;
   const void*       addresse() const;
-                    operator const Dl_info&() const;
-  bool              isEmpty() const;
+  operator const Dl_info&() const;
+  bool isEmpty() const;
 
 private:
   std::unique_ptr<Dl_info> m_dlinfo;
