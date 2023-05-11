@@ -680,6 +680,7 @@ add_definitions(-DELEMENTS_DEFAULT_LOGLEVEL=${ELEMENTS_DEFAULT_LOGLEVEL})
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo" OR "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     add_definitions(-DNDEBUG)
+    add_definitions(-UDEBUG)
 endif()
 
 if(UNIX)
