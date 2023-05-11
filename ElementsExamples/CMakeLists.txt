@@ -37,6 +37,12 @@ elements_add_executable(CppProgramExample src/program/Program.cpp
                         INCLUDE_DIRS ElementsExamples ElementsOther
                         LINK_LIBRARIES ElementsExamples ElementsOther)
 
+elements_add_executable(CppProgramExampleNoConfigFile src/program/Program.cpp
+                        INCLUDE_DIRS ElementsExamples ElementsOther
+                        LINK_LIBRARIES ElementsExamples ElementsOther
+                        NO_CONFIG_FILE)
+
+
 elements_add_executable(CppExtProgramExample src/program/ExtProgram.cpp
                         INCLUDE_DIRS ElementsExamples ElementsOther
                         LINK_LIBRARIES ElementsExamples ElementsOther)
@@ -62,7 +68,7 @@ elements_add_executable(CProgramExample src/CProgram/*.c
 #===== Test that the executables do run ========================================
 
 elements_add_test(CppProgramExampleRun COMMAND CppProgramExample)
-elements_add_test(CppProgramExampleNoConfigFile COMMAND CppProgramExample --config-file=toto.conf FAILS)
+elements_add_test(CppProgramExampleNoConfigFileRun COMMAND CppProgramExample --config-file=toto.conf FAILS)
 elements_add_test(CppProgramExampleWrongArgument COMMAND CppProgramExample --toto FAILS)
 elements_add_test(CppProgramExampleWrongLevel COMMAND CppProgramExample --log-level dddsc FAILS)
 elements_add_test(CProgramExampleRun COMMAND CProgramExample)
@@ -332,7 +338,7 @@ endif()
 
 #===== Test that the python program does run ========================================
 elements_add_test(PythonProgramExampleRun COMMAND PythonProgramExample)
-elements_add_test(PythonProgramExampleNoConfigFile COMMAND PythonProgramExample --config-file=toto.conf FAILS)
+elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExample --config-file=toto.conf FAILS)
 if(SWIG_FOUND AND PYTHONLIBS_FOUND)
 elements_add_test(SwigProgramExampleRun COMMAND SwigProgramExample LABELS Swig Build)
 endif()

@@ -2391,7 +2391,7 @@ endfunction()
 # target (library, module, dictionary...)
 #-------------------------------------------------------------------------------
 macro(elements_common_add_build)
-  CMAKE_PARSE_ARGUMENTS(ARG "" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
   # obsolete option
   if(ARG_LIBRARIES)
     message(WARNING "Deprecated option 'LIBRARIES', use 'LINK_LIBRARIES' instead")
@@ -3257,7 +3257,7 @@ endfunction()
 #---------------------------------------------------------------------------------------------------
 function(elements_add_executable executable)
 
-  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL" "" "" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE" "" "" ${ARGN})
 
   elements_common_add_build(${ARGN})
 
@@ -3270,6 +3270,10 @@ function(elements_add_executable executable)
     set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
   else()
     set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
+  endif()
+
+  if (ARG_NO_CONFIG_FILE)
+    target_compile_definitions(${executable} PUBLIC NO_CONFIG_FILE)
   endif()
 
   #----Installation details-------------------------------------------------------

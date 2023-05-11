@@ -68,7 +68,8 @@ using VariablesMap = Program::VariablesMap;
 ProgramManager::ProgramManager(std::unique_ptr<Program> program_ptr, const string& parent_project_version,
                                const string& parent_project_name, const string& parent_project_vcs_version,
                                const string& parent_module_version, const string& parent_module_name,
-                               const vector<string>& search_dirs, const Priority::Value& elements_loglevel)
+                               const vector<string>& search_dirs, const Priority::Value& elements_loglevel,
+                               bool no_config_file)
     : m_program_ptr(move(program_ptr))
     , m_parent_project_version(move(parent_project_version))
     , m_parent_project_name(move(parent_project_name))
@@ -77,7 +78,8 @@ ProgramManager::ProgramManager(std::unique_ptr<Program> program_ptr, const strin
     , m_parent_module_name(move(parent_module_name))
     , m_search_dirs(move(search_dirs))
     , m_env{}
-    , m_elements_loglevel(move(elements_loglevel)) {}
+    , m_elements_loglevel(move(elements_loglevel))
+    , m_no_config_file(move(no_config_file)) {}
 
 const Path::Item& ProgramManager::getProgramPath() const {
   return m_program_path;
@@ -173,17 +175,21 @@ const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
   using boost::program_options::value;
 
   VariablesMap var_map{};
+  Path::Item   config_file;
 
   // default value for default_log_level option
   string default_log_level = "INFO";
 
-  // Get defaults
-  Path::Item default_config_file = getDefaultConfigFile(getProgramName(), m_parent_module_name);
-
   // Define the options which can be given only at the command line
   OptionsDescription cmd_only_generic_options{};
-  cmd_only_generic_options.add_options()("version", "Print version string")("help", "Produce help message")(
-      "config-file", value<Path::Item>()->default_value(default_config_file), "Name of a configuration file");
+  cmd_only_generic_options.add_options()("version", "Print version string")("help", "Produce help message");
+
+  if (not m_no_config_file) {
+    // Get defaults
+    Path::Item default_config_file = getDefaultConfigFile(getProgramName(), m_parent_module_name);
+    cmd_only_generic_options.add_options()("config-file", value<Path::Item>()->default_value(default_config_file),
+                                           "Name of a configuration file");
+  }
 
   // Define the options which can be given both at command line and conf file
   OptionsDescription cmd_and_file_generic_options{};
@@ -236,9 +242,11 @@ const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
     exit(static_cast<int>(ExitCode::OK));
   }
 
-  // Get the configuration file. It is guaranteed to exist, because it has
-  // default value
-  auto config_file = var_map.at("config-file").as<Path::Item>();
+  if (not m_no_config_file) {
+    // Get the configuration file. It is guaranteed to exist, because it has
+    // default value
+    config_file = var_map.at("config-file").as<Path::Item>();
+  }
 
   // Parse from the command line the rest of the options. Here we also handle
   // the positional arguments.
@@ -253,12 +261,14 @@ const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
 
     store(parsed_cmdline_options, var_map);
 
-    // Parse from the configuration file if it exists
-    if (not config_file.empty() and boost::filesystem::exists(config_file)) {
-      std::ifstream ifs{config_file.string()};
-      if (ifs) {
-        auto parsed_cfgfile_options = parse_config_file(ifs, all_cmd_and_file_options);
-        store(parsed_cfgfile_options, var_map);
+    if (not m_no_config_file) {
+      // Parse from the configuration file if it exists
+      if (not config_file.empty() and boost::filesystem::exists(config_file)) {
+        std::ifstream ifs{config_file.string()};
+        if (ifs) {
+          auto parsed_cfgfile_options = parse_config_file(ifs, all_cmd_and_file_options);
+          store(parsed_cfgfile_options, var_map);
+        }
       }
     }
 

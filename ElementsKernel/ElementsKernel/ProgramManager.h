@@ -63,7 +63,8 @@ public:
                           const std::string& parent_project_vcs_version = "",
                           const std::string& parent_module_version = "", const std::string& parent_module_name = "",
                           const std::vector<std::string>& search_dirs       = {},
-                          const log4cpp::Priority::Value& elements_loglevel = log4cpp::Priority::DEBUG);
+                          const log4cpp::Priority::Value& elements_loglevel = log4cpp::Priority::DEBUG,
+                          bool                            no_config_file    = false);
 
   /**
    * @brief Destructor
@@ -270,6 +271,11 @@ private:
    * default info level for the Elements internal logging messages
    */
   log4cpp::Priority::Value m_elements_loglevel;
+
+  /**
+   * prevent the --config-file option to be added
+   */
+  bool m_no_config_file;
 };
 
 }  // namespace Elements
