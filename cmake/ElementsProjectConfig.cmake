@@ -4715,7 +4715,7 @@ function(elements_add_python_program executable module)
                        DEPENDS ${program_file})
   endif()
 
-  string(REPLACE "." "_" python_program_target ${module})
+  string(REPLACE "." "_" python_program_target "${name}_${executable}")
   add_custom_target(${python_program_target} ALL DEPENDS ${executable_file})
   set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${executable_file})
 
