@@ -3893,32 +3893,74 @@ endfunction()
 #---------------------------------------------------------------------------------------------------
 # elements_install_aux_files()
 #
-# Declare that the package needs to install the content of the 'aux' directory.
+# - Declare that the package needs to install the content of the 'aux' directory.
+# - the WITH_CONFIGURE option configures (interpolates) first the files in the directory and puts the 
+#   result in the build directory
 #---------------------------------------------------------------------------------------------------
 function(elements_install_aux_files)
 
-  # early check at configure time for the existence of the directory
-  if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux OR IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} OR IS_DIRECTORY ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
-    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux)
-      message(WARNING "The aux directory name in the ${CMAKE_CURRENT_SOURCE_DIR} location is dangerous. Please rename it to ${AUX_DIR_NAME}")
-    endif()
-    foreach(ad ${CMAKE_CURRENT_SOURCE_DIR}/aux ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
-      if(IS_DIRECTORY ${ad})
-        install(DIRECTORY ${ad}/
-               DESTINATION ${AUX_INSTALL_SUFFIX}
-               PATTERN "CVS" EXCLUDE
-               PATTERN ".svn" EXCLUDE
-               PATTERN "*~" EXCLUDE)
-        file(GLOB aux_list RELATIVE ${ad} ${ad}/*)
-        foreach(af ${aux_list})
-          set_property(GLOBAL APPEND PROPERTY REGULAR_AUX_OBJECTS ${af})
-        endforeach()
-        set_property(GLOBAL APPEND PROPERTY PROJ_HAS_AUX TRUE)
+  CMAKE_PARSE_ARGUMENTS(INSTALL_AUX "WITH_CONFIGURE" "" "" ${ARGN})
+
+  if(INSTALL_AUX_WITH_CONFIGURE)
+
+    # early check at configure time for the existence of the directory
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux OR IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME})
+      if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux)
+        message(WARNING "The aux directory name in the ${CMAKE_CURRENT_SOURCE_DIR} location is dangerous. Please rename it to ${AUX_DIR_NAME}")
       endif()
-    endforeach()
+      foreach(ad aux ${AUX_DIR_NAME})
+        set(full_ad ${CMAKE_CURRENT_SOURCE_DIR}/${ad})
+        set(full_build_ad ${CMAKE_BINARY_DIR}/${ad})
+        if(IS_DIRECTORY ${full_ad})
+          file(GLOB_RECURSE aux_list RELATIVE ${full_ad} ${full_ad}/*)
+          foreach(af ${aux_list})
+            if(NOT IS_DIRECTORY ${full_ad}/${af})
+              strip_template_extension(af_ne ${af}) 
+              configure_file("${full_ad}/${af}"
+                             "${full_build_ad}/${af_ne}"
+                             @ONLY)
+              set_property(GLOBAL APPEND PROPERTY REGULAR_AUX_OBJECTS ${af_ne})
+            endif()
+          endforeach()
+          install(DIRECTORY ${full_build_ad}/
+                 DESTINATION ${AUX_INSTALL_SUFFIX}
+                 PATTERN "CVS" EXCLUDE
+                 PATTERN ".svn" EXCLUDE
+                 PATTERN "*~" EXCLUDE)
+          set_property(GLOBAL APPEND PROPERTY PROJ_HAS_AUX TRUE)
+        endif()
+      endforeach()
+    else()
+      message(FATAL_ERROR "No ${AUX_DIR_NAME} directory to configurea in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+    endif()
+
   else()
-    message(FATAL_ERROR "No ${AUX_DIR_NAME} directory in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+  
+    # early check at configure time for the existence of the directory
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux OR IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} OR IS_DIRECTORY ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
+      if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux)
+        message(WARNING "The aux directory name in the ${CMAKE_CURRENT_SOURCE_DIR} location is dangerous. Please rename it to ${AUX_DIR_NAME}")
+      endif()
+      foreach(ad ${CMAKE_CURRENT_SOURCE_DIR}/aux ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
+        if(IS_DIRECTORY ${ad})
+          install(DIRECTORY ${ad}/
+                 DESTINATION ${AUX_INSTALL_SUFFIX}
+                 PATTERN "CVS" EXCLUDE
+                 PATTERN ".svn" EXCLUDE
+                 PATTERN "*~" EXCLUDE)
+          file(GLOB aux_list RELATIVE ${ad} ${ad}/*)
+          foreach(af ${aux_list})
+            set_property(GLOBAL APPEND PROPERTY REGULAR_AUX_OBJECTS ${af})
+          endforeach()
+          set_property(GLOBAL APPEND PROPERTY PROJ_HAS_AUX TRUE)
+        endif()
+      endforeach()
+    else()
+      message(FATAL_ERROR "No ${AUX_DIR_NAME} directory in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+    endif()
+
   endif()
+
 endfunction()
 
 #---------------------------------------------------------------------------------------------------

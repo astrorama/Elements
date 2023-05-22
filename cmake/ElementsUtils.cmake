@@ -230,6 +230,27 @@ function(split_filename_ext filename_ne filename_ext filename)
   set(${filename_ext} ${CMAKE_MATCH_2} PARENT_SCOPE)
 endfunction()
 
+
+function(strip_template_extension output_filename filename)
+  
+  CMAKE_PARSE_ARGUMENTS(STRIP_TMPL "" "NAME" "" ${ARGN})
+  
+  if(NOT STRIP_TMPL_NAME)
+    set(STRIP_TMPL_NAME "in")
+  endif()
+  
+
+  split_filename_ext(filename_ne filename_ext ${filename})
+  
+  if("${filename_ext}" STREQUAL "${STRIP_TMPL_NAME}")
+    set(${output_filename} ${filename_ne} PARENT_SCOPE)
+  else()
+    set(${output_filename} ${filename} PARENT_SCOPE)    
+  endif()
+
+endfunction()
+
+
 function(find_file_to_configure template_file_name)
 
   CMAKE_PARSE_ARGUMENTS(TEMPLATE_CONF "" "OUTPUTDIR;OUTPUTNAME;FILETYPE" "PATHS;PATH_SUFFIXES" ${ARGN})
