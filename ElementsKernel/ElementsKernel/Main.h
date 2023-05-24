@@ -49,12 +49,22 @@
  * the class Elements::Program class.
  * @param MANAGER name of the manager variable to be created.
  */
+#ifndef NO_CONFIG_FILE
 #define CREATE_MANAGER_WITH_ARGS(MANAGER, ELEMENTS_PROGRAM, ...)                                                       \
   Elements::ProgramManager MANAGER {                                                                                   \
     std::unique_ptr<Elements::Program>{new ELEMENTS_PROGRAM{__VA_ARGS__}}, Elements::Project::versionString(),         \
         Elements::Project::name(), Elements::Project::vcsVersion(), Elements::Module::versionString(),                 \
         Elements::Module::name(), Elements::Project::searchDirectories(), log4cpp::Priority::ELEMENTS_DEFAULT_LOGLEVEL \
   }
+#else
+#define CREATE_MANAGER_WITH_ARGS(MANAGER, ELEMENTS_PROGRAM, ...)                                                       \
+  Elements::ProgramManager MANAGER {                                                                                   \
+    std::unique_ptr<Elements::Program>{new ELEMENTS_PROGRAM{__VA_ARGS__}}, Elements::Project::versionString(),         \
+        Elements::Project::name(), Elements::Project::vcsVersion(), Elements::Module::versionString(),                 \
+        Elements::Module::name(), Elements::Project::searchDirectories(),                                              \
+        log4cpp::Priority::ELEMENTS_DEFAULT_LOGLEVEL, true                                                             \
+  }
+#endif
 
 /**
  * @def CREATE_MANAGER(ELEMENTS_PROGRAM_NAME, MANAGER)

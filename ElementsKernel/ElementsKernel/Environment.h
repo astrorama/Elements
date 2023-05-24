@@ -105,7 +105,7 @@ public:
   Environment&       env() const;
   std::string        value() const;
   /// to string converter
-       operator std::string() const;
+  operator std::string() const;
   bool empty() const;
   bool exists() const;
 

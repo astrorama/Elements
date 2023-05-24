@@ -150,6 +150,12 @@ function(_internal_find_projects projects_var config_file)
       get_filename_component(${upper_proj_name}_CONFIG_FILE ${config_file} ABSOLUTE CACHE)
     endif()
 
+    if(NOT ${upper_proj_name}_PROJECT_VERSION)
+      set(${upper_proj_name}_PROJECT_VERSION ${version_name} CACHE STRING "The project version")
+    endif()
+
+
+
     list(FIND collected_config2 ${${upper_proj_name}_CONFIG_FILE} conf_pos)
     if(conf_pos EQUAL -1)
       list(APPEND collected_config2 ${${upper_proj_name}_CONFIG_FILE})

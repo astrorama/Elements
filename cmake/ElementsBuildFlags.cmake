@@ -688,6 +688,7 @@ add_definitions(-DELEMENTS_DEFAULT_LOGLEVEL=${ELEMENTS_DEFAULT_LOGLEVEL})
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo" OR "${CMAKE_BUILD_TYPE}" STREQUAL "Release")
     add_definitions(-DNDEBUG)
+    add_definitions(-UDEBUG)
 endif()
 
 if(UNIX)
@@ -921,16 +922,16 @@ endif()
 if(CMAKE_EXPORT_COMPILE_COMMANDS AND IWYU_FOUND)
   set(IWYU_EXTRA)
   set(IWYU_TOOL_COMMAND ${IWYU_TOOL_EXECUTABLE})
-  
+
   if(IWYU_TOOL_OPTIONS)
     string(REPLACE " " ";" iwyu_tool_list ${IWYU_TOOL_OPTIONS})
     foreach(iwyu_o ${iwyu_tool_list})
       set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} ${iwyu_o})
     endforeach()
   endif()
-  
+
   set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -p ${CMAKE_BINARY_DIR})
-  
+
   if(IWYU_OPTIONS)
     set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -- )
     string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
