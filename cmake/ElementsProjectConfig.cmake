@@ -3894,7 +3894,7 @@ endfunction()
 # elements_install_aux_files()
 #
 # - Declare that the package needs to install the content of the 'aux' directory.
-# - the WITH_CONFIGURE option configures (interpolates) first the files in the directory and puts the 
+# - the WITH_CONFIGURE option configures (interpolates) first the files in the directory and puts the
 #   result in the build directory
 #---------------------------------------------------------------------------------------------------
 function(elements_install_aux_files)
@@ -3915,7 +3915,7 @@ function(elements_install_aux_files)
           file(GLOB_RECURSE aux_list RELATIVE ${full_ad} ${full_ad}/*)
           foreach(af ${aux_list})
             if(NOT IS_DIRECTORY ${full_ad}/${af})
-              strip_template_extension(af_ne ${af}) 
+              strip_template_extension(af_ne ${af})
               configure_file("${full_ad}/${af}"
                              "${full_build_ad}/${af_ne}"
                              @ONLY)
@@ -3935,7 +3935,7 @@ function(elements_install_aux_files)
     endif()
 
   else()
-  
+
     # early check at configure time for the existence of the directory
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux OR IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} OR IS_DIRECTORY ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
       if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux)
