@@ -232,20 +232,20 @@ endfunction()
 
 
 function(strip_template_extension output_filename filename)
-  
+
   CMAKE_PARSE_ARGUMENTS(STRIP_TMPL "" "NAME" "" ${ARGN})
-  
+
   if(NOT STRIP_TMPL_NAME)
     set(STRIP_TMPL_NAME "in")
   endif()
-  
+
 
   split_filename_ext(filename_ne filename_ext ${filename})
-  
+
   if("${filename_ext}" STREQUAL "${STRIP_TMPL_NAME}")
     set(${output_filename} ${filename_ne} PARENT_SCOPE)
   else()
-    set(${output_filename} ${filename} PARENT_SCOPE)    
+    set(${output_filename} ${filename} PARENT_SCOPE)
   endif()
 
 endfunction()
