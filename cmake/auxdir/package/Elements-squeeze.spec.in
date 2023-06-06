@@ -9,6 +9,8 @@ Group:          Development/Tools
 Source:         @CPACK_RPM_PACKAGE_NAME@-@CPACK_RPM_PACKAGE_VERSION@.tar.gz
 Vendor:         @CPACK_PACKAGE_VENDOR@
 
+%global source_date_epoch_from_changelog 0
+
 %bcond_with doc
 
 %global __brp_mangle_shebangs_exclude /usr/bin/env python@PYTHON_EXPLICIT_VERSION@
