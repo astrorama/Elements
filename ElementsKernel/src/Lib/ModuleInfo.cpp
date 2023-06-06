@@ -21,6 +21,7 @@
 
 #include "ElementsKernel/ModuleInfo.h"
 
+#include <cstdint>  // for std::int64_t
 #include <dlfcn.h>
 #include <libgen.h>
 #include <sys/param.h>
