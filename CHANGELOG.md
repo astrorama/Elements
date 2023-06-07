@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [6.1.3] - 2023-06-07
+
+### Fixed
+  - Add a missing <cstint> include for int64_t. This was a problem on Fedora 38.
+  - Fix the warning about a missing changelog entry in the RPM spec file
+
+
 ## [6.1.2] - 2022-11-29
 
 ### Added
