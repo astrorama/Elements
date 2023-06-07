@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [6.1.4] - 2023-06-07
+
 ### Changed
 - Move from Py.Test to PyTest
     - pytest 7.2.0 no longer depends on py module which means that the import of py.test will no longer work.
@@ -16,11 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Change the comments and documentation from Py.Test to PyTest
 
 
-
 ## [6.1.3] - 2023-06-07
 
 ### Fixed
-  - Add a missing <cstint> include for int64_t. This was a problem on Fedora 38.
+  - Add a missing <cstdint> include for int64_t. This was a problem on Fedora 38.
   - Fix the warning about a missing changelog entry in the RPM spec file
 
 
