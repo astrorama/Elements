@@ -8,6 +8,7 @@ get_property(include_list GLOBAL PROPERTY PROJ_INCLUDE_LIST)
 list(REMOVE_DUPLICATES include_list)
 
 get_property(test_list GLOBAL PROPERTY TEST_LIST)
+get_property(test_src_list GLOBAL PROPERTY TEST_SRC_LIST)
 
 
 find_file_to_configure(cmake_info.cmake.in

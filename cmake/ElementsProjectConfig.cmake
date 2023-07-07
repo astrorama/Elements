@@ -3470,6 +3470,10 @@ function(elements_add_unit_test name)
 
     set_property(GLOBAL APPEND PROPERTY TEST_LIST ${package}.${name}:${executable}${exec_suffix})
 
+    string(REPLACE ";" ":" srcs_str ${srcs})
+
+    set_property(GLOBAL APPEND PROPERTY TEST_SRC_LIST "${package}.${name}:${executable}${exec_suffix}:${srcs_str}")
+
     set_property(TEST ${package}.${name} PROPERTY CMDLINE "${executable}${exec_suffix}")
     set_property(TEST ${package}.${name} APPEND PROPERTY LABELS UnitTest ${package} Binary)
 
