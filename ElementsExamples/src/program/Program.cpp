@@ -141,7 +141,7 @@ public:
      *  2) the configuration file
      *  3) the command line
      *
-     *  If an none of the three options provide any values for a mandatory
+     *  If none of the three options provide any values for a mandatory
      *  argument, you should check if your option has any values following the
      *  below example. Note that this may happen for all options without default
      *  values.
