@@ -1,3 +1,4 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
 #[=======================================================================[.rst:
 ElementsBuildFlags
 ------------------
@@ -6,6 +7,7 @@ This file set the default values for various CMake cache variables used by a
 new project.
 
 #]=======================================================================]
+
 include_guard(GLOBAL)
 
 include(CheckCXXCompilerFlag)
