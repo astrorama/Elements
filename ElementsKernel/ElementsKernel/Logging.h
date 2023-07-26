@@ -314,7 +314,7 @@ private:
 
   public:
     LogMessageStream(log4cpp::Category& logger, P_log_func log_func);
-    LogMessageStream(LogMessageStream&& other);
+    LogMessageStream(LogMessageStream&& other) noexcept;
     LogMessageStream(const LogMessageStream& other);
     ~LogMessageStream();
     template <typename T>

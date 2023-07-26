@@ -21,14 +21,12 @@
 
 #include "ElementsKernel/ThisModule.h"
 
-#include <cstddef>
-#include <dlfcn.h>
+#include <dlfcn.h>  // for dlopen, dlsym
 
 #include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
 #include "ElementsKernel/ModuleInfo.h"   // for ModuleInfo
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 const ModuleInfo& getThisExecutableInfo() {
   static ModuleInfo this_module;
@@ -45,5 +43,4 @@ const ModuleInfo& getThisExecutableInfo() {
   return this_module;
 }
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
