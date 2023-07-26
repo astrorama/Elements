@@ -9,14 +9,14 @@ cmake_minimum_required(VERSION 3.5)
 
 if(NOT PYTHON_EXECUTABLE)
   if(NumPy_FIND_QUIETLY)
-    find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION} QUIET)
+    find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development QUIET)
   else()
-    find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+    find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development)
     set(__numpy_out 1)
   endif()
 endif()
 
-if (PYTHON_EXECUTABLE)
+if (Python_EXECUTABLE)
   # Find out the include path
   execute_process(
     COMMAND "${PYTHON_EXECUTABLE}" -c
@@ -29,7 +29,7 @@ if (PYTHON_EXECUTABLE)
     OUTPUT_VARIABLE __numpy_version)
 elseif(__numpy_out)
   message(STATUS "Python executable not found.")
-endif(PYTHON_EXECUTABLE)
+endif(Python_EXECUTABLE)
 
 find_path(PYTHON_NUMPY_INCLUDE_DIR numpy/arrayobject.h
   HINTS "${__numpy_path}" "${PYTHON_INCLUDE_PATH}" NO_DEFAULT_PATH)
