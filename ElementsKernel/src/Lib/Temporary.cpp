@@ -87,7 +87,7 @@ TempDir::TempDir(const string& arg_motif, const string& keep_var) : TempPath(arg
   boost::filesystem::create_directory(path());
 }
 
-TempDir::~TempDir() {}
+TempDir::~TempDir() = default;
 
 TempFile::TempFile(const string& arg_motif, const string& keep_var) : TempPath(arg_motif, keep_var) {
 
@@ -97,6 +97,6 @@ TempFile::TempFile(const string& arg_motif, const string& keep_var) : TempPath(a
   ofs.close();
 }
 
-TempFile::~TempFile() {}
+TempFile::~TempFile() = default;
 
 }  // namespace Elements

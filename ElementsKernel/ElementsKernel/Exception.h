@@ -156,7 +156,7 @@ private:
   // Specialization which handles two or more arguments
   template <typename First, typename... Rest>
   struct ExitCodeHelper<First, Rest...> : ExitCodeHelper<Rest...> {
-    ExitCodeHelper(const First&, const Rest&... rest) : ExitCodeHelper<Rest...>(rest...) {}
+    explicit ExitCodeHelper(const First&, const Rest&... rest) : ExitCodeHelper<Rest...>(rest...) {}
   };
 };
 
