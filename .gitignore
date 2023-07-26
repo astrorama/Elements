@@ -3,6 +3,8 @@
 # Building area
 /build
 /build.*
+/cmake-build-*
+/build_*
 
 # Install area
 /InstallArea
@@ -49,6 +51,7 @@
 
 # PyCharm
 /.idea
+/.run
 
 ## VIM
 *.swp
