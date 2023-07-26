@@ -123,7 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add the CMake EXTRA_SPHINX_FILES variable for files to be copied into the sphinx doc dir
 - Implementation of the HTML tree merge
     - the merge is triggered by the MERGE_HTML_DOC_TREES=ON CMake option. By
-    default it is set to OFF
+    default, it is set to OFF
     - the tree is generated at build/doc/html
     - the root of the tree is the doxygen one
     - the sphinx tree is located at build/doc/html/sphinx
