@@ -3271,6 +3271,9 @@ function(elements_add_executable executable)
     set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
   endif()
 
+  set_target_properties(${executable} PROPERTIES  ENABLE_EXPORTS 1)
+
+
   if (ARG_NO_CONFIG_FILE)
     target_compile_definitions(${executable} PUBLIC NO_CONFIG_FILE)
   endif()
