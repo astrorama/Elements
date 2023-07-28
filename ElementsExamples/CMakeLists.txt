@@ -296,7 +296,7 @@ elements_add_swig_binding(SwigExample ElementsExamples/SwigExample.i
                           PUBLIC_HEADERS ElementsExamples)
 
 find_package(NumPy)
-if(NUMPY_FOUND)
+if(NumPy_FOUND)
 elements_add_swig_binding(NumPyExample  ElementsExamples/NumPyExample.i
                           INCLUDE_DIRS NumPy
                           NO_PUBLIC_HEADERS)
