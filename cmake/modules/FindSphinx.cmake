@@ -1,6 +1,6 @@
 if (NOT SPHINX_FOUND)
 
-  find_package(Python ${PYTHON_EXPLICIT_VERSION})
+  find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
 
   # ----------------------------------------------------------------------------
   # default components to look for

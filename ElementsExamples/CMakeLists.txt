@@ -288,15 +288,15 @@ elements_add_test(OpenMPWorks COMMAND OpenMPExample LABELS OpenMP Build)
 
 
 find_package(SWIG QUIET)
-find_package(Python ${PYTHON_EXPLICIT_VERSION} QUIET)
-if(SWIG_FOUND AND Python_FOUND)
+find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET)
+if(SWIG_FOUND AND PYTHONLIBS_FOUND)
 elements_add_swig_binding(SwigExample ElementsExamples/SwigExample.i
                           LINK_LIBRARIES ElementsExamples
                           INCLUDE_DIRS ElementsExamples
                           PUBLIC_HEADERS ElementsExamples)
 
 find_package(NumPy)
-if(NumPy_FOUND)
+if(NUMPY_FOUND)
 elements_add_swig_binding(NumPyExample  ElementsExamples/NumPyExample.i
                           INCLUDE_DIRS NumPy
                           NO_PUBLIC_HEADERS)
@@ -305,8 +305,8 @@ endif()
 endif()
 
 find_package(Cython QUIET)
-find_package(Python ${PYTHON_EXPLICIT_VERSION} QUIET)
-if(CYTHON_FOUND AND Python_FOUND)
+find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET)
+if(CYTHON_FOUND AND PYTHONLIBS_FOUND)
 elements_add_cython_module(src/Cython/lib/PiCalculator.pyx
                            LINK_LIBRARIES ElementsExamples
                            INCLUDE_DIRS ElementsExamples
@@ -318,7 +318,7 @@ elements_add_cython_module(src/Cython/lib/Rect.pyx
 endif()
 
 find_package(pybind11)
-if(pybind11_FOUND AND Python_FOUND)
+if(pybind11_FOUND AND PYTHONLIBS_FOUND)
   elements_add_pybind11_module(testCallBack src/pybind11/callback.cpp
                                INCLUDE_DIRS ElementsExamples
                                LINK_LIBRARIES ElementsExamples)
@@ -334,7 +334,7 @@ elements_install_python_modules(TEST_TIMEOUT 60)
 #    ElementsExamples.PythonProgramExample is the source file
 elements_add_python_program(PythonProgramExample ElementsExamples.PythonProgramExample)
 elements_add_python_program(PythonProgramExampleNoConfigFile ElementsExamples.PythonProgramExample NO_CONFIG_FILE)
-if(SWIG_FOUND AND Python_FOUND)
+if(SWIG_FOUND AND PYTHONLIBS_FOUND)
   elements_add_python_program(SwigProgramExample ElementsExamples.SwigProgramExample)
 endif()
 
@@ -342,7 +342,7 @@ endif()
 #===== Test that the python program does run ========================================
 elements_add_test(PythonProgramExampleRun COMMAND PythonProgramExample)
 elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExample --config-file=toto.conf FAILS)
-if(SWIG_FOUND AND Python_FOUND)
+if(SWIG_FOUND AND PYTHONLIBS_FOUND)
 elements_add_test(SwigProgramExampleRun COMMAND SwigProgramExample LABELS Swig Build)
 endif()
 

@@ -7,7 +7,6 @@ This file set the default values for various CMake cache variables used by a
 new project.
 
 #]=======================================================================]
-
 include_guard(GLOBAL)
 
 include(CheckCXXCompilerFlag)
@@ -109,6 +108,8 @@ if(("${SGS_COMP}" STREQUAL "clang") OR ("${SGS_COMP}" STREQUAL "llvm"))
   SET (CMAKE_RANLIB        "${LLVM_RANLIB}")
 endif()
 
+set(Boost_NO_WARN_NEW_VERSIONS ON)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 if(NOT BUILD_PREFIX_NAME)
   set(BUILD_PREFIX_NAME "build" CACHE STRING "Prefix name for the build directory" FORCE)

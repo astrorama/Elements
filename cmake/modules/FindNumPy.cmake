@@ -14,29 +14,47 @@ if(NOT NumPy_FOUND)
   endif()
 endif()
 
-if(NOT Python_NumPy_INCLUDE_DIRS)
+if(Python_NumPy_INCLUDE_DIRS)
+  set(NUMPY_INCLUDE_DIRS ${Python_NumPy_INCLUDE_DIRS})
+else()
+
+  if(NOT PYTHON_EXECUTABLE)
+    if(NumPy_FIND_QUIETLY)
+      find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION} QUIET)
+    else()
+      find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+      set(__numpy_out 1)
+    endif()
+  endif()
 
   if (PYTHON_EXECUTABLE)
-    # Find out the include path
+  # Find out the include path
     execute_process(
             COMMAND "${PYTHON_EXECUTABLE}" -c
             "from __future__ import print_function\ntry: import numpy; print(numpy.get_include(), end='')\nexcept:pass\n"
             OUTPUT_VARIABLE __numpy_path)
-    # And the version
+  # And the version
     execute_process(
             COMMAND "${PYTHON_EXECUTABLE}" -c
             "from __future__ import print_function\ntry: import numpy; print(numpy.__version__, end='')\nexcept:pass\n"
-            OUTPUT_VARIABLE Python_NumPy_VERSION)
+            OUTPUT_VARIABLE __numpy_version)
   elseif(__numpy_out)
     message(STATUS "Python executable not found.")
   endif(PYTHON_EXECUTABLE)
 
-  find_path(Python_NumPy_INCLUDE_DIRS numpy/arrayobject.h
+  find_path(PYTHON_NUMPY_INCLUDE_DIR numpy/arrayobject.h
             HINTS "${__numpy_path}" "${PYTHON_INCLUDE_PATH}" NO_DEFAULT_PATH)
+
+  if(PYTHON_NUMPY_INCLUDE_DIR)
+    set(PYTHON_NUMPY_FOUND 1 CACHE INTERNAL "Python numpy found")
+  endif(PYTHON_NUMPY_INCLUDE_DIR)
+
+  set(Python_NumPy_INCLUDE_DIRS ${PYTHON_NUMPY_INCLUDE_DIR})
+  set(NUMPY_INCLUDE_DIRS ${Python_NumPy_INCLUDE_DIRS})
 
 endif()
 
-set(NUMPY_INCLUDE_DIRS ${Python_NumPy_INCLUDE_DIRS})
+
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(NumPy REQUIRED_VARS Python_NumPy_INCLUDE_DIRS NUMPY_INCLUDE_DIRS

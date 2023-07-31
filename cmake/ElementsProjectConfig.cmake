@@ -92,9 +92,9 @@ set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 #---------------------------------------------------------------------------------------------------
 include(CMakeParseArguments)
 
-find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development QUIET)
+find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION} QUIET)
 
-if(Python_EXECUTABLE MATCHES "^(/usr)?/bin/python")
+if(PYTHON_EXECUTABLE MATCHES "^(/usr)?/bin/python")
   set(PYTHON_HAS_STD_LOCATION TRUE)
 else()
   set(PYTHON_HAS_STD_LOCATION FALSE)
@@ -289,92 +289,93 @@ macro(elements_project project version)
   # (python scripts are located as such but run through python)
   set(binary_paths ${CMAKE_SOURCE_DIR}/cmake/scripts ${binary_paths})
 
-  find_file(env_cmd env.py HINTS ${binary_paths})
-  set(env_cmd ${Python_EXECUTABLE} ${env_cmd})
+  find_program(env_cmd env.py HINTS ${binary_paths})
+  set(env_cmd ${PYTHON_EXECUTABLE} ${env_cmd})
 
-  find_file(merge_cmd merge_files.py HINTS ${binary_paths})
-  set(merge_cmd ${Python_EXECUTABLE} ${merge_cmd} --no-stamp)
+  find_program(merge_cmd merge_files.py HINTS ${binary_paths})
+  set(merge_cmd ${PYTHON_EXECUTABLE} ${merge_cmd} --no-stamp)
 
-  find_file(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
+  find_program(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
   if(versheader_cmd)
-    set(versheader_cmd ${Python_EXECUTABLE} ${versheader_cmd})
+    set(versheader_cmd ${PYTHON_EXECUTABLE} ${versheader_cmd})
   endif()
 
-  find_file(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
+  find_program(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
   if(instheader_cmd)
-    set(instheader_cmd ${Python_EXECUTABLE} ${instheader_cmd})
+    set(instheader_cmd ${PYTHON_EXECUTABLE} ${instheader_cmd})
   endif()
 
-  find_file(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
+  find_program(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
   if(expheader_cmd)
-    set(expheader_cmd ${Python_EXECUTABLE} ${expheader_cmd})
+    set(expheader_cmd ${PYTHON_EXECUTABLE} ${expheader_cmd})
   endif()
 
-  find_file(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
+
+  find_program(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
   if(versmodule_cmd)
-    set(versmodule_cmd ${Python_EXECUTABLE} ${versmodule_cmd})
+    set(versmodule_cmd ${PYTHON_EXECUTABLE} ${versmodule_cmd})
   endif()
 
-  find_file(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
+  find_program(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
   if(instmodule_cmd)
-    set(instmodule_cmd ${Python_EXECUTABLE} ${instmodule_cmd})
+    set(instmodule_cmd ${PYTHON_EXECUTABLE} ${instmodule_cmd})
   endif()
 
 
-  find_file(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
+  find_program(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
   if(thisheader_cmd)
-    set(thisheader_cmd ${Python_EXECUTABLE} ${thisheader_cmd})
+    set(thisheader_cmd ${PYTHON_EXECUTABLE} ${thisheader_cmd})
   endif()
 
-  find_file(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
+  find_program(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
   if(thismodule_cmd)
-    set(thismodule_cmd ${Python_EXECUTABLE} ${thismodule_cmd})
+    set(thismodule_cmd ${PYTHON_EXECUTABLE} ${thismodule_cmd})
   endif()
 
 
-  find_file(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
+  find_program(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
   if(thismodheader_cmd)
-    set(thismodheader_cmd ${Python_EXECUTABLE} ${thismodheader_cmd})
+    set(thismodheader_cmd ${PYTHON_EXECUTABLE} ${thismodheader_cmd})
   endif()
 
-  find_file(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
+  find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
   if(Boost_testmain_cmd)
-    set(Boost_testmain_cmd ${Python_EXECUTABLE} ${Boost_testmain_cmd})
+    set(Boost_testmain_cmd ${PYTHON_EXECUTABLE} ${Boost_testmain_cmd})
   endif()
 
-  find_file(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
+  find_program(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
   if(CppUnit_testmain_cmd)
-    set(CppUnit_testmain_cmd ${Python_EXECUTABLE} ${CppUnit_testmain_cmd})
+    set(CppUnit_testmain_cmd ${PYTHON_EXECUTABLE} ${CppUnit_testmain_cmd})
   endif()
 
-  find_file(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
+  find_program(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
   if(elementsrun_cmd)
-    set(elementsrun_cmd ${Python_EXECUTABLE} ${elementsrun_cmd})
+    set(elementsrun_cmd ${PYTHON_EXECUTABLE} ${elementsrun_cmd})
   endif()
 
   find_package(RPMBuild)
   if(RPMBUILD_FOUND)
-    find_file(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
-    set(rpmbuild_wrap_cmd ${Python_EXECUTABLE} ${rpmbuild_wrap_cmd})
+    find_program(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
+    set(rpmbuild_wrap_cmd ${PYTHON_EXECUTABLE} ${rpmbuild_wrap_cmd})
 	  mark_as_advanced(rpmbuild_wrap_cmd)
 	  if (NOT RPMBUILD_VERSION VERSION_LESS 4.14)
 	    set_property(GLOBAL APPEND PROPERTY CMAKE_EXTRA_FLAGS "-DELEMENTS_DETACHED_DEBINFO=OFF")
     endif()
   endif()
 
-  find_file(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
+  find_program(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
   if(pythonprogramscript_cmd)
-    set(pythonprogramscript_cmd ${Python_EXECUTABLE} ${pythonprogramscript_cmd})
+    set(pythonprogramscript_cmd ${PYTHON_EXECUTABLE} ${pythonprogramscript_cmd})
   endif()
 
-  find_file(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
+  find_program(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
   if(ctest2junit_cmd)
-    set(ctest2junit_cmd ${Python_EXECUTABLE} ${ctest2junit_cmd})
+    set(ctest2junit_cmd ${PYTHON_EXECUTABLE} ${ctest2junit_cmd})
   endif()
 
-  find_file(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
+  find_program(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
   if(ctestxml2html_cmd)
-    set(ctestxml2html_cmd ${Python_EXECUTABLE} ${ctestxml2html_cmd})
+    set(ctestxml2html_cmd ${PYTHON_EXECUTABLE} ${ctestxml2html_cmd})
   endif()
 
   mark_as_advanced(env_cmd merge_cmd versheader_cmd instheader_cmd expheader_cmd
@@ -421,7 +422,7 @@ macro(elements_project project version)
 
   # get the python test framework
 
-  if(Python_FOUND)
+  if(PYTHONINTERP_FOUND)
     set(PYFRMK_TEST)
     set(PYFRMK_NAME)
     if(USE_PYTHON_NOSE)
@@ -460,7 +461,7 @@ macro(elements_project project version)
       endif()
     endif()
     if(PYFRMK_TEST)
-      set(PYFRMK_TEST ${Python_EXECUTABLE} ${PYFRMK_TEST})
+      set(PYFRMK_TEST ${PYTHON_EXECUTABLE} ${PYFRMK_TEST})
     endif()
   endif()
 
@@ -2719,9 +2720,9 @@ function(elements_add_python_module module)
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
 
   # require Python libraries
-  find_package(Python ${PYTHON_EXPLICIT_VERSION} QUIET REQUIRED)
+  find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET REQUIRED)
 
-  elements_include_directories(AFTER ${Python_INCLUDE_DIRS})
+  elements_include_directories(AFTER ${PYTHON_INCLUDE_DIRS})
   add_library(${module} MODULE ${srcs})
 
   if(ARG_LINKER_LANGUAGE)
@@ -2735,7 +2736,7 @@ function(elements_add_python_module module)
     set_target_properties(${module} PROPERTIES SUFFIX .so PREFIX "")
     set_target_properties(${module} PROPERTIES BASENAME "${module}.so")
   endif()
-  target_link_libraries(${module} PRIVATE ${Python_LIBRARIES} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${module} PRIVATE ${PYTHON_LIBRARIES} ${ARG_LINK_LIBRARIES})
   _elements_detach_debinfo(${module})
 
   #----Installation details-------------------------------------------------------
@@ -3035,9 +3036,9 @@ function(_generate_cython_cpp)
         "${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo" )
       set(cython_debug_arg "--gdb")
   endif()
-  if("${Python_VERSION_MAJOR}" STREQUAL "2")
+  if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^2.")
     set(version_arg "-2")
-  elseif("${Python_VERSION_MAJOR}" MATCHES "3")
+  elseif("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.")
     set(version_arg "-3")
   else()
     set(version_arg)
@@ -3216,11 +3217,11 @@ function(elements_add_pybind11_module module)
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
 
   # require Python libraries
-  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development QUIET REQUIRED)
+  find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET REQUIRED)
 
-  elements_include_directories(AFTER ${Python_INCLUDE_DIRS})
+  elements_include_directories(AFTER ${PYTHON_INCLUDE_DIRS})
 
-  find_package(pybind11 CONFIG)
+  find_package(pybind11)
 
   pybind11_add_module(${module} ${srcs})
 
@@ -3228,7 +3229,7 @@ function(elements_add_pybind11_module module)
     set_target_properties(${module} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
   endif()
 
-  target_link_libraries(${module} PRIVATE ${Python_LIBRARIES} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${module} PRIVATE ${PYTHON_LIBRARIES} ${ARG_LINK_LIBRARIES})
 
   _elements_detach_debinfo(${module})
 
@@ -3757,7 +3758,7 @@ function(add_python_test_dir)
       set_property(TEST ${package}.${pytest_name} PROPERTY TIMEOUT ${PYTEST_ARG_TIMEOUT})
     endif()
   else()
-    if(NOT Python_VERSION VERSION_LESS "2.7")
+    if(NOT PYTHON_VERSION_STRING VERSION_LESS "2.7")
       foreach(pytestsubdir ${PYTEST_ARG_UNPARSED_ARGUMENTS})
         set(pytest_name "${pytest_name}:${pytestsubdir}")
         elements_add_test(${pytest_name}
@@ -4747,7 +4748,7 @@ function(elements_add_python_program executable module)
   get_directory_property(elements_module_name name)
   get_directory_property(elements_module_version version)
 
-  set(PYTHON_SCRIPT_VERSION ${Python_VERSION_MAJOR})
+  set(PYTHON_SCRIPT_VERSION ${PYTHON_VERSION_MAJOR})
   if(PYTHON_EXPLICIT_VERSION)
     set(PYTHON_SCRIPT_VERSION ${PYTHON_EXPLICIT_VERSION})
   endif()
