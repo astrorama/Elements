@@ -50,6 +50,14 @@ if(POLICY CMP0054)
   endif()
 endif()
 
+if(POLICY CMP0148)
+  # this policy is related to the python find_package
+  # please run "cmake --help-policy CMP0148" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.27) # i.e CMAKE_VERSION >= 3.27
+    cmake_policy(SET CMP0148 OLD)
+  endif()
+endif()
+
 
 if (NOT HAS_ELEMENTS_TOOLCHAIN)
   # this is the call to the preload_local_module_path is the toolchain has not been called

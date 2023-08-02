@@ -1,6 +1,9 @@
 if (NOT SPHINX_FOUND)
 
+  cmake_policy(PUSH)
+  cmake_policy(SET CMP0148 OLD)
   find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+  cmake_policy(POP)
 
   # ----------------------------------------------------------------------------
   # default components to look for

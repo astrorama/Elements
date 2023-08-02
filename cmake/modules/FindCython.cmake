@@ -1,7 +1,11 @@
 if (NOT CYTHON_FOUND)
 
+    cmake_policy(PUSH)
+    cmake_policy(SET CMP0148 OLD)
     find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
     find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION})
+    cmake_policy(POP)
+
 
     set(explicit_cython)
     if(PYTHON_EXPLICIT_VERSION)

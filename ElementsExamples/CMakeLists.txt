@@ -15,6 +15,12 @@ find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 find_package(CppUnit)
 find_package(GMock)
 
+cmake_policy(PUSH)
+cmake_policy(SET CMP0148 OLD)
+find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION})
+cmake_policy(POP)
+
+
 #===== Libraries ===============================================================
 # Instruction for creating a C++ library
 #    ElementsExamples is the library name
@@ -288,7 +294,6 @@ elements_add_test(OpenMPWorks COMMAND OpenMPExample LABELS OpenMP Build)
 
 
 find_package(SWIG QUIET)
-find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET)
 if(SWIG_FOUND AND PYTHONLIBS_FOUND)
 elements_add_swig_binding(SwigExample ElementsExamples/SwigExample.i
                           LINK_LIBRARIES ElementsExamples
@@ -305,7 +310,6 @@ endif()
 endif()
 
 find_package(Cython QUIET)
-find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET)
 if(CYTHON_FOUND AND PYTHONLIBS_FOUND)
 elements_add_cython_module(src/Cython/lib/PiCalculator.pyx
                            LINK_LIBRARIES ElementsExamples

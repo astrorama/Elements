@@ -884,7 +884,11 @@ endmacro()
 
 function(find_python_module module)
 
+    cmake_policy(PUSH)
+    cmake_policy(SET CMP0148 OLD)
     find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+    cmake_policy(POP)
+
 
     string(TOUPPER ${module} module_upper_tmp)
     string(REPLACE "." "_" module_upper ${module_upper_tmp})
