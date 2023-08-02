@@ -16,7 +16,9 @@ find_package(CppUnit)
 find_package(GMock)
 
 cmake_policy(PUSH)
-cmake_policy(SET CMP0148 OLD)
+if(POLICY CMP0148)
+  cmake_policy(SET CMP0148 OLD)
+endif()
 find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION})
 cmake_policy(POP)
 

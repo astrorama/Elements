@@ -1,7 +1,9 @@
 if (NOT PYTEST_FOUND)
 
     cmake_policy(PUSH)
-    cmake_policy(SET CMP0148 OLD)
+    if(POLICY CMP0148)
+      cmake_policy(SET CMP0148 OLD)
+    endif()
     find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
     cmake_policy(POP)
 
