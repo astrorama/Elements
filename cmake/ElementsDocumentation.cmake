@@ -249,7 +249,7 @@ include_guard(GLOBAL)
 
       if(USE_SPHINX_APIDOC)
         if(NOT TARGET sphinx_apidoc_${_py_pack_short})
-          file(GLOB_RECURSE _py_pack_dir_files LIST_DIRECTORIES false RELATIVE  ${_py_pack_dir} CONFIGURE_DEPENDS  ${_py_pack_dir}/*)
+          file(GLOB_RECURSE _py_pack_dir_files LIST_DIRECTORIES false RELATIVE  ${_py_pack_dir} CONFIGURE_DEPENDS  ${_py_pack_dir}/*.py)
           set(_py_pack_dir_files_full ${_py_pack_dir_files})
           list(TRANSFORM _py_pack_dir_files_full PREPEND ${_py_pack_dir}/)
 
