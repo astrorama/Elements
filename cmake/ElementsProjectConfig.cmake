@@ -5,7 +5,7 @@
 #
 # Commit Id: $Format:%H$
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.5)
 
 # FIXME: use of LOCATION property is deprecated and should be replaced with the
 #        generator expression $<TARGET_FILE>, but the way we use it requires
@@ -47,6 +47,14 @@ if(POLICY CMP0054)
     cmake_policy(SET CMP0054 NEW)
   else()
     cmake_policy(SET CMP0054 OLD)
+  endif()
+endif()
+
+if(POLICY CMP0148)
+  # this policy is related to the python find_package
+  # please run "cmake --help-policy CMP0148" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.27) # i.e CMAKE_VERSION >= 3.27
+    cmake_policy(SET CMP0148 OLD)
   endif()
 endif()
 
@@ -289,73 +297,73 @@ macro(elements_project project version)
   # (python scripts are located as such but run through python)
   set(binary_paths ${CMAKE_SOURCE_DIR}/cmake/scripts ${binary_paths})
 
-  find_program(env_cmd env.py HINTS ${binary_paths})
+  find_file(env_cmd env.py HINTS ${binary_paths})
   set(env_cmd ${PYTHON_EXECUTABLE} ${env_cmd})
 
-  find_program(merge_cmd merge_files.py HINTS ${binary_paths})
+  find_file(merge_cmd merge_files.py HINTS ${binary_paths})
   set(merge_cmd ${PYTHON_EXECUTABLE} ${merge_cmd} --no-stamp)
 
-  find_program(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
+  find_file(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
   if(versheader_cmd)
     set(versheader_cmd ${PYTHON_EXECUTABLE} ${versheader_cmd})
   endif()
 
-  find_program(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
+  find_file(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
   if(instheader_cmd)
     set(instheader_cmd ${PYTHON_EXECUTABLE} ${instheader_cmd})
   endif()
 
-  find_program(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
+  find_file(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
   if(expheader_cmd)
     set(expheader_cmd ${PYTHON_EXECUTABLE} ${expheader_cmd})
   endif()
 
 
-  find_program(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
+  find_file(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
   if(versmodule_cmd)
     set(versmodule_cmd ${PYTHON_EXECUTABLE} ${versmodule_cmd})
   endif()
 
-  find_program(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
+  find_file(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
   if(instmodule_cmd)
     set(instmodule_cmd ${PYTHON_EXECUTABLE} ${instmodule_cmd})
   endif()
 
 
-  find_program(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
+  find_file(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
   if(thisheader_cmd)
     set(thisheader_cmd ${PYTHON_EXECUTABLE} ${thisheader_cmd})
   endif()
 
-  find_program(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
+  find_file(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
   if(thismodule_cmd)
     set(thismodule_cmd ${PYTHON_EXECUTABLE} ${thismodule_cmd})
   endif()
 
 
-  find_program(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
+  find_file(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
   if(thismodheader_cmd)
     set(thismodheader_cmd ${PYTHON_EXECUTABLE} ${thismodheader_cmd})
   endif()
 
-  find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
+  find_file(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
   if(Boost_testmain_cmd)
     set(Boost_testmain_cmd ${PYTHON_EXECUTABLE} ${Boost_testmain_cmd})
   endif()
 
-  find_program(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
+  find_file(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
   if(CppUnit_testmain_cmd)
     set(CppUnit_testmain_cmd ${PYTHON_EXECUTABLE} ${CppUnit_testmain_cmd})
   endif()
 
-  find_program(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
+  find_file(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
   if(elementsrun_cmd)
     set(elementsrun_cmd ${PYTHON_EXECUTABLE} ${elementsrun_cmd})
   endif()
 
   find_package(RPMBuild)
   if(RPMBUILD_FOUND)
-    find_program(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
+    find_file(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
     set(rpmbuild_wrap_cmd ${PYTHON_EXECUTABLE} ${rpmbuild_wrap_cmd})
 	  mark_as_advanced(rpmbuild_wrap_cmd)
 	  if (NOT RPMBUILD_VERSION VERSION_LESS 4.14)
@@ -363,17 +371,17 @@ macro(elements_project project version)
     endif()
   endif()
 
-  find_program(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
+  find_file(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
   if(pythonprogramscript_cmd)
     set(pythonprogramscript_cmd ${PYTHON_EXECUTABLE} ${pythonprogramscript_cmd})
   endif()
 
-  find_program(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
+  find_file(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
   if(ctest2junit_cmd)
     set(ctest2junit_cmd ${PYTHON_EXECUTABLE} ${ctest2junit_cmd})
   endif()
 
-  find_program(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
+  find_file(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
   if(ctestxml2html_cmd)
     set(ctestxml2html_cmd ${PYTHON_EXECUTABLE} ${ctestxml2html_cmd})
   endif()
@@ -2855,6 +2863,10 @@ function(_generate_swig_files swig_module)
                  PROPERTY COMPILE_FLAGS " -Wno-null-dereference")
   endif()
 
+  if(CXX_HAS_NO_UNUSED_PARAMETER)
+    set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-unused-parameter")
+  endif()
 
 
   install(FILES ${PY_MODULE_DIR}/${PY_MODULE}.py DESTINATION ${PYTHON_INSTALL_SUFFIX})
@@ -3275,6 +3287,9 @@ function(elements_add_executable executable)
     set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
   endif()
 
+  set_target_properties(${executable} PROPERTIES  ENABLE_EXPORTS 1)
+
+
   if (ARG_NO_CONFIG_FILE)
     target_compile_definitions(${executable} PUBLIC NO_CONFIG_FILE)
   endif()
@@ -3476,6 +3491,10 @@ function(elements_add_unit_test name)
 
 
     set_property(GLOBAL APPEND PROPERTY TEST_LIST ${package}.${name}:${executable}${exec_suffix})
+
+    string(REPLACE ";" ":" srcs_str ${srcs})
+
+    set_property(GLOBAL APPEND PROPERTY TEST_SRC_LIST "${package}.${name}:${executable}${exec_suffix}:${srcs_str}")
 
     set_property(TEST ${package}.${name} PROPERTY CMDLINE "${executable}${exec_suffix}")
     set_property(TEST ${package}.${name} APPEND PROPERTY LABELS UnitTest ${package} Binary)
@@ -3747,8 +3766,11 @@ function(add_python_test_dir)
         endforeach()
       endif()
     endif()
+
+    set(PYFRMK_COMMAND ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_COVERAGE_OPT} ${PYFRMK_EXTRA_OPTS} ${pysrcs})
+
     elements_add_test(${pytest_name}
-                      COMMAND  ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_COVERAGE_OPT} ${PYFRMK_EXTRA_OPTS} ${pysrcs}
+                      COMMAND  ${PYFRMK_COMMAND}
                       ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})
     set_property(TEST ${package}.${pytest_name} APPEND PROPERTY LABELS Python UnitTest ${PYFRMK_NAME})
     if(PYTEST_ARG_TIMEOUT)
@@ -3759,7 +3781,7 @@ function(add_python_test_dir)
       foreach(pytestsubdir ${PYTEST_ARG_UNPARSED_ARGUMENTS})
         set(pytest_name "${pytest_name}:${pytestsubdir}")
         elements_add_test(${pytest_name}
-                          COMMAND ${PYTHON_EXECUTABLE} -m unittest discover -s ${CMAKE_CURRENT_SOURCE_DIR}/${pytestsubdir} -p "${PYTEST_ARG_PATTERN}"
+                          COMMAND ${Python_EXECUTABLE} -m unittest discover -s ${CMAKE_CURRENT_SOURCE_DIR}/${pytestsubdir} -p "${PYTEST_ARG_PATTERN}"
                           ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})
         set_property(TEST ${package}.${pytest_name} APPEND PROPERTY LABELS Python UnitTest)
         if(PYTEST_ARG_TIMEOUT)
@@ -4413,7 +4435,7 @@ macro(elements_external_project_environment)
 
       find_package(${pack} QUIET)
 
-      if("${pack}" STREQUAL "PythonInterp" OR "${pack}" STREQUAL "PythonLibs")
+      if("${pack}" STREQUAL "PythonInterp" OR "${pack}" STREQUAL "PythonLibs" OR "${pack}" STREQUAL "Python")
         set(pack Python)
       endif()
       string(TOUPPER ${pack} _pack_upper)

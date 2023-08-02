@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.5)
+
 elements_subdir(ElementsKernel)
 
 find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex)

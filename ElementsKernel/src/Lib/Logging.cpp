@@ -70,7 +70,7 @@ Logging::Logging(Category& log4cppLogger) : m_log4cppLogger(log4cppLogger) {}
 
 Logging Logging::getLogger(const string& name) {
   if (Category::getRoot().getAppender("console") == nullptr) {
-    log4cpp::OstreamAppender* consoleAppender = new log4cpp::OstreamAppender{"console", &std::cerr};
+    auto* consoleAppender = new log4cpp::OstreamAppender{"console", &std::cerr};
     consoleAppender->setLayout(getLogLayout().release());
     Category::getRoot().addAppender(consoleAppender);
     if (Category::getRoot().getPriority() == Priority::NOTSET) {
@@ -96,7 +96,7 @@ void Logging::setLogFile(const Path::Item& fileName) {
   Category& root = Category::getRoot();
   root.removeAppender(root.getAppender("file"));
   if (fileName.has_filename()) {
-    log4cpp::FileAppender* fileAppender = new log4cpp::FileAppender("file", fileName.string());
+    auto* fileAppender = new log4cpp::FileAppender("file", fileName.string());
     fileAppender->setLayout(getLogLayout().release());
     root.addAppender(fileAppender);
   }
@@ -108,7 +108,7 @@ Logging::LogMessageStream::LogMessageStream(Category& logger, P_log_func log_fun
     : m_logger(logger), m_log_func{log_func} {}
 /// @endcond Doxygen_Suppress
 
-Logging::LogMessageStream::LogMessageStream(LogMessageStream&& other)
+Logging::LogMessageStream::LogMessageStream(LogMessageStream&& other) noexcept
     : m_logger(other.m_logger), m_log_func{other.m_log_func} {}
 
 Logging::LogMessageStream::LogMessageStream(const LogMessageStream& other)

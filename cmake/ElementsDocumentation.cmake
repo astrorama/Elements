@@ -1,3 +1,6 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+
+
 include_guard(GLOBAL)
 
   if(INSTALL_DOC)

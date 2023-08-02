@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.5)
+
+
 if (NOT HAS_ELEMENTS_TOOLCHAIN)
 
 message(STATUS "-----------------------------------------------------------------------")
