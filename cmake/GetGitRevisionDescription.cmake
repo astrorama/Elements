@@ -1,3 +1,6 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+
+
 # - Returns a version string from Git
 #
 # These functions force a re-configure on each git commit so that you can

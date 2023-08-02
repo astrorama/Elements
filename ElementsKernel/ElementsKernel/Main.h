@@ -84,7 +84,7 @@
  * @code
  *    MAIN_FOR_WITH_ARGS(ELEMENTS_PROGRAM, ...)
  * @endcode.
- * The macro is equiped with a set_terminate placed just before
+ * The macro is equipped with a set_terminate placed just before
  * the main function definition:
  * @code
  * ELEMENTS_UNUSED const auto installed{std::set_terminate(&Elements::ProgramManager::onTerminate)};

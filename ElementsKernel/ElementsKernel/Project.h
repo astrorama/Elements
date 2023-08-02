@@ -28,7 +28,7 @@
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_PROJECT_H_
 
 #include <algorithm>  // for for_each
-#include <cstdint>    // for uing_least64_t
+#include <cstdint>    // for uint_least64_t
 #include <iostream>   // for ostream
 #include <string>     // for string
 #include <vector>     // for vector
@@ -79,21 +79,21 @@ struct Project {
   }
 };
 
-inline std::ostream& operator<<(std::ostream& stream, const Project& p) {
-  stream << "Name: " << p.name() << std::endl;
-  stream << "Version String: " << p.versionString() << std::endl;
-  stream << "Version: " << p.version() << std::endl;
-  stream << "Major Version: " << p.majorVersion() << std::endl;
-  stream << "Minor Version: " << p.minorVersion() << std::endl;
-  stream << "Patch Version: " << p.patchVersion() << std::endl;
-  stream << "Original Version: " << p.originalVersion() << std::endl;
-  stream << "VCS Version: " << p.vcsVersion() << std::endl;
-  stream << "Install Location: " << p.installLocation() << std::endl;
-  stream << "Use So Version: " << p.useSoVersion() << std::endl;
-  stream << "Install Prefix: " << p.installPrefix() << std::endl;
+inline std::ostream& operator<<(std::ostream& stream, const Project& /* p */) {
+  stream << "Name: " << Elements::Project::name() << std::endl;
+  stream << "Version String: " << Elements::Project::versionString() << std::endl;
+  stream << "Version: " << Elements::Project::version() << std::endl;
+  stream << "Major Version: " << Elements::Project::majorVersion() << std::endl;
+  stream << "Minor Version: " << Elements::Project::minorVersion() << std::endl;
+  stream << "Patch Version: " << Elements::Project::patchVersion() << std::endl;
+  stream << "Original Version: " << Elements::Project::originalVersion() << std::endl;
+  stream << "VCS Version: " << Elements::Project::vcsVersion() << std::endl;
+  stream << "Install Location: " << Elements::Project::installLocation() << std::endl;
+  stream << "Use So Version: " << Elements::Project::useSoVersion() << std::endl;
+  stream << "Install Prefix: " << Elements::Project::installPrefix() << std::endl;
   stream << "Search Directories: ";
 
-  for (const auto& d : p.searchDirectories()) {
+  for (const auto& d : Elements::Project::searchDirectories()) {
     stream << d << " ";
   }
 
