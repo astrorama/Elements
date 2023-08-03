@@ -2852,7 +2852,7 @@ function(_generate_swig_files swig_module)
 
   if(CXX_HAS_SHADOW)
     set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-shadow")
+                 PROPERTY COMPILE_FLAGS " -Wno-shadow=local")
   endif()
 
   if(CXX_HAS_NULL_DEREFERENCE)
@@ -3186,7 +3186,7 @@ function(elements_add_cython_module)
 
   if(CXX_HAS_SHADOW)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-shadow")
+                 PROPERTY COMPILE_FLAGS " -Wno-shadow=local")
   endif()
 
   if(CXX_HAS_CONVERSION)
