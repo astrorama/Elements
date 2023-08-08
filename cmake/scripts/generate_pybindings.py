@@ -116,10 +116,10 @@ for initFile in initFiles:
 # If we have PyXB version 1.2.1 or earlier we need to comment out all the lines
 # related with the ModuleRecord variable
 pyxbVer = int(pyxb.__version__.replace('.', ''))
-if (pyxbVer < 122):
+if pyxbVer < 122:
     print('\n\nDetected PyXB version < 1.2.2. Applying ModuleRecord hack...')
     hackDir = options.outdir + os.sep
-    if (len(options.module) > 0):
+    if len(options.module) > 0:
         hackDir += options.module.replace('.', os.sep)
     pyFileList = [d + '/' + f for (d, _, l) in walk(hackDir) for f in l if (f.endswith('.py'))]
     for pyFile in pyFileList:
