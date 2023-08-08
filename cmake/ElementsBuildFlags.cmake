@@ -379,6 +379,11 @@ option(INSTALL_TESTS
        "Enable the installation of the binary tests"
        OFF)
 
+option(PRINT_TEST_COMMANDS
+       "Print the test commands at configure time"
+       OFF)
+
+
 option(USE_VERSIONED_LIBRARIES
        "Generate versioned shared libraries"
        ON)
