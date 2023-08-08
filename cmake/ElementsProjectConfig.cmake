@@ -3469,18 +3469,26 @@ function(elements_add_unit_test name)
       endif()
     endif()
 
+    set(full_test_commandline)
+
     if (USE_MEMORYCHECK)
       separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
-      add_test(NAME ${package}.${name}
-               WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
-               COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-               ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.memcheck.xml ${executable}${exec_suffix} ${exec_argument})
+      set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.memcheck.xml ${executable}${exec_suffix} ${exec_argument})
     else()
-      add_test(NAME ${package}.${name}
-               WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
-               COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-               ${executable}${exec_suffix} ${exec_argument})
+      set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${executable}${exec_suffix} ${exec_argument})
     endif()
+
+    add_test(NAME ${package}.${name}
+             WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
+             COMMAND ${full_test_commandline})
+
+    if(PRINT_TEST_COMMANDS)
+      message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+      string(REPLACE ";" " " full_test_commandline_string "${full_test_commandline}")
+      message(STATUS "${package}.${name} Test Command Line: ${full_test_commandline_string}")
+      message(STATUS "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    endif()
+
 
 
     set_property(GLOBAL APPEND PROPERTY TEST_LIST ${package}.${name}:${executable}${exec_suffix})
@@ -3574,17 +3582,21 @@ function(elements_add_test name)
 
   if (USE_MEMORYCHECK)
     separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
-    add_test(NAME ${package}.${name}
-             WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
-             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-             ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${name}.memcheck.xml ${cmdline})
+    set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${name}.memcheck.xml ${cmdline})
   else()
-    add_test(NAME ${package}.${name}
-             WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
-             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-              ${cmdline})
+    set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${cmdline})
   endif()
 
+  add_test(NAME ${package}.${name}
+           WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
+           COMMAND ${full_test_commandline})
+
+  if(PRINT_TEST_COMMANDS)
+    message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    string(REPLACE ";" " " full_test_commandline_string "${full_test_commandline}")
+    message(STATUS "${package}.${name} Test Command Line: ${full_test_commandline_string}")
+    message(STATUS "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+  endif()
 
   set_property(TEST ${package}.${name} APPEND PROPERTY LABELS ${package})
   set_property(TEST ${package}.${name} PROPERTY CMDLINE "${cmdline}")
@@ -3761,7 +3773,7 @@ function(add_python_test_dir)
     endif()
 
     set(PYFRMK_COMMAND ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_COVERAGE_OPT} ${PYFRMK_EXTRA_OPTS} ${pysrcs})
-
+    
     elements_add_test(${pytest_name}
                       COMMAND  ${PYFRMK_COMMAND}
                       ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})
