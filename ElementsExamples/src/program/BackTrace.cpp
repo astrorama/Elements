@@ -22,7 +22,7 @@
 #include <stdexcept>  // for standard exceptions
 #include <string>     // for string
 
-#include "ElementsExamples/crashingFunction.h"  // for crashingFunction
+#include "ElementsExamples/CrashingFunction.h"  // for crashingFunction
 
 #include "ElementsKernel/ProgramHeaders.h"  // for including all Program/related headers
 #include "ElementsKernel/Unused.h"          // for ELEMENTS_UNUSED
