@@ -1,8 +1,8 @@
-/**
- * @file crashingFunction.cpp
+/*
+ * Rectangle_test.cpp
  *
- * @date Nov 15, 2016
- * @author hubert
+ *  Created on: Dec 17, 2019
+ *      Author: Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -19,21 +19,21 @@
  *
  */
 
-#include "ElementsExamples/crashingFunction.h"
+#include "ElementsExamples/CrashingFunction.h"  // Access the objects you want to test
 
+#include <boost/test/unit_test.hpp>
+#include <iostream>
 #include <stdexcept>  // for the logic_error
 
-#include "ElementsKernel/Logging.h"  // for the Logging
+using Elements::Examples::crashingFunction;
 
-namespace Elements {
-namespace Examples {
+// Starts a test suite and name it.
+BOOST_AUTO_TEST_SUITE(crashingFunction_test_suite)
 
-void crashingFunction() {
-  auto log = Logging::getLogger("ElementsExamples");
-  log.info() << "Entering Crashing Function";
+BOOST_AUTO_TEST_CASE(Call_test) {
 
-  throw std::logic_error("arrg!");
+  BOOST_CHECK_THROW(crashingFunction(), std::logic_error);
 }
 
-}  // namespace Examples
-}  // namespace Elements
+// Ends the test suite
+BOOST_AUTO_TEST_SUITE_END()

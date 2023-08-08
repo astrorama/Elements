@@ -1,5 +1,5 @@
 /**
- * @file callBackExample.cpp
+ * @file callBackExample.h
  *
  * @date Apr 1, 2020
  * @author Hubert Degaudenzi
@@ -19,32 +19,25 @@
  *
  */
 
-#include <functional>  // for function
-#include <vector>      // for vector
+/**
+ * @addtogroup ElementsExamples ElementsExamples
+ * @{
+ */
 
-#include "ElementsKernel/Logging.h"  // for Logging
+#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CALLBACKEXAMPLE_H_
+#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CALLBACKEXAMPLE_H_
 
-#include "ElementsExamples/callBackExample.h"
+#include <functional>
+#include <vector>
 
-using std::vector;
+#include "ElementsKernel/Export.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-double testCallBack(vector<double> x, const std::function<double(vector<double>)>& fun) {
+ELEMENTS_API double testCallBack(std::vector<double> x, const std::function<double(std::vector<double>)>& fun);
 
-  auto log = Logging::getLogger("ElementsExamples");
+}  // namespace Elements::Examples
 
-  log.info() << "Calling the Python function from C++";
+#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CALLBACKEXAMPLE_H_
 
-  double f = fun(x);
-
-  log.info() << "The value of the function is " << f;
-
-  log.info() << "Returning the result";
-
-  return (f);
-}
-
-}  // namespace Examples
-}  // namespace Elements
+/**@}*/
