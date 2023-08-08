@@ -50,6 +50,14 @@ if(POLICY CMP0054)
   endif()
 endif()
 
+if(POLICY CMP0148)
+  # this policy is related to the python find_package
+  # please run "cmake --help-policy CMP0148" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.27) # i.e CMAKE_VERSION >= 3.27
+    cmake_policy(SET CMP0148 OLD)
+  endif()
+endif()
+
 
 if (NOT HAS_ELEMENTS_TOOLCHAIN)
   # this is the call to the preload_local_module_path is the toolchain has not been called
@@ -289,73 +297,73 @@ macro(elements_project project version)
   # (python scripts are located as such but run through python)
   set(binary_paths ${CMAKE_SOURCE_DIR}/cmake/scripts ${binary_paths})
 
-  find_program(env_cmd env.py HINTS ${binary_paths})
+  find_file(env_cmd env.py HINTS ${binary_paths})
   set(env_cmd ${PYTHON_EXECUTABLE} ${env_cmd})
 
-  find_program(merge_cmd merge_files.py HINTS ${binary_paths})
+  find_file(merge_cmd merge_files.py HINTS ${binary_paths})
   set(merge_cmd ${PYTHON_EXECUTABLE} ${merge_cmd} --no-stamp)
 
-  find_program(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
+  find_file(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
   if(versheader_cmd)
     set(versheader_cmd ${PYTHON_EXECUTABLE} ${versheader_cmd})
   endif()
 
-  find_program(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
+  find_file(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
   if(instheader_cmd)
     set(instheader_cmd ${PYTHON_EXECUTABLE} ${instheader_cmd})
   endif()
 
-  find_program(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
+  find_file(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
   if(expheader_cmd)
     set(expheader_cmd ${PYTHON_EXECUTABLE} ${expheader_cmd})
   endif()
 
 
-  find_program(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
+  find_file(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
   if(versmodule_cmd)
     set(versmodule_cmd ${PYTHON_EXECUTABLE} ${versmodule_cmd})
   endif()
 
-  find_program(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
+  find_file(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
   if(instmodule_cmd)
     set(instmodule_cmd ${PYTHON_EXECUTABLE} ${instmodule_cmd})
   endif()
 
 
-  find_program(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
+  find_file(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
   if(thisheader_cmd)
     set(thisheader_cmd ${PYTHON_EXECUTABLE} ${thisheader_cmd})
   endif()
 
-  find_program(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
+  find_file(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
   if(thismodule_cmd)
     set(thismodule_cmd ${PYTHON_EXECUTABLE} ${thismodule_cmd})
   endif()
 
 
-  find_program(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
+  find_file(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
   if(thismodheader_cmd)
     set(thismodheader_cmd ${PYTHON_EXECUTABLE} ${thismodheader_cmd})
   endif()
 
-  find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
+  find_file(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
   if(Boost_testmain_cmd)
     set(Boost_testmain_cmd ${PYTHON_EXECUTABLE} ${Boost_testmain_cmd})
   endif()
 
-  find_program(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
+  find_file(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
   if(CppUnit_testmain_cmd)
     set(CppUnit_testmain_cmd ${PYTHON_EXECUTABLE} ${CppUnit_testmain_cmd})
   endif()
 
-  find_program(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
+  find_file(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
   if(elementsrun_cmd)
     set(elementsrun_cmd ${PYTHON_EXECUTABLE} ${elementsrun_cmd})
   endif()
 
   find_package(RPMBuild)
   if(RPMBUILD_FOUND)
-    find_program(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
+    find_file(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
     set(rpmbuild_wrap_cmd ${PYTHON_EXECUTABLE} ${rpmbuild_wrap_cmd})
 	  mark_as_advanced(rpmbuild_wrap_cmd)
 	  if (NOT RPMBUILD_VERSION VERSION_LESS 4.14)
@@ -363,17 +371,17 @@ macro(elements_project project version)
     endif()
   endif()
 
-  find_program(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
+  find_file(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
   if(pythonprogramscript_cmd)
     set(pythonprogramscript_cmd ${PYTHON_EXECUTABLE} ${pythonprogramscript_cmd})
   endif()
 
-  find_program(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
+  find_file(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
   if(ctest2junit_cmd)
     set(ctest2junit_cmd ${PYTHON_EXECUTABLE} ${ctest2junit_cmd})
   endif()
 
-  find_program(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
+  find_file(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
   if(ctestxml2html_cmd)
     set(ctestxml2html_cmd ${PYTHON_EXECUTABLE} ${ctestxml2html_cmd})
   endif()
@@ -2844,7 +2852,7 @@ function(_generate_swig_files swig_module)
 
   if(CXX_HAS_SHADOW)
     set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-shadow")
+                 PROPERTY COMPILE_FLAGS " -Wno-shadow=local")
   endif()
 
   if(CXX_HAS_NULL_DEREFERENCE)
@@ -2852,6 +2860,10 @@ function(_generate_swig_files swig_module)
                  PROPERTY COMPILE_FLAGS " -Wno-null-dereference")
   endif()
 
+  if(CXX_HAS_NO_UNUSED_PARAMETER)
+    set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-unused-parameter")
+  endif()
 
 
   install(FILES ${PY_MODULE_DIR}/${PY_MODULE}.py DESTINATION ${PYTHON_INSTALL_SUFFIX})
@@ -3174,7 +3186,7 @@ function(elements_add_cython_module)
 
   if(CXX_HAS_SHADOW)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-shadow")
+                 PROPERTY COMPILE_FLAGS " -Wno-shadow=local")
   endif()
 
   if(CXX_HAS_CONVERSION)
@@ -3457,18 +3469,26 @@ function(elements_add_unit_test name)
       endif()
     endif()
 
+    set(full_test_commandline)
+
     if (USE_MEMORYCHECK)
       separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
-      add_test(NAME ${package}.${name}
-               WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
-               COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-               ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.memcheck.xml ${executable}${exec_suffix} ${exec_argument})
+      set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.memcheck.xml ${executable}${exec_suffix} ${exec_argument})
     else()
-      add_test(NAME ${package}.${name}
-               WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
-               COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-               ${executable}${exec_suffix} ${exec_argument})
+      set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${executable}${exec_suffix} ${exec_argument})
     endif()
+
+    add_test(NAME ${package}.${name}
+             WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
+             COMMAND ${full_test_commandline})
+
+    if(PRINT_TEST_COMMANDS)
+      message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+      string(REPLACE ";" " " full_test_commandline_string "${full_test_commandline}")
+      message(STATUS "${package}.${name} Test Command Line: ${full_test_commandline_string}")
+      message(STATUS "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    endif()
+
 
 
     set_property(GLOBAL APPEND PROPERTY TEST_LIST ${package}.${name}:${executable}${exec_suffix})
@@ -3562,17 +3582,21 @@ function(elements_add_test name)
 
   if (USE_MEMORYCHECK)
     separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
-    add_test(NAME ${package}.${name}
-             WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
-             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-             ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${name}.memcheck.xml ${cmdline})
+    set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${name}.memcheck.xml ${cmdline})
   else()
-    add_test(NAME ${package}.${name}
-             WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
-             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-              ${cmdline})
+    set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${cmdline})
   endif()
 
+  add_test(NAME ${package}.${name}
+           WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
+           COMMAND ${full_test_commandline})
+
+  if(PRINT_TEST_COMMANDS)
+    message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    string(REPLACE ";" " " full_test_commandline_string "${full_test_commandline}")
+    message(STATUS "${package}.${name} Test Command Line: ${full_test_commandline_string}")
+    message(STATUS "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+  endif()
 
   set_property(TEST ${package}.${name} APPEND PROPERTY LABELS ${package})
   set_property(TEST ${package}.${name} PROPERTY CMDLINE "${cmdline}")
@@ -3749,7 +3773,7 @@ function(add_python_test_dir)
     endif()
 
     set(PYFRMK_COMMAND ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_COVERAGE_OPT} ${PYFRMK_EXTRA_OPTS} ${pysrcs})
-
+    
     elements_add_test(${pytest_name}
                       COMMAND  ${PYFRMK_COMMAND}
                       ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})
