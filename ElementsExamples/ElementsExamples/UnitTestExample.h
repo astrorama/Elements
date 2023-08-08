@@ -29,8 +29,7 @@
 #include "ElementsKernel/Export.h"
 #include <vector>
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class UnitTestExample
@@ -61,8 +60,7 @@ public:
   double average(const std::vector<int>& v);
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_UNITTESTEXAMPLE_H_
 

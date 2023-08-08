@@ -24,8 +24,7 @@
 
 #include <cstddef>  // for std::size_t
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 template <typename T>
 double TemplatedDataSourceUser::sumRecords(const T& data_source) {
@@ -38,7 +37,6 @@ double TemplatedDataSourceUser::sumRecords(const T& data_source) {
   return sum;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_

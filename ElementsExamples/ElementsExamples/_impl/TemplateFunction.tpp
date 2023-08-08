@@ -25,15 +25,13 @@
 
 #include <iostream>
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 template <typename T>
 void templateFunction() {
   std::cout << "foo!" << static_cast<T>(3.14f) << std::endl;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_

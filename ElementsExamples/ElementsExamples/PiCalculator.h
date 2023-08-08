@@ -26,8 +26,7 @@
 
 #include "ElementsKernel/Export.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 class ELEMENTS_API PiCalculator {
 public:
@@ -41,8 +40,7 @@ private:
   show_result_callback_type m_show_result_callback{};
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_PICALCULATOR_H_
 

@@ -28,8 +28,7 @@
 
 #include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 class ELEMENTS_API Rectangle {
 public:
@@ -45,8 +44,7 @@ public:
   void move(int dx, int dy);
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_RECTANGLE_H_
 

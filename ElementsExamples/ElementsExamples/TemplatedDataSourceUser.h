@@ -27,8 +27,7 @@
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_H_
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_H_
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class TemplatedDataSourceUser
@@ -56,8 +55,7 @@ public:
   double sumRecords(const T& data_source);
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * @def ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_

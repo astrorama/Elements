@@ -30,13 +30,11 @@
 #include "ElementsKernel/Export.h"
 #include "ElementsKernel/ModuleInfo.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 ELEMENTS_API const System::ModuleInfo& getModuleInfo();
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_MODULEINFO_H_
 

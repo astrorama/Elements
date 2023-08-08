@@ -29,8 +29,7 @@
 
 #include "ElementsKernel/Export.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 template <typename T>
 ELEMENTS_API void templateFunction();
@@ -39,8 +38,7 @@ ELEMENTS_API void templateFunction();
 extern template ELEMENTS_API void templateFunction<int>();
 extern template ELEMENTS_API void templateFunction<double>();
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * @def ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
