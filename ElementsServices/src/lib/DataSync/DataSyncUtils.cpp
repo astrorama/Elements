@@ -36,6 +36,10 @@ namespace DataSync {
 
 using std::string;
 
+const string DEFAULT_WORKDIR_VAR{"WORKSPACE"};
+
+const string WORKDIR_VAR_VAR{"DATASYNC_WORKDIR_VAR"};
+
 path confFilePath(path filename) {
   return Configuration::getPath(filename);
 }
@@ -79,8 +83,21 @@ string environmentVariable(string name) {
   return Environment().get(name);  // Already returns "" if not found
 }
 
+string getWorkdirVariable() {
+
+  string      workdir_variable = DEFAULT_WORKDIR_VAR;
+  Environment current;
+
+  if (not current[WORKDIR_VAR_VAR].empty()) {
+    workdir_variable = current[WORKDIR_VAR_VAR];
+  }
+
+  return workdir_variable;
+}
+
 path localWorkspacePrefix() {
-  const string codeen_prefix("WORKSPACE");
+  const string workdir_variable = getWorkdirVariable();
+  const string codeen_prefix(workdir_variable);
   const string prefix_env_variable(codeen_prefix);
   return path(environmentVariable(prefix_env_variable));
 }

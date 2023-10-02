@@ -26,6 +26,9 @@
 
 #include "ElementsServices/DataSync/DataSyncUtils.h"
 
+#include "ElementsKernel/Environment.h"
+#include "ElementsKernel/Temporary.h"
+
 namespace DataSync = ElementsServices::DataSync;
 
 using std::string;
@@ -93,6 +96,34 @@ BOOST_AUTO_TEST_CASE(containsInThisOrder_test) {
   BOOST_CHECK(containsInThisOrder(input, wordcut));
   BOOST_CHECK(not containsInThisOrder(input, unordered));
   BOOST_CHECK(not containsInThisOrder(input, random));
+}
+
+BOOST_AUTO_TEST_CASE(getWorkdirVariable_test) {
+
+  using Elements::Environment;
+  using Elements::TempPath;
+
+  Environment current;
+
+  if (current[DataSync::WORKDIR_VAR_VAR].empty()) {
+
+    BOOST_CHECK_EQUAL(DataSync::getWorkdirVariable(), DataSync::DEFAULT_WORKDIR_VAR);
+    if (not current[DataSync::DEFAULT_WORKDIR_VAR].empty()) {
+      BOOST_CHECK_EQUAL(DataSync::localWorkspacePrefix(), string(current[DataSync::DEFAULT_WORKDIR_VAR]));
+    }
+
+    Environment local;
+    local[DataSync::WORKDIR_VAR_VAR] = "THIS_WORKDIR";
+    BOOST_CHECK_EQUAL(DataSync::getWorkdirVariable(), "THIS_WORKDIR");
+    if (local["THIS_WORKDIR"].empty()) {
+      TempPath this_workdir;
+      local["THIS_WORKDIR"] = this_workdir.path().string();
+    }
+    BOOST_CHECK_EQUAL(DataSync::localWorkspacePrefix(), string(local[local[DataSync::WORKDIR_VAR_VAR]]));
+  } else {
+    BOOST_CHECK_EQUAL(DataSync::getWorkdirVariable(), string(current[DataSync::WORKDIR_VAR_VAR]));
+    BOOST_CHECK_EQUAL(DataSync::localWorkspacePrefix(), string(current[current[DataSync::DEFAULT_WORKDIR_VAR]]));
+  }
 }
 
 //-----------------------------------------------------------------------------

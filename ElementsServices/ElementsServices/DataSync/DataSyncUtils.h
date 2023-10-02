@@ -40,6 +40,21 @@ namespace DataSync {
 /// importing the path item from ElementsKernel
 using path = Path::Item;
 
+/**
+ * @brief Name of the default variable that contains the path
+ * to the work dir.
+ * @ingroup ElementsServices
+ */
+ELEMENTS_API extern const std::string DEFAULT_WORKDIR_VAR;
+
+/**
+ * @brief Name of the variable containing the name of the workspace.
+ * It that variable is not set or empty, the content of #DEFAULT_WORKDIR_VAR
+ * is used as the work dir path.
+ * @ingroup ElementsServices
+ */
+ELEMENTS_API extern const std::string WORKDIR_VAR_VAR;
+
 ELEMENTS_API path confFilePath(path filename);
 
 ELEMENTS_API bool checkCall(const std::string& command);
@@ -56,6 +71,13 @@ ELEMENTS_API void createLocalDirOf(path localFile);
  * @return The value if the variable exists; "" otherwise.
  */
 ELEMENTS_API std::string environmentVariable(std::string name);
+
+/**
+ * @brief Get the datasync workdir variable
+ * @ingroup ElementsServices
+ * @return the name of the variable containing the workdir path
+ */
+ELEMENTS_API std::string getWorkdirVariable();
 
 ELEMENTS_API path localWorkspacePrefix();
 
