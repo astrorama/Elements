@@ -22,6 +22,7 @@ import os
 
 from ElementsKernel.Temporary import TempDir, TempEnv
 from ElementsServices.DataSync.DataSynchronizer import DownloadFailed
+from ElementsServices.DataSync.DataSyncUtils import getWorkdirVariable
 
 from fixtures.MockDataSynchronizer import MockDataSynchronizer
 from fixtures.ConfigFilesFixture import theNoOverwriteConfig
@@ -33,7 +34,8 @@ class TestDataSynchronizer(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.m_top_dir = TempDir(prefix="DataSync_test")
         self.m_env = TempEnv()
-        self.m_env["WORKSPACE"] = os.path.join(self.m_top_dir.path(), "workspace")
+        self.m_workdir_var = getWorkdirVariable()
+        self.m_env[self.m_workdir_var] = os.path.join(self.m_top_dir.path(), "workspace")
 
     def tearDown(self):
         unittest.TestCase.tearDown(self)

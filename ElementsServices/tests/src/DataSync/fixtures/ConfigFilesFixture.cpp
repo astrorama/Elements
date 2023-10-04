@@ -13,13 +13,15 @@
 #include <vector>
 
 #include "ElementsKernel/Temporary.h"
+
 #include "ElementsServices/DataSync/DataSyncUtils.h"
 
+using ElementsServices::DataSync::DEFAULT_WORKDIR_VAR;
 using ElementsServices::DataSync::localWorkspacePrefix;
 using ElementsServices::DataSync::path;
 
 WorkspaceFixture::WorkspaceFixture() {
-  m_env["WORKSPACE"] = (m_top_dir.path() / "workspace").string();
+  m_env[DEFAULT_WORKDIR_VAR] = (m_top_dir.path() / "workspace").string();
 }
 
 path theDependencyConfig() {

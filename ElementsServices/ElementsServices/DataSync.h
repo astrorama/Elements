@@ -83,7 +83,8 @@ public:
    *
    * On LODEEN, the prefix is empty.
    * On CODEEN, it is the job workspace which the user do not know.
-   * It can be set by the user through the $WORKSPACE environment variable.
+   * It can be set by the user through the variable name in the DATASYNC_WORKDIR_VAR
+   * or by the WORKSPACE environment variable if the later is empty.
    *
    * @warning This function must be used to access any data
    * downloaded by the DataSync tool.

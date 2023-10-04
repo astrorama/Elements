@@ -22,6 +22,10 @@ import subprocess
 
 from ElementsKernel.Configuration import getConfigurationPath
 
+DEFAULT_WORKDIR_VAR = "WORKSPACE"
+
+WORKDIR_VAR_VAR = "DATASYNC_WORKDIR_VAR"
+
 
 def dataSyncConfFilePath (filename):
     """Get the path of a configuration file for the data synchronization tool.
@@ -63,10 +67,23 @@ def environmentVariable (name):
     """
     return os.environ.get(name, "")
 
+
+def getWorkdirVariable():
+    """ Get the variable holding the name of the workdir variable path
+    """
+
+    workdir_variable = DEFAULT_WORKDIR_VAR
+
+    if os.environ.get(WORKDIR_VAR_VAR, None):
+        workdir_variable = os.environ[WORKDIR_VAR_VAR]
+
+    return workdir_variable
+
+
 def localWorkspacePrefix ():
     """Get the prefix of the local workspace.
     """
-    codeen_prefix = 'WORKSPACE'
+    codeen_prefix = getWorkdirVariable()
     return environmentVariable(codeen_prefix)
 
 

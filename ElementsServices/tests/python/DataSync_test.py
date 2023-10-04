@@ -25,6 +25,7 @@ from ElementsKernel.Temporary import TempDir, TempEnv
 from ElementsServices.DataSync import DataSync
 from ElementsServices.DataSync.IrodsSynchronizer import irodsIsInstalled
 from ElementsServices.DataSync.WebdavSynchronizer import webdavIsInstalled
+from ElementsServices.DataSync.DataSyncUtils import getWorkdirVariable
 
 from fixtures.ConfigFilesFixture import theDependencyConfig, theLocalFiles
 from fixtures.ConfigFilesFixture import aBadConnectionConfig, theWebdavFrConfig
@@ -37,7 +38,8 @@ class TestDataSync(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.m_top_dir = TempDir(prefix="DataSync_test")
         self.m_env = TempEnv()
-        self.m_env["WORKSPACE"] = os.path.join(self.m_top_dir.path(), "workspace")
+        self.m_workdir_var = getWorkdirVariable()
+        self.m_env[self.m_workdir_var] = os.path.join(self.m_top_dir.path(), "workspace")
 
     def tearDown(self):
         unittest.TestCase.tearDown(self)
