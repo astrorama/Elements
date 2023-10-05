@@ -3773,7 +3773,7 @@ function(add_python_test_dir)
     endif()
 
     set(PYFRMK_COMMAND ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_COVERAGE_OPT} ${PYFRMK_EXTRA_OPTS} ${pysrcs})
-    
+
     elements_add_test(${pytest_name}
                       COMMAND  ${PYFRMK_COMMAND}
                       ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})

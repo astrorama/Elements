@@ -4131,10 +4131,10 @@ CODEEN, where the file system constraints are not known a priori. For
 example, you might not be allowed to write to ``/tmp`` while you would
 want to do that in LODEEN. Therefore, the local test workspace is
 prefixed by the CODEEN job workspace, which is pointed by the
-environment variable ``$WORKSPACE``. 
+environment variable ``$WORKSPACE``.
 
-This ``WORKSPACE`` name can be changed with the ``DATASYNC_WORKDIR_VAR`` to 
-a different variable (e.g. ``MY_WORKSPACE``). If the ``DATASYNC_WORKDIR_VAR`` 
+This ``WORKSPACE`` name can be changed with the ``DATASYNC_WORKDIR_VAR`` to
+a different variable (e.g. ``MY_WORKSPACE``). If the ``DATASYNC_WORKDIR_VAR``
 doesn't exist or is empty, it falls back to ``WORKSPACE``.
 
 This means that you can yourself set the variable in your environment to
