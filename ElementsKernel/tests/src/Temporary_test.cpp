@@ -49,6 +49,8 @@ namespace Elements {
 //
 //-----------------------------------------------------------------------------
 
+const string WORKDIR_VAR{"TMP_WORKSPACE"};
+
 struct Temporary_Fixture {
 
   TempDir m_top_dir{"Temporary_test-%%%%%%%"};
@@ -56,7 +58,7 @@ struct Temporary_Fixture {
 
   Temporary_Fixture() {
     // setup
-    m_env["WORKSPACE"] = (m_top_dir.path() / "work").string();
+    m_env[WORKDIR_VAR] = (m_top_dir.path() / "work").string();
   }
   ~Temporary_Fixture() {
     // teardown
@@ -147,7 +149,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
 
   using System::getEnv;
 
-  BOOST_CHECK(m_env["WORKSPACE"].value() == (m_top_dir.path() / "work").string());
+  BOOST_CHECK(m_env[WORKDIR_VAR].value() == (m_top_dir.path() / "work").string());
 
   // test if the global temporary directory exists.
   BOOST_CHECK(exists(m_top_dir.path()));
@@ -157,11 +159,11 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
   {
     TempEnv local;
     local["TMPDIR"] = test_tmpdir.c_str();
-    BOOST_CHECK(local["WORKSPACE"].value() == (m_top_dir.path() / "work").string());
-    BOOST_CHECK(m_env["WORKSPACE"].value() == (m_top_dir.path() / "work").string());
-    local["WORKSPACE"] = "that_work";
-    BOOST_CHECK(local["WORKSPACE"].value() == "that_work");
-    BOOST_CHECK(m_env["WORKSPACE"].value() == "that_work");
+    BOOST_CHECK(local[WORKDIR_VAR].value() == (m_top_dir.path() / "work").string());
+    BOOST_CHECK(m_env[WORKDIR_VAR].value() == (m_top_dir.path() / "work").string());
+    local[WORKDIR_VAR] = "that_work";
+    BOOST_CHECK(local[WORKDIR_VAR].value() == "that_work");
+    BOOST_CHECK(m_env[WORKDIR_VAR].value() == "that_work");
     string tmp_env_val = getEnv("TMPDIR");
     // test that the variable is actually set in the environment
     // of the process
@@ -169,7 +171,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
     BOOST_CHECK(local["TMPDIR"].value() == test_tmpdir.string());
   }
 
-  BOOST_CHECK(m_env["WORKSPACE"].value() == (m_top_dir.path() / "work").string());
+  BOOST_CHECK(m_env[WORKDIR_VAR].value() == (m_top_dir.path() / "work").string());
 
   BOOST_CHECK(getEnv("TMPDIR") == "");
   BOOST_CHECK(exists(test_tmpdir));

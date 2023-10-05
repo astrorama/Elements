@@ -18,14 +18,18 @@
 
 import os.path
 
-from ElementsServices.DataSync.DataSyncUtils import concatenatePaths, localWorkspacePrefix
+from ElementsServices.DataSync.DataSyncUtils import concatenatePaths, localWorkspacePrefix, getWorkdirVariable
 from ElementsKernel.Temporary import TempDir, TempEnv
 
+
 class WorkspaceFixture(object):
+
     def __init__(self):
         m_top_dir = TempDir("DataSync_test")
         m_env = TempEnv()
-        m_env["WORKSPACE"] = os.path.join(m_top_dir.path(), "workspace")
+        m_wordir_var = getWorkdirVariable()
+        m_env[m_wordir_var] = os.path.join(m_top_dir.path(), "workspace")
+
 
 def theDependencyConfig():
     return "ElementsServices/testdata/test_file_list.txt"
@@ -45,6 +49,7 @@ def theLocalWorkspace():
 
 def absPath(rel_path):
     return concatenatePaths([localWorkspacePrefix(), theLocalWorkspace(), rel_path])
+
 
 def thePrefixedLocalWorkspace():
     return concatenatePaths([localWorkspacePrefix(), theLocalWorkspace()])

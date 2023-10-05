@@ -22,7 +22,8 @@ import os
 from ElementsKernel.Temporary import TempDir, TempEnv
 
 from ElementsServices.DataSync import DependencyConfiguration
-from ElementsServices.DataSync.DataSyncUtils import getConfigurationPath, localWorkspacePrefix, concatenatePaths
+from ElementsServices.DataSync.DataSyncUtils import getConfigurationPath, localWorkspacePrefix
+from ElementsServices.DataSync.DataSyncUtils import concatenatePaths, getWorkdirVariable
 
 from fixtures.ConfigFilesFixture import theDependencyConfig, thePrefixedLocalWorkspace, theLocalFiles
 
@@ -33,7 +34,8 @@ class TestDependencyConfiguration(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.m_top_dir = TempDir(prefix="DataSync_test")
         self.m_env = TempEnv()
-        self.m_env["WORKSPACE"] = os.path.join(self.m_top_dir.path(), "workspace")
+        self.m_workdir_var = getWorkdirVariable()
+        self.m_env[self.m_workdir_var] = os.path.join(self.m_top_dir.path(), "workspace")
 
     def tearDown(self):
         unittest.TestCase.tearDown(self)
