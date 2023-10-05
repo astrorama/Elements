@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-
 import os.path
 import unittest
 
@@ -30,7 +29,8 @@ class TestDataSyncUtils(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.m_top_dir = TempDir(prefix="DataSync_test")
         self.m_env = TempEnv()
-        self.m_env["WORKSPACE"] = os.path.join(self.m_top_dir.path(), "workspace")
+        self.m_workdir_var = DataSyncUtils.getWorkdirVariable()
+        self.m_env[self.m_workdir_var] = os.path.join(self.m_top_dir.path(), "workspace")
 
     def tearDown(self):
         unittest.TestCase.tearDown(self)
@@ -64,7 +64,7 @@ class TestDataSyncUtils(unittest.TestCase):
 
     def test_localWorkspacePrefix(self):
         prefix_ev = DataSyncUtils.environmentVariable('NOPREFIX')
-        workspace_ev = DataSyncUtils.environmentVariable('WORKSPACE')
+        workspace_ev = DataSyncUtils.environmentVariable(self.m_workdir_var)
         prefix = DataSyncUtils.localWorkspacePrefix()
         if prefix_ev == '':
             assert prefix == workspace_ev

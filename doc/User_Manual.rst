@@ -4133,6 +4133,10 @@ want to do that in LODEEN. Therefore, the local test workspace is
 prefixed by the CODEEN job workspace, which is pointed by the
 environment variable ``$WORKSPACE``.
 
+This ``WORKSPACE`` name can be changed with the ``DATASYNC_WORKDIR_VAR`` to
+a different variable (e.g. ``MY_WORKSPACE``). If the ``DATASYNC_WORKDIR_VAR``
+doesn't exist or is empty, it falls back to ``WORKSPACE``.
+
 This means that you can yourself set the variable in your environment to
 set the prefix. For example, running:
 
@@ -4150,6 +4154,26 @@ or
    export WORKSPACE=/home/user/testdata
    make test
    </code>
+
+or
+
+::
+
+   <code class="text">
+   export DATASYNC_WORKDIR_VAR=MY_WORKSPACE
+   make MY_WORKSPACE=/home/user/testdata test
+   </code>
+
+or
+
+::
+
+   <code class="text">
+   export DATASYNC_WORKDIR_VAR=MY_WORKSPACE
+   export MY_WORKSPACE=/home/user/testdata
+   make test
+   </code>
+
 
 will prefix the local workspace with ``/home/user/testdata``.
 

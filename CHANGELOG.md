@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [6.2.3] - 2023-10-03
+
+### Fixed
+- Fix the astrorama/actions/elements-build-rpm action to version 3.5
+
+
+## [6.2.2] - 2023-08-30
+
+### Fixed
+- Add the missing <cstdint> include needed by the newest GCC compilers
+
+
 ## [6.2.1] - 2023-03-31
 
 ### Added
