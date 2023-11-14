@@ -418,8 +418,8 @@ option(USE_IWYU
        "Use the include-what-you-use checker"
        OFF)
 
-set(IWYU_OPTIONS "" CACHE STRING "List of options to be passed to includ-what-you-use")
-set(IWYU_TOOL_OPTIONS "" CACHE STRING "List of options to be passed to includ-what-you-use tool")
+set(IWYU_OPTIONS "" CACHE STRING "List of options to be passed to include-what-you-use")
+set(IWYU_TOOL_OPTIONS "" CACHE STRING "List of options to be passed to include-what-you-use tool")
 
 
 #--- Compilation Flags ---------------------------------------------------------
