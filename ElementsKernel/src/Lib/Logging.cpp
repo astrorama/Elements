@@ -30,7 +30,6 @@
 
 #include <log4cpp/Category.hh>         // for Category
 #include <log4cpp/FileAppender.hh>     // for FileAppender
-#include <log4cpp/Layout.hh>           // for Layout
 #include <log4cpp/OstreamAppender.hh>  // for OstreamAppender
 #include <log4cpp/PatternLayout.hh>    // for PatternLayout
 #include <log4cpp/Priority.hh>         // for Priority, Priority::::INFO, etc
@@ -39,6 +38,8 @@
 #include "ElementsKernel/Exception.h"  // for Exception
 #include "ElementsKernel/Memory.h"     // for make_unique
 #include "ElementsKernel/Path.h"       // for Path::Item
+
+namespace log4cpp { class Layout; }
 
 using log4cpp::Category;
 using log4cpp::Layout;

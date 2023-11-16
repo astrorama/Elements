@@ -23,10 +23,10 @@
 
 #include <algorithm>  // for find
 #include <map>        // for map
-#include <sstream>    // for stringstream
 #include <stdexcept>  // for out_of_range
 #include <string>     // for string
 #include <utility>    // for move
+#include <sstream>    // for stringstream
 
 #include <boost/format.hpp>  // for format
 

@@ -4,6 +4,7 @@
   { include: ["<bits/std_abs.h>", "private", "<cmath>", "public"] },
   { include: ["@<boost/test/.*>", "private", "<boost/test/unit_test.hpp>", "public"] },
   { include: ["@<boost/format/.*>", "private", "<boost/format.hpp>", "public"] },
-  { include: ["@<boost/preprocessor/.*>", "private", "<boost/preprocessor.hpp>", "public"] },
+  { include: ["@<boost/preprocessor/.*>", "private", "<boost/test/unit_test.hpp>", "public"] },
   { include: ["@<boost/filesystem/.*>", "private", "<boost/filesystem.hpp>", "public"] },
+  { symbol: ["std::stringstream", "private", "<sstream>", "public"] }
 ]

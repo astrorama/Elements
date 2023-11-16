@@ -20,4 +20,3 @@ if (NOT IWYU_FOUND)
 
 
 endif (NOT IWYU_FOUND)
-

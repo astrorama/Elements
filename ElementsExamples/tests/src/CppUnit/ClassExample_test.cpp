@@ -22,13 +22,14 @@
 #include <iostream>
 #include <string>  // for string
 
-#include "ElementsExamples/ClassExample.h"
-#include <cppunit/TestCase.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include "ElementsExamples/ClassExample.h"  // for ClassExample
 
-#include "ElementsKernel/Exception.h"
-#include "ElementsKernel/Real.h"  // Provides isEqual
+#include "ElementsKernel/Exception.h"  // for Exception
+#include "ElementsKernel/Real.h"       // for isEqual, DBL_DEFAULT_TEST_TOLERANCE
+#include <cppunit/TestAssert.h>        // for CPPUNIT_ASSERT, CPPUNIT_ASSERT_DOUBLES_EQUAL
+#include <cppunit/TestFixture.h>       // for TestFixture
+#include <cppunit/extensions/HelperMacros.h>  // for CPPUNIT_TEST, CPPUNIT_TEST_SUITE, CPPUNIT_TEST_SUITE_END, CPPUNIT_TEST_SUITE_REGISTRATION
+#include <string>                             // for allocator, string
 
 using Elements::Examples::ClassExample;
 using std::string;

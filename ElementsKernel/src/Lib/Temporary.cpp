@@ -21,15 +21,14 @@
 
 #include "ElementsKernel/Temporary.h"
 
-#include <iostream>
-#include <string>
+#include <iostream>                      // for operator<<
+#include <string>                        // for string
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem.hpp>          // for operator<<, create_directory, remove_all, temp_directory_path, unique_path, ofstream
 
-#include "ElementsKernel/Environment.h"
-#include "ElementsKernel/Logging.h"
-#include "ElementsKernel/Path.h"
+#include "ElementsKernel/Environment.h"  // for Environment
+#include "ElementsKernel/Logging.h"      // for Logging
+#include "ElementsKernel/Path.h"         // for Item
 
 using boost::filesystem::temp_directory_path;
 using std::string;

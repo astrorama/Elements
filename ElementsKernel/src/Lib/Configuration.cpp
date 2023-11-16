@@ -27,7 +27,7 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/filesystem.hpp>  // for exists
 
 #include "ElementsKernel/Path.h"    // for Path::VARIABLE, Path::Type
 #include "ElementsKernel/System.h"  // for DEFAULT_INSTALL_PREFIX

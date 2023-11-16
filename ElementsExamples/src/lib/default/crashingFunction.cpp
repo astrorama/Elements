@@ -21,9 +21,11 @@
 
 #include "ElementsExamples/crashingFunction.h"
 
-#include <stdexcept>  // for the logic_error
+#include <memory>                    // for allocator
+#include <ostream>                   // for operator<<
+#include <stdexcept>                 // for logic_error
 
-#include "ElementsKernel/Logging.h"  // for the Logging
+#include "ElementsKernel/Logging.h"  // for Logging
 
 namespace Elements {
 namespace Examples {
