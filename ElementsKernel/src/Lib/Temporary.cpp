@@ -21,10 +21,9 @@
 
 #include "ElementsKernel/Temporary.h"
 
-#include <iostream>                      // for operator<<
-#include <string>                        // for string
+#include <string>  // for string
 
-#include <boost/filesystem.hpp>          // for operator<<, create_directory, remove_all, temp_directory_path, unique_path, ofstream
+#include <boost/filesystem.hpp>  // for operator<<, create_directory, remove_all, temp_directory_path, unique_path, ofstream
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging

@@ -18,7 +18,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"       // for DataSync
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"  // for webdavIsInstalled
 
 namespace DataSync = ElementsServices::DataSync;
 

@@ -17,8 +17,14 @@
  */
 
 #include "ElementsServices/DataSync.h"
-#include "ElementsServices/DataSync/DataSynchronizer.h"
-#include "ElementsServices/DataSync/DataSynchronizerMaker.h"
+
+#include <exception>  // for exception
+#include <memory>     // for __shared_ptr_access, shared_ptr
+
+#include <boost/filesystem.hpp>  // for operator/, path
+
+#include "ElementsServices/DataSync/DataSynchronizer.h"       // for DataSynchronizer
+#include "ElementsServices/DataSync/DataSynchronizerMaker.h"  // for createSynchronizer
 
 namespace Elements {
 inline namespace Services {

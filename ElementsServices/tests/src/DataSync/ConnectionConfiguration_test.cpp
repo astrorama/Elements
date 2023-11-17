@@ -16,13 +16,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
-#include <vector>
-
 #include <boost/test/unit_test.hpp>
 
-#include "fixtures/ConfigFilesFixture.h"
-#include "fixtures/ConnectionConfigurationPublic.h"
+#include <exception>  // for exception
+#include <string>     // for basic_string, allocator, string
+#include <vector>     // for vector
+
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration, DataHost, OverwritingPolicy
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for DataSync
+
+#include "fixtures/ConfigFilesFixture.h"  // for theWebdavFrConfig, theNoOverwriteConfig, thePrefixedLocalWorkspace, WorkspaceFixture
+#include "fixtures/ConnectionConfigurationPublic.h"  // for ConnectionConfigurationPublic
 
 namespace DataSync = ElementsServices::DataSync;
 

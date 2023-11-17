@@ -25,11 +25,13 @@ def main():
 
     # Prepare data to be written
     outputdata = """ /* Automatically generated file: do not modify! */
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/ui/text/TestRunner.h>
+#include <memory>                                    // for allocator
 
-#include "ElementsKernel/Unused.h"
-#include "ElementsKernel/Export.h"
+#include <cppunit/extensions/TestFactoryRegistry.h>  // for TestFactoryRegistry
+#include <cppunit/ui/text/TestRunner.h>              // for TestRunner
+
+#include "ElementsKernel/Export.h"                   // for ELEMENTS_API
+#include "ElementsKernel/Unused.h"                   // for ELEMENTS_UNUSED
 
 ELEMENTS_API int main(ELEMENTS_UNUSED int argc, ELEMENTS_UNUSED char **argv)
 {
@@ -53,6 +55,7 @@ ELEMENTS_API int main(ELEMENTS_UNUSED int argc, ELEMENTS_UNUSED char **argv)
     # Overwrite the file only if there are changes
     if outputdata != olddata:
         open(outputfile, "w").write(outputdata)
+
 
 if __name__ == "__main__":
     main()

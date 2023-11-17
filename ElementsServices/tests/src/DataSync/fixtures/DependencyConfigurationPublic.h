@@ -20,9 +20,8 @@
 #ifndef _ELEMENTSSERVICES_DATASYNC_DEPENDENCYCONFIGURATIONPUBLIC_H
 #define _ELEMENTSSERVICES_DATASYNC_DEPENDENCYCONFIGURATIONPUBLIC_H
 
-#include "ElementsServices/DataSync/DependencyConfiguration.h"
-
-#include "ConfigFilesFixture.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for path
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
 
 class DependencyConfigurationPublic : public ElementsServices::DataSync::DependencyConfiguration {
 public:

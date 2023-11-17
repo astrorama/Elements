@@ -24,15 +24,14 @@
 #ifndef ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCHRONIZERMAKER_H_
 #define ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCHRONIZERMAKER_H_
 
-#include <memory>
-#include <stdexcept>
+#include <memory>  // for shared_ptr
 
-#include "ElementsKernel/Export.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
-#include "ElementsServices/DataSync/DataSynchronizer.h"
-#include "ElementsServices/DataSync/IrodsSynchronizer.h"
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for Services
+#include "ElementsServices/DataSync/DataSynchronizer.h"         // for DataSynchronizer
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
 
 namespace Elements {
 inline namespace Services {

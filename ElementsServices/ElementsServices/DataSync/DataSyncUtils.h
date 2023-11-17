@@ -24,14 +24,12 @@
 #ifndef ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCUTILS_H_
 #define ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCUTILS_H_
 
-#include <string>
-#include <utility>
-#include <vector>
+#include <string>   // for string
+#include <utility>  // for pair
+#include <vector>   // for vector
 
-#include <boost/filesystem.hpp>
-
-#include "ElementsKernel/Export.h"
-#include "ElementsKernel/Path.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
+#include "ElementsKernel/Path.h"    // for Item
 
 namespace Elements {
 inline namespace Services {

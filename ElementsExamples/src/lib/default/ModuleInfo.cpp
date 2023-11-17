@@ -20,7 +20,11 @@
 
 #include "ElementsExamples/ModuleInfo.h"
 
-#include "ElementsKernel/ThisModule.h"
+#include "ElementsKernel/ThisModule.h"  // for getThisModuleInfo
+
+namespace Elements::System {
+class ModuleInfo;
+}
 
 namespace Elements {
 namespace Examples {

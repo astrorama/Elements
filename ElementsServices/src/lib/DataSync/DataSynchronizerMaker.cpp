@@ -18,6 +18,9 @@
 
 #include "ElementsServices/DataSync/DataSynchronizerMaker.h"
 
+#include "ElementsServices/DataSync/IrodsSynchronizer.h"   // for IrodsSynchronizer
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"  // for WebdavSynchronizer
+
 namespace Elements {
 inline namespace Services {
 namespace DataSync {

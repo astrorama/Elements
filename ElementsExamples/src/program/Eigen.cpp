@@ -18,15 +18,17 @@
  *
  */
 
-#include <iostream>
+#include <iostream>  // for endl, cout
+#include <map>       // for map
+#include <string>    // for allocator, string
 
-#include <map>     // for map
-#include <string>  // for string
+#include <Eigen/Core>
 
-#include <Eigen/Dense>
-
-#include "ElementsKernel/ProgramHeaders.h"  // for including all Program/related headers
-#include "ElementsKernel/Unused.h"          // for ELEMENTS_UNUSED
+#include "ElementsKernel/Exit.h"     // for ExitCode
+#include "ElementsKernel/Logging.h"  // for Logging
+#include "ElementsKernel/Main.h"     // for MAIN_FOR
+#include "ElementsKernel/Program.h"  // for Program
+#include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 
 using std::map;
 using std::string;

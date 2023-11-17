@@ -19,16 +19,13 @@
  *
  */
 
-#include "ElementsExamples/DataSourceUser.h"  // Access the objects you want to test
+#include "ElementsExamples/DataSourceUser.h"
 
+#include "ElementsKernel/EnableGMock.h"  // for Return, ReturnAction, TypedExpectation, EXPECT_CALL, MockSpec, Matcher
+#include "ElementsKernel/Real.h"         // for isEqual
 #include <boost/test/unit_test.hpp>
-#include <cstddef>
-#include <gmock/gmock.h>
 
-#include "ElementsKernel/EnableGMock.h"  // initialize the gmock framework
-#include "ElementsKernel/Real.h"
-
-#include "DataSourceInterfaceMock.h"
+#include "DataSourceInterfaceMock.h"  // for DataSourceInterfaceMock
 
 using std::size_t;
 using testing::Return;

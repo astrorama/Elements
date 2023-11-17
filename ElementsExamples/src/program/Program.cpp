@@ -20,22 +20,27 @@
 
 #include <cstdint>  // for int64_t
 #include <map>      // for map
-#include <memory>   // for unique_ptr
-#include <string>   // for string
+#include <memory>   // for allocator, unique_ptr
+#include <string>   // for basic_string, string, operator<
 #include <utility>  // for move
 #include <vector>   // for vector
 
 #include <boost/current_function.hpp>  // for BOOST_CURRENT_FUNCTION
-#include <boost/program_options.hpp>   // for program options from configuration file of command line arguments
+#include <boost/program_options.hpp>  // for value, typed_value, options_description_easy_init, variable_value, bool_switch
 
-#include "ElementsKernel/Module.h"          // for Module
-#include "ElementsKernel/ProgramHeaders.h"  // for including all Program/related headers
-#include "ElementsKernel/Project.h"         // for Project
-#include "ElementsKernel/ThisModule.h"      // for getThisExecutableInfo
+#include "ElementsKernel/Exception.h"   // for Exception
+#include "ElementsKernel/Exit.h"        // for ExitCode
+#include "ElementsKernel/Logging.h"     // for Logging
+#include "ElementsKernel/Main.h"        // for MAIN_FOR
+#include "ElementsKernel/Module.h"      // for Module
+#include "ElementsKernel/ModuleInfo.h"  // for ModuleInfo
+#include "ElementsKernel/Program.h"     // for Program
+#include "ElementsKernel/Project.h"     // for Project, operator<<
+#include "ElementsKernel/ThisModule.h"  // for getThisExecutableInfo
 
-#include "ElementsExamples/ClassExample.h"
-#include "ElementsExamples/PrintProject.h"
-#include "ElementsExamples/functionExample.h"
+#include "ElementsExamples/ClassExample.h"     // for ClassExample
+#include "ElementsExamples/PrintProject.h"     // for printProject
+#include "ElementsExamples/functionExample.h"  // for functionExample
 
 using std::map;
 using std::string;

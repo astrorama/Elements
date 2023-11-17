@@ -26,19 +26,24 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAMMANAGER_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAMMANAGER_H_
 
-#include <map>     // for map
-#include <memory>  // for unique_ptr
-#include <string>  // for string
+#include <memory>  // for allocator, unique_ptr
+#include <string>  // for string, basic_string
 #include <vector>  // for vector
 
-#include <boost/program_options/parsers.hpp>
-#include <log4cpp/Priority.hh>
+#include <log4cpp/Priority.hh>  // for Priority, Priority::DEBUG
 
-#include "ElementsKernel/Environment.h"  // For Environment
-#include "ElementsKernel/Exit.h"         // For ExitCode
-#include "ElementsKernel/Export.h"       // ELEMENTS_API
-#include "ElementsKernel/Path.h"         // for Path::Item
-#include "ElementsKernel/Program.h"
+#include "ElementsKernel/Environment.h"  // for Environment
+#include "ElementsKernel/Export.h"       // for ELEMENTS_API
+#include "ElementsKernel/Path.h"         // for Item
+#include "ElementsKernel/Program.h"      // for Program
+
+namespace Elements {
+enum class ExitCode : int;
+}
+namespace boost::program_options {
+template <class charT>
+class basic_parsed_options;
+}
 
 namespace Elements {
 

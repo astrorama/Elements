@@ -16,9 +16,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
+#include "ElementsServices/DataSync/IrodsSynchronizer.h"  // for IrodsSynchronizer, irodsIsInstalled
 
-#include "ElementsServices/DataSync/IrodsSynchronizer.h"
+#include <stdexcept>  // for runtime_error
+#include <string>     // for allocator, operator+, char_traits, string
+
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for checkCall, path
+#include "ElementsServices/DataSync/DataSynchronizer.h"         // for DataSynchronizer
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
 
 namespace Elements {
 inline namespace Services {

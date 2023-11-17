@@ -24,11 +24,14 @@
 #ifndef ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DEPENDENCYCONFIGURATION_H_
 #define ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DEPENDENCYCONFIGURATION_H_
 
-#include <map>
-#include <string>
-#include <vector>
+#include <cstddef>  // for size_t
+#include <map>      // for map
+#include <string>   // for string
+#include <vector>   // for vector
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
+
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, Services
 
 namespace Elements {
 inline namespace Services {
@@ -53,7 +56,7 @@ public:
 
   path distantPathOf(path localFile) const;
 
-  size_t dependencyCount() const;
+  std::size_t dependencyCount() const;
 
   std::vector<path> distantPaths() const;
 

@@ -23,6 +23,8 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAMHEADERS_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAMHEADERS_H_
 
+#pragma message("Header `ElementsKernel/ProgramHeaders.h` is deprecated!")
+
 #include <boost/filesystem.hpp>       // for boost path type
 #include <boost/program_options.hpp>  // for program options from configuration file of command line arguments
 

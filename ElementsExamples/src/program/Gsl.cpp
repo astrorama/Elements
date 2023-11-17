@@ -18,16 +18,19 @@
  *
  */
 
-#include <map>     // for map
-#include <string>  // for string
-
-#include <boost/format.hpp>  // for format
-
 #include <gsl/gsl_sf_bessel.h>  // for gsl_sf_bessel_J0
-#include <gsl/gsl_version.h>
+#include <gsl/gsl_version.h>    // for gsl_version
 
-#include "ElementsKernel/ProgramHeaders.h"  // for including all Program/related headers
-#include "ElementsKernel/Unused.h"          // for ELEMENTS_UNUSED
+#include <map>     // for map
+#include <string>  // for allocator, string
+
+#include <boost/format.hpp>  // for basic_format, operator<<, format
+
+#include "ElementsKernel/Exit.h"     // for ExitCode
+#include "ElementsKernel/Logging.h"  // for Logging
+#include "ElementsKernel/Main.h"     // for MAIN_FOR
+#include "ElementsKernel/Program.h"  // for Program
+#include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 
 using std::map;
 using std::string;

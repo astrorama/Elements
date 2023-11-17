@@ -28,9 +28,9 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
 
-#include "ElementsKernel/Export.h"
-#include "ElementsKernel/Main.h"
-#include "ElementsKernel/Path.h"
+#include "ElementsKernel/Exit.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
+#include "ElementsKernel/Path.h"    // for Item
 
 namespace Elements {
 

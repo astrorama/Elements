@@ -16,9 +16,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"  // for WebdavSynchronizer, webdavIsInstalled
 
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include <stdexcept>  // for runtime_error
+#include <string>     // for allocator, operator+, char_traits, to_string, string
+
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for checkCall, path
+#include "ElementsServices/DataSync/DataSynchronizer.h"         // for DataSynchronizer
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
 
 namespace Elements {
 inline namespace Services {
