@@ -420,6 +420,10 @@ option(USE_IWYU
 
 set(IWYU_OPTIONS "" CACHE STRING "List of options to be passed to include-what-you-use")
 set(IWYU_TOOL_OPTIONS "" CACHE STRING "List of options to be passed to include-what-you-use tool")
+set(IWYU_MAPPING_FILE "" CACHE STRING "List of mapping files for IWYU")
+
+
+include(ElementsCheck)
 
 
 #--- Compilation Flags ---------------------------------------------------------
@@ -920,12 +924,21 @@ find_package(IWYU)
 if(USE_IWYU)
   if(IWYU_FOUND)
     set(IWYU_COMMAND "${IWYU_EXECUTABLE}")
+
     if(IWYU_OPTIONS)
       string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
       foreach(iwyu_o ${iwyu_list})
         set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;${iwyu_o}")
       endforeach()
     endif()
+
+    if(MAPPING_FILE)
+      string(REPLACE " " ";" iwyu_mapping_list ${MAPPING_FILE})
+      foreach(iwyu_o ${iwyu_mapping_list})
+        set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;--mapping_file=${iwyu_o}")
+      endforeach()
+    endif()
+
   endif()
 endif()
 
@@ -947,6 +960,13 @@ if(CMAKE_EXPORT_COMPILE_COMMANDS AND IWYU_FOUND)
     string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
     foreach(iwyu_o ${iwyu_list})
       set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -Xiwyu ${iwyu_o})
+    endforeach()
+  endif()
+
+  if(MAPPING_FILE)
+    string(REPLACE " " ";" iwyu_mapping_list ${MAPPING_FILE})
+    foreach(iwyu_o ${iwyu_mapping_list})
+      set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -Xiwyu --mapping_file=${iwyu_o})
     endforeach()
   endif()
 
