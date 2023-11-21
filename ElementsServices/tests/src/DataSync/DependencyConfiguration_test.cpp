@@ -16,11 +16,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
+#include "ElementsServices/DataSync/DependencyConfiguration.h"
 
-#include <algorithm>  // for find
-#include <string>     // for allocator, operator+, char_traits, string
-#include <vector>     // for vector
+#include <string>  // for allocator, operator+, char_traits, string
+#include <vector>  // for vector
 
 #include <boost/filesystem.hpp>  // for operator/, operator==
 #include <boost/test/unit_test.hpp>

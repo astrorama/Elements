@@ -19,14 +19,14 @@
  *
  */
 
-#include "ElementsKernel/ModuleInfo.h"  // header file to test
+#include "ElementsKernel/ModuleInfo.h"
 
-#include <libgen.h>  // for basename
+#include <libgen.h>  // for __xpg_basename, basename
 
-#include <iostream>
-#include <string>
+#include <string>  // for operator==, string
 
-#include <boost/test/unit_test.hpp>  // for the boost test macros
+#include <boost/filesystem.hpp>      // for path
+#include <boost/test/unit_test.hpp>  // for BOOST_PP_IIF_1, BOOST_PP_IIF_0, BOOST_PP_BOOL_0, BOOST_PP_BOOL_1, BOOST_PP_EXPR_IIF_1, BOOST_PP_FOR_CHECK_BOOST_PP_NIL, operator<<, BOOST_PP_DEC_1, BOOST_PP_TUPLE_ELEM_O_3, BOOST_PP_VARIADIC_ELEM_3, BOOST_PP_BOOL_2, BOOST_PP_DEC_2, BOOST_PP_FOR_0, BOOST_PP_SEQ_ELEM_0, BOOST_PP_COMPL_0, BOOST_PP_NOT_EQUAL_1, BOOST_PP_NOT_EQUAL_CHECK_BOOST_PP_NOT_EQUAL_1, BOOST_AUTO_TEST_CASE, BOOST_PP_DEC_128, BOOST_PP_DEC_16, BOOST_PP_DEC_3, BOOST_PP_DEC_32, BOOST_PP_DEC_4, BOOST_PP_DEC_64, BOOST_PP_DEC_8, BOOST_PP_FOR_1, BOOST_PP_FOR_127, BOOST_PP_FOR_15, BOOST_PP_FOR_3, BOOST_PP_FOR_31, BOOST_PP_FOR_63, BOOST_PP_FOR_7, BOOST_PP_NODE_ENTRY_256, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_2, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_3, BOOST_TEST_TOOL_PASS_ARGS0, BOOST_TEST_TOOL_PASS_PRED0, BOOST_CHECK_EQUAL, BOOST_CHECK, BOOST_TEST_TOOL_PASS_ARGS2, BOOST_TEST_TOOL_PASS_PRED2, BOOST_AUTO_TEST_SUITE, BOOST_AUTO_TEST_SUITE_END, BOOST_CHECK_NE
 
 #include "ElementsKernel/ThisModule.h"  // for getThisModuleInfo
 

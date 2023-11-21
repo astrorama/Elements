@@ -21,10 +21,11 @@
 
 #include "ElementsKernel/Version.h"
 
-#include <boost/algorithm/string.hpp>
-#include <boost/utility.hpp>
-#include <string>
-#include <vector>
+#include <boost/algorithm/string.hpp>  // for is_any_ofF, is_any_of, split
+#include <boost/next_prior.hpp>        // for next, prior
+
+#include <string>  // for basic_string, allocator, string, to_string, char_traits, operator+
+#include <vector>  // for vector
 
 using std::string;
 

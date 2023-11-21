@@ -19,17 +19,17 @@
  *
  */
 
-#include "ElementsKernel/Path.h"  // header to test
+#include "ElementsKernel/Path.h"
+
+#include <boost/filesystem.hpp>  // for operator/, path, operator==, exists, operator!=, create_directory, is_regular_file, is_regular, ofstream
+#include <boost/test/unit_test.hpp>
 
 #include <algorithm>  // for for_each, transform
-#include <string>     // for std::string
-#include <vector>     // for std::vector
+#include <ostream>    // for basic_ostream, operator<<, endl
+#include <string>     // for allocator, basic_string, operator==, string, char_traits
+#include <vector>     // for vector, operator==
 
-#include <boost/filesystem.hpp>          // for boost::filesystem
-#include <boost/filesystem/fstream.hpp>  // for ofstream
-#include <boost/test/unit_test.hpp>      // for boost unit test macros
-
-#include "ElementsKernel/Temporary.h"  // for TempDir
+#include "ElementsKernel/Temporary.h"  // for TempDir, TempEnv
 
 using std::string;
 using std::vector;

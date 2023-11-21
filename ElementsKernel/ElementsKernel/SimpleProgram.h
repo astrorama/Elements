@@ -28,14 +28,14 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
 
-#include "ElementsKernel/Exit.h"
 #include "ElementsKernel/Export.h"  // for ELEMENTS_API
 #include "ElementsKernel/Path.h"    // for Item
 
 namespace Elements {
-
-// Forward declaration. We don't need the definition right now.
 enum class ExitCode;
+}
+
+namespace Elements {
 
 class ELEMENTS_API SimpleProgram {
 

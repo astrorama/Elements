@@ -19,14 +19,12 @@
  *
  */
 
-#include "ElementsKernel/System.h"  // getEnv, isEnvSet
-
-#include <cstdlib>   // for std::getenv
-#include <iostream>  // for cout, endl
-#include <string>    // for string
-#include <vector>
+#include <cstdlib>  // for getenv, setenv, unsetenv
+#include <string>   // for allocator, operator==, string
 
 #include <boost/test/unit_test.hpp>
+
+#include "ElementsKernel/System.h"  // for getEnv, isEnvSet, setEnv, unSetEnv
 
 using std::getenv;  // standard
 using std::string;

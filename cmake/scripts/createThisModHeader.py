@@ -28,7 +28,6 @@ def main():
 /* Automatically generated file: do not modify! */
 #include <cstdint>                  // for uing_least64_t
 #include <string>                   // for string
-#include <vector>                   // for vector
 #include "%(Mod)sVersion.h"
 constexpr std::uint_least64_t THIS_MODULE_MAJOR_VERSION = %(mod)s_MAJOR_VERSION;
 constexpr std::uint_least64_t THIS_MODULE_MINOR_VERSION = %(mod)s_MINOR_VERSION;
@@ -50,6 +49,7 @@ const std::string THIS_MODULE_NAME_STRING {"%(Mod)s"};
     # Overwrite the file only if there are changes
     if outputdata != olddata:
         open(outputfile, "w").write(outputdata)
+
 
 if __name__ == "__main__":
     main()

@@ -20,22 +20,23 @@
 
 #include "ElementsKernel/Logging.h"
 
-#include <cstdlib>  // for srand
-#include <ctime>
-#include <fstream>
-#include <iomanip>  // for setprecision
-#include <ostream>
-#include <sstream>  // for std::stringstream
-#include <string>   // for std::string
-#include <tuple>    // for std::tuple, std::tie, std::ignore
-#include <vector>   // for std::vector
+#include <cstdlib>   // for rand, srand
+#include <ctime>     // for time
+#include <iomanip>   // for operator<<, setprecision, _Setprecision
+#include <iostream>  // for cerr, cout
+#include <sstream>  // for basic_istream, basic_ostream, operator<<, basic_ostream::operator<<, stringstream, basic_ios::rdbuf, ifstream, endl, ostream, basic_ios::clear, streambuf
+#include <string>   // for basic_string, char_traits, string, allocator, getline, operator+, operator<<
+#include <tuple>    // for tuple, tie, ignore, make_tuple
+#include <variant>  // for tuple
+#include <vector>   // for vector
 
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string.hpp>  // for ends_with, trim, trim_left
+#include <boost/filesystem.hpp>        // for exists
 #include <boost/test/unit_test.hpp>
-#include <boost/version.hpp>  // for the BOOST_VERSION define
+#include <boost/version.hpp>  // for BOOST_VERSION
 
-#include "ElementsKernel/MathConstants.h"  // For pi
-#include "ElementsKernel/Temporary.h"      // For TempDir
+#include "ElementsKernel/MathConstants.h"  // for pi
+#include "ElementsKernel/Temporary.h"      // for TempDir
 
 using Elements::Logging;
 

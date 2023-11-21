@@ -21,18 +21,18 @@
 
 #include "ElementsKernel/Configuration.h"  // header to test
 
-#include <algorithm>  // for for_each, transform, copy_if
-#include <string>     // for std::string
-#include <vector>     // for std::vector
+#include <boost/filesystem.hpp>  // for operator/, path, exists, create_directory, is_regular
+#include <boost/test/unit_test.hpp>
 
-#include <boost/filesystem/fstream.hpp>     // for ofstream
-#include <boost/filesystem/operations.hpp>  // for exists
-#include <boost/test/unit_test.hpp>         // for boost unit test macros
+#include <algorithm>  // for copy_if, for_each
+#include <iterator>   // for distance
+#include <string>     // for allocator, string
+#include <vector>     // for vector
 
-#include "ElementsKernel/Path.h"       // for joinPath, Item
+#include "ElementsKernel/Exception.h"  // for Exception
+#include "ElementsKernel/Path.h"       // for Item, join
 #include "ElementsKernel/System.h"     // for DEFAULT_INSTALL_PREFIX
 #include "ElementsKernel/Temporary.h"  // for TempDir, TempEnv
-#include <ElementsKernel/Exception.h>  // for Exception
 
 using std::string;
 using std::vector;
