@@ -26,7 +26,7 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_H_
 
-#include <sstream>   // for stringstream
+#include <sstream>  // for stringstream
 #include <string>   // for string
 #include <utility>  // for forward
 
