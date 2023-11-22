@@ -78,7 +78,7 @@ storageConvert<std::int64_t>(const std::int64_t& size, StorageType source_unit, 
 }  // namespace Elements
 
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_STORAGE_IMPL_
-#include "ElementsKernel/_impl/Storage.tpp"
+#include "ElementsKernel/_impl/Storage.tpp"  // IWYU pragma: export
 #undef ELEMENTSKERNEL_ELEMENTSKERNEL_STORAGE_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_STORAGE_H_

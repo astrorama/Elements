@@ -25,17 +25,15 @@
 
 #pragma message("Header `ElementsKernel/ProgramHeaders.h` is deprecated!")
 
-#include <boost/filesystem.hpp>       // for boost path type
-#include <boost/program_options.hpp>  // for program options from configuration file of command line arguments
-
-#include "ElementsKernel/Exception.h"  // for Elements Exception
-#include "ElementsKernel/Exit.h"       // for ExitCode, ExitCode::OK
-#include "ElementsKernel/Logging.h"    // for Logging::LogMessageStream, etc
+// IWYU pragma: begin_exports
+#include "ElementsKernel/Exit.h"     // for ExitCode, ExitCode::OK
+#include "ElementsKernel/Logging.h"  // for Logging::LogMessageStream, etc
 
 #include "ElementsKernel/Main.h"     // for the MAIN macro
 #include "ElementsKernel/Program.h"  // for the Program interface
 
 #include "ElementsKernel/Version.h"  // ??
+// IWYU pragma: end_exports
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAMHEADERS_H_
 

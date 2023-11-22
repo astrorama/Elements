@@ -47,7 +47,7 @@ extern template ELEMENTS_API void templateFunction<double>();
  * @brief Macro to prevent the direct inclusion of the implementation file
  */
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
-#include "ElementsExamples/_impl/TemplateFunction.tpp"
+#include "ElementsExamples/_impl/TemplateFunction.tpp"  // IWYU pragma: export
 #undef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_H_

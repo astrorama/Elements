@@ -26,6 +26,7 @@
 
 #include <boost/algorithm/string.hpp>  // for is_any_ofF, is_any_of, split
 #include <boost/filesystem.hpp>        // for exists, is_directory, path
+#include <boost/iterator.hpp>          // for operator!=
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging

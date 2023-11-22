@@ -16,6 +16,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include <algorithm>  // for find
 #include <cstddef>    // for size_t
 #include <exception>  // for exception
 #include <stdexcept>  // for runtime_error

@@ -281,7 +281,7 @@ extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vecto
  * @brief Macro to prevent the direct inclusion of the implementation file
  */
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_IMPL_
-#include "ElementsKernel/_impl/Path.tpp"
+#include "ElementsKernel/_impl/Path.tpp"  // IWYU pragma: export
 #undef ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_H_

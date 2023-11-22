@@ -18,6 +18,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+// IWYU pragma: private, include "ElementsKernel/Auxiliary.h"
+
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_AUXILIARY_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Auxiliary.h instead"
 #else

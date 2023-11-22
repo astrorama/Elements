@@ -18,8 +18,9 @@
 
 #include "ElementsServices/DataSync/DependencyConfiguration.h"
 
-#include <string>  // for allocator, operator+, char_traits, string
-#include <vector>  // for vector
+#include <algorithm>  // for find
+#include <string>     // for allocator, operator+, char_traits, string
+#include <vector>     // for vector
 
 #include <boost/filesystem.hpp>  // for operator/, operator==
 #include <boost/test/unit_test.hpp>

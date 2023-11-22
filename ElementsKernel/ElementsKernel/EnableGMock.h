@@ -28,7 +28,8 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/version.hpp>  // for the BOOST_VERSION define
-#include <gmock/gmock.h>
+#include <gmock/gmock.h>      // IWYU pragma: export
+#include <gtest/gtest.h>      // IWYU pragma: export
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 

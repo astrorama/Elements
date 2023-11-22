@@ -102,7 +102,7 @@ ELEMENTS_API std::vector<Path::Item> getLocations(bool exist_only = false);
 }  // namespace Elements
 
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_AUXILIARY_IMPL_
-#include "ElementsKernel/_impl/Auxiliary.tpp"
+#include "ElementsKernel/_impl/Auxiliary.tpp"  // IWYU pragma: export
 #undef ELEMENTSKERNEL_ELEMENTSKERNEL_AUXILIARY_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_AUXILIARY_H_
