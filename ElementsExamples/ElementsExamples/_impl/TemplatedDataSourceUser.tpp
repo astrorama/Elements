@@ -1,4 +1,4 @@
-/*
+/**
  * @file ElementsExamples/_impl/TemplateDataSourceUser.tpp
  *
  * @date 2015-09-23

@@ -1,4 +1,4 @@
-/*
+/**
  * @file TemplatedDataSourceUser_test.cpp
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
