@@ -19,21 +19,17 @@
  *
  */
 
-#include "ElementsKernel/Temporary.h"  // for TempDir
+#include "ElementsKernel/Temporary.h"
 
-#include <cstdlib>
-#include <iostream>
-#include <string>  // for string
-#include <vector>
+#include <iostream>  // for basic_ostream, operator<<, endl, cout
+#include <string>    // for operator==, char_traits, allocator, string, basic_string
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem.hpp>  // for exists, operator/, path, operator<<, temp_directory_path, unique_path, create_directory, operator==, remove_all, ofstream
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Environment.h"  // for Environment
-#include "ElementsKernel/Exception.h"
-#include "ElementsKernel/Path.h"    // for Path::Item
-#include "ElementsKernel/System.h"  // for getEnv, setEnv, unSetEnv
+#include "ElementsKernel/Path.h"         // for Item
+#include "ElementsKernel/System.h"       // for getEnv, setEnv, unSetEnv
 
 using std::string;
 

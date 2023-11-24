@@ -1,4 +1,4 @@
-/*
+/**
  * Rectangle_test.cpp
  *
  *  Created on: Dec 17, 2019
@@ -19,11 +19,11 @@
  *
  */
 
-#include "ElementsExamples/crashingFunction.h"  // Access the objects you want to test
+#include "ElementsExamples/crashingFunction.h"
+
+#include <stdexcept>  // for logic_error
 
 #include <boost/test/unit_test.hpp>
-#include <iostream>
-#include <stdexcept>  // for the logic_error
 
 using Elements::Examples::crashingFunction;
 

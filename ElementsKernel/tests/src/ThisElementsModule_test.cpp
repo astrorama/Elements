@@ -21,10 +21,9 @@
 
 #include "ThisElementsModule.h"
 
-#include <string>
-#include <typeinfo>  // for type_info
-
 #include <boost/test/unit_test.hpp>
+
+#include <string>  // for string
 
 using std::string;
 

@@ -19,16 +19,19 @@
  *
  */
 
-#include <iostream>  // for cout, endl
+#include <iostream>  // for basic_ostream, operator<<, endl, cout
 #include <map>       // for map
-#include <string>    // for string
-#include <utility>   // for pair, make_pair
+#include <string>    // for basic_string, char_traits, allocator, string, operator<<, operator<
+#include <utility>   // for make_pair, pair
 #include <vector>    // for vector
 
-#include <boost/program_options.hpp>  // for program options from configuration file of command line arguments
+#include <boost/program_options.hpp>  // for value, options_description_easy_init, typed_value, variable_value
 
-#include "ElementsKernel/ProgramHeaders.h"
-#include "ElementsKernel/Unused.h"
+#include "ElementsKernel/Exit.h"     // for ExitCode
+#include "ElementsKernel/Logging.h"  // for Logging
+#include "ElementsKernel/Main.h"     // for MAIN_FOR
+#include "ElementsKernel/Program.h"  // for Program
+#include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 
 using std::map;
 using std::string;

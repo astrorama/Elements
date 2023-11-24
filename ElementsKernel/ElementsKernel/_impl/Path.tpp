@@ -18,6 +18,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+// IWYU pragma: private, include "ElementsKernel/Path.h"
+
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Path.h instead"
 #else

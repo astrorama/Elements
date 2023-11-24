@@ -918,3 +918,54 @@ settings are possible:
 -  add an option to the CMAKEFLAGS environment variables if your are
    using the top wrapper Makefile
 -  pass directly the option to CMake if your are using it directly
+
+
+
+
+
+Global Switch Usage
+-------------------
+
+
+Cleaning the List of C++ Includes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to keep the list of include statements of the C++ files as easy to use 
+as can be for a top down analysis, a philosophy called "Include What You Use" 
+("IWYU" for short) as been devised. It goal is to keep the usage of the include statement
+as close as possible as to the usage of the symbol it is included for.
+
+Therefore, it avoids to rely on meta-include files that gather several other include statements
+because it typically hides the very origin of the symbols that are used in the final file.
+
+It also depends heavily on the point of view: you might want to have a very detailed include 
+list for the symbols of your own project but have a rather short and compact list for external projects.
+
+This is the case, for example, for the boost test library. It comes with many fine-grained include files 
+that contains all the various symbols needed for the tests. It makes the code pretty heavy while not 
+providing useful information. And in that case you might just want to have a single include files that hides
+all of these unwanted details with ``#include <boost/test/unit_test.hpp>``.  
+
+There some support in CMake for the IWYU philosophy. It relies on an external binary executable called
+``include-what-you-use`` (https://github.com/include-what-you-use/include-what-you-use) that has to be 
+installed on your system.
+
+The build with the IWYU tool can be trigger with the ``-DUSE_IWYU=ON`` CMake flag. It should 
+only be enabled temporarily for the sole purpose of the include list cleaning. When active, it 
+will generates warnings and prescriptions on how to fix the source files.
+
+As mentioned above, some tampering of the include behavior might be neede. It is performed throught 
+a specific config file that has to be passe to IWYU: the IWYU mapping file (.imp). In Elements, an automatic 
+lookup of the file ``cmake/check/common.imp.in`` file is performed in the current project (or recursively in one 
+of the parent projects until found). Please have a look at the Elements instance of that file in order to have
+an example.
+
+Some other important points:
+
+- the ``-DIWYU_OPTIONS="..."`` CMake argument allows to pass extra option to the IWYU executable itself.
+- the ``-DIWYU_MAPPING_FILE="..."`` allows to pass one or several mapping files to the IWYU executable. 
+  This option inhibits the automatic lookup of the internal ``common.imp.in`` file. 
+- the IWYU executable is able to understand `a series of internal pragmas <https://github.com/include-what-you-use/include-what-you-use/blob/master/docs/IWYUPragmas.md>`_
+  that come quite handy in some situation. For example when separating the template implementations 
+  from their declaration: In the ``ElementsKernel/Auxiliary.h`` and ``ElementsKernel/_imp/Auxiliary.tpp`` files,
+  the export and private IWYU pragmas are forcing the first one to be the facade include file.  

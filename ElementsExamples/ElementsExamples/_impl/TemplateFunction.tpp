@@ -19,6 +19,8 @@
  *
  */
 
+// IWYU pragma: private, include "ElementsExamples/TemplateFunction.h"
+
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEFUNCTION_IMPL_
 #error "This file should not be included directly! Use ElementsExamples/TemplateFunction.h instead"
 #else

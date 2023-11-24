@@ -16,14 +16,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include "ElementsServices/DataSync/DependencyConfiguration.h"
+
+#include <algorithm>  // for find
+#include <string>     // for allocator, operator+, char_traits, string
+#include <vector>     // for vector
+
+#include <boost/filesystem.hpp>  // for operator/, operator==
 #include <boost/test/unit_test.hpp>
-#include <string>
-#include <vector>
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, valueIsListed, DataSync
 
-#include "fixtures/ConfigFilesFixture.h"
-#include "fixtures/DependencyConfigurationPublic.h"
+#include "fixtures/ConfigFilesFixture.h"             // for theDependencyConfig, theLocalFiles, WorkspaceFixture
+#include "fixtures/DependencyConfigurationPublic.h"  // for DependencyConfigurationPublic
 
 namespace DataSync = ElementsServices::DataSync;
 

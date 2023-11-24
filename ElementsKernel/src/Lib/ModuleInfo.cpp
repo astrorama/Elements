@@ -21,36 +21,27 @@
 
 #include "ElementsKernel/ModuleInfo.h"
 
-#include <cstdint>  // for std::int64_t
-#include <dlfcn.h>
-#include <libgen.h>
-#include <sys/param.h>
-#include <sys/times.h>
-#include <unistd.h>
+#include <dlfcn.h>   // for dladdr, Dl_info, (anonymous), dlopen, dlsym, RTLD_LAZY
+#include <libgen.h>  // for __xpg_basename, basename
+#include <limits.h>  // for PATH_MAX
+#include <unistd.h>  // for getpid
+
+#include <array>    // for array
+#include <cstdint>  // for int64_t
+#include <cstdlib>  // for realpath, size_t
+#include <sstream>  // for basic_istream, basic_ostream, basic_ostream::operator<<, operator<<, basic_ios, ifstream, istringstream, stringstream
+#include <string>   // for char_traits, basic_string, string, operator>>, getline, operator==
+#include <vector>   // for vector
+
+#include <boost/filesystem.hpp>  // for operator/, exists, path, canonical
+
+#include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
+#include "ElementsKernel/Path.h"         // for Item
 
 #ifdef __APPLE__
+#include <climits>        // for PATH_MAX
 #include <mach-o/dyld.h>  // for _NSGetExecutablePath
 #endif
-
-#include <array>
-#include <cerrno>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <fstream>  // for ifstream
-#include <iostream>
-#include <sstream>  // for stringstream
-#include <string>   // for string
-#include <vector>
-
-#ifdef __APPLE__
-#include <climits>  // for PATH_MAX
-#endif
-
-#include <boost/filesystem/operations.hpp>  // for filesystem::exists, canonical
-
-#include "ElementsKernel/FuncPtrCast.h"
-#include "ElementsKernel/Path.h"  // for Path::Item
 
 using std::string;
 using std::vector;

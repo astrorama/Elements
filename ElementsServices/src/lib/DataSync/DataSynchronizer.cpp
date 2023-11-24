@@ -16,11 +16,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "ElementsKernel/Unused.h"
-#include <string>
+#include "ElementsServices/DataSync/DataSynchronizer.h"  // for DataSynchronizer, DownloadFailed
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
-#include "ElementsServices/DataSync/DataSynchronizer.h"
+#include <map>      // for map, operator!=, _Rb_tree_const_iterator
+#include <string>   // for string
+#include <utility>  // for pair
+
+#include <boost/filesystem.hpp>  // for is_regular_file, file_size
+
+#include "ElementsKernel/Unused.h"  // for ELEMENTS_UNUSED
+
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, createLocalDirOf, runCommandAndCaptureOutErr
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
 
 namespace Elements {
 inline namespace Services {

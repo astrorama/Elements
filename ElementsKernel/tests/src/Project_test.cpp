@@ -19,10 +19,11 @@
  *
  */
 
-#include "ElementsKernel/Module.h"  // for Project
+#include <string>  // for operator==
 
 #include <boost/test/unit_test.hpp>
-#include <iostream>
+
+#include "ElementsKernel/Module.h"  // for Module
 
 namespace Elements {
 

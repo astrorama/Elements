@@ -72,10 +72,8 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_REAL_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_REAL_H_
 
-#include <cmath>        // for round
-#include <cstring>      // for memcpy
-#include <limits>       // for numeric_limits
-#include <type_traits>  // for is_floating_point
+#include <cstring>  // for memcpy
+#include <limits>   // for numeric_limits
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 #include "ElementsKernel/Unused.h"  // ELEMENTS_UNUSED

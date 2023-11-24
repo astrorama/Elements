@@ -16,13 +16,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include <exception>  // for exception
+#include <vector>     // for vector
+
+#include <boost/filesystem.hpp>  // for is_regular_file, remove
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsServices/DataSync.h"
-#include "ElementsServices/DataSync/IrodsSynchronizer.h"
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include "ElementsServices/DataSync.h"                     // for DataSync
+#include "ElementsServices/DataSync/DataSyncUtils.h"       // for path, DataSync
+#include "ElementsServices/DataSync/IrodsSynchronizer.h"   // for irodsIsInstalled
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"  // for webdavIsInstalled
 
-#include "DataSync/fixtures/ConfigFilesFixture.h"
+#include "DataSync/fixtures/ConfigFilesFixture.h"  // for theDependencyConfig, theIrodsFrConfig, theLocalFiles, theWebdavFrConfig, aBadConnectionConfig
 
 namespace DataSync = ElementsServices::DataSync;
 

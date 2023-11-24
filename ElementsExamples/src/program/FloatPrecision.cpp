@@ -18,20 +18,21 @@
  *
  */
 
-#include <iomanip>   // for setprecision
-#include <iostream>  // for cout, endl
-#include <limits>    // the templated version of the <cfloat> header
+#include <cmath>     // for nextafter, nexttoward
+#include <complex>   // for cos, pow
+#include <iomanip>   // for operator<<, setprecision
+#include <iostream>  // for operator<<, endl, cout, basic_ostream, basic_ostream::operator<<, fixed
+#include <limits>    // for numeric_limits
 #include <map>       // for map
-#include <string>    // for string
-                     // it exposes numeric_limits
-#include <cmath>     // for nextafter
+#include <string>    // for char_traits, string
 
-#include <boost/format.hpp>                       // for format
 #include <boost/math/constants/constants.hpp>     // for pi
 #include <boost/math/special_functions/next.hpp>  // for float_next
 
-#include "ElementsKernel/ProgramHeaders.h"  // for including all Program/related headers
-#include "ElementsKernel/Unused.h"          // for ELEMENTS_UNUSED
+#include "ElementsKernel/Exit.h"     // for ExitCode
+#include "ElementsKernel/Main.h"     // for MAIN_FOR
+#include "ElementsKernel/Program.h"  // for Program
+#include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 
 using std::cout;
 using std::endl;

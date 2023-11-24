@@ -16,18 +16,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "fixtures/ConfigFilesFixture.h"
-
-#include <string>
-#include <vector>
-
 #define BOOST_TEST_IGNORE_NON_ZERO_CHILD_CODE
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include <string>   // for allocator, basic_string, string, operator+, operator==
+#include <utility>  // for pair
+#include <vector>   // for vector
 
-#include "ElementsKernel/Environment.h"
-#include "ElementsKernel/Temporary.h"
+#include "ElementsKernel/Environment.h"               // for Environment
+#include "ElementsKernel/Temporary.h"                 // for TempPath
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for containsInThisOrder, localWorkspacePrefix, checkCall, getWorkdirVariable, DEFAULT_WORKDIR_VAR, WORKDIR_VAR_VAR, environmentVariable, lower, runCommandAndCaptureOutErr, DataSync
+
+#include "fixtures/ConfigFilesFixture.h"  // for WorkspaceFixture
 
 namespace DataSync = ElementsServices::DataSync;
 

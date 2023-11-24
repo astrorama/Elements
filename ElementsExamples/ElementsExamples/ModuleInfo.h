@@ -27,8 +27,11 @@
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_MODULEINFO_H_
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_MODULEINFO_H_
 
-#include "ElementsKernel/Export.h"
-#include "ElementsKernel/ModuleInfo.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
+
+namespace Elements::System {
+class ModuleInfo;
+}
 
 namespace Elements {
 namespace Examples {

@@ -19,12 +19,13 @@
  *
  */
 
-#include <numeric>
-#include <vector>
+#include <cstddef>  // for size_t
+#include <numeric>  // for accumulate, iota
+#include <vector>   // for vector
 
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Real.h"
+#include "ElementsKernel/Real.h"  // for isEqual
 
 BOOST_AUTO_TEST_SUITE(GLibCxxParallel_test)
 

@@ -1,5 +1,5 @@
-/*
- * UnitTestExample_test.cpp
+/**
+ * TestEnvironment_test.cpp
  *
  *  Created on: Sep 22, 2015
  *      Author: fdubath

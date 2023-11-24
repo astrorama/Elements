@@ -18,18 +18,21 @@
  *
  */
 
-#include <cmath>  // for cos
-#include <cstdio>
+#include <fftw3.h>  // for fftw_destroy_plan, fftw_execute, fftw_plan_dft_1d, fftw_cleanup, fftw_complex, FFTW_ESTIMATE, fftw_plan, fftw_plan_s, FFTW_BACKWARD, FFTW_FORWARD
+
+#include <cmath>   // for cos
+#include <cstdio>  // for size_t, printf
 #include <map>     // for map
-#include <string>  // for string
+#include <string>  // for allocator, string
 
-#include <boost/format.hpp>  // for format
+#include <boost/format.hpp>  // for basic_format, operator<<, format
 
-#include <fftw3.h>
-
-#include "ElementsKernel/MathConstants.h"   // for pi
-#include "ElementsKernel/ProgramHeaders.h"  // for including all Program/related headers
-#include "ElementsKernel/Unused.h"          // for ELEMENTS_UNUSED
+#include "ElementsKernel/Exit.h"           // for ExitCode
+#include "ElementsKernel/Logging.h"        // for Logging
+#include "ElementsKernel/Main.h"           // for MAIN_FOR
+#include "ElementsKernel/MathConstants.h"  // for pi
+#include "ElementsKernel/Program.h"        // for Program
+#include "ElementsKernel/Unused.h"         // for ELEMENTS_UNUSED
 
 using std::map;
 using std::string;

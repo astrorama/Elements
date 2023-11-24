@@ -19,15 +19,14 @@
  *
  */
 
-#include "ElementsKernel/MathConstants.h"  // The interface to test
+#include "ElementsKernel/MathConstants.h"
 
-#include <cmath>  // for sqrt
+#include <boost/math/constants/constants.hpp>  // for e, euler, half_pi, ln_two, pi, pi_sqr, root_two, constants
+#include <boost/test/unit_test.hpp>
 
-#include <boost/math/constants/constants.hpp>
-#include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test_suite.hpp>
+#include <cmath>  // for log, sqrt, log10, log2, M_1_PI, M_2_PI, M_2_SQRTPI, M_E, M_LN10, M_LN2, M_LOG10E, M_LOG2E, M_PI, M_PI_2, M_PI_4, M_SQRT1_2, M_SQRT2
 
-#include "ElementsKernel/Real.h"  // for the isEqual function
+#include "ElementsKernel/Real.h"  // for isEqual
 
 namespace Elements {
 

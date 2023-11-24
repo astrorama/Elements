@@ -16,19 +16,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <algorithm>
-#include <array>
-#include <cstdio>
-#include <cstdlib>
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, checkCall, confFilePath, containsInThisOrder, createLocalDirOf, environmentVariable, getWorkdirVariable, localDirExists, localWorkspacePrefix, lower, runCommandAndCaptureOutErr
 
-#include "ElementsKernel/Configuration.h"
-#include "ElementsKernel/Environment.h"  // For Environment
+#include <algorithm>  // for transform
+#include <array>      // for array
+#include <cctype>     // for tolower
+#include <cstdio>     // for fgets, popen, BUFSIZ, pclose, FILE
+#include <cstdlib>    // for system
+#include <memory>     // for allocator, shared_ptr
+#include <stdexcept>  // for runtime_error
+#include <string>     // for string, operator+, basic_string, char_traits
+#include <utility>    // for make_pair, pair
+#include <vector>     // for vector
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include <boost/filesystem.hpp>  // for create_directories, is_directory
+
+#include "ElementsKernel/Configuration.h"  // for getPath
+#include "ElementsKernel/Environment.h"    // for Environment
 
 namespace Elements {
 inline namespace Services {

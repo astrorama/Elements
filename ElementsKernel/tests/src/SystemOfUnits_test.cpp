@@ -18,13 +18,11 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "ElementsKernel/SystemOfUnits.h"  // The interface to test
+#include "ElementsKernel/SystemOfUnits.h"
 
-#include <boost/math/constants/constants.hpp>
-#include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test_suite.hpp>
+#include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Real.h"  // for the isEqual function
+#include "ElementsKernel/Real.h"  // for isEqual
 
 namespace Elements {
 

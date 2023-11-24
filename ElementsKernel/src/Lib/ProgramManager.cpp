@@ -23,36 +23,36 @@
 
 #include <algorithm>  // for transform
 #include <cstdint>    // for int64_t
-#include <cstdlib>    // for the exit function
-#include <exception>  // for exception
-#include <fstream>    // for ifstream
-#include <iostream>   // for cout
+#include <cstdlib>    // for exit, _Exit, abort
+#include <exception>  // for exception, current_exception, rethrow_exception, exception_ptr
+#include <iostream>   // for basic_ostream, operator<<, endl, basic_ostream::operator<<, cerr, cout, ifstream
+#include <map>        // for operator!=, map, _Rb_tree_const_iterator
 #include <sstream>    // for stringstream
-#include <string>     // for string
-#include <typeinfo>   // for the typid operator
+#include <string>     // for basic_string, char_traits, operator<<, operator+, string, operator==
+#include <utility>    // for pair, move
 #include <vector>     // for vector
 
-#include <boost/algorithm/string/predicate.hpp>  // for starts_with
-#include <boost/filesystem/operations.hpp>       // for filesystem::complete, exists
-#include <boost/program_options.hpp>             // for program_options
+#include <boost/algorithm/string.hpp>  // for starts_with
+#include <boost/any.hpp>               // for any
+#include <boost/filesystem.hpp>  // for path, operator<<, operator>>, exists, canonical, complete, operator!=, operator/
+#include <boost/program_options.hpp>  // for variable_value, store, value, options_description_easy_init, typed_value, basic_command_line_parser, collect_unrecognized, notify, operator<<, options_description, parse_config_file, command_line_parser, variables_map, basic_parsed_options, collect_unrecognized_mode, include_positional
+#include <boost/smart_ptr.hpp>        // for shared_ptr
 
-#include "ElementsKernel/Configuration.h"  // for getConfigurationPath
-#include "ElementsKernel/Path.h"           // for Path::VARIABLE, multiPathAppend, PATH_SEP
-#include "ElementsKernel/Program.h"        // for Program
-                                           // for Path::Item
+#include "ElementsKernel/Configuration.h"  // for getConfigurationPath, getConfigurationLocations
 #include "ElementsKernel/Exception.h"      // for Exception
 #include "ElementsKernel/Exit.h"           // for ExitCode
 #include "ElementsKernel/Logging.h"        // for Logging
 #include "ElementsKernel/ModuleInfo.h"     // for getExecutablePath
+#include "ElementsKernel/Path.h"           // for Item, joinPath, multiPathAppend, SUFFIXES, VARIABLE, PATH_SEP
+#include "ElementsKernel/Program.h"        // for Program
 #include "ElementsKernel/System.h"         // for backTrace
 #include "ElementsKernel/Unused.h"         // for ELEMENTS_UNUSED
 
-#include "OptionException.h"  // local exception for unrecognized options
+#include "OptionException.h"  // for OptionException
 
 using log4cpp::Priority;
 using std::cerr;
 using std::endl;
-using std::move;
 using std::string;
 using std::vector;
 
@@ -70,16 +70,16 @@ ProgramManager::ProgramManager(std::unique_ptr<Program> program_ptr, const strin
                                const string& parent_module_version, const string& parent_module_name,
                                const vector<string>& search_dirs, const Priority::Value& elements_loglevel,
                                bool no_config_file)
-    : m_program_ptr(move(program_ptr))
-    , m_parent_project_version(move(parent_project_version))
-    , m_parent_project_name(move(parent_project_name))
-    , m_parent_project_vcs_version(move(parent_project_vcs_version))
-    , m_parent_module_version(move(parent_module_version))
-    , m_parent_module_name(move(parent_module_name))
-    , m_search_dirs(move(search_dirs))
+    : m_program_ptr(std::move(program_ptr))
+    , m_parent_project_version(std::move(parent_project_version))
+    , m_parent_project_name(std::move(parent_project_name))
+    , m_parent_project_vcs_version(std::move(parent_project_vcs_version))
+    , m_parent_module_version(std::move(parent_module_version))
+    , m_parent_module_name(std::move(parent_module_name))
+    , m_search_dirs(std::move(search_dirs))
     , m_env{}
-    , m_elements_loglevel(move(elements_loglevel))
-    , m_no_config_file(move(no_config_file)) {}
+    , m_elements_loglevel(std::move(elements_loglevel))
+    , m_no_config_file(std::move(no_config_file)) {}
 
 const Path::Item& ProgramManager::getProgramPath() const {
   return m_program_path;

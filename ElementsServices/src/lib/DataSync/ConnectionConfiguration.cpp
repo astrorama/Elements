@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -16,12 +16,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <boost/program_options.hpp>
-#include <string>
-#include <vector>
+#include <algorithm>  // for find
+#include <cstddef>    // for size_t
+#include <exception>  // for exception
+#include <stdexcept>  // for runtime_error
+#include <string>     // for basic_string, allocator, string, operator==, operator+
+#include <vector>     // for vector
 
-#include "ElementsServices/DataSync/ConnectionConfiguration.h"
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include <boost/filesystem.hpp>       // for operator/, path
+#include <boost/program_options.hpp>  // for value, typed_value, variables_map, options_description_easy_init, variable_value, notify, parse_config_file, store, options_description, program_options
+
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration, OverwritingPolicy, DataHost, UnknownHost
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for lower, valueIsListed, confFilePath, localWorkspacePrefix, path
 
 namespace Elements {
 inline namespace Services {
@@ -73,7 +79,7 @@ void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
   parseOverwritingPolicy(vm["overwrite"].as<string>());
   distantRoot = vm["distant-workspace"].as<string>();
   localRoot   = localWorkspacePrefix() / vm["local-workspace"].as<string>();
-  tries       = static_cast<size_t>(vm["tries"].as<int>());
+  tries       = static_cast<std::size_t>(vm["tries"].as<int>());
 }
 
 void ConnectionConfiguration::parseHost(const string& name) {

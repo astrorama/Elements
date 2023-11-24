@@ -16,15 +16,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
-#include <vector>
+#include <string>  // for basic_string, allocator, string
+#include <vector>  // for vector
 
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for containsInThisOrder, DataSync
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"       // for WebdavSynchronizer
 
-#include "fixtures/ConfigFilesFixture.h"
+#include "fixtures/ConfigFilesFixture.h"  // for theDependencyConfig, theWebdavFrConfig, WorkspaceFixture
 
 using std::string;
 

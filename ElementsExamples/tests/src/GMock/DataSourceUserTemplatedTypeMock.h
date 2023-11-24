@@ -1,4 +1,4 @@
-/*
+/**
  * @file DataSourceUserTemplatedTypeMock.h
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
