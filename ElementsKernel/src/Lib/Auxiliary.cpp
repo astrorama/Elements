@@ -23,12 +23,11 @@
 #include "ElementsKernel/Auxiliary.h"
 
 #include <algorithm>  // for remove_if
-#include <iterator>
-#include <map>
-#include <string>  // for string
-#include <vector>  // for vector
+#include <map>        // for map
+#include <string>     // for string
+#include <vector>     // for vector
 
-#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/filesystem.hpp>  // for operator/, path, exists
 
 #include "ElementsKernel/Path.h"    // for Type, Item, VARIABLE
 #include "ElementsKernel/System.h"  // for DEFAULT_INSTALL_PREFIX

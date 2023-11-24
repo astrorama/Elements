@@ -21,9 +21,10 @@
 
 #include "ElementsKernel/ThisModule.h"
 
-#include <boost/test/unit_test.hpp>
+#include <dlfcn.h>   // for Dl_info
+#include <libgen.h>  // for __xpg_basename, basename
 
-#include <libgen.h>
+#include <boost/test/unit_test.hpp>
 
 namespace Elements {
 

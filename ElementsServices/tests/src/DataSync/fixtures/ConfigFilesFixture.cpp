@@ -10,11 +10,12 @@
 
 #include "ConfigFilesFixture.h"
 
-#include <vector>
+#include <boost/filesystem.hpp>  // for operator/, path
 
-#include "ElementsKernel/Temporary.h"
+#include <vector>  // for vector
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include "ElementsKernel/Temporary.h"                 // for TempDir
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, localWorkspacePrefix, DEFAULT_WORKDIR_VAR
 
 using ElementsServices::DataSync::DEFAULT_WORKDIR_VAR;
 using ElementsServices::DataSync::localWorkspacePrefix;

@@ -1,4 +1,4 @@
-/*
+/**
  * @file TemplatedDataSourceUser_test.cpp
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -16,12 +16,16 @@
  *
  */
 
-#include "ElementsExamples/TemplatedDataSourceUser.h"  // Access the objects you want to test
+#include "ElementsExamples/TemplatedDataSourceUser.h"
 
-#include "ElementsKernel/EnableGMock.h"  // initialize the gmock framework
-#include "ElementsKernel/Real.h"         // isEqual
+#include <cstddef>  // for size_t
 
-#include "DataSourceUserTemplatedTypeMock.h"  // Access the needed mock objects.
+#include <boost/test/unit_test.hpp>
+
+#include "ElementsKernel/EnableGMock.h"
+#include "ElementsKernel/Real.h"  // for isEqual
+
+#include "DataSourceUserTemplatedTypeMock.h"  // for DataSourceUserTemplatedTypeMock
 
 using Elements::Examples::DataSourceUserTemplatedTypeMock;
 using testing::Return;
@@ -32,7 +36,7 @@ BOOST_AUTO_TEST_CASE(sumRecords_test) {
   // Setup mock
   DataSourceUserTemplatedTypeMock data_source_mock;
   EXPECT_CALL(data_source_mock, countRecords()).Times(1).WillOnce(Return(5));
-  for (size_t index = 0; index < 5; ++index) {
+  for (std::size_t index = 0; index < 5; ++index) {
     EXPECT_CALL(data_source_mock, getRecordValue(index)).Times(1).WillOnce(Return(static_cast<double>(index) + 1.));
   }
 

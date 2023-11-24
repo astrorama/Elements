@@ -19,10 +19,12 @@
  *
  */
 
-#include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/ui/text/TestRunner.h>
+#include <memory>  // for allocator
 
-#include "ElementsKernel/Unused.h"
+#include <cppunit/extensions/TestFactoryRegistry.h>  // for TestFactoryRegistry
+#include <cppunit/ui/text/TestRunner.h>              // for TestRunner
+
+#include "ElementsKernel/Unused.h"  // for ELEMENTS_UNUSED
 
 int main(ELEMENTS_UNUSED int argc, ELEMENTS_UNUSED char** argv) {
   CppUnit::TextUi::TestRunner   runner;

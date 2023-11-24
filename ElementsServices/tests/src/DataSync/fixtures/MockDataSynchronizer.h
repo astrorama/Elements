@@ -11,12 +11,13 @@
 #ifndef ELEMENTSSERVICES_TESTS_SRC_DATASYNC_FIXTURES_MOCKDATASYNCHRONIZER_H_
 #define ELEMENTSSERVICES_TESTS_SRC_DATASYNC_FIXTURES_MOCKDATASYNCHRONIZER_H_
 
-#include <map>
-#include <string>
+#include <map>     // for map
+#include <string>  // for string
 
-#include "ElementsServices/DataSync/DataSynchronizer.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"     // for path
+#include "ElementsServices/DataSync/DataSynchronizer.h"  // for DataSynchronizer
 
-#include "ConfigFilesFixture.h"
+#include "ConfigFilesFixture.h"  // for theDependencyConfig, theWebdavFrConfig, WorkspaceFixture
 
 struct MockDataSynchronizer : public ElementsServices::DataSync::DataSynchronizer, WorkspaceFixture {
 

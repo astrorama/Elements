@@ -20,6 +20,8 @@
  *
  */
 
+// IWYU pragma: private, include "ElementsKernel/Storage.h"
+
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_STORAGE_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Storage.h instead"
 #else
@@ -67,7 +69,7 @@ ELEMENTS_API T storageConvert(const T& size, StorageType source_unit, StorageTyp
     T       size_in_bytes = size * T(StorageFactor[source_unit]);
     int64_t target_factor = StorageFactor[target_unit];
     double  value         = roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor),
-                                 static_cast<size_t>(log10(static_cast<double>(target_factor))));
+                                          static_cast<size_t>(log10(static_cast<double>(target_factor))));
     converted_value       = Elements::numberCast<T>(value);
   }
 

@@ -32,7 +32,7 @@
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 
 // STL include files
-#include <climits>
+#include <bits/local_lim.h>  // for HOST_NAME_MAX
 #include <memory>
 #include <string>
 #include <typeinfo>

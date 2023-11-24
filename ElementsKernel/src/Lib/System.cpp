@@ -19,30 +19,25 @@
 
 #include "ElementsKernel/System.h"
 
-#include <cxxabi.h>
-#include <dlfcn.h>     // for Dl_info, dladdr, dlclose, etc
-#include <execinfo.h>  // for backtrace
-#include <sys/utsname.h>
-#include <unistd.h>  // for environ
+#include <cxxabi.h>       // for __cxa_demangle
+#include <dlfcn.h>        // for dladdr, dlclose, dlerror, dlopen, dlsym, Dl_info, RTLD_GLOBAL, RTLD_LAZY
+#include <execinfo.h>     // for backtrace
+#include <sys/utsname.h>  // for uname, utsname
+#include <unistd.h>       // for gethostname, environ
 
-#include <array>    // for array
-#include <cstdlib>  // for free, getenv, malloc, etc
-#include <iomanip>
-#include <iostream>
-#include <new>  // for new
-#include <sstream>
-#include <string>    // for string
+#include <array>     // for array
+#include <cerrno>    // for errno
+#include <cstdlib>   // for free, getenv, setenv, unsetenv, size_t
+#include <cstring>   // for strerror, strnlen, size_t
+#include <iomanip>   // for operator<<, setiosflags, setw
+#include <iostream>  // for basic_ostream, operator<<, basic_ostream::operator<<, dec, hex, ios, ostringstream
+#include <new>       // for nothrow
+#include <string>    // for string, char_traits, basic_string, operator<<, operator+
 #include <typeinfo>  // for type_info
 #include <vector>    // for vector
 
-#include <cerrno>   // for errno
-#include <climits>  // for HOST_NAME_MAX
-#include <cstddef>  // for size_t
-#include <cstring>  // for strnlen, strerror
-
-#include "ElementsKernel/FuncPtrCast.h"
-#include "ElementsKernel/ModuleInfo.h"  // for ImageHandle
-#include "ElementsKernel/Unused.h"      // for ELEMENTS_UNUSED
+#include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
+#include "ElementsKernel/Unused.h"       // for ELEMENTS_UNUSED
 
 using std::size_t;
 using std::string;

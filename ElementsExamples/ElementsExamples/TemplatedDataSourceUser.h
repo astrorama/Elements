@@ -64,7 +64,7 @@ public:
  * @brief Macro to prevent the direct inclusion of the implementation file
  */
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
-#include "ElementsExamples/_impl/TemplatedDataSourceUser.tpp"
+#include "ElementsExamples/_impl/TemplatedDataSourceUser.tpp"  // IWYU pragma: export
 #undef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_H_

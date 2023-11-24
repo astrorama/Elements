@@ -19,16 +19,17 @@
  *
  */
 
+#include "ElementsExamples/ClassExample2.h"  // for ClassExample2
+
 #include <cstdint>  // for int64_t
-#include <memory>   // for make_unique
+#include <memory>   // for allocator, unique_ptr
 #include <string>   // for string
+#include <utility>  // for move
 #include <vector>   // for vector
 
-#include "ElementsExamples/ClassExample2.h"
-#include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Exception.h"
+#include "ElementsKernel/Exception.h"  // for Exception
 
 using std::int64_t;
 using std::string;

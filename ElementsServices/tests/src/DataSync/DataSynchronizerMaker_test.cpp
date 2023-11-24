@@ -24,8 +24,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsServices/DataSync/DataSynchronizerMaker.h"
-
 //-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_SUITE(DataSynchronizerMaker_test)

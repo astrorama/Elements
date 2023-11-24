@@ -16,12 +16,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <fstream>
-#include <map>
-#include <string>
-#include <vector>
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
 
-#include "ElementsServices/DataSync/DependencyConfiguration.h"
+#include <cstddef>  // for size_t
+#include <fstream>  // for basic_istream, ifstream
+#include <map>      // for map, operator!=, _Rb_tree_const_iterator
+#include <string>   // for char_traits, string, getline
+#include <utility>  // for pair
+#include <vector>   // for vector
+
+#include <boost/filesystem.hpp>  // for operator/, path, operator<
+
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, confFilePath
 
 namespace Elements {
 inline namespace Services {
@@ -43,7 +49,7 @@ path DependencyConfiguration::distantPathOf(path localFile) const {
   return m_fileMap.at(localFile);  // @TODO error handling
 }
 
-size_t DependencyConfiguration::dependencyCount() const {
+std::size_t DependencyConfiguration::dependencyCount() const {
   return m_fileMap.size();
 }
 

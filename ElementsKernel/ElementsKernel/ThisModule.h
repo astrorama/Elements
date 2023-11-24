@@ -26,8 +26,9 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 
-#include "ElementsKernel/FuncPtrCast.h"
-#include "ElementsKernel/ModuleInfo.h"
+#include "ElementsKernel/Export.h"       // for ELEMENTS_API
+#include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
+#include "ElementsKernel/ModuleInfo.h"   // for ModuleInfo
 
 namespace Elements {
 namespace System {

@@ -414,6 +414,18 @@ set(NOSE_EXTRA_OPTIONS "" CACHE STRING "Extra option to be appended to the noset
 set(EXTRA_SPHINX_FILES "" CACHE STRING "List of extra doc files for the sphinx generation")
 
 
+option(USE_IWYU
+       "Use the include-what-you-use checker"
+       OFF)
+
+set(IWYU_OPTIONS "" CACHE STRING "List of options to be passed to include-what-you-use")
+set(IWYU_TOOL_OPTIONS "" CACHE STRING "List of options to be passed to include-what-you-use tool")
+set(IWYU_MAPPING_FILE "" CACHE STRING "List of mapping files for IWYU")
+
+
+include(ElementsCheck)
+
+
 #--- Compilation Flags ---------------------------------------------------------
 if(NOT ELEMENTS_FLAGS_SET)
   message(STATUS "Setting cached build flags")
@@ -445,7 +457,7 @@ if(NOT ELEMENTS_FLAGS_SET)
   check_and_use_cxx_option(-Wno-long-long CXX_HAS_NO_LONG_LONG)
   check_and_use_cxx_option(-Wno-unknown-pragmas CXX_HAS_NO_UNKNOWN_PRAGMAS)
   check_and_use_cxx_option(-Wformat-security CXX_HAS_FORMAT_SECURITY)
-  if (NOT "${SGS_COMP}" STREQUAL clang)
+  if (NOT "${SGS_COMP}" STREQUAL clang AND NOT USE_IWYU)
     check_and_use_cxx_option(-Wshadow=local CXX_HAS_SHADOW)
   endif()
   check_and_use_cxx_option(-Wlogical-not-parentheses CXX_HAS_LOGICAL_NOT_PARENTHESES)
@@ -475,7 +487,7 @@ if(NOT ELEMENTS_FLAGS_SET)
   check_and_use_c_option(-Wno-long-long C_HAS_NO_LONG_LONG)
   check_and_use_c_option(-Wno-unknown-pragmas C_HAS_NO_UNKNOWN_PRAGMAS)
   check_and_use_c_option(-Wformat-security C_HAS_FORMAT_SECURITY)
-  if (NOT "${SGS_COMP}" STREQUAL clang)
+  if (NOT "${SGS_COMP}" STREQUAL clang AND NOT USE_IWYU)
     check_and_use_c_option(-Wshadow=local C_HAS_SHADOW)
   endif()
   check_and_use_c_option(-Wlogical-not-parentheses C_HAS_LOGICAL_NOT_PARENTHESES)
@@ -485,12 +497,14 @@ if(NOT ELEMENTS_FLAGS_SET)
 
   check_and_use_c_option(-Werror=return-type C_HAS_ERROR_RETURN_TYPE)
 
-  if(NOT "${SGS_COMP}" STREQUAL clang)
+  if(NOT "${SGS_COMP}" STREQUAL clang AND NOT USE_IWYU)
     check_and_use_cxx_option(-Wduplicated-cond CXX_HAS_DUPLICATED_COND)
     check_and_use_c_option(-Wduplicated-cond C_HAS_DUPLICATED_COND)
-    check_and_use_c_option(-Wjump-misses-init C_HAS_JUMP_MISSES_INIT)
   endif()
 
+  if(NOT "${SGS_COMP}" STREQUAL clang)
+    check_and_use_c_option(-Wjump-misses-init C_HAS_JUMP_MISSES_INIT)
+  endif()
 
   if((NOT "${SGS_COMP}" STREQUAL clang) OR (SGS_COMP_VERSION VERSION_GREATER "4.0") )
     check_and_use_cxx_option(-ansi CXX_HAS_ANSI)
@@ -902,6 +916,64 @@ add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
 
 if(("${SGS_COMP}" STREQUAL "gcc") OR ELEMENTS_CPP11)
   set(GCCXML_CXX_FLAGS "${GCCXML_CXX_FLAGS} -D__STRICT_ANSI__")
+endif()
+
+
+find_package(IWYU)
+
+if(USE_IWYU)
+  if(IWYU_FOUND)
+    set(IWYU_COMMAND "${IWYU_EXECUTABLE}")
+
+    if(IWYU_OPTIONS)
+      string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
+      foreach(iwyu_o ${iwyu_list})
+        set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;${iwyu_o}")
+      endforeach()
+    endif()
+
+    if(MAPPING_FILE)
+      string(REPLACE " " ";" iwyu_mapping_list ${MAPPING_FILE})
+      foreach(iwyu_o ${iwyu_mapping_list})
+        set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;--mapping_file=${iwyu_o}")
+      endforeach()
+    endif()
+
+  endif()
+endif()
+
+if(CMAKE_EXPORT_COMPILE_COMMANDS AND IWYU_FOUND)
+  set(IWYU_EXTRA)
+  set(IWYU_TOOL_COMMAND ${IWYU_TOOL_EXECUTABLE})
+
+  if(IWYU_TOOL_OPTIONS)
+    string(REPLACE " " ";" iwyu_tool_list ${IWYU_TOOL_OPTIONS})
+    foreach(iwyu_o ${iwyu_tool_list})
+      set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} ${iwyu_o})
+    endforeach()
+  endif()
+
+  set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -p ${CMAKE_BINARY_DIR})
+
+  if(IWYU_OPTIONS)
+    set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -- )
+    string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
+    foreach(iwyu_o ${iwyu_list})
+      set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -Xiwyu ${iwyu_o})
+    endforeach()
+  endif()
+
+  if(MAPPING_FILE)
+    string(REPLACE " " ";" iwyu_mapping_list ${MAPPING_FILE})
+    foreach(iwyu_o ${iwyu_mapping_list})
+      set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -Xiwyu --mapping_file=${iwyu_o})
+    endforeach()
+  endif()
+
+  add_custom_target(iwyu
+    COMMAND ${IWYU_TOOL_COMMAND}
+    COMMENT "Running include-what-you-use tool"
+  )
 endif()
 
 include(LocalBuildFlags OPTIONAL)

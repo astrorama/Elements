@@ -19,14 +19,13 @@
  *
  */
 
-#include "ElementsKernel/System.h"
+#include <cstddef>  // for size_t
+#include <string>   // for string, basic_string
+#include <vector>   // for vector
 
 #include <boost/test/unit_test.hpp>
-#include <string>
-#include <vector>
 
-// Temporary includes for dev
-#include <iostream>
+#include "ElementsKernel/System.h"  // for backTrace
 
 namespace Elements {
 

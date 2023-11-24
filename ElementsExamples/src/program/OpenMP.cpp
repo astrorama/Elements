@@ -18,14 +18,15 @@
  *
  */
 
-#include <complex>  // for complex
-#include <cstdio>   // for size_t
+#include <complex>  // for operator+, abs, complex, operator*, operator-, operator/
+#include <cstdio>   // for putchar, puts, size_t
 #include <map>      // for map
-#include <string>   // for string
+#include <string>   // for allocator, string
 
-#include <boost/current_function.hpp>  // for BOOST_CURRENT_FUNCTION
-
-#include "ElementsKernel/ProgramHeaders.h"  // for including all Program/related headers
+#include "ElementsKernel/Exit.h"     // for ExitCode
+#include "ElementsKernel/Logging.h"  // for Logging
+#include "ElementsKernel/Main.h"     // for MAIN_FOR
+#include "ElementsKernel/Program.h"  // for Program
 
 using std::map;
 using std::size_t;

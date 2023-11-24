@@ -19,14 +19,14 @@
  *
  */
 
-#include <cstdint>  // for int64_t
-#include <string>   // for string
+#include "ElementsExamples/ClassExample.h"  // for ClassExample
 
-#include "ElementsExamples/ClassExample.h"
-#include <boost/test/test_tools.hpp>
+#include <cstdint>  // for int64_t
+#include <string>   // for allocator, string
+
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Exception.h"
+#include "ElementsKernel/Exception.h"  // for Exception
 
 using std::int64_t;
 using std::string;

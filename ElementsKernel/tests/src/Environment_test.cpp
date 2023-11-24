@@ -19,16 +19,15 @@
  *
  */
 
-#include "ElementsKernel/Environment.h"  // for Environment
+#include "ElementsKernel/Environment.h"
 
-#include <iostream>   // for interactive testing
-#include <stdexcept>  // for out_of_range
-#include <string>
+#include <stdexcept>  // for invalid_argument, out_of_range
+#include <string>     // for operator==, allocator, string, operator+, char_traits
 
-#include <boost/regex.hpp>  // for regex, regex_match
+#include <boost/regex.hpp>  // for regex_traits, regex_match, regex
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/System.h"  // for isEnvSet
+#include "ElementsKernel/System.h"  // for isEnvSet, getEnv, setEnv, unSetEnv
 
 using std::string;
 

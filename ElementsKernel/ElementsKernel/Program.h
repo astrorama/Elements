@@ -28,15 +28,17 @@
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAM_H_
 
 #include <map>      // for map
-#include <memory>   // for unique_ptr
 #include <string>   // for string
 #include <utility>  // for pair
 
-#include <boost/program_options.hpp>
+#include <boost/program_options.hpp>  // for options_description, positional_options_description, variable_value, variables_map
 
-#include "ElementsKernel/Exit.h"     // for ExitCode
-#include "ElementsKernel/Export.h"   // ELEMENTS_API
+#include "ElementsKernel/Export.h"   // for ELEMENTS_API
 #include "ElementsKernel/Logging.h"  // for Logging
+
+namespace Elements {
+enum class ExitCode : int;
+}
 
 namespace Elements {
 

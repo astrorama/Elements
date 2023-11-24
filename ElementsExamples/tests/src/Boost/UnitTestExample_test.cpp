@@ -1,4 +1,4 @@
-/*
+/**
  * UnitTestExample_test.cpp
  *
  *  Created on: Sep 22, 2015
@@ -19,15 +19,17 @@
  *
  */
 
-#include "ElementsExamples/UnitTestExample.h"  // Access the objects you want to test
+#include "ElementsExamples/UnitTestExample.h"
 
-#include <vector>  // for vector
+#include <cstddef>  // for size_t
+#include <vector>   // for vector
 
-#include <boost/test/unit_test.hpp>  // Gives access to the unit test framework.
+#include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Exception.h"  // Exception
+#include "ElementsKernel/Exception.h"  // for Exception
 
 using Elements::Examples::UnitTestExample;
+using std::size_t;
 using std::vector;
 
 // Starts a test suite and name it.

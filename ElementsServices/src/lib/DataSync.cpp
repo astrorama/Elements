@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -17,8 +17,14 @@
  */
 
 #include "ElementsServices/DataSync.h"
-#include "ElementsServices/DataSync/DataSynchronizer.h"
-#include "ElementsServices/DataSync/DataSynchronizerMaker.h"
+
+#include <exception>  // for exception
+#include <memory>     // for __shared_ptr_access, shared_ptr
+
+#include <boost/filesystem.hpp>  // for operator/, path
+
+#include "ElementsServices/DataSync/DataSynchronizer.h"       // for DataSynchronizer
+#include "ElementsServices/DataSync/DataSynchronizerMaker.h"  // for createSynchronizer
 
 namespace Elements {
 inline namespace Services {

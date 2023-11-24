@@ -21,17 +21,15 @@
 
 #include "ElementsKernel/PathSearch.h"
 
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/test/unit_test.hpp>
-#include <cstdlib>
-#include <string>  // for std::string
-#include <vector>  // for std::vector
+#include <string>  // for allocator, operator+, char_traits, string, basic_string, operator==
+#include <vector>  // for vector
 
-#include "ElementsKernel/Auxiliary.h"    // for getAuxiliaryPath
-#include "ElementsKernel/Environment.h"  // for the Environment class
-#include "ElementsKernel/Exception.h"
-#include "ElementsKernel/Temporary.h"  // for the TempDir class
+#include <boost/filesystem.hpp>      // for path, operator/, operator==, create_directories, operator!=
+#include <boost/test/unit_test.hpp>  // for operator<<, BOOST_PP_IIF_1, BOOST_CHECK, BOOST_PP_BOOL_2, BOOST_TEST_TOOL_PASS_ARGS2, BOOST_TEST_TOOL_PASS_PRED2, BOOST_PP_COMPL_0, BOOST_PP_IIF_0, BOOST_FIXTURE_TEST_CASE, BOOST_PP_NOT_EQUAL_2, BOOST_PP_NOT_EQUAL_CHECK_BOOST_PP_NOT_EQUAL_2, BOOST_PP_NOT_EQUAL_1, BOOST_PP_NOT_EQUAL_CHECK_BOOST_PP_NOT_EQUAL_1, BOOST_AUTO_TEST_CASE, BOOST_AUTO_TEST_SUITE, BOOST_AUTO_TEST_SUITE_END
+
+#include "ElementsKernel/Auxiliary.h"    // for getPath
+#include "ElementsKernel/Environment.h"  // for Environment
+#include "ElementsKernel/Temporary.h"    // for TempDir
 
 using std::string;
 using std::vector;
