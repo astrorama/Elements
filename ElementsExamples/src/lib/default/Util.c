@@ -23,6 +23,6 @@
 
 int MY_CONST = 42;
 
-int myFunc() {
+int myFunc(void) {
   return 1;
 }

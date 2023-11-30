@@ -92,6 +92,7 @@ public:
   Variable(Environment& env, const std::string& index);
   Variable(const Variable& other);
   Variable(Variable&& other);
+  ~Variable() = default;
   Variable&          operator=(const Variable& other);
   Variable&          operator=(Variable&& other);
   Variable&          operator=(const std::string&);

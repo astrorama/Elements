@@ -78,8 +78,6 @@
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 #include "ElementsKernel/Unused.h"  // ELEMENTS_UNUSED
 
-using std::numeric_limits;
-
 namespace Elements {
 
 /// Single precision float default maximum unit in the last place
