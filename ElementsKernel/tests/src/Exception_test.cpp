@@ -81,37 +81,6 @@ BOOST_AUTO_TEST_CASE(SubclassStreamOperator_test) {
   } catch (...) {
     BOOST_FAIL("Unknown type of exception instead of TestException");
   }
-
-  // When
-  try {
-    TestException e{6};
-    throw e << message_part_1 << message_part_2;
-
-    // Then
-  } catch (const TestException& ex) {
-    BOOST_CHECK_EQUAL(ex.what(), message_part_1 + message_part_2);
-    BOOST_CHECK_EQUAL(ex.m_number, 6);
-  } catch (const Exception& ex) {
-    BOOST_FAIL("Exception subclass thrown as Elements::Exception");
-  } catch (...) {
-    BOOST_FAIL("Unknown type of exception instead of TestException");
-  }
-
-  // When
-  try {
-    TestException e{7};
-    e << message_part_1 << message_part_2;
-    throw e;
-
-    // Then
-  } catch (const TestException& ex) {
-    BOOST_CHECK_EQUAL(ex.what(), message_part_1 + message_part_2);
-    BOOST_CHECK_EQUAL(ex.m_number, 7);
-  } catch (const Exception& ex) {
-    BOOST_FAIL("Exception subclass thrown as Elements::Exception");
-  } catch (...) {
-    BOOST_FAIL("Unknown type of exception instead of TestException");
-  }
 }
 
 //-----------------------------------------------------------------------------

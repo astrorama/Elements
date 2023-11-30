@@ -68,7 +68,7 @@ void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
     po::store(po::parse_config_file<char>(abs_path.c_str(), options), vm);
     po::notify(vm);
   } catch (std::exception& e) {
-    throw e.what();
+    throw e;
   }
 
   /* Configure object */

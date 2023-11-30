@@ -50,7 +50,7 @@ Environment::Variable::Variable(const Environment::Variable& other) : m_env{othe
   checkCompatibility(other);
 }
 
-Environment::Variable::Variable(Environment::Variable&& other) : m_env{std::move(other.m_env)} {
+Environment::Variable::Variable(Environment::Variable&& other) : m_env{other.m_env} {
   checkCompatibility(other);
 }
 
@@ -65,7 +65,7 @@ Environment::Variable& Environment::Variable::operator=(const Environment::Varia
 Environment::Variable& Environment::Variable::operator=(Environment::Variable&& other) {
   checkCompatibility(other);
 
-  m_env = std::move(other.m_env);
+  m_env = other.m_env;
 
   return *this;
 }
