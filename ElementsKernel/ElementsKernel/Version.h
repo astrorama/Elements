@@ -33,9 +33,7 @@
 
 /// Mangle major, minor and patch version number into a single integer
 constexpr std::uint_least64_t CALC_PROJECT_VERSION(const std::uint_least64_t maj, const std::uint_least64_t min,
-                                                   const std::uint_least64_t pat) {
-  return (((maj) << 32) + ((min) << 16) + (pat));
-}
+                                                   const std::uint_least64_t pat);
 
 namespace Elements {
 
@@ -83,6 +81,10 @@ ELEMENTS_API std::string getVersionString(const unsigned short major, const unsi
                                           const unsigned short patch = 0);
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_IMPL_
+#include "ElementsKernel/_impl/Version.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_H_
 

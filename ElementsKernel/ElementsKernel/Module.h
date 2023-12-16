@@ -39,39 +39,26 @@
 namespace Elements {
 
 struct Module {
-  static inline std::string name() {
-    return THIS_MODULE_NAME_STRING;
-  }
-  static inline std::string versionString() {
-    return THIS_MODULE_VERSION_STRING;
-  }
-  static inline std::uint_least64_t version() {
-    return THIS_MODULE_VERSION;
-  }
-  static inline std::uint_least64_t majorVersion() {
-    return THIS_MODULE_MAJOR_VERSION;
-  }
-  static inline std::uint_least64_t minorVersion() {
-    return THIS_MODULE_MINOR_VERSION;
-  }
-  static inline std::uint_least64_t patchVersion() {
-    return THIS_MODULE_PATCH_VERSION;
-  }
+  static std::string name();
+
+  static std::string versionString();
+
+  static std::uint_least64_t version();
+
+  static std::uint_least64_t majorVersion();
+
+  static std::uint_least64_t minorVersion();
+
+  static std::uint_least64_t patchVersion();
 };
 
-inline std::ostream& operator<<(std::ostream& stream, const Module& m) {
-
-  stream << "Name: " << m.name() << std::endl;
-  stream << "Version String: " << m.versionString() << std::endl;
-  stream << "Version: " << m.version() << std::endl;
-  stream << "Major Version: " << m.majorVersion() << std::endl;
-  stream << "Minor Version: " << m.minorVersion() << std::endl;
-  stream << "Patch Version: " << m.patchVersion() << std::endl;
-
-  return stream;
-}
+std::ostream& operator<<(std::ostream& stream, const Module& m);
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_MODULE_IMPL_
+#include "ElementsKernel/_impl/Module.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_MODULE_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_MODULE_H_
 

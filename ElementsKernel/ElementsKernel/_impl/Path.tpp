@@ -24,13 +24,15 @@
 #error "This file should not be included directly! Use ElementsKernel/Path.h instead"
 #else
 
-#include <algorithm>      // for find_if, transform, for_each
+#include <algorithm>      // IWYU pragma: keep
+#include <iosfwd>         // for ptrdiff_t
 #include <string>         // for string
 #include <unordered_set>  // for unordered_set
+#include <utility>        // for forward, pair
 #include <vector>         // for vector
 
-#include <boost/algorithm/string/join.hpp>  // for join
-#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/algorithm/string.hpp>  // for join
+#include <boost/filesystem.hpp>        // for operator/, exists, path
 
 namespace Elements {
 inline namespace Kernel {
@@ -94,7 +96,7 @@ std::string joinPath(const std::vector<T>& path_list) {
     return Item{s}.string();
   });
 
-  std::string result = boost::algorithm::join(elems, PATH_SEP);
+  string result = boost::algorithm::join(elems, PATH_SEP);
 
   return result;
 }
@@ -135,7 +137,7 @@ std::vector<Item> removeDuplicates(const std::vector<T>& path_list) {
 
   std::vector<Item> output(path_list.size());
 
-  auto end = copy_if(path_list.cbegin(), path_list.cend(), output.begin(), [&s](const T& i) {
+  auto end = std::copy_if(path_list.cbegin(), path_list.cend(), output.begin(), [&s](const T& i) {
     return s.insert(Item{i}.string()).second;
   });
 

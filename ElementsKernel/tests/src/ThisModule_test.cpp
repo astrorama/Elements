@@ -26,6 +26,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include "ElementsKernel/ModuleInfo.h"  // for ModuleInfo, exeName
+
 namespace Elements {
 
 //-----------------------------------------------------------------------------

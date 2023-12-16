@@ -138,26 +138,6 @@ const Path::Item ProgramManager::setProgramPath(ELEMENTS_UNUSED char* arg0) {
   return full_path.parent_path();
 }
 
-template <class charT>
-void ProgramManager::checkCommandLineOptions(
-    const boost::program_options::basic_parsed_options<charT>& cmd_parsed_options) {
-
-  for (const auto& o : cmd_parsed_options.options) {
-    if (o.string_key == "config-file") {
-      if (o.value.size() != 1) {
-        cerr << "Wrong usage of the --config-file option" << endl;
-        exit(static_cast<int>(ExitCode::USAGE));
-      } else {
-        auto conf_file = Path::Item{o.value[0]};
-        if (not boost::filesystem::exists(conf_file)) {
-          cerr << "The " << conf_file << " configuration file doesn't exist!" << endl;
-          exit(static_cast<int>(ExitCode::CONFIG));
-        }
-      }
-    }
-  }
-}
-
 /*
  * Get program options
  */

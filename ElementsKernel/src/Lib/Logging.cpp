@@ -25,6 +25,7 @@
 #include <memory>    // for unique_ptr, make_unique
 #include <sstream>   // for basic_ostream, operator<<, endl, stringstream
 #include <string>    // for char_traits, allocator, basic_string, operator<, operator<<, string
+#include <utility>   // for pair
 
 #include <boost/algorithm/string.hpp>  // for to_upper
 
@@ -104,6 +105,49 @@ void Logging::setLogFile(const Path::Item& fileName) {
     root.addAppender(fileAppender);
   }
   root.setPriority(root.getPriority());
+}
+
+void Logging::debug(const std::string& logMessage) {
+  m_log4cppLogger.debug(logMessage);
+}
+
+Logging::LogMessageStream Logging::debug() {
+  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::debug};
+}
+
+void Logging::info(const std::string& logMessage) {
+  m_log4cppLogger.info(logMessage);
+}
+
+Logging::LogMessageStream Logging::info() {
+  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::info};
+}
+
+void Logging::warn(const std::string& logMessage) {
+  m_log4cppLogger.warn(logMessage);
+}
+
+Logging::LogMessageStream Logging::warn() {
+  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::warn};
+}
+
+void Logging::error(const std::string& logMessage) {
+  m_log4cppLogger.error(logMessage);
+}
+Logging::LogMessageStream Logging::error() {
+  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::error};
+}
+
+void Logging::fatal(const std::string& logMessage) {
+  m_log4cppLogger.fatal(logMessage);
+}
+
+Logging::LogMessageStream Logging::fatal() {
+  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::fatal};
+}
+
+void Logging::log(log4cpp::Priority::Value level, const std::string& logMessage) {
+  m_log4cppLogger.log(level, logMessage);
 }
 
 /// @cond Doxygen_Suppress

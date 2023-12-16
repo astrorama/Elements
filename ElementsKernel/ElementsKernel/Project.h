@@ -39,68 +39,39 @@
 namespace Elements {
 
 struct Project {
-  static inline std::string name() {
-    return THIS_PROJECT_NAME_STRING;
-  }
 
-  static inline std::string versionString() {
-    return THIS_PROJECT_VERSION_STRING;
-  }
-  static inline std::uint_least64_t version() {
-    return THIS_PROJECT_VERSION;
-  }
-  static inline std::uint_least64_t majorVersion() {
-    return THIS_PROJECT_MAJOR_VERSION;
-  }
-  static inline std::uint_least64_t minorVersion() {
-    return THIS_PROJECT_MINOR_VERSION;
-  }
-  static inline std::uint_least64_t patchVersion() {
-    return THIS_PROJECT_PATCH_VERSION;
-  }
-  static inline std::string originalVersion() {
-    return THIS_PROJECT_ORIGINAL_VERSION;
-  }
-  static inline std::string vcsVersion() {
-    return THIS_PROJECT_VCS_VERSION;
-  }
+  static std::string name();
 
-  static inline std::string installLocation() {
-    return THIS_PROJECT_INSTALL_LOCATION_STRING;
-  }
-  static inline bool useSoVersion() {
-    return THIS_PROJECT_USE_SOVERSION;
-  }
-  static inline std::string installPrefix() {
-    return CMAKE_INSTALL_PREFIX_STRING;
-  }
-  static inline std::vector<std::string> searchDirectories() {
-    return THIS_PROJECT_SEARCH_DIRS;
-  }
+  static std::string versionString();
+
+  static std::uint_least64_t version();
+
+  static std::uint_least64_t majorVersion();
+
+  static std::uint_least64_t minorVersion();
+
+  static std::uint_least64_t patchVersion();
+
+  static std::string originalVersion();
+
+  static std::string vcsVersion();
+
+  static std::string installLocation();
+
+  static bool useSoVersion();
+
+  static std::string installPrefix();
+
+  static std::vector<std::string> searchDirectories();
 };
 
-inline std::ostream& operator<<(std::ostream& stream, const Project& /* p */) {
-  stream << "Name: " << Elements::Project::name() << std::endl;
-  stream << "Version String: " << Elements::Project::versionString() << std::endl;
-  stream << "Version: " << Elements::Project::version() << std::endl;
-  stream << "Major Version: " << Elements::Project::majorVersion() << std::endl;
-  stream << "Minor Version: " << Elements::Project::minorVersion() << std::endl;
-  stream << "Patch Version: " << Elements::Project::patchVersion() << std::endl;
-  stream << "Original Version: " << Elements::Project::originalVersion() << std::endl;
-  stream << "VCS Version: " << Elements::Project::vcsVersion() << std::endl;
-  stream << "Install Location: " << Elements::Project::installLocation() << std::endl;
-  stream << "Use So Version: " << Elements::Project::useSoVersion() << std::endl;
-  stream << "Install Prefix: " << Elements::Project::installPrefix() << std::endl;
-  stream << "Search Directories: ";
-
-  for (const auto& d : Elements::Project::searchDirectories()) {
-    stream << d << " ";
-  }
-
-  return stream;
-}
+std::ostream& operator<<(std::ostream& stream, const Project& /* p */);
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_PROJECT_IMPL_
+#include "ElementsKernel/_impl/Project.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_PROJECT_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_PROJECT_H_
 
