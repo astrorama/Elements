@@ -25,12 +25,12 @@
 #error "This file should not be included directly! Use ElementsKernel/PathSearch.h instead"
 #else
 
-#include <string>
-#include <vector>
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem.hpp>  // for is_directory
 
-#include "ElementsKernel/Path.h"
+#include "ElementsKernel/Path.h"  // for Item
 
 namespace Elements {
 inline namespace Kernel {

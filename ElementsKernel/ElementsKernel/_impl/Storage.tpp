@@ -26,8 +26,10 @@
 #error "This file should not be included directly! Use ElementsKernel/Storage.h instead"
 #else
 
-#include <cmath>    // for pow, round
+#include <cmath>    // for log10, pow, round
+#include <cstddef>  // for size_t
 #include <cstdint>  // for int64_t
+#include <map>      // for map
 
 #include "ElementsKernel/Number.h"  // for numberCast
 
@@ -36,13 +38,13 @@ inline namespace Kernel {
 namespace Units {
 
 template <typename T>
-ELEMENTS_API T roundToDigits(const T& value, const size_t& max_digits) {
+T roundToDigits(const T& value, const size_t& max_digits) {
   std::int64_t factor = std::int64_t(std::pow(10, max_digits));
   return std::round(value * static_cast<T>(factor)) / static_cast<T>(factor);
 }
 
 template <std::size_t max_digits, typename T>
-ELEMENTS_API T storageConvert(const T& size, StorageType source_unit, StorageType target_unit) {
+T storageConvert(const T& size, StorageType source_unit, StorageType target_unit) {
 
   using std::log10;
 
@@ -59,7 +61,7 @@ ELEMENTS_API T storageConvert(const T& size, StorageType source_unit, StorageTyp
 }
 
 template <typename T>
-ELEMENTS_API T storageConvert(const T& size, StorageType source_unit, StorageType target_unit) {
+T storageConvert(const T& size, StorageType source_unit, StorageType target_unit) {
 
   using std::log10;
 

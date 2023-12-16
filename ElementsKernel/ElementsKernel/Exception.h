@@ -26,15 +26,12 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_EXCEPTION_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_EXCEPTION_H_
 
-#include <cstddef>  // for size_t
-#include <cstdio>
-#include <exception>
-#include <sstream>
-#include <string>
-#include <type_traits>
-#include <utility>
+#include <exception>    // for exception
+#include <string>       // for string
+#include <type_traits>  // for enable_if, is_same, remove_reference, is_base_of
+#include <utility>      // for forward
 
-#include "ElementsKernel/Exit.h"
+#include "ElementsKernel/Exit.h"    // for ExitCode
 #include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
 namespace Elements {
@@ -51,7 +48,7 @@ public:
    * @param e: this is an optional exit code. By default is is set
    *           to NOT_OK.
    */
-  explicit Exception(ExitCode e = ExitCode::NOT_OK) : m_exit_code{e} {}
+  explicit Exception(ExitCode e = ExitCode::NOT_OK);
 
   /** Constructor (C strings).
    *  @param message C-style string error message.
@@ -61,15 +58,14 @@ public:
    *  @param e: this is an optional exit code. By default is is set
    *            to NOT_OK.
    */
-  explicit Exception(const char* message, ExitCode e = ExitCode::NOT_OK) : m_error_msg(message), m_exit_code{e} {}
+  explicit Exception(const char* message, ExitCode e = ExitCode::NOT_OK);
 
   /** Constructor (C++ STL strings).
    *  @param message The error message.
    *  @param e: this is an optional exit code. By default is is set
    *            to NOT_OK.
    */
-  explicit Exception(const std::string& message, ExitCode e = ExitCode::NOT_OK)
-      : m_error_msg(message), m_exit_code{e} {}
+  explicit Exception(const std::string& message, ExitCode e = ExitCode::NOT_OK);
 
   /**
    * @brief Constructs a new Exception with a message using format specifiers
@@ -78,34 +74,24 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  explicit Exception(const char* stringFormat, Args&&... args) : m_exit_code{ExitCodeHelper<Args...>{args...}.code} {
-    std::size_t len     = snprintf(nullptr, 0, stringFormat, std::forward<Args>(args)...) + 1;
-    char*       message = new char[len];
-    snprintf(message, len, stringFormat, std::forward<Args>(args)...);
-    m_error_msg = std::string(message);
-    delete[] message;
-  }
+  explicit Exception(const char* string_format, Args&&... args);
 
   /** Virtual destructor.
    */
-  virtual ~Exception() noexcept = default;
+  virtual ~Exception() noexcept;
 
   /** Returns a pointer to the (constant) error description.
    *  @return A pointer to a const char *. The underlying memory
    *          is in possession of the Exception object. Callers must
    *          not attempt to free the memory.
    */
-  const char* what() const noexcept override {
-    return m_error_msg.c_str();
-  }
+  const char* what() const noexcept override;
 
   /** Return the exit code of the Exception
    *
    * @return the exit code
    */
-  ExitCode exitCode() const noexcept {
-    return m_exit_code;
-  }
+  ExitCode exitCode() const noexcept;
 
   /**
    * @brief Appends in the end of the exception message the parameter
@@ -115,11 +101,7 @@ public:
    * @param message The message to append
    */
   template <typename T>
-  void appendMessage(const T& message) {
-    std::stringstream new_message;
-    new_message << m_error_msg << message;
-    m_error_msg = new_message.str();
-  }
+  void appendMessage(const T& message);
 
 protected:
   /** Error message.
@@ -137,38 +119,36 @@ private:
   // Specialization which handles the last argument
   template <typename Last>
   struct ExitCodeHelper<Last> {
-    explicit ExitCodeHelper(const Last& last) : code{getCode(last)} {}
+    explicit ExitCodeHelper(const Last& last);
     ExitCode code;
 
   private:
     // This method is used if the T is an ExitCode object
     template <typename T, typename std::enable_if<std::is_same<T, ExitCode>::value>::type* = nullptr>
-    ExitCode getCode(const T& t) {
-      return t;
-    }
+    ExitCode getCode(const T& t);
+
     // This method is used when the T is not an ExitCode object
     template <typename T, typename std::enable_if<not std::is_same<T, ExitCode>::value>::type* = nullptr>
-    ExitCode getCode(const T&) {
-      return ExitCode::NOT_OK;
-    }
+    ExitCode getCode(const T&);
   };
 
   // Specialization which handles two or more arguments
   template <typename First, typename... Rest>
   struct ExitCodeHelper<First, Rest...> : ExitCodeHelper<Rest...> {
-    explicit ExitCodeHelper(const First&, const Rest&... rest) : ExitCodeHelper<Rest...>(rest...) {}
+    explicit ExitCodeHelper(const First&, const Rest&... rest);
   };
 };
 
 template <typename Ex, typename T,
           typename = typename std::enable_if<
               std::is_base_of<Exception, typename std::remove_reference<Ex>::type>::value>::type>
-auto operator<<(Ex&& ex, const T& message) -> decltype(std::forward<Ex>(ex)) {
-  ex.appendMessage(message);
-  return std::forward<Ex>(ex);
-}
+ELEMENTS_API auto operator<<(Ex&& ex, const T& message) -> decltype(std::forward<Ex>(ex));
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_EXCEPTION_IMPL_
+#include "ElementsKernel/_impl/Exception.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_EXCEPTION_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_EXCEPTION_H_
 

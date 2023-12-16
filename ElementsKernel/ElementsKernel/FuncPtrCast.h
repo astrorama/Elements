@@ -47,15 +47,14 @@ namespace System {
  * @return destination pointer
  */
 template <typename DESTPTR, typename SRC>
-constexpr DESTPTR FuncPtrCast(SRC* const src_p) noexcept {
-  static_assert(std::is_pointer<DESTPTR>::value, "must be a pointer");
-  DESTPTR dst_p = nullptr;  // must initialize to be a valid constexpr...
-  std::memcpy(&dst_p, &src_p, sizeof(dst_p));
-  return dst_p;
-}
+constexpr DESTPTR FuncPtrCast(SRC* const src_p) noexcept;
 
 }  // namespace System
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_FUNCPTRCAST_IMPL_
+#include "ElementsKernel/_impl/FuncPtrCast.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_FUNCPTRCAST_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_FUNCPTRCAST_H_
 

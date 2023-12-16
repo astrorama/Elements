@@ -285,6 +285,10 @@ private:
 
 }  // namespace Elements
 
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAM_MANAGER_IMPL_
+#include "ElementsKernel/_impl/ProgramManager.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAM_MANAGER_IMPL_
+
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAMMANAGER_H_
 
 /**@}*/

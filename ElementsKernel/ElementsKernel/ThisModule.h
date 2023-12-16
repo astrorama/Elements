@@ -26,12 +26,13 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 
-#include "ElementsKernel/Export.h"       // for ELEMENTS_API
-#include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
-#include "ElementsKernel/ModuleInfo.h"   // for ModuleInfo
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
 namespace Elements {
 namespace System {
+
+class ModuleInfo;
+
 /**
  * @brief function to retrieve the current module
  * @ingroup ElementsKernel
@@ -39,14 +40,7 @@ namespace System {
  * It has to be included in the target source and compiled
  * within the module to be identified.
  */
-static inline const ModuleInfo& getThisModuleInfo() {
-  static ModuleInfo this_module;
-  if (this_module.isEmpty()) {
-    this_module = ModuleInfo(FuncPtrCast<void*>(getThisModuleInfo));
-  }
-
-  return this_module;
-}
+static const ModuleInfo& getThisModuleInfo();
 
 /** @example ElementsExamples/src/lib/default/ModuleInfo.cpp
  * This is an example of how to use the getThisModuleInfo function.
@@ -57,6 +51,10 @@ ELEMENTS_API const ModuleInfo& getThisExecutableInfo();
 
 }  // namespace System
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_
+#include "ElementsKernel/_impl/ThisModule.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 

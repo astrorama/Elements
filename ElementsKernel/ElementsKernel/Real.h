@@ -121,19 +121,13 @@ public:
 };
 
 template <typename RawType>
-constexpr std::size_t defaultMaxUlps() {
-  return FLT_DEFAULT_MAX_ULPS;
-}
+ELEMENTS_API constexpr std::size_t defaultMaxUlps();
 
 template <>
-constexpr std::size_t defaultMaxUlps<float>() {
-  return FLT_DEFAULT_MAX_ULPS;
-}
+ELEMENTS_API constexpr std::size_t defaultMaxUlps<float>();
 
 template <>
-constexpr std::size_t defaultMaxUlps<double>() {
-  return DBL_DEFAULT_MAX_ULPS;
-}
+ELEMENTS_API constexpr std::size_t defaultMaxUlps<double>();
 
 // This template class represents an IEEE floating-point number
 // (either single-precision or double-precision, depending on the
@@ -211,54 +205,34 @@ public:
   // around may change its bits, although the new value is guaranteed
   // to be also a NAN.  Therefore, don't expect this constructor to
   // preserve the bits in x when x is a NAN.
-  explicit FloatingPoint(const RawType& x) {
-    m_u.m_value = x;
-  }
+  explicit FloatingPoint(const RawType& x);
 
   // Static methods
 
   // Reinterprets a bit pattern as a floating-point number.
   //
   // This function is needed to test the AlmostEquals() method.
-  static RawType ReinterpretBits(const Bits& bits) {
-    FloatingPoint fp(0);
-    fp.m_u.m_bits = bits;
-    return fp.m_u.m_value;
-  }
+  static RawType ReinterpretBits(const Bits& bits);
 
   // Returns the floating-point number that represent positive infinity.
-  static RawType Infinity() {
-    return ReinterpretBits(s_exponent_bitmask);
-  }
+  static RawType Infinity();
 
   // Non-static methods
 
   // Returns the bits that represents this number.
-  const Bits& bits() const {
-    return m_u.m_bits;
-  }
+  const Bits& bits() const;
 
   // Returns the exponent bits of this number.
-  Bits exponentBits() const {
-    return s_exponent_bitmask & m_u.m_bits;
-  }
+  Bits exponentBits() const;
 
   // Returns the fraction bits of this number.
-  Bits fractionBits() const {
-    return s_fraction_bitmask & m_u.m_bits;
-  }
+  Bits fractionBits() const;
 
   // Returns the sign bit of this number.
-  Bits signBit() const {
-    return s_sign_bitmask & m_u.m_bits;
-  }
+  Bits signBit() const;
 
   // Returns true iff this is NAN (not a number).
-  bool isNan() const {
-    // It's a NAN if the exponent bits are all ones and the fraction
-    // bits are not entirely zeros.
-    return (exponentBits() == s_exponent_bitmask) && (fractionBits() != 0);
-  }
+  bool isNan() const;
 
   // Returns true iff this number is at most kMaxUlps ULP's away from
   // rhs.  In particular, this function:
@@ -266,14 +240,7 @@ public:
   //   - returns false if either number is (or both are) NAN.
   //   - treats really large numbers as almost equal to infinity.
   //   - thinks +0.0 and -0.0 are 0 DLP's apart.
-  bool AlmostEquals(const FloatingPoint& rhs) const {
-    // The IEEE standard says that any comparison operation involving
-    // a NAN must return false.
-    if (isNan() || rhs.isNan()) {
-      return false;
-    }
-    return distanceBetweenSignAndMagnitudeNumbers(m_u.m_bits, rhs.m_u.m_bits) <= m_max_ulps;
-  }
+  bool AlmostEquals(const FloatingPoint& rhs) const;
 
   // Converts an integer from the sign-and-magnitude representation to
   // the biased representation.  More precisely, let N be 2 to the
@@ -290,23 +257,11 @@ public:
   //
   // Read http://en.wikipedia.org/wiki/Signed_number_representations
   // for more details on signed number representations.
-  static Bits signAndMagnitudeToBiased(const Bits& sam) {
-    if (s_sign_bitmask & sam) {
-      // sam represents a negative number.
-      return ~sam + 1;
-    } else {
-      // sam represents a positive number.
-      return s_sign_bitmask | sam;
-    }
-  }
+  static Bits signAndMagnitudeToBiased(const Bits& sam);
 
   // Given two numbers in the sign-and-magnitude representation,
   // returns the distance between them as an unsigned number.
-  static Bits distanceBetweenSignAndMagnitudeNumbers(const Bits& sam1, const Bits& sam2) {
-    const Bits biased1 = signAndMagnitudeToBiased(sam1);
-    const Bits biased2 = signAndMagnitudeToBiased(sam2);
-    return (biased1 >= biased2) ? (biased1 - biased2) : (biased2 - biased1);
-  }
+  static Bits distanceBetweenSignAndMagnitudeNumbers(const Bits& sam1, const Bits& sam2);
 
 private:
   // The data type used to store the actual floating-point number.
@@ -321,149 +276,65 @@ private:
 // Usable AlmostEqual function
 
 template <typename FloatType>
-bool almostEqual2sComplement(ELEMENTS_UNUSED const FloatType& a, ELEMENTS_UNUSED const FloatType& b,
-                             ELEMENTS_UNUSED const std::size_t& max_ulps = 0) {
-  return false;
-}
+ELEMENTS_API bool almostEqual2sComplement(ELEMENTS_UNUSED const FloatType& a, ELEMENTS_UNUSED const FloatType& b,
+                                          ELEMENTS_UNUSED const std::size_t& max_ulps = 0);
 
 template <typename RawType>
-bool isNan(const RawType& x) {
-
-  using Bits = typename TypeWithSize<sizeof(RawType)>::UInt;
-  Bits x_bits;
-  std::memcpy(&x_bits, &x, sizeof(x_bits));
-
-  Bits x_exp_bits  = FloatingPoint<RawType>::s_exponent_bitmask & x_bits;
-  Bits x_frac_bits = FloatingPoint<RawType>::s_fraction_bitmask & x_bits;
-
-  return (x_exp_bits == FloatingPoint<RawType>::s_exponent_bitmask) && (x_frac_bits != 0);
-}
+ELEMENTS_API bool isNan(const RawType& x);
 
 template <typename RawType, std::size_t max_ulps = defaultMaxUlps<RawType>()>
-bool isEqual(const RawType& left, const RawType& right) {
-
-  bool is_equal{false};
-
-  if (not(isNan<RawType>(left) or isNan<RawType>(right))) {
-    using Bits = typename TypeWithSize<sizeof(RawType)>::UInt;
-    Bits l_bits;
-    Bits r_bits;
-    std::memcpy(&l_bits, &left, sizeof(l_bits));
-    std::memcpy(&r_bits, &right, sizeof(r_bits));
-    is_equal = (FloatingPoint<RawType>::distanceBetweenSignAndMagnitudeNumbers(l_bits, r_bits) <= max_ulps);
-  }
-
-  return is_equal;
-}
+ELEMENTS_API bool isEqual(const RawType& left, const RawType& right);
 
 template <std::size_t max_ulps>
-inline bool isEqual(const float& left, const float& right) {
-  return (isEqual<float, max_ulps>(left, right));
-}
+ELEMENTS_API bool isEqual(const float& left, const float& right);
 
 template <std::size_t max_ulps>
-inline bool isEqual(const double& left, const double& right) {
-  return (isEqual<double, max_ulps>(left, right));
-}
+ELEMENTS_API bool isEqual(const double& left, const double& right);
 
 template <typename RawType, std::size_t max_ulps = defaultMaxUlps<RawType>()>
-inline bool isNotEqual(const RawType& left, const RawType& right) {
-  return (not isEqual<RawType, max_ulps>(left, right));
-}
+ELEMENTS_API bool isNotEqual(const RawType& left, const RawType& right);
 
 template <std::size_t max_ulps>
-inline bool isNotEqual(const float& left, const float& right) {
-  return (isNotEqual<float, max_ulps>(left, right));
-}
+ELEMENTS_API bool isNotEqual(const float& left, const float& right);
 
 template <std::size_t max_ulps>
-inline bool isNotEqual(const double& left, const double& right) {
-  return (isNotEqual<double, max_ulps>(left, right));
-}
+ELEMENTS_API bool isNotEqual(const double& left, const double& right);
 
 template <typename RawType, std::size_t max_ulps = defaultMaxUlps<RawType>()>
-bool isLess(const RawType& left, const RawType& right) {
-  bool is_less{false};
-
-  if (left < right && (not isEqual<RawType, max_ulps>(left, right))) {
-    is_less = true;
-  }
-
-  return is_less;
-}
+ELEMENTS_API bool isLess(const RawType& left, const RawType& right);
 
 template <std::size_t max_ulps>
-inline bool isLess(const float& left, const float& right) {
-  return (isLess<float, max_ulps>(left, right));
-}
+ELEMENTS_API bool isLess(const float& left, const float& right);
 
 template <std::size_t max_ulps>
-inline bool isLess(const double& left, const double& right) {
-  return (isLess<double, max_ulps>(left, right));
-}
+ELEMENTS_API bool isLess(const double& left, const double& right);
 
 template <typename RawType, std::size_t max_ulps = defaultMaxUlps<RawType>()>
-bool isGreater(const RawType& left, const RawType& right) {
-  bool is_greater{false};
-
-  if (left > right && (not isEqual<RawType, max_ulps>(left, right))) {
-    is_greater = true;
-  }
-
-  return is_greater;
-}
+ELEMENTS_API bool isGreater(const RawType& left, const RawType& right);
 
 template <std::size_t max_ulps>
-inline bool isGreater(const float& left, const float& right) {
-  return (isGreater<float, max_ulps>(left, right));
-}
+ELEMENTS_API bool isGreater(const float& left, const float& right);
 
 template <std::size_t max_ulps>
-inline bool isGreater(const double& left, const double& right) {
-  return (isGreater<double, max_ulps>(left, right));
-}
+ELEMENTS_API bool isGreater(const double& left, const double& right);
 
 template <typename RawType, std::size_t max_ulps = defaultMaxUlps<RawType>()>
-bool isLessOrEqual(const RawType& left, const RawType& right) {
-  bool is_loe{false};
-
-  if (not isGreater<RawType, max_ulps>(left, right)) {
-    is_loe = true;
-  }
-
-  return is_loe;
-}
+ELEMENTS_API bool isLessOrEqual(const RawType& left, const RawType& right);
 
 template <std::size_t max_ulps>
-inline bool isLessOrEqual(const float& left, const float& right) {
-  return (isLessOrEqual<float, max_ulps>(left, right));
-}
+ELEMENTS_API bool isLessOrEqual(const float& left, const float& right);
 
 template <std::size_t max_ulps>
-inline bool isLessOrEqual(const double& left, const double& right) {
-  return (isLessOrEqual<double, max_ulps>(left, right));
-}
+ELEMENTS_API bool isLessOrEqual(const double& left, const double& right);
 
 template <typename RawType, std::size_t max_ulps = defaultMaxUlps<RawType>()>
-bool isGreaterOrEqual(const RawType& left, const RawType& right) {
-  bool is_goe{false};
-
-  if (not isLess<RawType, max_ulps>(left, right)) {
-    is_goe = true;
-  }
-
-  return is_goe;
-}
+ELEMENTS_API bool isGreaterOrEqual(const RawType& left, const RawType& right);
 
 template <std::size_t max_ulps>
-inline bool isGreaterOrEqual(const float& left, const float& right) {
-  return (isGreaterOrEqual<float, max_ulps>(left, right));
-}
+ELEMENTS_API bool isGreaterOrEqual(const float& left, const float& right);
 
 template <std::size_t max_ulps>
-inline bool isGreaterOrEqual(const double& left, const double& right) {
-  return (isGreaterOrEqual<double, max_ulps>(left, right));
-}
+ELEMENTS_API bool isGreaterOrEqual(const double& left, const double& right);
 
 /**
  * @brief
@@ -516,14 +387,13 @@ ELEMENTS_API bool almostEqual2sComplement(const double& left, const double& righ
  *   true if the 2 numbers are bitwise equal
  */
 template <typename RawType>
-ELEMENTS_API bool      realBitWiseEqual(const RawType& left, const RawType& right) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wfloat-equal"
-  return (left == right);
-#pragma GCC diagnostic pop
-}
+ELEMENTS_API bool realBitWiseEqual(const RawType& left, const RawType& right);
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_REAL_IMPL_
+#include "ElementsKernel/_impl/Real.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_REAL_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_REAL_H_
 

@@ -28,7 +28,6 @@
 
 #include <sstream>  // for stringstream
 #include <string>   // for string
-#include <utility>  // for forward
 
 #include <log4cpp/Category.hh>  // for category
 #include <log4cpp/Priority.hh>  // for Priority
@@ -141,9 +140,7 @@ public:
    * Logs a debug message.
    * @param logMessage The message to log
    */
-  void debug(const std::string& logMessage) {
-    m_log4cppLogger.debug(logMessage);
-  }
+  void debug(const std::string& logMessage);
 
   /**
    * Logs a debug message using format specifiers.
@@ -151,26 +148,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void debug(const char* stringFormat, Args&&... args) {
-    m_log4cppLogger.debug(stringFormat, std::forward<Args>(args)...);
-  }
+  void debug(const char* stringFormat, Args&&... args);
 
   /**
    * Returns an object which can be used for logging a debug message using the
    * "<<" operator.
    * @return An object used for logging a debug message using the "<<" opearator
    */
-  LogMessageStream debug() {
-    return LogMessageStream{m_log4cppLogger, &log4cpp::Category::debug};
-  }
+  LogMessageStream debug();
 
   /**
    * Logs an info message.
    * @param logMessage The message to log
    */
-  void info(const std::string& logMessage) {
-    m_log4cppLogger.info(logMessage);
-  }
+  void info(const std::string& logMessage);
 
   /**
    * Logs an info message using format specifiers.
@@ -178,26 +169,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void info(const char* stringFormat, Args&&... args) {
-    m_log4cppLogger.info(stringFormat, std::forward<Args>(args)...);
-  }
+  void info(const char* stringFormat, Args&&... args);
 
   /**
    * Returns an object which can be used for logging a info message using the
    * "<<" operator.
    * @return An object used for logging a info message using the "<<" opearator
    */
-  LogMessageStream info() {
-    return LogMessageStream{m_log4cppLogger, &log4cpp::Category::info};
-  }
+  LogMessageStream info();
 
   /**
    * Logs a warning message.
    * @param logMessage The message to log
    */
-  void warn(const std::string& logMessage) {
-    m_log4cppLogger.warn(logMessage);
-  }
+  void warn(const std::string& logMessage);
 
   /**
    * Logs a warning message using format specifiers.
@@ -205,26 +190,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void warn(const char* stringFormat, Args&&... args) {
-    m_log4cppLogger.warn(stringFormat, std::forward<Args>(args)...);
-  }
+  void warn(const char* stringFormat, Args&&... args);
 
   /**
    * Returns an object which can be used for logging a warn message using the
    * "<<" operator.
    * @return An object used for logging a warn message using the "<<" opearator
    */
-  LogMessageStream warn() {
-    return LogMessageStream{m_log4cppLogger, &log4cpp::Category::warn};
-  }
+  LogMessageStream warn();
 
   /**
    * Logs an error message.
    * @param logMessage The message to log
    */
-  void error(const std::string& logMessage) {
-    m_log4cppLogger.error(logMessage);
-  }
+  void error(const std::string& logMessage);
 
   /**
    * Logs an error message using format specifiers.
@@ -232,26 +211,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void error(const char* stringFormat, Args&&... args) {
-    m_log4cppLogger.error(stringFormat, std::forward<Args>(args)...);
-  }
+  void error(const char* stringFormat, Args&&... args);
 
   /**
    * Returns an object which can be used for logging a error message using the
    * "<<" operator.
    * @return An object used for logging a error message using the "<<" opearator
    */
-  LogMessageStream error() {
-    return LogMessageStream{m_log4cppLogger, &log4cpp::Category::error};
-  }
+  LogMessageStream error();
 
   /**
    * Logs a fatal message.
    * @param logMessage The message to log
    */
-  void fatal(const std::string& logMessage) {
-    m_log4cppLogger.fatal(logMessage);
-  }
+  void fatal(const std::string& logMessage);
 
   /**
    * Logs a fatal message using format specifiers.
@@ -259,27 +232,21 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void fatal(const char* stringFormat, Args&&... args) {
-    m_log4cppLogger.fatal(stringFormat, std::forward<Args>(args)...);
-  }
+  void fatal(const char* stringFormat, Args&&... args);
 
   /**
    * Returns an object which can be used for logging a fatal message using the
    * "<<" operator.
    * @return An object used for logging a fatal message using the "<<" opearator
    */
-  LogMessageStream fatal() {
-    return LogMessageStream{m_log4cppLogger, &log4cpp::Category::fatal};
-  }
+  LogMessageStream fatal();
 
   /**
    * Logs a message.
    * @param level The logging level of the message
    * @param logMessage The message to log
    */
-  void log(log4cpp::Priority::Value level, const std::string& logMessage) {
-    m_log4cppLogger.log(level, logMessage);
-  }
+  void log(log4cpp::Priority::Value level, const std::string& logMessage);
 
   /**
    * Logs an log message using a level and format specifiers.
@@ -288,9 +255,7 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void log(log4cpp::Priority::Value level, const char* stringFormat, Args&&... args) {
-    m_log4cppLogger.log(level, stringFormat, std::forward<Args>(args)...);
-  }
+  void log(log4cpp::Priority::Value level, const char* stringFormat, Args&&... args);
 
 private:
   explicit Logging(log4cpp::Category& log4cppLogger);
@@ -318,11 +283,9 @@ private:
     LogMessageStream(LogMessageStream&& other) noexcept;
     LogMessageStream(const LogMessageStream& other);
     ~LogMessageStream();
+
     template <typename T>
-    LogMessageStream& operator<<(const T& m) {
-      m_message << m;
-      return *this;
-    }
+    LogMessageStream& operator<<(const T& m);
 
   private:
     log4cpp::Category& m_logger;
@@ -332,6 +295,10 @@ private:
 };
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_IMPL_
+#include "ElementsKernel/_impl/Logging.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_H_
 

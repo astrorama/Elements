@@ -921,9 +921,19 @@ endif()
 
 find_package(IWYU)
 
+set(IWYU_BASE_OPTIONS "--check_also=*.tpp --check_also=*.icpp")
+
 if(USE_IWYU)
   if(IWYU_FOUND)
     set(IWYU_COMMAND "${IWYU_EXECUTABLE}")
+
+    if(IWYU_BASE_OPTIONS)
+      string(REPLACE " " ";" iwyu_base_list ${IWYU_BASE_OPTIONS})
+      foreach(iwyu_o ${iwyu_base_list})
+        set(IWYU_COMMAND "${IWYU_COMMAND};-Xiwyu;${iwyu_o}")
+      endforeach()
+    endif()
+
 
     if(IWYU_OPTIONS)
       string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
@@ -955,8 +965,20 @@ if(CMAKE_EXPORT_COMPILE_COMMANDS AND IWYU_FOUND)
 
   set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -p ${CMAKE_BINARY_DIR})
 
-  if(IWYU_OPTIONS)
+
+  if(IWYU_OPTIONS OR IWYU_BASE_OPTIONS)
     set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -- )
+  endif()
+
+  if(IWYU_BASE_OPTIONS)
+    string(REPLACE " " ";" iwyu_base_list ${IWYU_BASE_OPTIONS})
+    foreach(iwyu_o ${iwyu_base_list})
+      set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -Xiwyu ${iwyu_o})
+    endforeach()
+  endif()
+
+
+  if(IWYU_OPTIONS)
     string(REPLACE " " ";" iwyu_list ${IWYU_OPTIONS})
     foreach(iwyu_o ${iwyu_list})
       set(IWYU_TOOL_COMMAND ${IWYU_TOOL_COMMAND} -Xiwyu ${iwyu_o})
