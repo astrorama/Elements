@@ -25,6 +25,7 @@
 #include <cstdint>    // for int64_t
 #include <cstdlib>    // for exit, _Exit, abort
 #include <exception>  // for exception, current_exception, rethrow_exception, exception_ptr
+#include <fstream>    // IWYU pragma: keep
 #include <iostream>   // for basic_ostream, operator<<, endl, basic_ostream::operator<<, cerr, cout, ifstream
 #include <map>        // for operator!=, map, _Rb_tree_const_iterator
 #include <sstream>    // for stringstream

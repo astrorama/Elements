@@ -29,6 +29,7 @@
 #include <array>    // for array
 #include <cstdint>  // for int64_t
 #include <cstdlib>  // for realpath, size_t
+#include <fstream>  // IWYU pragma: keep
 #include <sstream>  // for basic_istream, basic_ostream, basic_ostream::operator<<, operator<<, basic_ios, ifstream, istringstream, stringstream
 #include <string>   // for char_traits, basic_string, string, operator>>, getline, operator==
 #include <vector>   // for vector
