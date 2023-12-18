@@ -25,6 +25,7 @@
 #include <string>    // for operator==, char_traits, allocator, string, basic_string
 
 #include <boost/filesystem.hpp>  // for exists, operator/, path, operator<<, temp_directory_path, unique_path, create_directory, operator==, remove_all, ofstream
+#include <boost/filesystem/fstream.hpp>  // for fstream
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Environment.h"  // for Environment
