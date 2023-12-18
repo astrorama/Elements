@@ -19,7 +19,7 @@
  *
  */
 
-#include "ElementsExamples/crashingFunction.h"  // Access the objects you want to test
+#include "ElementsExamples/CrashingFunction.h"  // Access the objects you want to test
 
 #include <boost/test/unit_test.hpp>
 #include <iostream>
