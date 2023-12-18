@@ -114,9 +114,6 @@ unsigned long loadDynamicLib(const string& name, ImageHandle* handle) {
 /// unload dynamic link library
 unsigned long unloadDynamicLib(ImageHandle handle) {
   ::dlclose(handle);
-  if (0) {
-    return getLastError();
-  }
   return 1;
 }
 
@@ -163,7 +160,7 @@ const string getLastErrorString() {
 
 /// Retrieve error code as string for a given error
 const string getErrorString(unsigned long error) {
-  string errString = "";
+  string errString;
   char*  cerrString(0);
   // Remember: for linux dl* routines must be handled differently!
   if (error == 0xAFFEDEAD) {

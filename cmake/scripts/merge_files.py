@@ -126,7 +126,7 @@ if __name__ == "__main__":
         action="store",
         default=None,
         help="Create the stamp file in the specified directory. If not specified"
-        +" the directory of the source file is used."
+        + " the directory of the source file is used."
     )
     parser.add_option(
         "--no-stamp",
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     else:
         stampFileName = lambda x: os.path.join(options.stamp_dir,
                                                os.path.basename(x)
-                                               +".stamp")
+                                               + ".stamp")
     # Configure Python logging
     import logging
     logging.basicConfig(level=logging.INFO)

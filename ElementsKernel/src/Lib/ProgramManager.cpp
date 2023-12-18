@@ -500,7 +500,7 @@ void ProgramManager::onTerminate() noexcept {
 
     log.fatal() << "Crash detected";
     log.fatal() << "This is the back trace:";
-    for (auto level : System::backTrace(21, 4)) {
+    for (const auto& level : System::backTrace(21, 4)) {
       log.fatal() << level;
     }
 

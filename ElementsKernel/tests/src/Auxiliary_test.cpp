@@ -69,7 +69,7 @@ struct Auxiliary_Fixture {
     m_item_list.emplace_back(m_top_dir.path() / "test2");
     m_item_list.emplace_back(m_top_dir.path() / "test3");
 
-    for_each(m_item_list.cbegin(), m_item_list.cend(), [](Path::Item p) {
+    for_each(m_item_list.cbegin(), m_item_list.cend(), [](const Path::Item& p) {
       boost::filesystem::create_directory(p);
     });
 
@@ -94,7 +94,7 @@ struct Auxiliary_Fixture {
     m_target_real_item_list.erase(it2, m_target_real_item_list.end());
   }
 
-  ~Auxiliary_Fixture() {}
+  ~Auxiliary_Fixture() = default;
 };
 
 BOOST_AUTO_TEST_SUITE(Auxiliary_test)
@@ -170,6 +170,8 @@ BOOST_FIXTURE_TEST_CASE(NamespaceAlias_test, Auxiliary_Fixture) {
   BOOST_CHECK_EQUAL(Auxiliary::getVariableName(), "ELEMENTS_AUX_PATH");
 
   Path::Item make_template = Auxiliary::getPath("ElementsKernel/templates/Makefile.in");
+
+  BOOST_CHECK_THROW(Auxiliary::getPath("NonExistingFile.txt"), Exception);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

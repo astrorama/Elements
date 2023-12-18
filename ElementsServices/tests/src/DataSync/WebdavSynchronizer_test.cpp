@@ -41,7 +41,7 @@ DataSync::WebdavSynchronizer createTestSynchronizer() {
   auto                              distant_root = connection.distantRoot;
   auto                              local_root   = connection.localRoot;
   DataSync::DependencyConfiguration dependencies(distant_root, local_root, theDependencyConfig());
-  return DataSync::WebdavSynchronizer(connection, dependencies);
+  return {connection, dependencies};
 }
 
 BOOST_AUTO_TEST_CASE(webdavGetCmd_test) {

@@ -59,7 +59,7 @@ map<StorageType, int64_t> StorageFactor{{StorageType::Byte, 1},
                                         {StorageType::MetricTeraByte, pow(10, 12)},
                                         {StorageType::MetricPetaByte, pow(10, 15)}};
 
-// explicit instantiation: without the template<>. Otherwise this is a template specialization
+// explicit instantiation: without the template<>. Otherwise, this is a template specialization
 template double roundToDigits<double>(const double& value, const size_t& max_digits);
 template float  roundToDigits<float>(const float& value, const size_t& max_digits);
 

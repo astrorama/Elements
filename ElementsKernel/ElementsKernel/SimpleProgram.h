@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
-#define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
+#ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 
 #include "ElementsKernel/Export.h"
 #include "ElementsKernel/Main.h"
@@ -83,6 +83,6 @@ private:
     return static_cast<Elements::ExitCodeType>(exit_code);                                                             \
   }
 
-#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
+#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 
 /**@}*/

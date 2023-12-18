@@ -42,8 +42,7 @@
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 #include "ElementsKernel/Unused.h"  // ELEMENTS_UNUSED
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 // --------------------------------------------------------------------------------------
 // various constants
@@ -163,8 +162,7 @@ ELEMENTS_API const std::vector<std::string> backTrace(const int depth, const int
 ELEMENTS_API bool getStackLevel(ELEMENTS_UNUSED void* addresses, ELEMENTS_UNUSED void*& addr,
                                 ELEMENTS_UNUSED std::string& fnc, ELEMENTS_UNUSED std::string& lib);
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 

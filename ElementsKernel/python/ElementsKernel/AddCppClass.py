@@ -124,7 +124,7 @@ def substituteAuxFiles(module_dir, class_name, module_name, subdir, opt_visibili
     template_class_cpp = ""
 
     defwords = ("_" + module_name + "_" + class_name).upper()
-    tdefwords = "_" + (module_name).upper() + defwords + "_IMPL"
+    tdefwords = "_" + module_name.upper() + defwords + "_IMPL"
 
     # Template option set
     if opt_template:

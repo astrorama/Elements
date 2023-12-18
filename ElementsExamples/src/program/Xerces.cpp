@@ -32,8 +32,7 @@ namespace Xerces = XERCES_CPP_NAMESPACE;  // needed to avoid an unneeded ugly ns
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 class Xerces : public Program {
 
@@ -54,8 +53,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

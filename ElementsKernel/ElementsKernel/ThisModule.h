@@ -29,8 +29,7 @@
 #include "ElementsKernel/FuncPtrCast.h"
 #include "ElementsKernel/ModuleInfo.h"
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 /**
  * @brief function to retrieve the current module
  * @ingroup ElementsKernel
@@ -54,8 +53,7 @@ static inline const ModuleInfo& getThisModuleInfo() {
 
 ELEMENTS_API const ModuleInfo& getThisExecutableInfo();
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 
