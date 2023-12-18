@@ -40,9 +40,7 @@ def generate(xsd_file, cpp_file, h_file, d_file,
     target_ns_cpp = namespaceXml2cpp(target_ns, namespace_prefix)
 
     # append cpp namespace map for each xmlns
-    nsmaps = []
-    nsmaps.append('--namespace-map')
-    nsmaps.append('%s=%s' % (target_ns, target_ns_cpp))
+    nsmaps = ['--namespace-map', '%s=%s' % (target_ns, target_ns_cpp)]
     for prefix, ns in root.nsmap.items():
         if ns.startswith(namespace_prefix):
             cpp_ns = namespaceXml2cpp(ns, namespace_prefix)
@@ -55,19 +53,9 @@ def generate(xsd_file, cpp_file, h_file, d_file,
     file_dir = os.path.dirname(xsd_file.replace(dm_dir + '/', ''))
 
     # Build xsd command
-    xsdcxx_command = []
-    xsdcxx_command.append(xsd_exe)
-    xsdcxx_command.append('cxx-tree')
-    xsdcxx_command.append('--std')
-    xsdcxx_command.append('c++11')
-    xsdcxx_command.append('--hxx-suffix')
-    xsdcxx_command.append('.h')
-    xsdcxx_command.append('--cxx-suffix')
-    xsdcxx_command.append('.cpp')
-    xsdcxx_command.append('--include-prefix')
-    xsdcxx_command.append(os.path.join(incl_pref, file_dir, ''))
-    xsdcxx_command.append('--generate-serialization')
-    xsdcxx_command.append('--generate-dep')
+    xsdcxx_command = [xsd_exe, 'cxx-tree', '--std', 'c++11', '--hxx-suffix', '.h', '--cxx-suffix', '.cpp',
+                      '--include-prefix', os.path.join(incl_pref, file_dir, ''), '--generate-serialization',
+                      '--generate-dep']
     xsdcxx_command.extend(nsmaps)
     xsdcxx_command.append('--output-dir')
     xsdcxx_command.append(out_dir)

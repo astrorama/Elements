@@ -42,7 +42,7 @@ namespace Elements {
  *    Function returning a version string extracted from SVN keywords
  * @details
  *    ElementsExample/src/program/Program.cpp shows how to use this method to implement
- *    a getVersion in a prgram
+ *    a getVersion in a program
  * @ingroup ElementsKernel
  * @param svnUrl
  *    This is a string that can be filled with the HeadURL svn keywords. Writing
@@ -77,8 +77,7 @@ ELEMENTS_API std::string getVersionFromSvnKeywords(const std::string& svnUrl, co
  * @return
  *    The formatted string with the version numbers
  */
-ELEMENTS_API std::string getVersionString(const unsigned short major, const unsigned short minor,
-                                          const unsigned short patch = 0);
+ELEMENTS_API std::string getVersionString(unsigned short major, unsigned short minor, unsigned short patch = 0);
 
 }  // namespace Elements
 

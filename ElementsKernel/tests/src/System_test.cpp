@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(HostName_test) {
 BOOST_AUTO_TEST_CASE(osName_test) {
 
   string         osname = "UNKNOWN";
-  struct utsname ut;
+  struct utsname ut {};
   if (::uname(&ut) == 0) {
     osname = ut.sysname;
   }
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(osName_test) {
 BOOST_AUTO_TEST_CASE(osVersion_test) {
 
   string         osver = "UNKNOWN";
-  struct utsname ut;
+  struct utsname ut {};
   if (uname(&ut) == 0) {
     osver = ut.release;
   }

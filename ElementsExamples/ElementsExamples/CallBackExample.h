@@ -1,8 +1,8 @@
 /**
- * @file crashingFunction.cpp
+ * @file callBackExample.h
  *
- * @date Nov 15, 2016
- * @author hubert
+ * @date Apr 1, 2020
+ * @author Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -19,22 +19,25 @@
  *
  */
 
-#include "ElementsExamples/crashingFunction.h"
+/**
+ * @addtogroup ElementsExamples ElementsExamples
+ * @{
+ */
 
-#include <memory>     // for allocator
-#include <stdexcept>  // for logic_error
+#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CALLBACKEXAMPLE_H_
+#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CALLBACKEXAMPLE_H_
 
-#include "ElementsKernel/Logging.h"  // for Logging
+#include <functional>
+#include <vector>
 
-namespace Elements {
-namespace Examples {
+#include "ElementsKernel/Export.h"
 
-void crashingFunction() {
-  auto log = Logging::getLogger("ElementsExamples");
-  log.info() << "Entering Crashing Function";
+namespace Elements::Examples {
 
-  throw std::logic_error("arrg!");
-}
+ELEMENTS_API double testCallBack(std::vector<double> x, const std::function<double(std::vector<double>)>& fun);
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
+
+#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CALLBACKEXAMPLE_H_
+
+/**@}*/

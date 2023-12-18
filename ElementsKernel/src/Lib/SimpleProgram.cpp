@@ -34,7 +34,7 @@ SimpleProgram::~SimpleProgram() {}
 
 ExitCode SimpleProgram::run(int argc, char* argv[]) noexcept {
 
-  ExitCode exit_code{ExitCode::OK};
+  ExitCode exit_code;
 
   setup(argc, argv);
 

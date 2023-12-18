@@ -16,12 +16,12 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-'''
+"""
 :data: Apr 29, 2016
 
 :author: Hubert Degaudenzi
 
-'''
+"""
 
 import os
 import unittest

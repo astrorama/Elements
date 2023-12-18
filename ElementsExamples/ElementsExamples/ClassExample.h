@@ -35,8 +35,7 @@
 
 #include "ElementsKernel/Export.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class ClassExample
@@ -200,8 +199,7 @@ private:
   double m_ra{0.0};
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CLASSEXAMPLE_H_
 

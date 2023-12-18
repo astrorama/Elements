@@ -1,8 +1,8 @@
-/**
- * @file callBackExample.cpp
+/*
+ * Rectangle_test.cpp
  *
- * @date Apr 1, 2020
- * @author Hubert Degaudenzi
+ *  Created on: Dec 17, 2019
+ *      Author: Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -19,32 +19,21 @@
  *
  */
 
-#include <functional>  // for function
-#include <vector>      // for vector
+#include "ElementsExamples/crashingFunction.h"  // Access the objects you want to test
 
-#include "ElementsKernel/Logging.h"  // for Logging
+#include <boost/test/unit_test.hpp>
+#include <iostream>
+#include <stdexcept>  // for the logic_error
 
-#include "ElementsExamples/callBackExample.h"
+using Elements::Examples::crashingFunction;
 
-using std::vector;
+// Starts a test suite and name it.
+BOOST_AUTO_TEST_SUITE(crashingFunction_test_suite)
 
-namespace Elements {
-namespace Examples {
+BOOST_AUTO_TEST_CASE(Call_test) {
 
-double testCallBack(vector<double> x, const std::function<double(vector<double>)>& fun) {
-
-  auto log = Logging::getLogger("ElementsExamples");
-
-  log.info() << "Calling the Python function from C++";
-
-  double f = fun(x);
-
-  log.info() << "The value of the function is " << f;
-
-  log.info() << "Returning the result";
-
-  return (f);
+  BOOST_CHECK_THROW(crashingFunction(), std::logic_error);
 }
 
-}  // namespace Examples
-}  // namespace Elements
+// Ends the test suite
+BOOST_AUTO_TEST_SUITE_END()

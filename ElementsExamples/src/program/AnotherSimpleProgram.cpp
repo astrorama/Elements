@@ -27,8 +27,7 @@
 #include "ElementsKernel/Exit.h"           // for ExitCode
 #include "ElementsKernel/SimpleProgram.h"  // for MAIN, SimpleProgram
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class AnotherSimpleProgram
@@ -65,7 +64,6 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 MAIN(Elements::Examples::AnotherSimpleProgram)

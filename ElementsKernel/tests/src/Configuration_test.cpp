@@ -148,6 +148,7 @@ BOOST_FIXTURE_TEST_CASE(NamespaceAlias_test, Configuration_Fixture) {
   }
 
   BOOST_CHECK_EQUAL(Configuration::getVariableName(), "ELEMENTS_CONF_PATH");
+  BOOST_CHECK_THROW(Configuration::getPath("NonExistingFile.conf"), Exception);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

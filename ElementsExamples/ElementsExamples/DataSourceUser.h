@@ -31,8 +31,7 @@
 
 #include "ElementsKernel/Export.h"  // For ELEMENTS_API
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class DataSourceInterface
@@ -90,8 +89,7 @@ public:
   double sumRecords(const DataSourceInterface& data_source);
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_DATASOURCEUSER_H_
 
