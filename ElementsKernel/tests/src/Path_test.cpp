@@ -21,13 +21,14 @@
 
 #include "ElementsKernel/Path.h"
 
-#include <boost/filesystem.hpp>  // for operator/, path, operator==, exists, operator!=, create_directory, is_regular_file, is_regular, ofstream
-#include <boost/test/unit_test.hpp>
-
 #include <algorithm>  // for for_each, transform
 #include <ostream>    // for basic_ostream, operator<<, endl
 #include <string>     // for allocator, basic_string, operator==, string, char_traits
 #include <vector>     // for vector, operator==
+
+#include <boost/filesystem.hpp>  // for operator/, path, operator==, exists, operator!=, create_directory, is_regular_file, is_regular, ofstream
+#include <boost/filesystem/fstream.hpp>  // for fstream
+#include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Temporary.h"  // for TempDir, TempEnv
 

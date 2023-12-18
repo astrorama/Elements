@@ -22,6 +22,7 @@
 
 #include <cstdlib>   // for rand, srand
 #include <ctime>     // for time
+#include <fstream>   // IWYU pragma: keep
 #include <iomanip>   // for operator<<, setprecision, _Setprecision
 #include <iostream>  // for cerr, cout
 #include <sstream>  // for basic_istream, basic_ostream, operator<<, basic_ostream::operator<<, stringstream, basic_ios::rdbuf, ifstream, endl, ostream, basic_ios::clear, streambuf
