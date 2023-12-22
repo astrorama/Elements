@@ -23,7 +23,7 @@
 #include <string>     // for basic_string, allocator, string, operator==, operator+
 #include <vector>     // for vector
 
-#include <boost/filesystem.hpp>       // for operator/, path
+#include <boost/filesystem/path.hpp>  // for operator/, path
 #include <boost/program_options.hpp>  // for value, typed_value, variables_map, options_description_easy_init, variable_value, notify, parse_config_file, store, options_description, program_options
 
 #include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration, OverwritingPolicy, DataHost, UnknownHost

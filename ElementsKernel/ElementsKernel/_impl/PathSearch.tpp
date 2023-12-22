@@ -28,9 +28,16 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include <boost/filesystem.hpp>  // for is_directory
+#include <boost/filesystem/operations.hpp>  // for is_directory
 
 #include "ElementsKernel/Path.h"  // for Item
+
+namespace boost::filesystem {
+class directory_iterator;
+}
+namespace boost::filesystem {
+class recursive_directory_iterator;
+}
 
 namespace Elements {
 inline namespace Kernel {

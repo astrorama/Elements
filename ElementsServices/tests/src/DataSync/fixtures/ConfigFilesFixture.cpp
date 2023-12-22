@@ -10,9 +10,9 @@
 
 #include "ConfigFilesFixture.h"
 
-#include <boost/filesystem.hpp>  // for operator/, path
-
 #include <vector>  // for vector
+
+#include <boost/filesystem/path.hpp>  // for operator/, path
 
 #include "ElementsKernel/Temporary.h"                 // for TempDir
 #include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, localWorkspacePrefix, DEFAULT_WORKDIR_VAR

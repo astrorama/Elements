@@ -53,7 +53,7 @@ def main():
 #define BOOST_TEST_MODULE %(pack)s Test Suite
 #include <boost/test/unit_test.hpp>
 #pragma GCC visibility pop
-""" % { 'pack': package }
+""" % {'pack': package}
 
     # Get the current content of the destination file (if any)
     try:

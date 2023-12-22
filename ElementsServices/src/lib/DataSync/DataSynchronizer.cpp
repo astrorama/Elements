@@ -22,7 +22,7 @@
 #include <string>   // for string
 #include <utility>  // for pair
 
-#include <boost/filesystem.hpp>  // for is_regular_file, file_size
+#include <boost/filesystem/operations.hpp>  // for is_regular_file, file_size
 
 #include "ElementsKernel/Unused.h"  // for ELEMENTS_UNUSED
 

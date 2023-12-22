@@ -19,7 +19,7 @@
 #include <exception>  // for exception
 #include <vector>     // for vector
 
-#include <boost/filesystem.hpp>  // for is_regular_file, remove
+#include <boost/filesystem/operations.hpp>  // for is_regular_file, remove
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsServices/DataSync.h"                     // for DataSync

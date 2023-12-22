@@ -29,13 +29,11 @@
 
 #include "ElementsKernel/Export.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 ELEMENTS_API int functionExample(const int j);
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE_H_
 

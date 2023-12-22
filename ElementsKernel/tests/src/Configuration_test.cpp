@@ -21,7 +21,8 @@
 
 #include "ElementsKernel/Configuration.h"  // header to test
 
-#include <boost/filesystem.hpp>  // for operator/, path, exists, create_directory, is_regular
+#include <boost/filesystem/operations.hpp>  // for exists, create_directory, is_regular
+#include <boost/filesystem/path.hpp>        // for operator/, path
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>  // for copy_if, for_each
@@ -148,6 +149,7 @@ BOOST_FIXTURE_TEST_CASE(NamespaceAlias_test, Configuration_Fixture) {
   }
 
   BOOST_CHECK_EQUAL(Configuration::getVariableName(), "ELEMENTS_CONF_PATH");
+  BOOST_CHECK_THROW(Configuration::getPath("NonExistingFile.conf"), Exception);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

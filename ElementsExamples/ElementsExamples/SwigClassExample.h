@@ -26,8 +26,7 @@
 
 #include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 class ELEMENTS_API SwigClassExample {
 
@@ -45,8 +44,7 @@ private:
   double m_dec;
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_SWIGCLASSEXAMPLE_H_
 

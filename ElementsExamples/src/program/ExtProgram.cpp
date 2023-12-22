@@ -161,7 +161,7 @@ public:
     log.info() << "Some result: " << method_result;
 
     double first = 1.0;
-    double division_result{};
+    double division_result;
     try {
       log.info("#");
       log.info("#   Calling a method throwing an exception ");

@@ -27,7 +27,7 @@
 #include "ElementsKernel/Program.h"  // for Program
 #include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 
-#include "ElementsExamples/crashingFunction.h"  // for crashingFunction
+#include "ElementsExamples/CrashingFunction.h"  // for crashingFunction
 
 using std::map;
 using std::string;

@@ -69,7 +69,7 @@ string getVersionString(const unsigned short major, const unsigned short minor, 
 
   using std::to_string;
 
-  string version{""};
+  string version{};
 
   version += to_string(major);
   version += ".";

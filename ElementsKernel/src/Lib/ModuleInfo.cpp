@@ -29,11 +29,13 @@
 #include <array>    // for array
 #include <cstdint>  // for int64_t
 #include <cstdlib>  // for realpath, size_t
+#include <fstream>  // IWYU pragma: keep
 #include <sstream>  // for basic_istream, basic_ostream, basic_ostream::operator<<, operator<<, basic_ios, ifstream, istringstream, stringstream
 #include <string>   // for char_traits, basic_string, string, operator>>, getline, operator==
 #include <vector>   // for vector
 
-#include <boost/filesystem.hpp>  // for operator/, exists, path, canonical
+#include <boost/filesystem/operations.hpp>  // for exists, canonical
+#include <boost/filesystem/path.hpp>        // for operator/, path
 
 #include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
 #include "ElementsKernel/Path.h"         // for Item

@@ -23,7 +23,9 @@
 
 #include <string>  // for string
 
-#include <boost/filesystem.hpp>  // for operator<<, create_directory, remove_all, temp_directory_path, unique_path, ofstream
+#include <boost/filesystem/fstream.hpp>     // for fstream
+#include <boost/filesystem/operations.hpp>  // for create_directory, remove_all, temp_directory_path, unique_path
+#include <boost/filesystem/path.hpp>        // for operator<<
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging

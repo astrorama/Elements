@@ -22,6 +22,7 @@
 
 #include <cstdlib>   // for rand, srand
 #include <ctime>     // for time
+#include <fstream>   // IWYU pragma: keep
 #include <iomanip>   // for operator<<, setprecision, _Setprecision
 #include <iostream>  // for cerr, cout
 #include <sstream>  // for basic_istream, basic_ostream, operator<<, basic_ostream::operator<<, stringstream, basic_ios::rdbuf, ifstream, endl, ostream, basic_ios::clear, streambuf
@@ -30,8 +31,8 @@
 #include <variant>  // for tuple
 #include <vector>   // for vector
 
-#include <boost/algorithm/string.hpp>  // for ends_with, trim, trim_left
-#include <boost/filesystem.hpp>        // for exists
+#include <boost/algorithm/string.hpp>       // for ends_with, trim, trim_left
+#include <boost/filesystem/operations.hpp>  // for exists
 #include <boost/test/unit_test.hpp>
 #include <boost/version.hpp>  // for BOOST_VERSION
 

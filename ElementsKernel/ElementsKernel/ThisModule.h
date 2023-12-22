@@ -28,8 +28,7 @@
 
 #include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 class ModuleInfo;
 
@@ -49,8 +48,7 @@ static const ModuleInfo& getThisModuleInfo();
 
 ELEMENTS_API const ModuleInfo& getThisExecutableInfo();
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_
 #include "ElementsKernel/_impl/ThisModule.tpp"  // IWYU pragma: export

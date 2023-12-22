@@ -24,7 +24,7 @@
 #include <pybind11/stl.h>
 #include <pyerrors.h>
 
-#include "ElementsExamples/callBackExample.h"
+#include "ElementsExamples/CallBackExample.h"
 #include "ElementsKernel/Export.h"
 
 ELEMENTS_API PYBIND11_MODULE(testCallBack, mod) {

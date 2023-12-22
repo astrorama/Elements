@@ -21,8 +21,9 @@
 #include <stdio.h>
 
 #include "ElementsExamples/Util.h"
+#include "ElementsKernel/Unused.h"
 
-int main(int argc, char* argv[]) {
+int main(ELEMENTS_UNUSED int argc, ELEMENTS_UNUSED char* argv[]) {
 
   printf("This is a constant: %d\n", MY_CONST);
   printf("This is the function result: %d\n", myFunc());

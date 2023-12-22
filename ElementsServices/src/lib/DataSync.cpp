@@ -21,7 +21,7 @@
 #include <exception>  // for exception
 #include <memory>     // for __shared_ptr_access, shared_ptr
 
-#include <boost/filesystem.hpp>  // for operator/, path
+#include <boost/filesystem/path.hpp>  // for operator/, path
 
 #include "ElementsServices/DataSync/DataSynchronizer.h"       // for DataSynchronizer
 #include "ElementsServices/DataSync/DataSynchronizerMaker.h"  // for createSynchronizer
