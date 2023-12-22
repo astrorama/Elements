@@ -22,7 +22,7 @@
 #include <string>     // for allocator, operator+, char_traits, string
 #include <vector>     // for vector
 
-#include <boost/filesystem.hpp>  // for operator/, operator==
+#include <boost/filesystem/path.hpp>  // for operator/, operator==
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, valueIsListed, DataSync

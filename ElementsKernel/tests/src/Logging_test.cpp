@@ -31,8 +31,8 @@
 #include <variant>  // for tuple
 #include <vector>   // for vector
 
-#include <boost/algorithm/string.hpp>  // for ends_with, trim, trim_left
-#include <boost/filesystem.hpp>        // for exists
+#include <boost/algorithm/string.hpp>       // for ends_with, trim, trim_left
+#include <boost/filesystem/operations.hpp>  // for exists
 #include <boost/test/unit_test.hpp>
 #include <boost/version.hpp>  // for BOOST_VERSION
 

@@ -26,8 +26,8 @@
 #include <string>     // for allocator, basic_string, operator==, string, char_traits
 #include <vector>     // for vector, operator==
 
-#include <boost/filesystem.hpp>  // for operator/, path, operator==, exists, operator!=, create_directory, is_regular_file, is_regular, ofstream
-#include <boost/filesystem/fstream.hpp>  // for fstream
+#include <boost/filesystem/fstream.hpp>
+#include <boost/filesystem/operations.hpp>  // for exists, create_directory, is_regular_file, is_regular
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Temporary.h"  // for TempDir, TempEnv

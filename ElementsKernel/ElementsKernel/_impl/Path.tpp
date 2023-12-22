@@ -31,8 +31,9 @@
 #include <utility>        // for forward, pair
 #include <vector>         // for vector
 
-#include <boost/algorithm/string.hpp>  // for join
-#include <boost/filesystem.hpp>        // for operator/, exists, path
+#include <boost/algorithm/string.hpp>       // for join
+#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/filesystem/path.hpp>        // for operator/, path
 
 namespace Elements {
 inline namespace Kernel {

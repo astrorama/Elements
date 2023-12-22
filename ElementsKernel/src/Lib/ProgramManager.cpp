@@ -33,9 +33,10 @@
 #include <utility>    // for pair, move
 #include <vector>     // for vector
 
-#include <boost/algorithm/string.hpp>  // for starts_with
-#include <boost/any.hpp>               // for any
-#include <boost/filesystem.hpp>  // for path, operator<<, operator>>, exists, canonical, complete, operator!=, operator/
+#include <boost/algorithm/string.hpp>       // for starts_with
+#include <boost/any.hpp>                    // for any
+#include <boost/filesystem/operations.hpp>  // for canonical, complete, exists
+#include <boost/filesystem/path.hpp>        // for path, operator<<, operator>>, operator!=, operator/
 #include <boost/program_options.hpp>  // for variable_value, store, value, options_description_easy_init, typed_value, basic_command_line_parser, collect_unrecognized, notify, operator<<, options_description, parse_config_file, command_line_parser, variables_map, basic_parsed_options, collect_unrecognized_mode, include_positional
 #include <boost/smart_ptr.hpp>        // for shared_ptr
 

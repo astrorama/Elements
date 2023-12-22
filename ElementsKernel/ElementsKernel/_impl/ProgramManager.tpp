@@ -24,9 +24,11 @@
 #error "This file should not be included directly! Use ElementsKernel/ProgramManager.h instead"
 #else
 
-#include <boost/filesystem.hpp>  // for exists, operator<<
-#include <iostream>              // for operator<<, basic_ostream, char_traits, endl, cerr
-#include <stdlib.h>              // for exit
+#include <iostream>  // for operator<<, basic_ostream, char_traits, endl, cerr
+#include <stdlib.h>  // for exit
+
+#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/filesystem/path.hpp>        // for operator<<
 
 #include "ElementsKernel/Exit.h"  // for ExitCode
 #include "ElementsKernel/Path.h"  // for Item

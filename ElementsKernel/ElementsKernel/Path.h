@@ -35,11 +35,12 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_H_
 
-#include <boost/filesystem.hpp>  // for boost::filesystem
-#include <map>                   // for map
-#include <string>                // for string
-#include <utility>               // for forward
-#include <vector>                // for vector
+#include <map>      // for map
+#include <string>   // for string
+#include <utility>  // for forward
+#include <vector>   // for vector
+
+#include <boost/filesystem/path.hpp>  // for path
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 

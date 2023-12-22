@@ -24,12 +24,21 @@
 #include <string>  // for allocator, string, basic_string
 #include <vector>  // for vector
 
-#include <boost/algorithm/string.hpp>  // for is_any_ofF, is_any_of, split
-#include <boost/filesystem.hpp>        // for exists, is_directory, path
+#include <boost/algorithm/string.hpp>       // for is_any_ofF, is_any_of, split
+#include <boost/filesystem/operations.hpp>  // for exists, is_directory
+#include <boost/filesystem/path.hpp>        // for operator==, path
+#include <boost/iterator.hpp>               // for operator!=
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging
 #include "ElementsKernel/Path.h"         // for Item
+
+namespace boost::filesystem {
+class directory_iterator;
+}
+namespace boost::filesystem {
+class recursive_directory_iterator;
+}
 
 using std::string;
 using std::vector;

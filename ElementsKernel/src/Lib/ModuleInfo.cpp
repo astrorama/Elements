@@ -34,7 +34,8 @@
 #include <string>   // for char_traits, basic_string, string, operator>>, getline, operator==
 #include <vector>   // for vector
 
-#include <boost/filesystem.hpp>  // for operator/, exists, path, canonical
+#include <boost/filesystem/operations.hpp>  // for exists, canonical
+#include <boost/filesystem/path.hpp>        // for operator/, path
 
 #include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
 #include "ElementsKernel/Path.h"         // for Item
