@@ -17,4 +17,5 @@
   { include: ["\"gmock/gmock.h\"", "private", "\"ElementsKernel/EnableGMock.h\"", "public"] },
   { include: ["\"gtest/gtest.h\"", "private", "\"ElementsKernel/EnableGMock.h\"", "public"] },
   { include: ["@<Eigen/src/Core/.*>", "private", "<Eigen/Core>", "public"] },
+  { symbol: ["Elements::Program", "private", "\"ElementsKernel/Program.h\"", "public"] },
 ]

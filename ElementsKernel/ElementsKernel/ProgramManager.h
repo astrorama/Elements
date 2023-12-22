@@ -35,7 +35,7 @@
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Export.h"       // for ELEMENTS_API
 #include "ElementsKernel/Path.h"         // for Item
-#include "ElementsKernel/Program.h"      // for Program
+#include "ElementsKernel/Program.h"      // IWYU pragma: keep
 
 namespace Elements {
 enum class ExitCode : int;
