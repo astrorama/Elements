@@ -24,7 +24,8 @@
  */
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_MAIN_H_
-#define ELEMENTSKERNEL_ELEMENTSKERNEL_MAIN_H_
+#error "This file should not be included directly! Use ElementsKernel/Program.h instead"
+#else
 
 #include <exception>  // for set_terminate
 #include <log4cpp/Priority.hh>

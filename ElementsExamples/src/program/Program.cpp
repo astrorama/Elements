@@ -31,7 +31,6 @@
 #include "ElementsKernel/Exception.h"   // for Exception
 #include "ElementsKernel/Exit.h"        // for ExitCode
 #include "ElementsKernel/Logging.h"     // for Logging
-#include "ElementsKernel/Main.h"        // for MAIN_FOR
 #include "ElementsKernel/Module.h"      // for Module
 #include "ElementsKernel/ModuleInfo.h"  // for ModuleInfo
 #include "ElementsKernel/Program.h"     // for Program

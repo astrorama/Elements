@@ -124,6 +124,10 @@ public:
  */
 }  // namespace Elements
 
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_MAIN_H_
+#include "ElementsKernel/Main.h"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_MAIN_H_
+
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAM_H_
 
 /**@}*/
