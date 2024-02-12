@@ -21,13 +21,13 @@
 
 #include "ElementsKernel/PathSearch.h"
 
-#include <string>  // for allocator, string, basic_string
-#include <vector>  // for vector
+#include <iterator>  // for operator!=
+#include <string>    // for allocator, string, basic_string
+#include <vector>    // for vector
 
 #include <boost/algorithm/string.hpp>       // for is_any_ofF, is_any_of, split
 #include <boost/filesystem/operations.hpp>  // for exists, is_directory
 #include <boost/filesystem/path.hpp>        // for operator==, path
-#include <boost/iterator.hpp>               // for operator!=
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging

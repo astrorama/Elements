@@ -9,10 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [6.2.4] - 2024-02-12
+
+### Fixed
+- Remove the check_rpaths script from the rpmbuild procedure: nowadays, Fedora is
+  discouraging the usage of RPATH (RUNPATH) in the binaries. The issue boils down to the
+  fact that CMake is creating an empty RPATH when  _installing_  the binaries. check_rpaths
+  doesn't like that.
+
+
 ## [6.2.3] - 2023-10-03
 
 ### Fixed
-- Fix the astrorama/actions/elements-build-rpm action to version 3.5
+- Fix the astrorama/actions/elements-build-rpm action to version 3.5. This was done to solve a build problem with [[Fedora/38]] on [[github]]
 
 
 ## [6.2.2] - 2023-08-30
