@@ -1445,11 +1445,15 @@ ${MAIN_PROJECT_CHANGELOG}
          set(RPMBUILD_ARGS "${RPMBUILD_ARGS} --with debinfo")
       endif()
 
+      if(RPMBUILD_EXTRA_ARGS)
+         set(RPMBUILD_ARGS "${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS}")         
+      endif()
 
-      message(STATUS "${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec")
+
+      message(STATUS "${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec")
 
       add_custom_target(rpm
-                        COMMAND ${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec
+                        COMMAND ${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec
                         COMMENT "Generating The RPM Files in ${PROJECT_RPM_TOPDIR}" VERBATIM
       )
 
