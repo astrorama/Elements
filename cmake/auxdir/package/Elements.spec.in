@@ -9,6 +9,8 @@ Group:          Development/Tools
 Source:         @CPACK_RPM_PACKAGE_NAME@-@CPACK_RPM_PACKAGE_VERSION@.tar.gz
 Vendor:         @CPACK_PACKAGE_VENDOR@
 
+%global __brp_check_rpaths %{nil}
+
 %bcond_with doc
 %bcond_with debinfo
 
