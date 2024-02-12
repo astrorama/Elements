@@ -392,7 +392,7 @@ void ProgramManager::bootstrapEnvironment(char* arg0) {
   vector<Path::Item> local_search_paths(m_search_dirs.size());
 
   std::transform(m_search_dirs.cbegin(), m_search_dirs.cend(), local_search_paths.begin(), [](const string& s) {
-    return boost::filesystem::complete(s);
+    return boost::filesystem::absolute(s);
   });
 
   // insert local parent dir if it is not already
