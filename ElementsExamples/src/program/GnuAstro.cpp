@@ -46,7 +46,7 @@ public:
     double z{2.5};
     double H0{67.66};
 
-    auto age = gal_cosmology_age(z, H0, 0.0, 0.0, 0.0, 0);
+    auto age = gal_cosmology_age(z, H0, 0.0, 0.0, 0.0);
 
     log.info() << "Age of the Universe @ z = " << z << " : " << age << " GA";
 
