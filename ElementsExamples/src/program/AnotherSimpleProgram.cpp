@@ -24,7 +24,6 @@
 #include <boost/filesystem/path.hpp>  // for operator<<
 
 #include "ElementsKernel/Exception.h"      // for Exception
-#include "ElementsKernel/Exit.h"           // for ExitCode
 #include "ElementsKernel/SimpleProgram.h"  // for MAIN, SimpleProgram
 
 namespace Elements::Examples {
