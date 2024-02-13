@@ -21,8 +21,9 @@ cdef extern from "ElementsExamples/PiCalculator.h" namespace "Elements::Examples
         void calculate(unsigned int terms) nogil
         void setShowResultCallback(void * callback)
 
-cdef void show_result_callback(double pi) with gil:
+cdef int show_result_callback(double pi) with gil:
     print(float(pi))
+    return 0
 
 def print_pi(terms):
     cdef PiCalculator pi_calc

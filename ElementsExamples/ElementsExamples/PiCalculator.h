@@ -33,7 +33,7 @@ public:
   PiCalculator() = default;
   void calculate(unsigned int terms);
 
-  typedef void (*show_result_callback_type)(double pi);
+  typedef int (*show_result_callback_type)(double pi);
   void setShowResultCallback(show_result_callback_type f);
 
 private:
