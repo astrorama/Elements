@@ -21,6 +21,7 @@
 import os.path
 
 from .DataSyncUtils import dataSyncConfFilePath, localWorkspacePrefix
+from ElementsKernel import File
 
 
 class DependencyConfiguration(object):
@@ -47,7 +48,7 @@ class DependencyConfiguration(object):
         """Parse a dependency configuration file.
         """
         assert isinstance(filename, str)
-        with open(filename) as config_file:
+        with File.nativeOpen(filename) as config_file:
             for config_line in config_file:
                 striped_line = config_line.strip().replace('\n', '').replace(' ', '')
                 if striped_line:

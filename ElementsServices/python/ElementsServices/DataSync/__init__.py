@@ -12,6 +12,7 @@ from .DependencyConfiguration import *
 from .DataSynchronizerMaker import createSynchronizer
 from .DataSyncUtils import concatenatePaths, localWorkspacePrefix
 
+
 class DataSync(object):
     """ A class to download test data from a data repository \
     prior to the unit test run.
@@ -52,7 +53,7 @@ class DataSync(object):
         """
         try:
             self.download()
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             self._connection_config = ConnectionConfiguration(connectionFile)
             self.download()
 
