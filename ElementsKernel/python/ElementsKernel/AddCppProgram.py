@@ -35,8 +35,9 @@ from ElementsKernel import ParseCmakeListsMacros
 from ElementsKernel import Logging
 
 from ElementsKernel import Exit
+from ElementsKernel import File
 
-__updated__ = "2023-03-30"
+__updated__ = "2024-02-13"
 
 LOGGER = Logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ def addConfFile(module_dir, program_name):
     conf_file = os.path.join(module_dir, 'conf', program_name + '.conf')
     # check file does not exist
     if not os.path.exists(conf_file):
-        f = open(conf_file, 'w')
+        f = File.nativeOpen(conf_file, 'w')
         f.write('###############################################################################\n')
         f.write('#\n')
         f.write('# Configuration file for the <' + program_name + '> executable \n')
@@ -153,7 +154,7 @@ def updateCmakeListsFile(module_dir, program_name,
             cmake_object.elements_add_executable_list.append(exe_object)
 
     # Write new data
-    f = open(cmake_filename, 'w')
+    f = File.nativeOpen(cmake_filename, 'w')
     f.write(str(cmake_object))
     f.close()
 

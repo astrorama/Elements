@@ -28,6 +28,7 @@ from ElementsKernel.Path import VARIABLE, SUFFIXES, joinPath, multiPathAppend
 from ElementsKernel.Environment import Environment
 from ElementsKernel.Configuration import getConfigurationPath, getConfigurationLocations
 from ElementsKernel import Exit
+from ElementsKernel import File
 
 
 def str_to_bool(s):
@@ -122,7 +123,7 @@ class Program(object):
                                                     self._elements_module_name)
         conf = []
         if config_file:
-            with open(config_file) as f:
+            with File.nativeOpen(config_file) as f:
                 for line in f.readlines():
                     line = line.strip()
                     if line.startswith('#') or not '=' in line:
