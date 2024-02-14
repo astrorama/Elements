@@ -155,7 +155,7 @@ void printFloatPrecision() {
   auto zero             = Zero<T>();
   auto zero_plus        = float_next(zero);
   auto next_after_zero  = nextafter(zero, Two<T>());
-  auto next_zero_toward = nexttoward(zero, Two<T>());
+  auto next_zero_toward = nexttoward(zero, Two<long double>());
 
   cout << "zero: " << zero << endl;
   cout << "next to zero: " << zero_plus << endl;
@@ -165,7 +165,7 @@ void printFloatPrecision() {
   auto one                    = One<T>();
   auto one_plus               = float_next(one);
   auto next_after_one         = nextafter(one, Two<T>());
-  auto next_one_toward        = nexttoward(one, Two<T>());
+  auto next_one_toward        = nexttoward(one, Two<long double>());
   auto cos_pi_over_7          = cos(pi<T>() / Seven<T>());
   auto default_test_tolerance = pow(Ten<T>(), -numeric_limits<T>::digits10);
 

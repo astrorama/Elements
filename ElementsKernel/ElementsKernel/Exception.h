@@ -50,7 +50,8 @@ public:
    */
   explicit Exception(ExitCode e = ExitCode::NOT_OK);
 
-  /** Constructor (C strings).
+  /**
+   *  Constructor (C strings).
    *  @param message C-style string error message.
    *                 The string contents are copied upon construction.
    *                 Hence, responsibility for deleting the char* lies
@@ -60,7 +61,8 @@ public:
    */
   explicit Exception(const char* message, ExitCode e = ExitCode::NOT_OK);
 
-  /** Constructor (C++ STL strings).
+  /**
+   *  Constructor (C++ STL strings).
    *  @param message The error message.
    *  @param e: this is an optional exit code. By default is is set
    *            to NOT_OK.
@@ -76,19 +78,26 @@ public:
   template <typename... Args>
   explicit Exception(const char* string_format, Args&&... args);
 
-  /** Virtual destructor.
+  /**
+   * Explicit default copy constructor
+   */
+  Exception(const Exception& rhs) = default;
+
+  /**
+   * Virtual destructor.
    */
   virtual ~Exception() noexcept;
 
-  /** Returns a pointer to the (constant) error description.
+  /**
+   *  Returns a pointer to the (constant) error description.
    *  @return A pointer to a const char *. The underlying memory
    *          is in possession of the Exception object. Callers must
    *          not attempt to free the memory.
    */
   const char* what() const noexcept override;
 
-  /** Return the exit code of the Exception
-   *
+  /**
+   * Return the exit code of the Exception
    * @return the exit code
    */
   ExitCode exitCode() const noexcept;
@@ -104,7 +113,8 @@ public:
   void appendMessage(const T& message);
 
 protected:
-  /** Error message.
+  /**
+   * Error message.
    */
   std::string    m_error_msg{};
   const ExitCode m_exit_code{ExitCode::NOT_OK};

@@ -323,22 +323,22 @@ string getEnv(const string& var) {
 }
 
 /// get a particular env var, storing the value in the passed string (if set)
-bool getEnv(const string& var, string& value) {
+bool getEnv(const string& variable_name, string& variable_value) {
   bool found = false;
-  value      = "";
+  variable_value      = "";
 
-  char* env = ::getenv(var.c_str());
+  char* env = ::getenv(variable_name.c_str());
   if (env != nullptr) {
     found = true;
-    value = env;
+    variable_value = env;
   }
 
   return found;
 }
 
-bool isEnvSet(const string& var) {
+bool isEnvSet(const string& variable_name) {
   string result;
-  return getEnv(var, result);
+  return getEnv(variable_name, result);
 }
 
 /// get all defined environment vars

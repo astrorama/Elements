@@ -76,7 +76,7 @@ public:
 
     if (args.count("input-files") > 0) {
       vector<string> files = args["input-files"].as<vector<string>>();
-      for (string file : files) {
+      for (const string& file : files) {
         cout << "Input file " << file << endl;
       }
     }
