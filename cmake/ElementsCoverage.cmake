@@ -21,9 +21,15 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
 
   if(GENHTML_EXECUTABLE AND LCOV_EXECUTABLE)
 
+    set(LCOV_IGNORE_OPTS "")
+
+    if(LCOV_VERSION VERSION_GREATER_EQUAL "2.0")
+      set(LCOV_IGNORE_OPTS --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused)
+    endif()
+
     add_custom_target(lcov_init ALL
                       COMMAND ${LCOV_EXECUTABLE} --zerocounters --directory ${PROJECT_BINARY_DIR}
-                      COMMAND ${LCOV_EXECUTABLE} --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused --directory ${PROJECT_BINARY_DIR} --initial --capture --output-file ${PROJECT_NAME}.info || exit "No gcno files"
+                      COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --directory ${PROJECT_BINARY_DIR} --initial --capture --output-file ${PROJECT_NAME}.info || exit "No gcno files"
                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
                       COMMENT "Initialize the coverage info" VERBATIM)
 
@@ -35,15 +41,15 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
                     )
    if(NOT SQUEEZED_INSTALL)
      add_custom_target(lcov
-                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
-                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors unused,unused --remove ${PROJECT_NAME}.info /usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/include/* ${ELEMENTS_BASE_PREFIX_DIR}/usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/lib/gcc/* ${ELEMENTS_BASE_PREFIX_DIR}/x86_64-conda* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --remove ${PROJECT_NAME}.info /usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/include/* ${ELEMENTS_BASE_PREFIX_DIR}/usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/lib/gcc/* ${ELEMENTS_BASE_PREFIX_DIR}/x86_64-conda* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
                        COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
                        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
                        COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
    else()
      add_custom_target(lcov
-                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
-                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors unused,unused --remove ${PROJECT_NAME}.info /usr/include/* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --remove ${PROJECT_NAME}.info /usr/include/* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
                        COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
                        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
                        COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
