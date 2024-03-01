@@ -22,10 +22,10 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
   if(GENHTML_EXECUTABLE AND LCOV_EXECUTABLE)
 
     add_custom_target(lcov_init ALL
-                    COMMAND ${LCOV_EXECUTABLE} --zerocounters --directory ${PROJECT_BINARY_DIR}
-                    COMMAND ${LCOV_EXECUTABLE} --directory ${PROJECT_BINARY_DIR} --initial --capture --output-file ${PROJECT_NAME}.info || exit "No gcno files"
-                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
-                    COMMENT "Initialize the coverage info" VERBATIM)
+                      COMMAND ${LCOV_EXECUTABLE} --zerocounters --directory ${PROJECT_BINARY_DIR}
+                      COMMAND ${LCOV_EXECUTABLE} --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused --directory ${PROJECT_BINARY_DIR} --initial --capture --output-file ${PROJECT_NAME}.info || exit "No gcno files"
+                      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
+                      COMMENT "Initialize the coverage info" VERBATIM)
 
     add_dependencies(lcov_init lcov_dir)
 
@@ -34,19 +34,19 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
                     COMMENT "Please run:make; make test; make cov in order to get the coverage reports"
                     )
    if(NOT SQUEEZED_INSTALL)
-    add_custom_target(lcov
-                      COMMAND ${LCOV_EXECUTABLE} --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
-                      COMMAND ${LCOV_EXECUTABLE} --remove ${PROJECT_NAME}.info /usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/include/* ${ELEMENTS_BASE_PREFIX_DIR}/usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/lib/gcc/* ${ELEMENTS_BASE_PREFIX_DIR}/x86_64-conda* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
-                      COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
-                      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
-                      COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
-    else()
-    add_custom_target(lcov
-                      COMMAND ${LCOV_EXECUTABLE} --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
-                      COMMAND ${LCOV_EXECUTABLE} --remove ${PROJECT_NAME}.info /usr/include/* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
-                      COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
-                      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
-                      COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
+     add_custom_target(lcov
+                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
+                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors unused,unused --remove ${PROJECT_NAME}.info /usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/include/* ${ELEMENTS_BASE_PREFIX_DIR}/usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/lib/gcc/* ${ELEMENTS_BASE_PREFIX_DIR}/x86_64-conda* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
+                       COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
+                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
+                       COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
+   else()
+     add_custom_target(lcov
+                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
+                       COMMAND ${LCOV_EXECUTABLE} --ignore-errors unused,unused --remove ${PROJECT_NAME}.info /usr/include/* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
+                       COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
+                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
+                       COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
     endif()
 
 
