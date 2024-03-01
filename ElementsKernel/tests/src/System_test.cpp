@@ -43,7 +43,9 @@ BOOST_AUTO_TEST_CASE(HostName_test) {
 
   Environment current;
 
-  if (current["HOSTNAME"].exists() and string(current["HOSTNAME"]) != ".") {
+  if (current["HOSTNAME"].exists() and
+      (string(current["HOSTNAME"]) != "." or string(current["HOSTNAME"]) != "localhost" or
+       string(current["HOSTNAME"]) != "localhost.localdomain")) {
     BOOST_CHECK_EQUAL(string(current["HOSTNAME"]), System::hostName());
   }
 }
