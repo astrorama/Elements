@@ -28,8 +28,9 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 
-#include "ElementsKernel/Export.h"  // for ELEMENTS_API
-#include "ElementsKernel/Path.h"    // for Item
+#include "ElementsKernel/Export.h"   // for ELEMENTS_API
+#include "ElementsKernel/Logging.h"  // for Logging
+#include "ElementsKernel/Path.h"     // for Item
 
 namespace Elements {
 enum class ExitCode;
@@ -40,9 +41,12 @@ namespace Elements {
 class ELEMENTS_API SimpleProgram {
 
 public:
-  ELEMENTS_API ExitCode run(int argc, char** argv) noexcept;
-  ELEMENTS_API const Path::Item& getProgramPath() const;
-  ELEMENTS_API const Path::Item& getProgramName() const;
+  using ExitCode = Elements::ExitCode;
+  using Logging  = Elements::Logging;
+
+  ExitCode          run(int argc, char** argv) noexcept;
+  const Path::Item& getProgramPath() const;
+  const Path::Item& getProgramName() const;
 
 protected:
   SimpleProgram() = default;

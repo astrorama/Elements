@@ -18,6 +18,7 @@
 
 #define BOOST_TEST_IGNORE_NON_ZERO_CHILD_CODE
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
 #include <string>   // for allocator, basic_string, string, operator+, operator==
 #include <utility>  // for pair

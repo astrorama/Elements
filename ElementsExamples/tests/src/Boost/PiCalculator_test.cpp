@@ -29,9 +29,11 @@ using Elements::Examples::PiCalculator;
 // Starts a test suite and name it.
 BOOST_AUTO_TEST_SUITE(PiCalculator_test_suite)
 
-void callBackFunction(double pi) {
+int callBackFunction(double pi) {
 
   std::cout << "Here is the pi value: " << pi << std::endl;
+
+  return 0;
 }
 
 BOOST_AUTO_TEST_CASE(Creation_test) {

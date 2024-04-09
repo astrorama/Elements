@@ -21,6 +21,7 @@
 
 #include <boost/filesystem/operations.hpp>  // for is_regular_file, remove
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
 #include "ElementsServices/DataSync.h"                     // for DataSync
 #include "ElementsServices/DataSync/DataSyncUtils.h"       // for path, DataSync

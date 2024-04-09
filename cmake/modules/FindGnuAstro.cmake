@@ -35,12 +35,22 @@ if(NOT GNUASTRO_FOUND)
   set(GNUASTRO_LIBRARIES ${GNUASTRO_LIBRARY})
   set(GNUASTRO_INCLUDE_DIRS ${GNUASTRO_INCLUDE_DIR})
 
+  set(GNUASTRO_VERSION 0)
+
+  if( NOT GNUASTRO_VERSION AND EXISTS "${GNUASTRO_INCLUDE_DIR}/gnuastro/config.h" )
+    file( STRINGS "${GNUASTRO_INCLUDE_DIR}/gnuastro/config.h" gnuastro_config_h_contents REGEX "define GAL_CONFIG_VERSION" )    
+    if (gnuastro_config_h_contents) 
+      string( REGEX REPLACE ".*([0-9]\\.[0-9][0-9]?).*" "\\1" GNUASTRO_VERSION ${gnuastro_config_h_contents} )
+    endif()
+  endif()
+
+
 # handle the QUIETLY and REQUIRED arguments and set GNUASTRO_FOUND to TRUE if
 # all listed variables are TRUE
   INCLUDE(FindPackageHandleStandardArgs)
-  FIND_PACKAGE_HANDLE_STANDARD_ARGS(GnuAstro DEFAULT_MSG GNUASTRO_INCLUDE_DIRS GNUASTRO_LIBRARIES)
+  FIND_PACKAGE_HANDLE_STANDARD_ARGS(GnuAstro DEFAULT_MSG GNUASTRO_INCLUDE_DIRS GNUASTRO_LIBRARIES GNUASTRO_VERSION)
 
-  mark_as_advanced(GNUASTRO_FOUND GNUASTRO_INCLUDE_DIRS GNUASTRO_LIBRARIES)
+  mark_as_advanced(GNUASTRO_FOUND GNUASTRO_INCLUDE_DIRS GNUASTRO_LIBRARIES GNUASTRO_VERSION)
 
   find_package(Cfitsio)
 

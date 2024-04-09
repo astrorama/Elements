@@ -21,7 +21,6 @@
 #include <map>     // for map
 #include <string>  // for allocator, string
 
-#include "ElementsKernel/Exit.h"     // for ExitCode
 #include "ElementsKernel/Logging.h"  // for Logging
 #include "ElementsKernel/Program.h"  // for Program
 #include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED

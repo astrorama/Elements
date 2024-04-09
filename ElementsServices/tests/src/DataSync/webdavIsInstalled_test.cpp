@@ -17,6 +17,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
 #include "ElementsServices/DataSync/DataSyncUtils.h"       // for DataSync
 #include "ElementsServices/DataSync/WebdavSynchronizer.h"  // for webdavIsInstalled
