@@ -283,10 +283,17 @@ endif()
 
 find_package(GnuAstro QUIET)
 if(GNUASTRO_FOUND)
-elements_add_executable(GnuAstroExample src/program/GnuAstro.cpp
-                        LINK_LIBRARIES GnuAstro ElementsExamples
-                        INCLUDE_DIRS GnuAstro ElementsExamples)
-elements_add_test(GnuAstroWorks COMMAND GnuAstroExample LABELS GnuAstro Build)
+if(NOT GNUASTRO_VERSION VERSION_LESS 0.22)
+  elements_add_executable(GnuAstroExample src/program/GnuAstro.cpp
+                          LINK_LIBRARIES GnuAstro ElementsExamples
+                          INCLUDE_DIRS GnuAstro ElementsExamples)
+  elements_add_test(GnuAstroWorks COMMAND GnuAstroExample LABELS GnuAstro Build)
+else()
+  elements_add_executable(OldGnuAstroExample src/program/OldGnuAstro.cpp
+                          LINK_LIBRARIES GnuAstro ElementsExamples
+                          INCLUDE_DIRS GnuAstro ElementsExamples)
+  elements_add_test(OldGnuAstroWorks COMMAND OldGnuAstroExample LABELS GnuAstro Build)
+endif()
 endif()
 
 elements_add_executable(OpenMPExample src/program/OpenMP.cpp
