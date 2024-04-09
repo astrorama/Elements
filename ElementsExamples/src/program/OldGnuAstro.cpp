@@ -1,7 +1,8 @@
 /**
- * @file GnuAstro.cpp
+ * @file OldGnuAstro.cpp
  * @date January 6th, 2015
  * @author Pierre Dubath
+ * @brief Version for GnuAstro version <= 0.21
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -47,7 +48,7 @@ public:
     double z{2.5};
     double H0{67.66};
 
-    auto age = gal_cosmology_age(z, H0, 0.0, 0.0, 0.0, 0);
+    auto age = gal_cosmology_age(z, H0, 0.0, 0.0, 0.0);
 
     log.info() << "Age of the Universe @ z = " << z << " : " << age << " GA";
 

@@ -17,6 +17,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
 #include <exception>  // for exception
 #include <string>     // for basic_string, allocator, string
