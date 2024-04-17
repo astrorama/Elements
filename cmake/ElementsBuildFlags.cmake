@@ -252,7 +252,7 @@ set(DEBUG_FORMAT "" CACHE STRING "Set the -g debug format")
 
 set(DEBUG_LEVEL "" CACHE STRING "Set the -g debug level")
 
-set(EXTRA_DEBUG_ARGS "-fno-omit-frame-pointer" CACHE STRING "Add extra debug compile arguments")
+set(EXTRA_DEBUG_ARGS "" CACHE STRING "Add extra debug compile arguments")
 
 
 option(ELEMENTS_LINKOPT
@@ -588,10 +588,10 @@ if(NOT ELEMENTS_FLAGS_SET)
   endif()
 
 
-  set(CMAKE_CXX_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS}"
+  set(CMAKE_CXX_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS} -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during Debug builds."
       FORCE)
-  set(CMAKE_C_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS}"
+  set(CMAKE_C_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS} -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during Debug builds."
       FORCE)
   if(OPT_DEBUG)
@@ -610,10 +610,10 @@ if(NOT ELEMENTS_FLAGS_SET)
   endif()
 
 
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL}"
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL} -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
       FORCE)
-  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL}"
+  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL} -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
       FORCE)
 
@@ -626,18 +626,18 @@ if(NOT ELEMENTS_FLAGS_SET)
         FORCE)
   endif()
 
-  set(CMAKE_CXX_FLAGS_COVERAGE "--coverage"
+  set(CMAKE_CXX_FLAGS_COVERAGE "--coverage -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during coverage builds."
       FORCE)
-  set(CMAKE_C_FLAGS_COVERAGE "--coverage"
+  set(CMAKE_C_FLAGS_COVERAGE "--coverage -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during coverage builds."
       FORCE)
 
   # @todo Check why the -D_GLIBCXX_PROFILE cannot be used with Boost.
-  set(CMAKE_CXX_FLAGS_PROFILE "-g -pg"
+  set(CMAKE_CXX_FLAGS_PROFILE "-g -pg -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during profile builds."
       FORCE)
-  set(CMAKE_C_FLAGS_PROFILE "-g -pg"
+  set(CMAKE_C_FLAGS_PROFILE "-g -pg -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during profile builds."
       FORCE)
 
