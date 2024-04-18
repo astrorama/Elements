@@ -1446,7 +1446,7 @@ ${MAIN_PROJECT_CHANGELOG}
       endif()
 
       if(RPMBUILD_EXTRA_ARGS)
-         set(RPMBUILD_ARGS "${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS}")         
+         set(RPMBUILD_ARGS "${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS}")
       endif()
 
 

@@ -678,7 +678,7 @@ if(NOT ELEMENTS_FLAGS_SET)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -pie"
             CACHE STRING "Flags used by the linker during the creation of exe's."
             FORCE)
-      endif()          
+      endif()
     endif()
   endif()
 
