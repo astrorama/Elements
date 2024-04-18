@@ -670,9 +670,15 @@ if(NOT ELEMENTS_FLAGS_SET)
           CACHE STRING "Flags used by the linker during the creation of exe's."
           FORCE)
     else()
-      set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -pie"
-          CACHE STRING "Flags used by the linker during the creation of exe's."
-          FORCE)
+      if(SGS_OS MATCHES "^conda_(.*)")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -no-pie"
+            CACHE STRING "Flags used by the linker during the creation of exe's."
+            FORCE)
+      else()
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--enable-new-dtags -Wl,--as-needed -pie"
+            CACHE STRING "Flags used by the linker during the creation of exe's."
+            FORCE)
+      endif()
     endif()
   endif()
 
