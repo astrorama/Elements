@@ -324,12 +324,12 @@ string getEnv(const string& var) {
 
 /// get a particular env var, storing the value in the passed string (if set)
 bool getEnv(const string& variable_name, string& variable_value) {
-  bool found = false;
-  variable_value      = "";
+  bool found     = false;
+  variable_value = "";
 
   char* env = ::getenv(variable_name.c_str());
   if (env != nullptr) {
-    found = true;
+    found          = true;
     variable_value = env;
   }
 
