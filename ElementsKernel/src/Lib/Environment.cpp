@@ -148,8 +148,8 @@ void Environment::Variable::checkCompatibility(const Environment::Variable& othe
 
   if (m_index != other.m_index) {
     stringstream error_buffer;
-    error_buffer << "The \"" << other.m_index << "\" environment variable"
-                 << " cannot be copied to the \"" << m_index << "\" environment variable." << endl;
+    error_buffer << "The \"" << other.m_index << "\" environment variable" << " cannot be copied to the \"" << m_index
+                 << "\" environment variable." << endl;
     throw std::invalid_argument(error_buffer.str());
   }
 }
