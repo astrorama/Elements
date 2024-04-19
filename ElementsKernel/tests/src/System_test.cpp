@@ -23,7 +23,7 @@
 
 #include <sys/utsname.h>  // for uname, utsname
 
-#include <boost/test/unit_test.hpp>  // for BOOST_PP_IIF_1, BOOST_PP_IIF_0, BOOST_PP_BOOL_0, BOOST_PP_BOOL_1, BOOST_PP_EXPR_IIF_1, BOOST_PP_FOR_CHECK_BOOST_PP_NIL, BOOST_PP_DEC_1, BOOST_PP_TUPLE_ELEM_O_3, BOOST_PP_VARIADIC_ELEM_3, operator<<, BOOST_PP_BOOL_2, BOOST_PP_DEC_2, BOOST_PP_FOR_0, BOOST_PP_SEQ_ELEM_0, BOOST_PP_COMPL_0, BOOST_PP_NOT_EQUAL_1, BOOST_PP_NOT_EQUAL_CHECK_BOOST_PP_NOT_EQUAL_1, BOOST_AUTO_TEST_CASE, BOOST_CHECK_EQUAL, BOOST_PP_DEC_128, BOOST_PP_DEC_16, BOOST_PP_DEC_3, BOOST_PP_DEC_32, BOOST_PP_DEC_4, BOOST_PP_DEC_64, BOOST_PP_DEC_8, BOOST_PP_FOR_1, BOOST_PP_FOR_127, BOOST_PP_FOR_15, BOOST_PP_FOR_3, BOOST_PP_FOR_31, BOOST_PP_FOR_63, BOOST_PP_FOR_7, BOOST_PP_NODE_ENTRY_256, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_2, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_3, BOOST_TEST_TOOL_PASS_ARGS0, BOOST_TEST_TOOL_PASS_PRED0, BOOST_AUTO_TEST_SUITE, BOOST_AUTO_TEST_SUITE_END
+#include <boost/test/unit_test.hpp>  // for BOOST_TEST
 
 #include <string>  // for string, operator!=
 
@@ -42,17 +42,20 @@ BOOST_AUTO_TEST_CASE(HostName_test) {
   using std::string;
 
   Environment current;
+  string      DELIMITER{"."};
 
-  if (current["HOSTNAME"].exists() and
-      (string(current["HOSTNAME"]) != "." or string(current["HOSTNAME"]) != "localhost" or
-       string(current["HOSTNAME"]) != "localhost.localdomain")) {
-    BOOST_CHECK_EQUAL(string(current["HOSTNAME"]), System::hostName());
+  if (current["HOSTNAME"].exists()) {
+    string full_var_hostname = current["HOSTNAME"];
+    string var_hostname      = full_var_hostname.substr(0, full_var_hostname.find(DELIMITER));
+    string full_sys_hostname = System::hostName();
+    string sys_hostname      = full_sys_hostname.substr(0, full_sys_hostname.find(DELIMITER));
+    BOOST_CHECK_EQUAL(var_hostname, sys_hostname);
   }
 }
 
 BOOST_AUTO_TEST_CASE(osName_test) {
 
-  string         osname = "UNKNOWN";
+  string         osname{"UNKNOWN"};
   struct utsname ut {};
   if (::uname(&ut) == 0) {
     osname = ut.sysname;
@@ -63,7 +66,7 @@ BOOST_AUTO_TEST_CASE(osName_test) {
 
 BOOST_AUTO_TEST_CASE(osVersion_test) {
 
-  string         osver = "UNKNOWN";
+  string         osver{"UNKNOWN"};
   struct utsname ut {};
   if (uname(&ut) == 0) {
     osver = ut.release;
