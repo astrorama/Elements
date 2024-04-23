@@ -1,3 +1,2 @@
 # Ignore SWIG interfaces files
-./ElementsExamples/ElementsExamples/NumPyExample.i
-./ElementsExamples/ElementsExamples/SwigExample.i
+./**/*.i
