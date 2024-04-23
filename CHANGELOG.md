@@ -14,12 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add an option to configure the auxiliary files.
     - They were just installed in the past and now they are interpolated in the build directory and then installed.
-    - Add a <PROJECT>_PROJECT_VERSION CMake cache variable
+    - Add a `<PROJECT>_PROJECT_VERSION` CMake cache variable
     - The `elements_install_aux_files` gets a `WITH_CONFIGURE` option to enable the configure phase
 - Add the support for `include-what-you-use` (IWYU, https://github.com/include-what-you-use/include-what-you-use)
     - A new `iwyu` gmake target has been added
     - Alernatively, the IWYU can also be run at compile time by using the `-DUSE_IWYU=ON` CMake option
-- Add a [[CMake]] option to print the test command lines
+- Add a CMake option to print the test command lines
     - the option name is PRINT_TEST_COMMANDS
     - it is set to OFF by default
 - Implement the indirection for the DataSync workspace location
@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Improve the creation of the source tarball
-    - Added the --exclude-vcs-ignores to the Tar command
+    - Added the `--exclude-vcs-ignores` to the Tar command
 - Update the Doxyfile template for Doxygen 1.9.6
 
 ### Fixed
@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - For C++, a `-DNO_CONFIG_FILE` compile option seems to be the best candidate
 - Fix a lot of warnings when the `-Wno-dev` CMake option is not passed
 - Fix the the recursive globbing of python files in Elements
-    - It was also picking up the __pycache__ directory and the CMake glob cross-check was failing
+    - It was also picking up the `__pycache__` directory and the CMake glob cross-check was failing
 - Fix the compilation against the Gnuastro library
     - Its behavior has changed and it requires an extra arg in the examples
     - use CMake to test the compilation
