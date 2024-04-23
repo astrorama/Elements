@@ -1,0 +1,2 @@
+# Ignore SWIG interfaces files
+./**/*.i

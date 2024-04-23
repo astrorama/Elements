@@ -37,7 +37,7 @@ try:
 except ImportError:
     from __builtin__ import input
 
-__updated__ = "2023-04-03"
+__updated__ = "2024-04-23"
 
 LOGGER = Logging.getLogger(__name__)
 
@@ -49,6 +49,7 @@ AUX_GITIGNORE_IN = "gitignore_template.in"
 AUX_GITATTRIBUTES_IN = "gitattributes_template.in"
 AUX_EDITOR_CONFIG = "editorconfig"
 AUX_CLANG_FORMAT = "clang-format"
+AUX_CLANG_FORMAT_IGNORE = "clang-format-ignore"
 AUX_CHANGELOG = "CHANGELOG.md"
 PRE_COMMIT_CONFIG = "pre-commit-config.yaml"
 
@@ -60,6 +61,7 @@ TARGET_LOCATIONS = { AUX_CMAKE_LIST_IN: "CMakeLists.txt",
                      AUX_GITATTRIBUTES_IN: ".gitattributes",
                      AUX_EDITOR_CONFIG: ".editorconfig",
                      AUX_CLANG_FORMAT: ".clang-format",
+                     AUX_CLANG_FORMAT_IGNORE: ".clang-format-ignore",
                      AUX_CHANGELOG: "CHANGELOG.md",
                      PRE_COMMIT_CONFIG: ".pre-commit-config.yaml"
                    }
