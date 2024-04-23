@@ -86,6 +86,10 @@ if [ ! -e $User_area/$project_name/$version/.clang-format ]; then
    echo "Error: <$User_area/$project_name/$version/.clang-format> file not found" 1>&2
    local_clean_exit 1
 fi
+if [ ! -e $User_area/$project_name/$version/.clang-format-ignore ]; then
+   echo "Error: <$User_area/$project_name/$version/.clang-ignore> file not found" 1>&2
+   local_clean_exit 1
+fi
 if [ ! -e $User_area/$project_name/$version/CHANGELOG.md ]; then
    echo "Error: <$User_area/$project_name/$version/CHANGELOG.md> file not found" 1>&2
    local_clean_exit 1
