@@ -45,8 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
       elements_add_python_program(PythonProgramExample ElementsExamples.PythonProgramExample)
       elements_add_python_program(PythonProgramExampleNoConfigFile ElementsExamples.PythonProgramExample NO_CONFIG_FILE)
       ```
-- Prevent the addition of the `--config-file` option to the generated [[C++]] executable
-    - It was already done for [[python]] by passing a NO_CONFIG_FILE CMake option to the elements_add_python_program function
+- Prevent the addition of the `--config-file` option to the generated C++ executable
+    - It was already done for python by passing a NO_CONFIG_FILE CMake option to the elements_add_python_program function
     - For C++, a `-DNO_CONFIG_FILE` compile option seems to be the best candidate
 - Fix a lot of warnings when the `-Wno-dev` CMake option is not passed
 - Fix the the recursive globbing of python files in Elements
