@@ -9,6 +9,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [6.3.0] - 2024-04-23
+
+### Added
+- Add an option to configure the auxiliary files.
+    - They were just installed in the past and now they are interpolated in the build directory and then installed.
+    - Add a <PROJECT>_PROJECT_VERSION CMake cache variable
+    - The `elements_install_aux_files` gets a `WITH_CONFIGURE` option to enable the configure phase
+- Add the support for `include-what-you-use` (IWYU, https://github.com/include-what-you-use/include-what-you-use)
+    - A new `iwyu` gmake target has been added
+    - Alernatively, the IWYU can also be run at compile time by using the `-DUSE_IWYU=ON` CMake option
+- Add a [[CMake]] option to print the test command lines
+    - the option name is PRINT_TEST_COMMANDS
+    - it is set to OFF by default
+- Implement the indirection for the DataSync workspace location
+    - the name of the variable pointing to the name of the variable containing the location is DATASYNC_WORKDIR_VAR (e.g. export DATASYNC_WORKDIR_VAR=MY_WORKSPACE).
+    - By default, if DATASYNC_WORKDIR_VAR is not set or is empty, the content the WORKSPACE (the default name) variable is used for the workspace location.
+- Add the .clang-format-ignore file to ignore the SWIG interface files recursively
+    - add this file also in the createProject script
+- Add sphinx-programoutput to default [[sphinx]] extensions
+- Add the `-fno-omit-frame-pointer` compiler option for all non-optimized builds
+
+### Changed
+- Improve the creation of the source tarball
+    - Added the --exclude-vcs-ignores to the Tar command
+- Update the Doxyfile template for Doxygen 1.9.6
+
+### Fixed
+- Fix the target of the elements_add_python_program CMake function
+    - it is now `{elements_module}_{executable}`. Instead of the original
+      python module name with the "." replaced by "_"  
+    - it allows to generate several executable with the same python module
+      and different option (like NO_CONFIG_FILE)  
+      ```cmake
+      elements_add_python_program(PythonProgramExample ElementsExamples.PythonProgramExample)
+      elements_add_python_program(PythonProgramExampleNoConfigFile ElementsExamples.PythonProgramExample NO_CONFIG_FILE)
+      ```
+- Prevent the addition of the `--config-file` option to the generated [[C++]] executable
+    - It was already done for [[python]] by passing a NO_CONFIG_FILE CMake option to the elements_add_python_program function
+    - For C++, a `-DNO_CONFIG_FILE` compile option seems to be the best candidate
+- Fix a lot of warnings when the `-Wno-dev` CMake option is not passed
+- Fix the the recursive globbing of python files in Elements
+    - It was also picking up the __pycache__ directory and the CMake glob cross-check was failing
+- Fix the compilation against the Gnuastro library
+    - Its behavior has changed and it requires an extra arg in the examples
+    - use CMake to test the compilation
+- Fix lcov execution for lcov 2.0
+
+
 ## [6.2.4] - 2024-02-12
 
 ### Fixed
