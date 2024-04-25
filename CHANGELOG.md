@@ -38,9 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix the target of the elements_add_python_program CMake function
     - it is now `{elements_module}_{executable}`. Instead of the original
-      python module name with the "." replaced by "_"  
+      python module name with the "." replaced by "_"
     - it allows to generate several executable with the same python module
-      and different option (like NO_CONFIG_FILE)  
+      and different option (like NO_CONFIG_FILE)
       ```cmake
       elements_add_python_program(PythonProgramExample ElementsExamples.PythonProgramExample)
       elements_add_python_program(PythonProgramExampleNoConfigFile ElementsExamples.PythonProgramExample NO_CONFIG_FILE)
