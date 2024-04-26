@@ -16,11 +16,11 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-
 from ElementsServices.DataSync import WebdavSynchronizer
 
 
 class TestWebdavIsInstalled(object):
 
-    def testWebdavIsInstalled(self):
+    @staticmethod
+    def testWebdavIsInstalled():
         assert WebdavSynchronizer.webdavIsInstalled()

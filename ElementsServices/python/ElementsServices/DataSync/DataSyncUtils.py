@@ -18,7 +18,7 @@
 
 import os
 import shlex
-import subprocess
+import subprocess  # nosec
 
 from ElementsKernel.Configuration import getConfigurationPath
 
@@ -36,7 +36,7 @@ def dataSyncConfFilePath (filename):
 def runCommandAndCaptureOutErr (cmd):
     """Execute a command and return its output and error messages.
     """
-    p = subprocess.Popen(
+    p = subprocess.Popen(# nosec
         shlex.split(cmd),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)

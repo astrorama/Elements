@@ -16,16 +16,17 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-import subprocess
+import subprocess  # nosec
 import shlex
 
 from .DataSynchronizer import DataSynchronizer
+
 
 def irodsIsInstalled():
     """Check whether an iRODS client is installed.
     """
     try:
-        subprocess.check_call(shlex.split("iget --help"))
+        subprocess.check_call(shlex.split("iget --help"))  # nosec
         return True
     except OSError:
         return False
