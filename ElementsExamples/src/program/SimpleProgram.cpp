@@ -28,6 +28,8 @@
 #include "ElementsKernel/Sleep.h"    // for nanoSleep
 #include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 
+#include "ElementsExamples/TemplateFunction.h"  // for templateFunction
+
 using std::map;
 using std::string;
 
@@ -66,6 +68,9 @@ public:
     Elements::nanoSleep(4);
 
     std::cout << "This Works too!" << std::endl;
+
+    templateFunction<int>();
+    templateFunction<double>();
 
     return ExitCode::OK;
   }

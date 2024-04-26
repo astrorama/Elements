@@ -33,7 +33,7 @@ if os.path.isfile('generate_pybindings.conf'):
     conf_fp = StringIO.StringIO(conf_string)
     conf_parser = ConfigParser.SafeConfigParser()
     conf_parser.readfp(conf_fp)
-    for (key, value) in conf_parser.items(conf_parser.sections()[0]):
+    for key, value in conf_parser.items(conf_parser.sections()[0]):
         args.append('--' + key + '=' + value)
 args.extend(sys.argv[1:])
 (options, args) = parser.parse_args(args)

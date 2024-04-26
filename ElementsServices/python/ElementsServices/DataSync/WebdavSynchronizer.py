@@ -16,7 +16,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-import subprocess
+import subprocess  # nosec
 import shlex
 
 from .DataSynchronizer import DataSynchronizer
@@ -26,7 +26,7 @@ def webdavIsInstalled ():
     """Check whether an iRODS client is installed.
     """
     try:
-        subprocess.check_call(shlex.split("wget -h"))
+        subprocess.check_call(shlex.split("wget -h"))  # nosec
         return True
     except OSError:
         return False
