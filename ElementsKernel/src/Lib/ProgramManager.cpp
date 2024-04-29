@@ -495,8 +495,6 @@ void ProgramManager::onTerminate() noexcept {
       log.fatal() << "# ";
       exit_code = exc1.exitCode();
     } catch (const std::exception& exc2) {
-      /// @todo : set the exit code according to the type of exception
-      ///         if a clear match is found.
       log.fatal() << "# ";
       log.fatal() << "# Standard Exception : " << exc2.what();
       log.fatal() << "# ";

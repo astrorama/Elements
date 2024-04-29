@@ -69,7 +69,10 @@ class ConnectionConfiguration(object):
     def parseConfigurationFile(self, filename):
         """Parse the connection configuration file.
         """
-        assert isinstance(filename, str)
+
+        if not isinstance(filename, str):
+            raise AssertionError("filename is not a string")
+
         config_file = dataSyncConfFilePath(filename)
         parser = argparse.ArgumentParser()
         # TODO: use configparser

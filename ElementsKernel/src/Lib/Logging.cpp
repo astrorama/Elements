@@ -37,6 +37,7 @@
 
 #include "ElementsKernel/Compat.h"     // for NON_REDUNDANT_MOVE
 #include "ElementsKernel/Exception.h"  // for Exception
+#include "ElementsKernel/Exit.h"       // for ExitCode
 #include "ElementsKernel/Memory.h"     // for make_unique
 #include "ElementsKernel/Path.h"       // for Item
 
@@ -92,7 +93,7 @@ void Logging::setLevel(string level) {
   } else {
     std::stringstream error_buffer;
     error_buffer << "Unrecognized logging level: " << level << std::endl;
-    throw Exception(error_buffer.str());
+    throw Exception(error_buffer.str(), ExitCode::CONFIG);
   }
 }
 
