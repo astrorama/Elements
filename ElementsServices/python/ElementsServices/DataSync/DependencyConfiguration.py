@@ -35,8 +35,13 @@ class DependencyConfiguration(object):
         """Create a dependency configuration,
         and optionally parse a dependency configuration file.
         """
-        assert isinstance(distant_root, str)
-        assert isinstance(local_root, str)
+
+        if not isinstance(distant_root, str):
+            raise AssertionError("distant_root is not a string")
+
+        if not isinstance(local_root, str):
+            raise AssertionError("local_root is not a string")
+
         self._distant_root = distant_root
         self._local_root = os.path.join(localWorkspacePrefix(), local_root)
         self._file_map = {}
@@ -47,7 +52,10 @@ class DependencyConfiguration(object):
     def parseConfigurationFile(self, filename):
         """Parse a dependency configuration file.
         """
-        assert isinstance(filename, str)
+
+        if not isinstance(filename, str):
+            raise AssertionError("filename is not a string")
+
         with File.nativeOpen(filename) as config_file:
             for config_line in config_file:
                 striped_line = config_line.strip().replace('\n', '').replace(' ', '')
