@@ -69,7 +69,7 @@ public:
                           const std::string& parent_module_version = "", const std::string& parent_module_name = "",
                           const std::vector<std::string>& search_dirs       = {},
                           const log4cpp::Priority::Value& elements_loglevel = log4cpp::Priority::DEBUG,
-                          bool                            no_config_file    = false);
+                          bool no_config_file = false, bool no_default_conf = false);
 
   /**
    * @brief Destructor
@@ -281,6 +281,11 @@ private:
    * prevent the --config-file option to be added
    */
   bool m_no_config_file;
+
+  /**
+   * prevent the location of default configuration files
+   */
+  bool m_no_default_conf;
 };
 
 }  // namespace Elements

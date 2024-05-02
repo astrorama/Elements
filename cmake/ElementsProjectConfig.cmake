@@ -2403,7 +2403,7 @@ endfunction()
 # target (library, module, dictionary...)
 #-------------------------------------------------------------------------------
 macro(elements_common_add_build)
-  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
   # obsolete option
   if(ARG_LIBRARIES)
     message(WARNING "Deprecated option 'LIBRARIES', use 'LINK_LIBRARIES' instead")
@@ -3276,7 +3276,7 @@ endfunction()
 #---------------------------------------------------------------------------------------------------
 function(elements_add_executable executable)
 
-  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE" "" "" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "" ${ARGN})
 
   elements_common_add_build(${ARGN})
 
@@ -3298,7 +3298,12 @@ function(elements_add_executable executable)
     target_compile_definitions(${executable} PUBLIC NO_CONFIG_FILE)
   endif()
 
-if(IWYU_FOUND)
+  if (ARG_NO_DEFAULT_CONF)
+    target_compile_definitions(${executable} PUBLIC NO_DEFAULT_CONF)
+  endif()
+
+
+  if(IWYU_FOUND)
     set_target_properties(${executable} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_COMMAND}")
   endif()
 
@@ -4758,7 +4763,7 @@ endfunction()
 
 function(elements_add_python_program executable module)
 
-  cmake_parse_arguments(PYPROG NO_CONFIG_FILE "" "" ${ARGN})
+  cmake_parse_arguments(PYPROG "NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "" ${ARGN})
 
   get_property(has_python_dir DIRECTORY PROPERTY module_has_python_dir)
 
@@ -4788,23 +4793,22 @@ function(elements_add_python_program executable module)
     set(PYTHON_SCRIPT_VERSION ${PYTHON_EXPLICIT_VERSION})
   endif()
 
+
+  set(PY_PROG_SCRIPT_EXTRA)
   if(PYPROG_NO_CONFIG_FILE)
-    add_custom_command(OUTPUT ${executable_file}
-                       COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_SCRIPT_VERSION}"
-                               --module ${module} --outdir ${CMAKE_BINARY_DIR}/scripts --execname ${executable}
-                               --project-name ${CMAKE_PROJECT_NAME} --elements-module-name ${elements_module_name}
-                               --elements-module-version ${elements_module_version}
-                               --elements-default-loglevel=${ELEMENTS_DEFAULT_LOGLEVEL} --no-config-file
-                       DEPENDS ${program_file})
-  else()
-    add_custom_command(OUTPUT ${executable_file}
-                       COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_SCRIPT_VERSION}"
-                               --module ${module} --outdir ${CMAKE_BINARY_DIR}/scripts --execname ${executable}
-                               --project-name ${CMAKE_PROJECT_NAME} --elements-module-name ${elements_module_name}
-                               --elements-module-version ${elements_module_version}
-                               --elements-default-loglevel=${ELEMENTS_DEFAULT_LOGLEVEL}
-                       DEPENDS ${program_file})
+    set(PY_PROG_SCRIPT_EXTRA ${PY_PROG_SCRIPT_EXTRA} --no-config-file)
   endif()
+  if(PYPROG_NO_DEFAULT_CONF)
+    set(PY_PROG_SCRIPT_EXTRA ${PY_PROG_SCRIPT_EXTRA} --no-default-conf)
+  endif()
+
+  add_custom_command(OUTPUT ${executable_file}
+                     COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_SCRIPT_VERSION}"
+                             --module ${module} --outdir ${CMAKE_BINARY_DIR}/scripts --execname ${executable}
+                             --project-name ${CMAKE_PROJECT_NAME} --elements-module-name ${elements_module_name}
+                             --elements-module-version ${elements_module_version}
+                             --elements-default-loglevel=${ELEMENTS_DEFAULT_LOGLEVEL} ${PY_PROG_SCRIPT_EXTRA}
+                     DEPENDS ${program_file})
 
   string(REPLACE "." "_" python_program_target "${name}_${executable}")
   add_custom_target(${python_program_target} ALL DEPENDS ${executable_file})
