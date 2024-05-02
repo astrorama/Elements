@@ -53,6 +53,10 @@ elements_add_executable(CppProgramExampleNoConfigFile src/program/Program.cpp
                         LINK_LIBRARIES ElementsExamples ElementsOther
                         NO_CONFIG_FILE)
 
+elements_add_executable(CppProgramExampleNoDefaultConf src/program/Program.cpp
+                        INCLUDE_DIRS ElementsExamples ElementsOther
+                        LINK_LIBRARIES ElementsExamples ElementsOther
+                        NO_DEFAULT_CONF)
 
 elements_add_executable(CppExtProgramExample src/program/ExtProgram.cpp
                         INCLUDE_DIRS ElementsExamples ElementsOther
@@ -79,7 +83,8 @@ elements_add_executable(CProgramExample src/CProgram/*.c
 #===== Test that the executables do run ========================================
 
 elements_add_test(CppProgramExampleRun COMMAND CppProgramExample)
-elements_add_test(CppProgramExampleNoConfigFileRun COMMAND CppProgramExample --config-file=toto.conf FAILS)
+elements_add_test(CppProgramExampleNoConfigFileRun COMMAND CppProgramExampleNoConfigFile --config-file=toto.conf FAILS)
+elements_add_test(CppProgramExampleNoDefaultConfRun COMMAND CppProgramExampleNoDefaultConf)
 elements_add_test(CppProgramExampleWrongArgument COMMAND CppProgramExample --toto FAILS)
 elements_add_test(CppProgramExampleWrongLevel COMMAND CppProgramExample --log-level dddsc FAILS)
 elements_add_test(CProgramExampleRun COMMAND CProgramExample)
@@ -347,6 +352,7 @@ elements_install_python_modules(TEST_TIMEOUT 60)
 #    ElementsExamples.PythonProgramExample is the source file
 elements_add_python_program(PythonProgramExample ElementsExamples.PythonProgramExample)
 elements_add_python_program(PythonProgramExampleNoConfigFile ElementsExamples.PythonProgramExample NO_CONFIG_FILE)
+elements_add_python_program(PythonProgramExampleNoDefaultConf ElementsExamples.PythonProgramExample NO_DEFAULT_CONF)
 if(SWIG_FOUND AND PYTHONLIBS_FOUND)
   elements_add_python_program(SwigProgramExample ElementsExamples.SwigProgramExample)
 endif()
@@ -354,7 +360,8 @@ endif()
 
 #===== Test that the python program does run ========================================
 elements_add_test(PythonProgramExampleRun COMMAND PythonProgramExample)
-elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExample --config-file=toto.conf FAILS)
+elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExampleNoConfigFile --config-file=toto.conf FAILS)
+elements_add_test(PythonProgramExampleNoDefaultConfRun COMMAND PythonProgramExampleNoDefaultConf)
 if(SWIG_FOUND AND PYTHONLIBS_FOUND)
 elements_add_test(SwigProgramExampleRun COMMAND SwigProgramExample LABELS Swig Build)
 endif()

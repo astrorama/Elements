@@ -31,7 +31,10 @@ parser.add_argument('--elements-default-loglevel', default="DEBUG",
                     help='default log level for the Elements framework')
 
 parser.add_argument('--no-config-file', default=False, action="store_true",
-                    help='default log level for the Elements framework')
+                    help='prevent the usage of a config file')
+
+parser.add_argument('--no-default-conf', default=False, action="store_true",
+                    help='Ignore the default config files')
 
 args = parser.parse_args()
 
@@ -45,6 +48,11 @@ if args.no_config_file:
     use_config_file_string = "False"
 else:
     use_config_file_string = "True"
+
+if args.no_default_conf:
+    use_default_conf_string = "False"
+else:
+    use_default_conf_string = "True"
 
 template = """\
 #!/usr/bin/env python%(Python_version)s
@@ -103,7 +111,8 @@ p = Program('%(MODULE_NAME)s',
              ELEMENTS_MODULE_NAME, ELEMENTS_MODULE_VERSION,
              %(proj)s_SEARCH_DIRS, os.path.realpath(__file__),
              logging.%(LogLevel)s,
-             use_config_file=%(UseConfigFile)s)
+             use_config_file=%(UseConfigFile)s,
+             use_default_conf=%(UseDefaultConf)s)
 
 if __name__ == '__main__':
     exit(p.runProgram())
@@ -114,7 +123,8 @@ if __name__ == '__main__':
        'Mod_version': args.elements_module_version,
        'Python_version': args.python_explicit_version,
        'LogLevel': args.elements_default_loglevel,
-       'UseConfigFile': use_config_file_string
+       'UseConfigFile': use_config_file_string,
+       'UseDefaultConf': use_default_conf_string
       }
 
 filename = os.path.join(args.outdir, args.execname)

@@ -47,11 +47,13 @@ class Program(object):
                  elements_module_name=None, elements_module_version=None,
                  search_dirs=None, original_path="",
                  elements_loglevel=logging.DEBUG,
-                 use_config_file=True):
+                 use_config_file=True,
+                 use_default_conf=True):
         self._app_module = importlib.import_module(app_module)
         self._logger = Logging.getLogger('ElementsProgram')
         self._elements_loglevel = elements_loglevel
         self._use_config_file = use_config_file
+        self._use_default_conf = use_default_conf
         self._parent_project_version = parent_project_version
         self._parent_project_name = parent_project_name
         self._parent_project_vcs_version = parent_project_vcs_version
@@ -84,10 +86,12 @@ class Program(object):
         else:
             rel_path = name
         conf_file = None
-        for conf_path in os.environ.get('ELEMENTS_CONF_PATH').split(os.pathsep):
-            if os.path.isfile(conf_path + os.sep + rel_path):
-                conf_file = conf_path + os.sep + rel_path
-                break
+
+        if self._use_default_conf:
+            for conf_path in os.environ.get('ELEMENTS_CONF_PATH').split(os.pathsep):
+                if os.path.isfile(conf_path + os.sep + rel_path):
+                    conf_file = conf_path + os.sep + rel_path
+                    break
         return conf_file
 
     def getDefaultConfigFile(self, program_name, module_name):
