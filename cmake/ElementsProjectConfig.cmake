@@ -3298,7 +3298,7 @@ function(elements_add_executable executable)
     target_compile_definitions(${executable} PUBLIC NO_CONFIG_FILE)
   endif()
 
-if(IWYU_FOUND)
+  if(IWYU_FOUND)
     set_target_properties(${executable} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_COMMAND}")
   endif()
 
