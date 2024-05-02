@@ -71,7 +71,7 @@ ProgramManager::ProgramManager(std::unique_ptr<Program> program_ptr, const strin
                                const string& parent_project_name, const string& parent_project_vcs_version,
                                const string& parent_module_version, const string& parent_module_name,
                                const vector<string>& search_dirs, const Priority::Value& elements_loglevel,
-                               bool no_config_file)
+                               bool no_config_file, bool no_default_conf)
     : m_program_ptr(std::move(program_ptr))
     , m_parent_project_version(std::move(parent_project_version))
     , m_parent_project_name(std::move(parent_project_name))
@@ -81,7 +81,8 @@ ProgramManager::ProgramManager(std::unique_ptr<Program> program_ptr, const strin
     , m_search_dirs(std::move(search_dirs))
     , m_env{}
     , m_elements_loglevel(std::move(elements_loglevel))
-    , m_no_config_file(std::move(no_config_file)) {}
+    , m_no_config_file(std::move(no_config_file))
+    , m_no_default_conf(std::move(no_default_conf)) {}
 
 const Path::Item& ProgramManager::getProgramPath() const {
   return m_program_path;
@@ -127,14 +128,12 @@ const Path::Item ProgramManager::getDefaultConfigFile(const Path::Item& program_
 }
 
 const Path::Item ProgramManager::setProgramName(ELEMENTS_UNUSED char* arg0) {
-
   Path::Item full_path = getExecutablePath();
 
   return full_path.filename();
 }
 
 const Path::Item ProgramManager::setProgramPath(ELEMENTS_UNUSED char* arg0) {
-
   Path::Item full_path = getExecutablePath();
 
   return full_path.parent_path();
@@ -144,7 +143,6 @@ const Path::Item ProgramManager::setProgramPath(ELEMENTS_UNUSED char* arg0) {
  * Get program options
  */
 const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
-
   using std::cout;
   using std::exit;
   using OptionsDescription = Program::OptionsDescription;
@@ -168,7 +166,13 @@ const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
 
   if (not m_no_config_file) {
     // Get defaults
-    Path::Item default_config_file = getDefaultConfigFile(getProgramName(), m_parent_module_name);
+
+    Path::Item default_config_file{};
+
+    if (not m_no_default_conf) {
+      default_config_file = getDefaultConfigFile(getProgramName(), m_parent_module_name);
+    }
+
     cmd_only_generic_options.add_options()("config-file", value<Path::Item>()->default_value(default_config_file),
                                            "Name of a configuration file");
   }
@@ -291,7 +295,6 @@ void ProgramManager::logFooter(string program_name) const {
 
 // Log all options with a header
 void ProgramManager::logAllOptions() const {
-
   using std::int64_t;
   using std::stringstream;
 
@@ -362,7 +365,6 @@ void ProgramManager::logAllOptions() const {
 
 // Log all options with a header
 void ProgramManager::logTheEnvironment() const {
-
   log.debug() << "##########################################################";
   log.debug() << "#";
   log.debug() << "# Environment of the Run";
@@ -377,7 +379,6 @@ void ProgramManager::logTheEnvironment() const {
 }
 
 void ProgramManager::bootstrapEnvironment(char* arg0) {
-
   m_program_name = setProgramName(arg0);
   m_program_path = setProgramPath(arg0);
 
@@ -409,7 +410,6 @@ void ProgramManager::bootstrapEnvironment(char* arg0) {
 
 // Get the program options and setup logging
 void ProgramManager::setup(int argc, char* argv[]) {
-
   // store the program name and path in class variable
   // and retrieve the local environment
   bootstrapEnvironment(argv[0]);
@@ -447,7 +447,6 @@ void ProgramManager::setup(int argc, char* argv[]) {
 }
 
 void ProgramManager::tearDown(const ExitCode& c) {
-
   log.debug() << "# Exit Code: " << int(c);
 
   logFooter(m_program_name.string());
@@ -455,7 +454,6 @@ void ProgramManager::tearDown(const ExitCode& c) {
 
 // This is the method call from the main which does everything
 ExitCode ProgramManager::run(int argc, char* argv[]) {
-
   setup(argc, argv);
 
   ExitCode exit_code = m_program_ptr->mainMethod(m_variables_map);
@@ -466,7 +464,6 @@ ExitCode ProgramManager::run(int argc, char* argv[]) {
 }
 
 string ProgramManager::getVersion() const {
-
   string version = m_parent_project_name + " " + m_parent_project_vcs_version;
 
   return version;
@@ -475,7 +472,6 @@ string ProgramManager::getVersion() const {
 ProgramManager::~ProgramManager() {}
 
 void ProgramManager::onTerminate() noexcept {
-
   ExitCode exit_code{ExitCode::NOT_OK};
 
   if (auto exc = std::current_exception()) {
