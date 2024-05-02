@@ -4793,7 +4793,7 @@ function(elements_add_python_program executable module)
     set(PYTHON_SCRIPT_VERSION ${PYTHON_EXPLICIT_VERSION})
   endif()
 
- 
+
   set(PY_PROG_SCRIPT_EXTRA)
   if(PYPROG_NO_CONFIG_FILE)
     set(PY_PROG_SCRIPT_EXTRA ${PY_PROG_SCRIPT_EXTRA} --no-config-file)
