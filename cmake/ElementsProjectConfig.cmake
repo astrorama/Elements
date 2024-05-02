@@ -2403,7 +2403,7 @@ endfunction()
 # target (library, module, dictionary...)
 #-------------------------------------------------------------------------------
 macro(elements_common_add_build)
-  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
   # obsolete option
   if(ARG_LIBRARIES)
     message(WARNING "Deprecated option 'LIBRARIES', use 'LINK_LIBRARIES' instead")
@@ -3276,7 +3276,7 @@ endfunction()
 #---------------------------------------------------------------------------------------------------
 function(elements_add_executable executable)
 
-  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE" "" "" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "" ${ARGN})
 
   elements_common_add_build(${ARGN})
 
@@ -4758,7 +4758,7 @@ endfunction()
 
 function(elements_add_python_program executable module)
 
-  cmake_parse_arguments(PYPROG NO_CONFIG_FILE "" "" ${ARGN})
+  cmake_parse_arguments(PYPROG "NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "" ${ARGN})
 
   get_property(has_python_dir DIRECTORY PROPERTY module_has_python_dir)
 
