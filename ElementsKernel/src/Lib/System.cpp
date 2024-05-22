@@ -32,6 +32,7 @@
 #include <iomanip>   // for operator<<, setiosflags, setw
 #include <iostream>  // for basic_ostream, operator<<, basic_ostream::operator<<, dec, hex, ios, ostringstream
 #include <new>       // for nothrow
+#include <sstream>   // for basic_ostringstream
 #include <string>    // for string, char_traits, basic_string, operator<<, operator+
 #include <typeinfo>  // for type_info
 #include <vector>    // for vector
