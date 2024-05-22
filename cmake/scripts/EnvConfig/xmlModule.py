@@ -7,7 +7,7 @@ Created on Jul 2, 2011
 from xml.dom import minidom
 import logging
 from pickle import load, dump
-from hashlib import md5
+import hashlib
 import os
 
 
@@ -32,7 +32,7 @@ class XMLFile(object):
         '''
         is_filename = type(path) is str
         if is_filename:
-            checksum = md5()
+            checksum = hashlib.new("md5", usedforsecurity=False)
             checksum.update(open(path, 'rb').read())
             checksum = checksum.digest()
 
