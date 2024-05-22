@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.1] - 2024-05-22
+This release essentially fixes problem met on the MacOS platform
+
+### Fixed
+- Fix the include for the `boost::filesystem`
+- Revert from find_file to find_program for executables, in CMake. This former is apparently 
+  not supported on the conda builds
+- Fix the include for the HOST_NAME_MAX constant. Use unistd.h.
+- Readd the sstream include for `std::basic_ostringstream`
+
 
 ## [6.3.0] - 2024-04-23
 
