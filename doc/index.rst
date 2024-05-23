@@ -1,10 +1,9 @@
-.. Elements 6.1 documentation master file
+.. Elements documentation master file
 
 ======================
 Elements Documentation
 ======================
 * A C++ base framework for the Euclid Software.
-* Version: 6.1
 
 Project Overview
 ================
