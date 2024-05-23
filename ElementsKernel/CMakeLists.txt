@@ -254,8 +254,11 @@ if(NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
 elements_add_test(SqueezedInstall COMMAND squeezedInstall_test
                   ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR}
                   LABELS Creation Meta)
-elements_add_test(SqueezedInstallWithMake COMMAND squeezedInstall_test
-                  ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} CMAKE_GENERATOR="Unix Makefiles"
-                  LABELS Creation Meta)
 
+find_package(Ninja)
+if(NINJA_FOUND)
+elements_add_test(SqueezedInstallWithNinja COMMAND squeezedInstall_test
+                  ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} CMAKE_GENERATOR=Ninja
+                  LABELS Creation Meta Ninja)
+endif()
 endif()
