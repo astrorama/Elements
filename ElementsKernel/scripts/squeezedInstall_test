@@ -17,6 +17,7 @@ custom_prefix=${tmploc}/usr/local
 mkdir -p ${custom_prefix}
 
 cmake_full_cmd="cmake -DCMAKE_PREFIX_PATH=${custom_prefix} -DCMAKE_INSTALL_PREFIX=${custom_prefix}"
+build_cmd="cmake --build . "
 
 
 # prepare the environment
@@ -61,7 +62,8 @@ fi
 
 
 # Install Elements
-make install
+
+${build_cmd} --target install
 if [ $? -ne 0 ]; then
   echo "Error: <make install> command failed!" 1>&2
   local_clean_exit 1
@@ -126,14 +128,14 @@ if [ $? -ne 0 ]; then
 fi
 
 # Build ProjectB
-make
+${build_cmd}
 if [ $? -ne 0 ]; then
   echo "Error: <make> command failed!" 1>&2
   local_clean_exit 1
 fi
 
 # Install ProjectB
-make install
+${build_cmd} --target install
 if [ $? -ne 0 ]; then
   echo "Error: <make install> command failed!" 1>&2
   local_clean_exit 1
