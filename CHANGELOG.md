@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [6.3.1] - 2024-05-22
-This release essentially fixes problem met on the MacOS platform
+This release essentially fixes problems met on the MacOS platform
 
 ### Fixed
 - Fix the include for the `boost::filesystem`
