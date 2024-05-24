@@ -22,7 +22,7 @@ if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_LESS 3.1 OR USE_DEBUG_
       if(USE_DEBUG_PRINT)
         message("${file_to_include} is already included")
       endif()
-      return()
+#      return()
     else()
       set_property(${GUARD_RANGE} APPEND PROPERTY FULL_INCLUDE_FILE_LIST "${file_to_include}")
       if(USE_DEBUG_PRINT)
