@@ -180,7 +180,7 @@ set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final su
 
 if(SQUEEZED_INSTALL)
 
-  find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
 
   execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
                   "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"

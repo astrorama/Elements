@@ -3,6 +3,7 @@ $PYTHON-devel
 $PYTHON-numpy
 $PYTHON-pytest
 $PYTHON-sphinx
+$PYTHON-lxml
 CCfits-devel
 $BOOST-$PYTHON-devel
 $BOOST-devel
