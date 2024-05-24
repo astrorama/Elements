@@ -16,7 +16,7 @@ tmploc=$(mktemp -dq -t temp.XXXXXX)
 custom_prefix=${tmploc}/usr/local
 mkdir -p ${custom_prefix}
 
-cmake_full_cmd="cmake -DCMAKE_PREFIX_PATH=${custom_prefix} -DCMAKE_INSTALL_PREFIX=${custom_prefix}"
+cmake_full_cmd="cmake -DCMAKE_PREFIX_PATH=${custom_prefix} -DCMAKE_INSTALL_PREFIX=${custom_prefix} ${TESTCMAKEFLAGS}"
 build_cmd="cmake --build . "
 
 
@@ -40,7 +40,7 @@ cd ${elements_build_dir}
 
 ${cmake_full_cmd} ${ELEMENTS_SOURCE_DIR}
 if [ $? -ne 0 ]; then
-  echo "Error: <cmake -DCMAKE_PREFIX_PATH=${custom_prefix} -DCMAKE_INSTALL_PREFIX=${custom_prefix} ${ELEMENTS_SOURCE_DIR}> command failed!" 1>&2
+  echo "Error: <${cmake_full_cmd} ${ELEMENTS_SOURCE_DIR}> command failed!" 1>&2
   local_clean_exit 1
 fi
 
