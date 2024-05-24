@@ -261,4 +261,9 @@ elements_add_test(SqueezedInstallWithNinja COMMAND squeezedInstall_test
                   ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} CMAKE_GENERATOR=Ninja
                   LABELS Creation Meta Ninja)
 endif()
+
+elements_add_test(CMakeIncludeGuards COMMAND squeezedInstall_test
+                  ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} TESTCMAKEFLAGS=-DUSE_DEBUG_PRINT=ON
+                  LABELS Creation Meta)
+
 endif()
