@@ -253,17 +253,17 @@ elements_add_test(MissingElementsProjectVersion
 if(NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
 elements_add_test(SqueezedInstall COMMAND squeezedInstall_test
                   ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR}
-                  LABELS Creation Meta)
+                  LABELS Creation Meta Squeezed)
 
 find_package(Ninja)
 if(NINJA_FOUND)
 elements_add_test(SqueezedInstallWithNinja COMMAND squeezedInstall_test
                   ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} CMAKE_GENERATOR=Ninja
-                  LABELS Creation Meta Ninja)
+                  LABELS Creation Meta Ninja Squeezed)
 endif()
 
 elements_add_test(CMakeIncludeGuards COMMAND squeezedInstall_test
                   ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} TESTCMAKEFLAGS=-DUSE_DEBUG_PRINT=ON
-                  LABELS Creation Meta)
+                  LABELS Creation Meta Squeezed)
 
 endif()

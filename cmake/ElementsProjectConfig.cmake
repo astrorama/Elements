@@ -100,9 +100,10 @@ set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 #---------------------------------------------------------------------------------------------------
 include(CMakeParseArguments)
 
-find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION} QUIET)
+find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter QUIET)
 
-if(PYTHON_EXECUTABLE MATCHES "^(/usr)?/bin/python")
+
+if(Python_EXECUTABLE MATCHES "^(/usr)?/bin/python")
   set(PYTHON_HAS_STD_LOCATION TRUE)
 else()
   set(PYTHON_HAS_STD_LOCATION FALSE)
@@ -298,73 +299,73 @@ macro(elements_project project version)
   set(binary_paths ${CMAKE_SOURCE_DIR}/cmake/scripts ${binary_paths})
 
   find_program(env_cmd env.py HINTS ${binary_paths})
-  set(env_cmd ${PYTHON_EXECUTABLE} ${env_cmd})
+  set(env_cmd ${Python_EXECUTABLE} ${env_cmd})
 
   find_program(merge_cmd merge_files.py HINTS ${binary_paths})
-  set(merge_cmd ${PYTHON_EXECUTABLE} ${merge_cmd} --no-stamp)
+  set(merge_cmd ${Python_EXECUTABLE} ${merge_cmd} --no-stamp)
 
   find_program(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
   if(versheader_cmd)
-    set(versheader_cmd ${PYTHON_EXECUTABLE} ${versheader_cmd})
+    set(versheader_cmd ${Python_EXECUTABLE} ${versheader_cmd})
   endif()
 
   find_program(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
   if(instheader_cmd)
-    set(instheader_cmd ${PYTHON_EXECUTABLE} ${instheader_cmd})
+    set(instheader_cmd ${Python_EXECUTABLE} ${instheader_cmd})
   endif()
 
   find_program(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
   if(expheader_cmd)
-    set(expheader_cmd ${PYTHON_EXECUTABLE} ${expheader_cmd})
+    set(expheader_cmd ${Python_EXECUTABLE} ${expheader_cmd})
   endif()
 
 
   find_program(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
   if(versmodule_cmd)
-    set(versmodule_cmd ${PYTHON_EXECUTABLE} ${versmodule_cmd})
+    set(versmodule_cmd ${Python_EXECUTABLE} ${versmodule_cmd})
   endif()
 
   find_program(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
   if(instmodule_cmd)
-    set(instmodule_cmd ${PYTHON_EXECUTABLE} ${instmodule_cmd})
+    set(instmodule_cmd ${Python_EXECUTABLE} ${instmodule_cmd})
   endif()
 
 
   find_program(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
   if(thisheader_cmd)
-    set(thisheader_cmd ${PYTHON_EXECUTABLE} ${thisheader_cmd})
+    set(thisheader_cmd ${Python_EXECUTABLE} ${thisheader_cmd})
   endif()
 
   find_program(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
   if(thismodule_cmd)
-    set(thismodule_cmd ${PYTHON_EXECUTABLE} ${thismodule_cmd})
+    set(thismodule_cmd ${Python_EXECUTABLE} ${thismodule_cmd})
   endif()
 
 
   find_program(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
   if(thismodheader_cmd)
-    set(thismodheader_cmd ${PYTHON_EXECUTABLE} ${thismodheader_cmd})
+    set(thismodheader_cmd ${Python_EXECUTABLE} ${thismodheader_cmd})
   endif()
 
   find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
   if(Boost_testmain_cmd)
-    set(Boost_testmain_cmd ${PYTHON_EXECUTABLE} ${Boost_testmain_cmd})
+    set(Boost_testmain_cmd ${Python_EXECUTABLE} ${Boost_testmain_cmd})
   endif()
 
   find_program(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
   if(CppUnit_testmain_cmd)
-    set(CppUnit_testmain_cmd ${PYTHON_EXECUTABLE} ${CppUnit_testmain_cmd})
+    set(CppUnit_testmain_cmd ${Python_EXECUTABLE} ${CppUnit_testmain_cmd})
   endif()
 
   find_program(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
   if(elementsrun_cmd)
-    set(elementsrun_cmd ${PYTHON_EXECUTABLE} ${elementsrun_cmd})
+    set(elementsrun_cmd ${Python_EXECUTABLE} ${elementsrun_cmd})
   endif()
 
   find_package(RPMBuild)
   if(RPMBUILD_FOUND)
     find_program(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
-    set(rpmbuild_wrap_cmd ${PYTHON_EXECUTABLE} ${rpmbuild_wrap_cmd})
+    set(rpmbuild_wrap_cmd ${Python_EXECUTABLE} ${rpmbuild_wrap_cmd})
 	  mark_as_advanced(rpmbuild_wrap_cmd)
 	  if (NOT RPMBUILD_VERSION VERSION_LESS 4.14)
 	    set_property(GLOBAL APPEND PROPERTY CMAKE_EXTRA_FLAGS "-DELEMENTS_DETACHED_DEBINFO=OFF")
@@ -373,17 +374,17 @@ macro(elements_project project version)
 
   find_program(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
   if(pythonprogramscript_cmd)
-    set(pythonprogramscript_cmd ${PYTHON_EXECUTABLE} ${pythonprogramscript_cmd})
+    set(pythonprogramscript_cmd ${Python_EXECUTABLE} ${pythonprogramscript_cmd})
   endif()
 
   find_program(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
   if(ctest2junit_cmd)
-    set(ctest2junit_cmd ${PYTHON_EXECUTABLE} ${ctest2junit_cmd})
+    set(ctest2junit_cmd ${Python_EXECUTABLE} ${ctest2junit_cmd})
   endif()
 
   find_program(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
   if(ctestxml2html_cmd)
-    set(ctestxml2html_cmd ${PYTHON_EXECUTABLE} ${ctestxml2html_cmd})
+    set(ctestxml2html_cmd ${Python_EXECUTABLE} ${ctestxml2html_cmd})
   endif()
 
   mark_as_advanced(env_cmd merge_cmd versheader_cmd instheader_cmd expheader_cmd
@@ -430,7 +431,7 @@ macro(elements_project project version)
 
   # get the python test framework
 
-  if(PYTHONINTERP_FOUND)
+  if(Python_Interpreter_FOUND)
     set(PYFRMK_TEST)
     set(PYFRMK_NAME)
     if(USE_PYTHON_NOSE)
@@ -469,7 +470,7 @@ macro(elements_project project version)
       endif()
     endif()
     if(PYFRMK_TEST)
-      set(PYFRMK_TEST ${PYTHON_EXECUTABLE} ${PYFRMK_TEST})
+      set(PYFRMK_TEST ${Python_EXECUTABLE} ${PYFRMK_TEST})
     endif()
   endif()
 
@@ -567,12 +568,12 @@ execute_process\(COMMAND ${instheader_cmd} --quiet ${so_version_option} ${projec
     set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
     set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.py)
     if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-      if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(Python_VERSION_MAJOR VERSION_LESS 3)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyc)
       endif()
     else()
-      if(SQUEEZED_INSTALL AND (PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(SQUEEZED_INSTALL AND (Python_VERSION_MAJOR VERSION_LESS 3)
          AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyc)
@@ -597,12 +598,12 @@ execute_process\(COMMAND ${instmodule_cmd} --quiet ${so_version_option} ${projec
     set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.py)
 
     if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-      if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(Python_VERSION_MAJOR VERSION_LESS 3)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyc)
       endif()
     else()
-      if(SQUEEZED_INSTALL AND (PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(SQUEEZED_INSTALL AND (Python_VERSION_MAJOR VERSION_LESS 3)
          AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyc)
@@ -979,7 +980,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
 
 
   set(CPACK_VERBOSE_LINE)
-  set(CPACK_EXPORT_VERBOSE_LINE "unset VERBOSE")
+  set(CPACK_EXPORT_VERBOSE_LINE "unset VERBOSE; unset CMAKE_GENERATOR")
   if(DEFINED ENV{VERBOSE})
     if($ENV{VERBOSE})
       set(CPACK_VERBOSE $ENV{VERBOSE})
@@ -987,7 +988,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
       set(CPACK_VERBOSE 0)
     endif()
     set(CPACK_VERBOSE_LINE "VERBOSE=${CPACK_VERBOSE}")
-    set(CPACK_EXPORT_VERBOSE_LINE "export ${CPACK_VERBOSE_LINE}")
+    set(CPACK_EXPORT_VERBOSE_LINE "export ${CPACK_VERBOSE_LINE}; unset CMAKE_GENERATOR")
   endif()
 
 #------------------------------------------------------------------------------
@@ -1145,13 +1146,13 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
   if(proj_has_python)
 
     if(SQUEEZED_INSTALL)
-      if(NOT (PYTHON_VERSION_MAJOR VERSION_LESS 3))
+      if(NOT (Python_VERSION_MAJOR VERSION_LESS 3))
         if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
           set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)
         endif()
       endif()
     else()
-      if(NOT (PYTHON_VERSION_MAJOR VERSION_LESS 3))
+      if(NOT (Python_VERSION_MAJOR VERSION_LESS 3))
         if(RPMBUILD_VERSION VERSION_LESS 4.12)
           set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)
         endif()
@@ -1845,7 +1846,11 @@ macro(_get_include_dir_from_package inc_dir pck)
       # If the package is found, add INCLUDE_DIRS or (if not defined) INCLUDE_DIR.
       # If none of the two is defined, do not add anything.
       if("${pck}" STREQUAL "PythonLibs")
-        set(to_incl_var PYTHON_INCLUDE_DIRS)
+        set(to_incl_var Python_INCLUDE_DIRS)
+      elseif("${pck}" STREQUAL "Python")
+        set(to_incl_var Python_INCLUDE_DIRS)
+      elseif("${pck}" STREQUAL "Python_Development")
+        set(to_incl_var Python_INCLUDE_DIRS)
       elseif(${_pack_upper}_INCLUDE_DIRS)
         set(to_incl_var ${_pack_upper}_INCLUDE_DIRS)
       elseif(${_pack_upper}_INCLUDE_DIR)
@@ -1933,7 +1938,11 @@ function(print_package_directories)
         # If the package is found, add INCLUDE_DIRS or (if not defined) INCLUDE_DIR.
         # If none of the two is defined, do not add anything.
         if("${package}" STREQUAL "PythonLibs")
-          set(to_incl PYTHON_INCLUDE_DIRS)
+          set(to_incl Python_INCLUDE_DIRS)
+        elseif("${pck}" STREQUAL "Python")
+          set(to_incl Python_INCLUDE_DIRS)
+        elseif("${pck}" STREQUAL "Python_Development")
+          set(to_incl Python_INCLUDE_DIRS)
         elseif(${_pack_upper}_INCLUDE_DIRS)
           set(to_incl ${_pack_upper}_INCLUDE_DIRS)
         elseif(${_pack_upper}_INCLUDE_DIR)
@@ -2226,7 +2235,11 @@ function(elements_resolve_link_libraries variable)
         # Handle some special cases first, then try for PACKAGE_LIBRARIES
         # otherwise fall back on Package_LIBRARIES.
         if("${package}" STREQUAL "PythonLibs")
-          set(collected ${collected} ${PYTHON_LIBRARIES})
+          set(collected ${collected} ${Python_LIBRARIES})
+        elseif("${package}" STREQUAL "Python")
+          set(collected ${collected} ${Python_LIBRARIES})        
+        elseif("${package}" STREQUAL "Python_Development")
+          set(collected ${collected} ${Python_LIBRARIES})        
         elseif(${_pack_upper}_LIBRARIES)
           set(collected ${collected} ${${_pack_upper}_LIBRARIES})
         else()
@@ -2735,9 +2748,10 @@ function(elements_add_python_module module)
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
 
   # require Python libraries
-  find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET REQUIRED)
 
-  elements_include_directories(AFTER ${PYTHON_INCLUDE_DIRS})
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development QUIET REQUIRED)
+
+  elements_include_directories(AFTER ${Python_INCLUDE_DIRS})
   add_library(${module} MODULE ${srcs})
 
   if(ARG_LINKER_LANGUAGE)
@@ -2751,7 +2765,7 @@ function(elements_add_python_module module)
     set_target_properties(${module} PROPERTIES SUFFIX .so PREFIX "")
     set_target_properties(${module} PROPERTIES BASENAME "${module}.so")
   endif()
-  target_link_libraries(${module} PRIVATE ${PYTHON_LIBRARIES} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${module} PRIVATE ${Python_LIBRARIES} ${ARG_LINK_LIBRARIES})
   _elements_detach_debinfo(${module})
 
   #----Installation details-------------------------------------------------------
@@ -2957,12 +2971,12 @@ function(elements_add_swig_binding binding)
   set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.py)
 
   if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-    if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
+    if(Python_VERSION_MAJOR VERSION_LESS 3)
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyo)
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyc)
     endif()
   else()
-    if(SQUEEZED_INSTALL AND (PYTHON_VERSION_MAJOR VERSION_LESS 3)
+    if(SQUEEZED_INSTALL AND (Python_VERSION_MAJOR VERSION_LESS 3)
        AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyo)
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyc)
@@ -3236,9 +3250,9 @@ function(elements_add_pybind11_module module)
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
 
   # require Python libraries
-  find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET REQUIRED)
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development QUIET REQUIRED)
 
-  elements_include_directories(AFTER ${PYTHON_INCLUDE_DIRS})
+  elements_include_directories(AFTER ${Python_INCLUDE_DIRS})
 
   find_package(pybind11)
 
@@ -3248,7 +3262,7 @@ function(elements_add_pybind11_module module)
     set_target_properties(${module} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
   endif()
 
-  target_link_libraries(${module} PRIVATE ${PYTHON_LIBRARIES} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${module} PRIVATE ${Python_LIBRARIES} ${ARG_LINK_LIBRARIES})
 
   _elements_detach_debinfo(${module})
 
@@ -3798,7 +3812,7 @@ function(add_python_test_dir)
       set_property(TEST ${package}.${pytest_name} PROPERTY TIMEOUT ${PYTEST_ARG_TIMEOUT})
     endif()
   else()
-    if(NOT PYTHON_VERSION_STRING VERSION_LESS "2.7")
+    if(NOT Python_VERSION VERSION_LESS "2.7")
       foreach(pytestsubdir ${PYTEST_ARG_UNPARSED_ARGUMENTS})
         set(pytest_name "${pytest_name}:${pytestsubdir}")
         elements_add_test(${pytest_name}
@@ -4788,7 +4802,7 @@ function(elements_add_python_program executable module)
   get_directory_property(elements_module_name name)
   get_directory_property(elements_module_version version)
 
-  set(PYTHON_SCRIPT_VERSION ${PYTHON_VERSION_MAJOR})
+  set(PYTHON_SCRIPT_VERSION ${Python_VERSION_MAJOR})
   if(PYTHON_EXPLICIT_VERSION)
     set(PYTHON_SCRIPT_VERSION ${PYTHON_EXPLICIT_VERSION})
   endif()

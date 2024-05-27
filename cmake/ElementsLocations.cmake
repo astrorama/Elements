@@ -182,7 +182,7 @@ if(SQUEEZED_INSTALL)
 
   find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
 
-  execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
+  execute_process(COMMAND "${Python_EXECUTABLE}" "-c"
                   "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"
                   OUTPUT_VARIABLE PYTHON_INSTALL_SUFFIX
                   ERROR_QUIET
