@@ -184,10 +184,11 @@ if(SQUEEZED_INSTALL)
 
   execute_process(COMMAND "${Python_EXECUTABLE}" "-c"
                   "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"
-                  OUTPUT_VARIABLE PYTHON_INSTALL_SUFFIX
+                  OUTPUT_VARIABLE custom_python_install_suffix
                   ERROR_QUIET
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
-
+                  
+  set(PYTHON_INSTALL_SUFFIX ${custom_python_install_suffix} CACHE STRING "Final suffix for the install directory of the python files" FORCE)
   set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the python binary files" FORCE)
 
 endif()
