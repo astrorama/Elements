@@ -50,6 +50,11 @@ if(POLICY CMP0054)
   endif()
 endif()
 
+if(POLICY CMP0094)
+  cmake_policy(SET CMP0094 NEW)
+endif()
+
+
 if(POLICY CMP0148)
   # this policy is related to the python find_package
   # please run "cmake --help-policy CMP0148" for more details
