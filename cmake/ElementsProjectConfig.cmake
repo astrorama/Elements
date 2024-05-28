@@ -1950,6 +1950,8 @@ function(print_package_directories)
           set(to_incl Python_INCLUDE_DIRS)
         elseif("${pck}" STREQUAL "Python_Development")
           set(to_incl Python_INCLUDE_DIRS)
+        elseif("${pck}" STREQUAL "NumPy")
+          set(to_incl Python_NumPy_INCLUDE_DIRS)
         elseif(${_pack_upper}_INCLUDE_DIRS)
           set(to_incl ${_pack_upper}_INCLUDE_DIRS)
         elseif(${_pack_upper}_INCLUDE_DIR)
@@ -2756,9 +2758,9 @@ function(elements_add_python_module module)
 
   # require Python libraries
 
-  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development QUIET REQUIRED)
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development NumPy QUIET REQUIRED)
 
-  elements_include_directories(AFTER ${Python_INCLUDE_DIRS})
+  elements_include_directories(AFTER ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS} )
   add_library(${module} MODULE ${srcs})
 
   if(ARG_LINKER_LANGUAGE)
@@ -3257,9 +3259,9 @@ function(elements_add_pybind11_module module)
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
 
   # require Python libraries
-  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development QUIET REQUIRED)
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development NumPy QUIET REQUIRED)
 
-  elements_include_directories(AFTER ${Python_INCLUDE_DIRS})
+  elements_include_directories(AFTER ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS})
 
   find_package(pybind11)
 

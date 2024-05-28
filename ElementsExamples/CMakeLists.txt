@@ -309,8 +309,8 @@ elements_add_swig_binding(SwigExample ElementsExamples/SwigExample.i
                           PUBLIC_HEADERS ElementsExamples)
 
 if(Python_NumPy_FOUND)
+
 elements_add_swig_binding(NumPyExample  ElementsExamples/NumPyExample.i
-                          INCLUDE_DIRS ${Python_NumPy_INCLUDE_DIRS}
                           NO_PUBLIC_HEADERS)
 endif()
 
