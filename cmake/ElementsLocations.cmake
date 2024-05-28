@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
 
 
-include_guard(DIRECTORY)
+include_guard(GLOBAL)
 
 include(GNUInstallDirs)
 
