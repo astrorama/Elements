@@ -310,7 +310,7 @@ elements_add_swig_binding(SwigExample ElementsExamples/SwigExample.i
 
 if(Python_NumPy_FOUND)
 elements_add_swig_binding(NumPyExample  ElementsExamples/NumPyExample.i
-                          INCLUDE_DIRS NumPy Python_NumPy
+                          INCLUDE_DIRS NumPy
                           NO_PUBLIC_HEADERS)
 endif()
 
