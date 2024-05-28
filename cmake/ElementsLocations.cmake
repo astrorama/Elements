@@ -188,17 +188,10 @@ if(SQUEEZED_INSTALL)
                   ERROR_QUIET
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-  message(STATUS "------------------------------------------------------> custom_python_install_suffix: ${custom_python_install_suffix}")
-
   set(PYTHON_INSTALL_SUFFIX ${custom_python_install_suffix} CACHE STRING "Final suffix for the install directory of the python files" FORCE)
   set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the python binary files" FORCE)
 
-  message(STATUS "------------------------------------------------------> PYTHON_INSTALL_SUFFIX: ${PYTHON_INSTALL_SUFFIX}")
-
-
 endif()
-
-message(STATUS "------------------------------------------------------> PYTHON_INSTALL_SUFFIX: ${PYTHON_INSTALL_SUFFIX}")
 
 
 IF(ENV{CMAKE_PREFIX_PATH})
