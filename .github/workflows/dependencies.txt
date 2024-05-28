@@ -11,3 +11,4 @@ doxygen
 graphviz
 log4cpp-devel
 which
+git-core
