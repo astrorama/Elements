@@ -1,5 +1,6 @@
 $NUMPY
 $PYTHON-devel
+$PYTHON-setuptools
 $PYTHON-numpy
 $PYTHON-pytest
 $PYTHON-sphinx
