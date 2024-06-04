@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [6.3.2] - 2024-06-04
+This release essentially fixes problem met on github 
+
+### Fixed
+- Add mandatory setuptools for the python prefix guessing.
+    - This is needed for the github build
+    - apparently the distuils package has been removed from the core python package and it is now available in the setuptools package
+
+
 ## [6.3.1] - 2024-05-22
 This release essentially fixes problem met on the MacOS platform
 
