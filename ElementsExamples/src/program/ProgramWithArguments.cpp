@@ -27,7 +27,6 @@
 
 #include <boost/program_options.hpp>  // for value, options_description_easy_init, typed_value, variable_value
 
-#include "ElementsKernel/Main.h"     // for MAIN_FOR
 #include "ElementsKernel/Program.h"  // for Program
 #include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 

@@ -27,7 +27,6 @@
 
 #include "ElementsKernel/Auxiliary.h"  // for getPath
 #include "ElementsKernel/Exception.h"  // for operator<<
-#include "ElementsKernel/Main.h"       // for MAIN_FOR
 #include "ElementsKernel/Program.h"    // for Program
 #include "ElementsKernel/Unused.h"     // for ELEMENTS_UNUSED
 

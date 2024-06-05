@@ -24,7 +24,11 @@
 #include <map>
 #include <string>
 
-#include "ElementsKernel/ProgramHeaders.h"
+
+#include "ElementsKernel/Exit.h"     // for ExitCode, ExitCode::OK
+#include "ElementsKernel/Logging.h"  // for Logging::LogMessageStream, etc
+
+#include "ElementsKernel/Program.h"  // for the Program interface
 
 class %(PROGRAMNAME)s : public Elements::Program {
 

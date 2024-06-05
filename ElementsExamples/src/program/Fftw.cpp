@@ -27,7 +27,6 @@
 
 #include <boost/format.hpp>  // for basic_format, operator<<, format
 
-#include "ElementsKernel/Main.h"           // for MAIN_FOR
 #include "ElementsKernel/MathConstants.h"  // for pi
 #include "ElementsKernel/Program.h"        // for Program
 #include "ElementsKernel/Unused.h"         // for ELEMENTS_UNUSED

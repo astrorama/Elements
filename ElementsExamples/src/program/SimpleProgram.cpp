@@ -23,7 +23,6 @@
 #include <map>       // for map
 #include <string>    // for char_traits, string
 
-#include "ElementsKernel/Main.h"     // for MAIN_FOR
 #include "ElementsKernel/Program.h"  // for Program
 #include "ElementsKernel/Sleep.h"    // for nanoSleep
 #include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED

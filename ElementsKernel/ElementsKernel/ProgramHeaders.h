@@ -29,7 +29,6 @@
 #include "ElementsKernel/Exit.h"     // for ExitCode, ExitCode::OK
 #include "ElementsKernel/Logging.h"  // for Logging::LogMessageStream, etc
 
-#include "ElementsKernel/Main.h"     // for the MAIN macro
 #include "ElementsKernel/Program.h"  // for the Program interface
 
 #include "ElementsKernel/Version.h"  // ??

@@ -29,7 +29,6 @@
 #include <boost/math/constants/constants.hpp>     // for pi
 #include <boost/math/special_functions/next.hpp>  // for float_next
 
-#include "ElementsKernel/Main.h"     // for MAIN_FOR
 #include "ElementsKernel/Program.h"  // for Program
 #include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 

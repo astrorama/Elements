@@ -23,7 +23,6 @@
 
 #include <healpix_cxx/healpix_map.h>  // for Healpix_Map
 
-#include "ElementsKernel/Main.h"     // for MAIN_FOR
 #include "ElementsKernel/Program.h"  // for Program
 #include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
 
