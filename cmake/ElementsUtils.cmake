@@ -1,5 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
 
+find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+
+
 if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_LESS 3.1 OR USE_DEBUG_PRINT)
   macro(include_guard)
 
@@ -885,6 +889,7 @@ endmacro()
 function(find_python_module module)
 
     find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
+    set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
 
     string(TOUPPER ${module} module_upper_tmp)

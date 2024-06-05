@@ -1,6 +1,7 @@
 if (NOT CYTHON_FOUND)
 
     find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development)
+    set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
 
     set(explicit_cython)

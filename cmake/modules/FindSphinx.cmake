@@ -1,6 +1,7 @@
 if (NOT SPHINX_FOUND)
 
   find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
+  set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
 
   # ----------------------------------------------------------------------------

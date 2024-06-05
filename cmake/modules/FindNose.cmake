@@ -1,6 +1,7 @@
 if (NOT NOSE_FOUND)
 
     find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
+    set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
     set(explicit_nose)
     if(PYTHON_EXPLICIT_VERSION)

@@ -106,6 +106,7 @@ set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 include(CMakeParseArguments)
 
 find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter QUIET)
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
 
 if(Python_EXECUTABLE MATCHES "^(/usr)?/bin/python")

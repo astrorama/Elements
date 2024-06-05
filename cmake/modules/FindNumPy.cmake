@@ -12,6 +12,7 @@ if(NOT NumPy_FOUND)
     find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development NumPy)
     set(__numpy_out 1)
   endif()
+  set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 endif()
 
 if(Python_NumPy_INCLUDE_DIRS)
