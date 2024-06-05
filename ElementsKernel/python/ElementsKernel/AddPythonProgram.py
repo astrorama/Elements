@@ -194,36 +194,27 @@ def mainMethod(args):
 
     program_name = args.program_name
 
-    try:
-        # Default is the current directory
-        current_dir = os.getcwd()
+    # Default is the current directory
+    current_dir = os.getcwd()
 
-        LOGGER.info('# Current directory : %s', current_dir)
-        LOGGER.info('')
+    LOGGER.info('# Current directory : %s', current_dir)
+    LOGGER.info('')
 
-        # We absolutely need a Elements cmake file
-        module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
+    # We absolutely need a Elements cmake file
+    module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
 
-        program_file_path = os.path.join(current_dir, 'python', module_name, program_name + '.py')
-        # Make checks
-        makeChecks(program_file_path, program_name)
+    program_file_path = os.path.join(current_dir, 'python', module_name, program_name + '.py')
+    # Make checks
+    makeChecks(program_file_path, program_name)
 
-        # Create program
-        createPythonProgram(current_dir, module_name, program_name)
+    # Create program
+    createPythonProgram(current_dir, module_name, program_name)
 
-        LOGGER.info('< %s > program successfully created in < %s >.', program_name, program_file_path)
-        # Remove backup file
-        ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
+    LOGGER.info('< %s > program successfully created in < %s >.', program_name, program_file_path)
+    # Remove backup file
+    ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
 
-        # Print all files created
-        ProjectCommonRoutines.printCreationList()
-
-    except Exception as msg:
-        if str(msg):
-            LOGGER.error(msg)
-        LOGGER.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
-    else:
-        LOGGER.info('# Script over.')
+    # Print all files created
+    ProjectCommonRoutines.printCreationList()
 
     return exit_code

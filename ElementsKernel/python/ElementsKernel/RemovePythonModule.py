@@ -131,31 +131,22 @@ def mainMethod(args):
     LOGGER.info('Current directory : %s', module_dir)
     LOGGER.info('')
 
-    try:
-        # We absolutely need a Elements cmake file
-        module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
+    # We absolutely need a Elements cmake file
+    module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
 
-        # Default is the current directory
-        file_to_be_deleted = getAllFiles(pymodule_name, module_dir, module_name)
-        if file_to_be_deleted:
-            LOGGER.info('File to be deleted:')
-            for elt_file in file_to_be_deleted:
-                LOGGER.info(' --> %s', elt_file)
-            response_key = input('Do you want to continue?(y/n, default: n)')
-            if response_key == 'Y' or response_key == 'y':
-                ProjectCommonRoutines.removeFilesOnDisk(file_to_be_deleted)
-                updateCmakeListsFile(module_dir)
-        else:
-            LOGGER.info('')
-            LOGGER.info('No file found for deletion!')
-            LOGGER.info('')
-
-    except Exception as msg:
-        if str(msg):
-            LOGGER.error(msg)
-        LOGGER.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
+    # Default is the current directory
+    file_to_be_deleted = getAllFiles(pymodule_name, module_dir, module_name)
+    if file_to_be_deleted:
+        LOGGER.info('File to be deleted:')
+        for elt_file in file_to_be_deleted:
+            LOGGER.info(' --> %s', elt_file)
+        response_key = input('Do you want to continue?(y/n, default: n)')
+        if response_key == 'Y' or response_key == 'y':
+            ProjectCommonRoutines.removeFilesOnDisk(file_to_be_deleted)
+            updateCmakeListsFile(module_dir)
     else:
-        LOGGER.info('# Script over.')
+        LOGGER.info('')
+        LOGGER.info('No file found for deletion!')
+        LOGGER.info('')
 
     return exit_code

@@ -37,7 +37,7 @@ from ElementsKernel import Logging
 from ElementsKernel import Exit
 from ElementsKernel import File
 
-__updated__ = "2024-02-13"
+__updated__ = "2024-06-05"
 
 LOGGER = Logging.getLogger(__name__)
 
@@ -234,32 +234,23 @@ def mainMethod(args):
     module_list = args.module_dependency
     library_list = args.library_dependency
 
-    try:
-        # Default is the current directory
-        current_dir = os.getcwd()
+    # Default is the current directory
+    current_dir = os.getcwd()
 
-        LOGGER.info('Current directory : %s', current_dir)
-        LOGGER.info('')
-        # make some checks
-        makeChecks(current_dir, program_name)
-        # Create CPP program
-        createCppProgram(current_dir, program_name, module_list, library_list)
+    LOGGER.info('Current directory : %s', current_dir)
+    LOGGER.info('')
+    # make some checks
+    makeChecks(current_dir, program_name)
+    # Create CPP program
+    createCppProgram(current_dir, program_name, module_list, library_list)
 
-        location = os.path.join(current_dir, 'src', 'program')
-        LOGGER.info('< %s > program successfully created in < %s >.', program_name, location)
+    location = os.path.join(current_dir, 'src', 'program')
+    LOGGER.info('< %s > program successfully created in < %s >.', program_name, location)
 
-        # Remove backup file
-        ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
+    # Remove backup file
+    ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
 
-        # Print all files created
-        ProjectCommonRoutines.printCreationList()
-
-    except Exception as msg:
-        if str(msg):
-            LOGGER.error(msg)
-        LOGGER.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
-    else:
-        LOGGER.info('# Script over.')
+    # Print all files created
+    ProjectCommonRoutines.printCreationList()
 
     return exit_code

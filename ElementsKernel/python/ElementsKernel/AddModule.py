@@ -237,19 +237,10 @@ def mainMethod(args):
     project_dir = os.getcwd()
     logger.info('# Current directory : %s', project_dir)
 
-    try:
-        makeChecks(project_dir, module_name, dependency_list)
-        createModule(project_dir, module_name, dependency_list, standalone, answer_yes)
-        logger.info('# <%s> module successfully created in <%s>.', module_name, project_dir)
-        # Print all files created
-        ProjectCommonRoutines.printCreationList()
-
-    except Exception as msg:
-        if str(msg):
-            logger.error(msg)
-        logger.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
-    else:
-        logger.info('# Script over.')
+    makeChecks(project_dir, module_name, dependency_list)
+    createModule(project_dir, module_name, dependency_list, standalone, answer_yes)
+    logger.info('# <%s> module successfully created in <%s>.', module_name, project_dir)
+    # Print all files created
+    ProjectCommonRoutines.printCreationList()
 
     return exit_code

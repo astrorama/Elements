@@ -129,39 +129,30 @@ def mainMethod(args):
     LOGGER.info('Current directory : %s', module_dir)
     LOGGER.info('')
 
-    try:
-        # We absolutely need a Elements cmake file
-        module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
+    # We absolutely need a Elements cmake file
+    module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
 
-        # Default is the current directory
-        file_to_be_deleted = getAllFiles(program_name, module_dir, module_name)
-        if file_to_be_deleted:
-            LOGGER.info('File to be deleted:')
-            for elt_file in file_to_be_deleted:
-                LOGGER.info(' --> %s', elt_file)
-            response_key = input('Do you want to continue?(y/n, default: n)')
-            if response_key.lower() == 'Y' or response_key.lower() == 'y':
-                ProjectCommonRoutines.removeFilesOnDisk(file_to_be_deleted)
-                cmakefile = os.path.join(module_dir, 'CMakeLists.txt')
-                updateCmakeListsFile(module_dir, program_name)
-                LOGGER.info('')
-                LOGGER.warning('# !!!!!!!!!!!!!!!!!!')
-                LOGGER.warning('# If your < %s > program has some Element and/or external dependencies,', \
-                                program_name)
-                LOGGER.warning('# you maybe need to remove them. Check the <find_package,')
-                LOGGER.warning('# elements_depends_on_subdirs> macros in the file :')
-                LOGGER.warning('# < %s >', cmakefile)
-                LOGGER.warning('# !!!!!!!!!!!!!!!!!!')
-        else:
-            LOGGER.info('No file found for deletion!')
+    # Default is the current directory
+    file_to_be_deleted = getAllFiles(program_name, module_dir, module_name)
+    if file_to_be_deleted:
+        LOGGER.info('File to be deleted:')
+        for elt_file in file_to_be_deleted:
+            LOGGER.info(' --> %s', elt_file)
+        response_key = input('Do you want to continue?(y/n, default: n)')
+        if response_key.lower() == 'Y' or response_key.lower() == 'y':
+            ProjectCommonRoutines.removeFilesOnDisk(file_to_be_deleted)
+            cmakefile = os.path.join(module_dir, 'CMakeLists.txt')
+            updateCmakeListsFile(module_dir, program_name)
             LOGGER.info('')
-
-    except Exception as msg:
-        if str(msg):
-            LOGGER.error(msg)
-        LOGGER.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
+            LOGGER.warning('# !!!!!!!!!!!!!!!!!!')
+            LOGGER.warning('# If your < %s > program has some Element and/or external dependencies,', \
+                            program_name)
+            LOGGER.warning('# you maybe need to remove them. Check the <find_package,')
+            LOGGER.warning('# elements_depends_on_subdirs> macros in the file :')
+            LOGGER.warning('# < %s >', cmakefile)
+            LOGGER.warning('# !!!!!!!!!!!!!!!!!!')
     else:
-        LOGGER.info('# Script over.')
+        LOGGER.info('No file found for deletion!')
+        LOGGER.info('')
 
     return exit_code

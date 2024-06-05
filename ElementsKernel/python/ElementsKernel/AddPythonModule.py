@@ -169,36 +169,27 @@ def mainMethod(args):
 
     python_module_name = args.module_name
 
-    try:
-        # Default is the current directory
-        current_dir = os.getcwd()
+    # Default is the current directory
+    current_dir = os.getcwd()
 
-        LOGGER.info('Current directory : %s', current_dir)
-        LOGGER.info('')
+    LOGGER.info('Current directory : %s', current_dir)
+    LOGGER.info('')
 
-        # We absolutely need a Elements cmake file
-        module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
+    # We absolutely need a Elements cmake file
+    module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
 
-        module_file_path = os.path.join(current_dir, 'python', module_name,
-                                        python_module_name + '.py')
-        makeChecks(module_file_path, python_module_name)
+    module_file_path = os.path.join(current_dir, 'python', module_name,
+                                    python_module_name + '.py')
+    makeChecks(module_file_path, python_module_name)
 
-        # Create module
-        createPythonModule(current_dir, module_name, python_module_name)
+    # Create module
+    createPythonModule(current_dir, module_name, python_module_name)
 
-        LOGGER.info('< %s > python module successfully created in < %s >', python_module_name, module_file_path)
-        # Remove backup file
-        ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
+    LOGGER.info('< %s > python module successfully created in < %s >', python_module_name, module_file_path)
+    # Remove backup file
+    ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
 
-        # Print all files created
-        ProjectCommonRoutines.printCreationList()
-
-    except Exception as msg:
-        if str(msg):
-            LOGGER.error(msg)
-        LOGGER.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
-    else:
-        LOGGER.info('# Script over.')
+    # Print all files created
+    ProjectCommonRoutines.printCreationList()
 
     return exit_code

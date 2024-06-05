@@ -127,27 +127,18 @@ def mainMethod(args):
 
     logger.info('# Installation directory : %s', destination_path)
 
-    try:
-        # Set the project directory
-        project_dir = Project.getProjectDirectory(no_version_directory, destination_path, proj_name, proj_version)
-        Project.makeChecks(proj_name, proj_version, dependency, dependant_projects)
+    # Set the project directory
+    project_dir = Project.getProjectDirectory(no_version_directory, destination_path, proj_name, proj_version)
+    Project.makeChecks(proj_name, proj_version, dependency, dependant_projects)
 
-        Project.checkProjectExist(project_dir, no_version_directory, force_erase, answer_yes)
+    Project.checkProjectExist(project_dir, no_version_directory, force_erase, answer_yes)
 
-        # Create the project
-        Project.createProject(project_dir, proj_name, proj_version, dependant_projects, standalone, visibility)
+    # Create the project
+    Project.createProject(project_dir, proj_name, proj_version, dependant_projects, standalone, visibility)
 
-        # Print all files created
-        ProjectCommonRoutines.printCreationList()
+    # Print all files created
+    ProjectCommonRoutines.printCreationList()
 
-        logger.info('# <%s> project successfully created.', project_dir)
-
-    except Exception as msg:
-        if str(msg):
-            logger.error(msg)
-        logger.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
-    else:
-        logger.info('# Script over.')
+    logger.info('# <%s> project successfully created.', project_dir)
 
     return exit_code

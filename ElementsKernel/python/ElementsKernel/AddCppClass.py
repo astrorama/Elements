@@ -354,35 +354,26 @@ def mainMethod(args):
     opt_visibility = args.visibility
     opt_template = args.template
 
-    try:
-        # Default is the current directory
-        module_dir = os.getcwd()
-        # Make checks
-        makeChecks()
-        # We absolutely need a Elements cmake file
-        module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
+    # Default is the current directory
+    module_dir = os.getcwd()
+    # Make checks
+    makeChecks()
+    # We absolutely need a Elements cmake file
+    module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
 
-        LOGGER.info('Current directory : %s', module_dir)
-        LOGGER.info('')
+    LOGGER.info('Current directory : %s', module_dir)
+    LOGGER.info('')
 
-        # Create CPP class
-        createCppClass(module_dir, module_name, subdir, class_name, elements_dep_list,
-                       library_dep_list, opt_visibility, opt_template)
+    # Create CPP class
+    createCppClass(module_dir, module_name, subdir, class_name, elements_dep_list,
+                   library_dep_list, opt_visibility, opt_template)
 
-        LOGGER.info('<%s> class successfully created in <%s>.', class_name, os.path.join(module_dir, subdir))
+    LOGGER.info('<%s> class successfully created in <%s>.', class_name, os.path.join(module_dir, subdir))
 
-        # Remove backup file
-        ProjectCommonRoutines.deleteFile(os.path.join(module_dir, CMAKE_LISTS_FILE) + '~')
+    # Remove backup file
+    ProjectCommonRoutines.deleteFile(os.path.join(module_dir, CMAKE_LISTS_FILE) + '~')
 
-        # Print all files created
-        ProjectCommonRoutines.printCreationList()
-
-    except Exception as msg:
-        if str(msg):
-            LOGGER.error(msg)
-        LOGGER.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
-    else:
-        LOGGER.info('# Script over.')
+    # Print all files created
+    ProjectCommonRoutines.printCreationList()
 
     return exit_code

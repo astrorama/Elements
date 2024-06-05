@@ -169,27 +169,18 @@ def mainMethod(args):
     LOGGER.info('# Current directory : %s', current_dir)
     LOGGER.info('')
 
-    try:
-        # Check name in the Element Naming Database
-        program_file_path = os.path.join(current_dir, 'scripts', program_name)
-        # Make checks
-        makeChecks(program_file_path, program_name)
+    # Check name in the Element Naming Database
+    program_file_path = os.path.join(current_dir, 'scripts', program_name)
+    # Make checks
+    makeChecks(program_file_path, program_name)
 
-        createScript(current_dir, program_name)
-        LOGGER.info('< %s > program successfully created in < %s >.', program_name, program_file_path)
+    createScript(current_dir, program_name)
+    LOGGER.info('< %s > program successfully created in < %s >.', program_name, program_file_path)
 
-        # Remove backup file
-        ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
+    # Remove backup file
+    ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
 
-        # Print all files created
-        ProjectCommonRoutines.printCreationList()
-
-    except Exception as msg:
-        if str(msg):
-            LOGGER.error(msg)
-        LOGGER.error('# Script aborted.')
-        exit_code = Exit.Code["NOT_OK"]
-    else:
-        LOGGER.info('# Script over.')
+    # Print all files created
+    ProjectCommonRoutines.printCreationList()
 
     return exit_code
