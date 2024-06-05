@@ -58,7 +58,7 @@ endif()
 if(POLICY CMP0148)
   # this policy is related to the python find_package
   # please run "cmake --help-policy CMP0148" for more details
-  if(NOT CMAKE_VERSION VERSION_LESS 3.27) # i.e CMAKE_VERSION >= 3.27
+  if(NOT CMAKE_VERSION VERSION_LESS 3.12) # i.e CMAKE_VERSION >= 3.12
     cmake_policy(SET CMP0148 OLD)
   endif()
 endif()
@@ -404,7 +404,7 @@ macro(elements_project project version)
   #--- Project Installations------------------------------------------------------------------------
   if(NOT SQUEEZED_INSTALL OR ("${CMAKE_PROJECT_NAME}" STREQUAL "Elements"))
 
-  install(DIRECTORY cmake/ DESTINATION ${CMAKE_INSTALL_SUFFIX}
+  install(DIRECTORY cmake/ DESTINATION ${CMAKE_INSTALL_SUFFIX} USE_SOURCE_PERMISSIONS
                            FILES_MATCHING
                              PATTERN "*.cmake"
                              PATTERN "*.in"
@@ -3942,9 +3942,7 @@ function(elements_install_scripts)
 
     if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${scrsubdir})
       install(DIRECTORY ${scrsubdir}/ DESTINATION ${SCRIPT_INSTALL_SUFFIX}
-              FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
-                               GROUP_EXECUTE GROUP_READ
-                               WORLD_EXECUTE WORLD_READ
+              USE_SOURCE_PERMISSIONS
               PATTERN "CVS" EXCLUDE
               PATTERN ".svn" EXCLUDE
               PATTERN "*~" EXCLUDE
