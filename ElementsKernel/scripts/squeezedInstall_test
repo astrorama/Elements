@@ -69,6 +69,15 @@ if [ $? -ne 0 ]; then
   local_clean_exit 1
 fi
 
+# Package Elements
+
+${build_cmd} --target rpm
+if [ $? -ne 0 ]; then
+  echo "Error: <make rpm> command failed!" 1>&2
+  local_clean_exit 1
+fi
+
+
 # Set up the envrionment of the just installed Elements instance
 
 elements_aux_install_dir=${custom_prefix}/$(${cmake_full_cmd} -LA -N ${ELEMENTS_SOURCE_DIR} | grep ^AUX_INSTALL_SUFFIX | awk -F '=' '{print $2}')

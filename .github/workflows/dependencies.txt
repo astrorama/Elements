@@ -1,5 +1,6 @@
 $NUMPY
 $PYTHON-devel
+$PYTHON-setuptools
 $PYTHON-numpy
 $PYTHON-pytest
 $PYTHON-sphinx
@@ -11,3 +12,4 @@ doxygen
 graphviz
 log4cpp-devel
 which
+git-core
