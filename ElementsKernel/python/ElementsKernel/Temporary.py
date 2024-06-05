@@ -31,6 +31,8 @@ from ElementsKernel import Logging
 
 from tempfile import mkdtemp, mkstemp
 
+__updated__ = "2024-06-05"
+
 DEFAULT_TMP_KEEP_VAR = "KEEPTEMPDIR"
 LOGGER = Logging.getLogger(__name__)
 

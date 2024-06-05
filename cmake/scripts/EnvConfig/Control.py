@@ -102,6 +102,7 @@ class Environment(object):
                 f = normpath(join(d, filename))
                 self.log.debug('trying %s', f)
                 yield f
+
         try:
             f = next((abspath(f) for f in candidates() if isfile(f)))
             self.log.debug('OK')
@@ -305,7 +306,7 @@ class Environment(object):
         else:
             f.write('')
             f.write('REM This is an enviroment settings file generated on ' +
-                    strftime("%a, %d %b %Y %H:%M:%S", gmtime()) + os.linesep)
+                    strftime("%Y-%m-%dT%H:%M:%S", gmtime()) + os.linesep)
             for variable in self.variables:
                 if not self[variable].local:
                     f.write(

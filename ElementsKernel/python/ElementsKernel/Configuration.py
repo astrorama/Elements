@@ -25,6 +25,8 @@
 
 from ElementsKernel import Path
 
+__updated__ = "2024-06-05"
+
 
 def getConfigurationVariableName():
     return Path.VARIABLE["configuration"]

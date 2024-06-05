@@ -32,6 +32,8 @@ from ElementsKernel import Logging
 from ElementsKernel import Project, ProjectCommonRoutines
 from ElementsKernel import Exit
 
+__updated__ = "2024-06-05"
+
 
 def defineSpecificProgramOptions():
     """

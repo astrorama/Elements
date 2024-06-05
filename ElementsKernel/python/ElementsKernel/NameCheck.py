@@ -42,6 +42,8 @@ except:  # pylint: disable=bare-except
     from urllib.request import urlopen  # @ImportRedefinition
     from urllib.error import URLError
 
+__updated__ = "2024-06-05"
+
 LOGGER = Logging.getLogger(__name__)
 
 TYPES = ["cmake", "library", "executable"]

@@ -28,6 +28,8 @@ import os
 
 from ElementsKernel import Path
 
+__updated__ = "2024-06-05"
+
 
 def getAuxiliaryVariableName():
     return Path.VARIABLE["auxiliary"]

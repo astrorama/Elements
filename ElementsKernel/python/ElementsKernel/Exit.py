@@ -21,6 +21,8 @@
 :author: Hubert Degaudenzi
 '''
 
+__updated__ = "2024-06-05"
+
 Code = {
     "OK": 0,  #  Everything is OK
 

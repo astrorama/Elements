@@ -38,6 +38,8 @@ from ElementsKernel import Logging
 
 from ElementsKernel import Exit
 
+__updated__ = "2024-06-05"
+
 LOGGER = Logging.getLogger(__name__)
 
 # Define constants
@@ -142,7 +144,7 @@ def substituteAuxFiles(module_dir, class_name, module_name, subdir, opt_visibili
                      "FILE_CPP": os.path.join('src', 'lib', subdir, class_name + '.cpp'),
                      "FILE_TEST": os.path.join('tests', 'src', subdir, class_name + '_test.cpp'),
                      "FILE_TPP": os.path.join(module_name, subdir, "_impl", class_name + '.tpp'),
-                     "DATE": time.strftime("%x"),
+                     "DATE": time.strftime("%Y-%m-%d"),
                      "AUTHOR": ProjectCommonRoutines.getAuthor(),
                      "DEFINE_WORDS": defwords + "_H",
                      "CLASSNAME": class_name,

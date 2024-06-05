@@ -41,6 +41,8 @@ from ElementsKernel import Logging
 
 from ElementsKernel import Exit
 
+__updated__ = "2024-06-05"
+
 CMAKE_LISTS_FILE = 'CMakeLists.txt'
 
 LOGGER = Logging.getLogger(__name__)

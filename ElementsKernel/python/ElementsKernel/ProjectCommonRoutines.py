@@ -40,6 +40,8 @@ try:
 except ImportError:
     from __builtin__ import input
 
+__updated__ = "2024-06-05"
+
 # Define a global list containing files created or modified
 # by the python scripts for the creation of a Elements project
 _filelist = []

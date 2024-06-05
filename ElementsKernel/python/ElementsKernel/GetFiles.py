@@ -29,6 +29,8 @@ import argparse
 from ElementsKernel import Logging
 from ElementsKernel import Path, Exit
 
+__updated__ = "2024-06-05"
+
 DEFAULT_TYPE = "executable"
 TYPES = [DEFAULT_TYPE, "library", "python", "configuration", "auxiliary"]
 

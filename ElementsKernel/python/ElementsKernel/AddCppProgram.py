@@ -90,7 +90,7 @@ def substituteAuxFiles(module_dir, program_name):
     """
     target_location = os.path.join('src', 'program', program_name + '.cpp')
     configuration = {  "FILE": target_location,
-                       "DATE": time.strftime("%x"),
+                       "DATE": time.strftime("%Y-%m-%d"),
                        "AUTHOR": ProjectCommonRoutines.getAuthor(),
                        "PROGRAMNAME": program_name
                     }

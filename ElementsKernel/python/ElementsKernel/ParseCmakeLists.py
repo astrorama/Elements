@@ -30,6 +30,8 @@
 import ElementsKernel.ParseCmakeListsMacros as pclm
 import re
 
+__updated__ = "2024-06-05"
+
 
 class CMakeLists(object):
     """

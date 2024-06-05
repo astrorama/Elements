@@ -31,6 +31,8 @@ from collections import OrderedDict
 
 from ElementsKernel.System import SHLIB_VAR_NAME, DEFAULT_INSTALL_PREFIX
 
+__updated__ = "2024-06-05"
+
 Type = ["executable", "library", "python", "configuration", "auxiliary"]
 
 PATHSEP = os.pathsep

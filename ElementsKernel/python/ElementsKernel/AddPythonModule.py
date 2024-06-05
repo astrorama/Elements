@@ -35,6 +35,8 @@ from ElementsKernel import Logging
 
 from ElementsKernel import Exit
 
+__updated__ = "2024-06-05"
+
 LOGGER = Logging.getLogger(__name__)
 
 # Define constants
@@ -104,7 +106,7 @@ def createPythonModule(module_dir, module_name, python_module_name):
 
     configuration = {  "FILE": full_pymodule_name,
                        "FILETEST": pytest_name,
-                       "DATE": time.strftime("%x"),
+                       "DATE": time.strftime("%Y-%m-%d"),
                        "AUTHOR": ProjectCommonRoutines.getAuthor(),
                        "MODULENAME": module_name,
                        "PYTHONMODULE": python_module_name

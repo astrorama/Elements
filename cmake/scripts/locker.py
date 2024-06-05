@@ -146,7 +146,7 @@ class LockFile(object):
         self.file = None
         self.log = logging.getLogger("LockFile")
         self.log.info(
-            "%s - Locking on %s", time.strftime("%Y-%m-%d_%H:%M:%S"), self.name)
+            "%s - Locking on %s", time.strftime("%Y-%m-%dT%H:%M:%S"), self.name)
         if not os.path.exists(name):
             mode = "w"
         else:
@@ -169,4 +169,4 @@ class LockFile(object):
                 except:
                     pass
             self.log.info(
-                "%s - Lock on %s released", time.strftime("%Y-%m-%d_%H:%M:%S"), self.name)
+                "%s - Lock on %s released", time.strftime("%Y-%m-%dT%H:%M:%S"), self.name)

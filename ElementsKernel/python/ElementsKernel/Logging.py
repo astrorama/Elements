@@ -27,6 +27,8 @@
 
 import logging
 
+__updated__ = "2024-06-05"
+
 # Check we are running for the first time. If we are we need to change a bit the
 # naming of the logging levels to match the ones of the C++
 if logging.getLevelName(logging.CRITICAL) == 'CRITICAL':

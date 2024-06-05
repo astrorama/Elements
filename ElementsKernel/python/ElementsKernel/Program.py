@@ -30,6 +30,8 @@ from ElementsKernel.Configuration import getConfigurationPath, getConfigurationL
 from ElementsKernel import Exit
 from ElementsKernel import File
 
+__updated__ = "2024-06-05"
+
 
 def str_to_bool(s):
     """Convert string to bool (in argparse context)."""

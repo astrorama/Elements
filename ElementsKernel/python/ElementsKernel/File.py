@@ -9,9 +9,9 @@
 @author Hubert Degaudenzi
 '''
 
-__updated__ = "2024-02-13"
-
 import sys
+
+__updated__ = "2024-06-05"
 
 DEFAULT_FILESYSTEM_ENCODING = sys.getfilesystemencoding()
 

@@ -21,7 +21,7 @@
 :file: ElementsKernel/RemoveCppClass.py
 :author: Nicolas Morisset
 
-:date: 02/10/16
+:date: 2016-10-02
 
 """
 

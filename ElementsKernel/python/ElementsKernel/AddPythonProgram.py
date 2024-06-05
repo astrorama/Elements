@@ -37,6 +37,8 @@ from ElementsKernel import Logging
 
 from ElementsKernel import Exit
 
+__updated__ = "2024-06-05"
+
 LOGGER = Logging.getLogger(__name__)
 
 # Define constants
@@ -85,7 +87,7 @@ def substituteAuxFiles(module_dir, program_name, module_name):
     """
     filename = program_name + ".py"
     configuration = {  "FILE": os.path.join('python', module_name, filename),
-                       "DATE": time.strftime("%x"),
+                       "DATE": time.strftime("%Y-%m-%d"),
                        "AUTHOR": ProjectCommonRoutines.getAuthor(),
                        "PROGRAMNAME": program_name
                     }

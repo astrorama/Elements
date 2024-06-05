@@ -27,6 +27,8 @@
 
 import platform
 
+__updated__ = "2024-06-05"
+
 if platform.system() == "Darwin":
     SHLIB_VAR_NAME = "DYLD_LIBRARY_PATH"
 else:

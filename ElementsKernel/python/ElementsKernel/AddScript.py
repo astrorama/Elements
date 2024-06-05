@@ -61,7 +61,7 @@ def substituteAuxFiles(module_dir, program_name):
     Copy AUX file(s) and substitutes keyworks
     """
     configuration = {"FILE": os.path.join('scripts', program_name),
-                     "DATE": time.strftime("%x"),
+                     "DATE": time.strftime("%Y-%m-%d"),
                      "AUTHOR": ProjectCommonRoutines.getAuthor(),
                     }
     # Put AUX files to their target and substitute

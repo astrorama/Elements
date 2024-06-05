@@ -19,7 +19,7 @@
 ''' Definition of a python package using extend_path
 to create a namespace
 
-:date: Created on Jan 29, 2015
+:date: 2015-01-29
 
 :author: Hubert Degaudenzi
 

@@ -18,6 +18,8 @@
 
 """Useful/conventional constants."""
 
+__updated__ = "2024-06-05"
+
 __all__ = ['ALL', 'VERBOSE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'FATAL',
            'TRUE', 'FALSE']
 

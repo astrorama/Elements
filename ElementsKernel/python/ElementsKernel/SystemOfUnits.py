@@ -50,9 +50,11 @@
 :file: ElementsKernel/SystemOfUnits.py
 :author: Wim Lavrijsen (LBNL, WLavrijsen@lbl.gov)
 :author: Hubert Degaudenzi (ISDC -- Hubert.Degaudenzi@unige.ch)
-:date: 01/21/04
+:date: 2004-01-21
 
 """
+
+__updated__ = "2024-06-05"
 
 #
 # Length [L]

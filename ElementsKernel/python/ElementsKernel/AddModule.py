@@ -40,6 +40,8 @@ try:
 except ImportError:
     from __builtin__ import input
 
+__updated__ = "2024-06-05"
+
 logger = Logging.getLogger('AddElementsModule')
 
 # Define constants
