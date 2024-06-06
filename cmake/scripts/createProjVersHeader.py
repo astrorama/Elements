@@ -1,4 +1,4 @@
-""" Script that generates the project header file containing its version informations"""
+""" Script that generates the project header file containing its version information"""
 
 import os
 import re
