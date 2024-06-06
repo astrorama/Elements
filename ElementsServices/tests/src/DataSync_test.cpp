@@ -17,7 +17,6 @@
  */
 
 #include <exception>  // for exception
-#include <vector>     // for vector
 
 #include <boost/filesystem/operations.hpp>  // for is_regular_file, remove
 #include <boost/test/unit_test.hpp>

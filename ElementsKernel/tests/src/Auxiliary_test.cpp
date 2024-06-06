@@ -22,7 +22,6 @@
 #include "ElementsKernel/Auxiliary.h"
 
 #include <algorithm>  // for copy_if, for_each
-#include <iterator>   // for distance
 #include <string>     // for allocator, string
 #include <vector>     // for vector
 
@@ -54,15 +53,14 @@ namespace Elements {
 struct Auxiliary_Fixture {
 
   TempDir            m_top_dir;
-  vector<Path::Item> m_item_list;
-  vector<Path::Item> m_target_item_list;
-  vector<Path::Item> m_real_item_list;
-  vector<Path::Item> m_target_real_item_list;
+  vector<Path::Item> m_item_list{};
+  vector<Path::Item> m_target_item_list{};
+  vector<Path::Item> m_real_item_list{};
+  vector<Path::Item> m_target_real_item_list{};
 
   Auxiliary_Fixture() : m_top_dir{"Auxiliary_test-%%%%%%%"} {
 
     using std::copy_if;
-    using std::distance;
     using std::for_each;
 
     m_item_list.emplace_back(m_top_dir.path() / "test1");

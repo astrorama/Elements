@@ -23,7 +23,6 @@
 #include "ElementsKernel/Auxiliary.h"
 
 #include <algorithm>  // for remove_if
-#include <map>        // for map
 #include <string>     // for string
 #include <vector>     // for vector
 

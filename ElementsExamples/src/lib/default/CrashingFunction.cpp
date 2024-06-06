@@ -21,7 +21,6 @@
 
 #include "ElementsExamples/CrashingFunction.h"
 
-#include <memory>     // for allocator
 #include <stdexcept>  // for logic_error
 
 #include "ElementsKernel/Logging.h"  // for Logging

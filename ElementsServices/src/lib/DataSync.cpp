@@ -19,7 +19,6 @@
 #include "ElementsServices/DataSync.h"
 
 #include <exception>  // for exception
-#include <memory>     // for __shared_ptr_access, shared_ptr
 
 #include <boost/filesystem/path.hpp>  // for operator/, path
 
