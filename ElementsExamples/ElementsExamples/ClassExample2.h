@@ -98,7 +98,7 @@ public:
    * @return
    *    The output of the method
    */
-  double fundamentalTypeMethod(const double input_variable) const;
+  static double fundamentalTypeMethod(const double input_variable);
 
   /**
    * @brief

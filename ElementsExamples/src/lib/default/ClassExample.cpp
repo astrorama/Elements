@@ -37,14 +37,14 @@ namespace Examples {
 
 const std::string ClassExample::s_static_string = "This is a static field example";
 
-double ClassExample::fundamentalTypeMethod(const double input_variable) const {
+double ClassExample::fundamentalTypeMethod(const double input_variable) {
   return input_variable;
 }
 
 /*
  * This is a silly example just to have a method throwing an exception
  */
-double ClassExample::divideNumbers(const double first, const double second) const {
+double ClassExample::divideNumbers(const double first, const double second) {
   double tolerance = 1e-12;
   if (std::abs(second) < tolerance) {
     throw Elements::Exception() << "Dividing by " << second << " exception in ClassExample::divideNumbers(...)";
@@ -52,11 +52,11 @@ double ClassExample::divideNumbers(const double first, const double second) cons
   return first / second;
 }
 
-void ClassExample::passingUniquePointer(std::unique_ptr<vector<double>> vector_unique_ptr) const {
+void ClassExample::passingUniquePointer(std::unique_ptr<vector<double>> vector_unique_ptr) {
   ELEMENTS_UNUSED auto vect_size = vector_unique_ptr->size();
 }
 
-void ClassExample::passingObjectInGeneral(const vector<double>& input_object) const {
+void ClassExample::passingObjectInGeneral(const vector<double>& input_object) {
   ELEMENTS_UNUSED auto object_size = input_object.size();
 }
 
