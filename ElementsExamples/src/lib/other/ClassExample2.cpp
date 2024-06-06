@@ -32,12 +32,11 @@
 
 using std::vector;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 std::string ClassExample2::s_static_string = "This is a static field example";
 
-double ClassExample2::fundamentalTypeMethod(const double input_variable) const {
+double ClassExample2::fundamentalTypeMethod(const double input_variable) {
   return input_variable;
 }
 
@@ -64,5 +63,4 @@ ClassExample2 ClassExample2::factoryMethod(const std::int64_t source_id, const d
   return ClassExample2{source_id, ra};
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

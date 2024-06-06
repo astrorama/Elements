@@ -28,8 +28,7 @@
 
 using std::vector;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 double testCallBack(vector<double> x, const std::function<double(vector<double>)>& fun) {
 
@@ -46,5 +45,4 @@ double testCallBack(vector<double> x, const std::function<double(vector<double>)
   return (f);
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

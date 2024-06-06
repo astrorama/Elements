@@ -31,8 +31,7 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 auto log = Logging::getLogger("BackTraceExample");
 
@@ -59,8 +58,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

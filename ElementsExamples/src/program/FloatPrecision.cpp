@@ -38,8 +38,7 @@ using std::endl;
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 constexpr int PRINT_PRECISION = 32;
 
@@ -208,8 +207,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

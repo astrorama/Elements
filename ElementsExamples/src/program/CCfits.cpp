@@ -34,8 +34,7 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 class CCfits : public Program {
 
@@ -64,8 +63,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro
