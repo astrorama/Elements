@@ -31,8 +31,9 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 
+#include <unistd.h>
+
 // STL include files
-#include <bits/local_lim.h>  // for HOST_NAME_MAX
 #include <memory>
 #include <string>
 #include <typeinfo>

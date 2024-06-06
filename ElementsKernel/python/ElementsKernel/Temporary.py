@@ -25,34 +25,11 @@
 from shutil import rmtree
 
 import os
-import tempfile
 import sys
 
 from ElementsKernel import Logging
 
-if not 'mkdtemp' in dir(tempfile):
-    # mkdtemp has been introduced in python 2.3, I simulate it
-    import warnings
-    warnings.filterwarnings(
-        action='ignore', message='.*tmpnam.*', category=RuntimeWarning)
-
-    def mkdtemp():
-        """Replacement for the missing function in the tempfile module"""
-        # pylint: disable=no-member
-        name = os.tmpnam()  # @UndefinedVariable
-        os.mkdir(name, 0o700)
-        return name
-
-    def mkstemp():
-        """Replacement for the missing function in the tempfile module"""
-        # pylint: disable=no-member
-        name = os.tmpnam()  # @UndefinedVariable
-        return (os.open(name, os.O_CREAT | os.O_RDWR | os.O_EXCL, 0o600),
-                name)
-
-else:
-    # use the real mkdtemp
-    from tempfile import mkdtemp, mkstemp
+from tempfile import mkdtemp, mkstemp
 
 DEFAULT_TMP_KEEP_VAR = "KEEPTEMPDIR"
 LOGGER = Logging.getLogger(__name__)

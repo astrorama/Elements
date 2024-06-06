@@ -27,6 +27,8 @@
 #include "ElementsKernel/Exception.h"  // for Exception
 #include "ElementsKernel/Path.h"       // for Path::VARIABLE, Path::Type, Path::Item
                                        // getPathFromLocations
+#include "ElementsKernel/Exit.h"       // for ExitCode
+
 namespace Elements {
 inline namespace Kernel {
 
@@ -38,7 +40,7 @@ Path::Item getAuxiliaryPath(const T& file_name, bool raise_exception) {
   auto result = Path::getPathFromLocations(file_name, location_list);
 
   if (result.empty() and raise_exception) {
-    throw Exception() << "The auxiliary path \"" << file_name << "\" cannot be found!";
+    throw Exception(ExitCode::NOINPUT) << "The auxiliary path \"" << file_name << "\" cannot be found!";
   }
 
   return result;

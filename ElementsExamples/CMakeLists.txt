@@ -15,13 +15,7 @@ find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 find_package(CppUnit)
 find_package(GMock)
 
-cmake_policy(PUSH)
-if(POLICY CMP0148)
-  cmake_policy(SET CMP0148 OLD)
-endif()
-find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION})
-cmake_policy(POP)
-
+find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development NumPy)
 
 #===== Libraries ===============================================================
 # Instruction for creating a C++ library
@@ -53,6 +47,10 @@ elements_add_executable(CppProgramExampleNoConfigFile src/program/Program.cpp
                         LINK_LIBRARIES ElementsExamples ElementsOther
                         NO_CONFIG_FILE)
 
+elements_add_executable(CppProgramExampleNoDefaultConf src/program/Program.cpp
+                        INCLUDE_DIRS ElementsExamples ElementsOther
+                        LINK_LIBRARIES ElementsExamples ElementsOther
+                        NO_DEFAULT_CONF)
 
 elements_add_executable(CppExtProgramExample src/program/ExtProgram.cpp
                         INCLUDE_DIRS ElementsExamples ElementsOther
@@ -79,7 +77,8 @@ elements_add_executable(CProgramExample src/CProgram/*.c
 #===== Test that the executables do run ========================================
 
 elements_add_test(CppProgramExampleRun COMMAND CppProgramExample)
-elements_add_test(CppProgramExampleNoConfigFileRun COMMAND CppProgramExample --config-file=toto.conf FAILS)
+elements_add_test(CppProgramExampleNoConfigFileRun COMMAND CppProgramExampleNoConfigFile --config-file=toto.conf FAILS)
+elements_add_test(CppProgramExampleNoDefaultConfRun COMMAND CppProgramExampleNoDefaultConf)
 elements_add_test(CppProgramExampleWrongArgument COMMAND CppProgramExample --toto FAILS)
 elements_add_test(CppProgramExampleWrongLevel COMMAND CppProgramExample --log-level dddsc FAILS)
 elements_add_test(CProgramExampleRun COMMAND CProgramExample)
@@ -303,23 +302,22 @@ elements_add_test(OpenMPWorks COMMAND OpenMPExample LABELS OpenMP Build)
 
 
 find_package(SWIG QUIET)
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+if(SWIG_FOUND AND Python_Development_FOUND)
 elements_add_swig_binding(SwigExample ElementsExamples/SwigExample.i
                           LINK_LIBRARIES ElementsExamples
                           INCLUDE_DIRS ElementsExamples
                           PUBLIC_HEADERS ElementsExamples)
 
-find_package(NumPy)
-if(NUMPY_FOUND)
+if(Python_NumPy_FOUND)
+
 elements_add_swig_binding(NumPyExample  ElementsExamples/NumPyExample.i
-                          INCLUDE_DIRS NumPy
                           NO_PUBLIC_HEADERS)
 endif()
 
 endif()
 
 find_package(Cython QUIET)
-if(CYTHON_FOUND AND PYTHONLIBS_FOUND)
+if(CYTHON_FOUND AND Python_Development_FOUND)
 elements_add_cython_module(src/Cython/lib/PiCalculator.pyx
                            LINK_LIBRARIES ElementsExamples
                            INCLUDE_DIRS ElementsExamples
@@ -331,7 +329,7 @@ elements_add_cython_module(src/Cython/lib/Rect.pyx
 endif()
 
 find_package(pybind11)
-if(pybind11_FOUND AND PYTHONLIBS_FOUND)
+if(pybind11_FOUND AND Python_Development_FOUND)
   elements_add_pybind11_module(testCallBack src/pybind11/callback.cpp
                                INCLUDE_DIRS ElementsExamples
                                LINK_LIBRARIES ElementsExamples)
@@ -347,15 +345,17 @@ elements_install_python_modules(TEST_TIMEOUT 60)
 #    ElementsExamples.PythonProgramExample is the source file
 elements_add_python_program(PythonProgramExample ElementsExamples.PythonProgramExample)
 elements_add_python_program(PythonProgramExampleNoConfigFile ElementsExamples.PythonProgramExample NO_CONFIG_FILE)
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+elements_add_python_program(PythonProgramExampleNoDefaultConf ElementsExamples.PythonProgramExample NO_DEFAULT_CONF)
+if(SWIG_FOUND AND Python_Development_FOUND)
   elements_add_python_program(SwigProgramExample ElementsExamples.SwigProgramExample)
 endif()
 
 
 #===== Test that the python program does run ========================================
 elements_add_test(PythonProgramExampleRun COMMAND PythonProgramExample)
-elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExample --config-file=toto.conf FAILS)
-if(SWIG_FOUND AND PYTHONLIBS_FOUND)
+elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExampleNoConfigFile --config-file=toto.conf FAILS)
+elements_add_test(PythonProgramExampleNoDefaultConfRun COMMAND PythonProgramExampleNoDefaultConf)
+if(SWIG_FOUND AND Python_Development_FOUND)
 elements_add_test(SwigProgramExampleRun COMMAND SwigProgramExample LABELS Swig Build)
 endif()
 

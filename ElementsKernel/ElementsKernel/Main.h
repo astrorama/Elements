@@ -41,6 +41,18 @@
 #define ELEMENTS_DEFAULT_LOGLEVEL DEBUG
 #endif
 
+#ifdef NO_CONFIG_FILE
+#define HAS_NO_CONFIG_FILE true
+#else
+#define HAS_NO_CONFIG_FILE false
+#endif
+
+#ifdef NO_DEFAULT_CONF
+#define HAS_NO_DEFAULT_CONF true
+#else
+#define HAS_NO_DEFAULT_CONF false
+#endif
+
 /**
  * @def CREATE_MANAGER_WITH_ARGS(ELEMENTS_PROGRAM, MANAGER)
  * Macro that declares a program manager with custom constructor arguments. It is
@@ -49,22 +61,13 @@
  * the class Elements::Program class.
  * @param MANAGER name of the manager variable to be created.
  */
-#ifndef NO_CONFIG_FILE
-#define CREATE_MANAGER_WITH_ARGS(MANAGER, ELEMENTS_PROGRAM, ...)                                                       \
-  Elements::ProgramManager MANAGER {                                                                                   \
-    std::unique_ptr<Elements::Program>{new ELEMENTS_PROGRAM{__VA_ARGS__}}, Elements::Project::versionString(),         \
-        Elements::Project::name(), Elements::Project::vcsVersion(), Elements::Module::versionString(),                 \
-        Elements::Module::name(), Elements::Project::searchDirectories(), log4cpp::Priority::ELEMENTS_DEFAULT_LOGLEVEL \
-  }
-#else
 #define CREATE_MANAGER_WITH_ARGS(MANAGER, ELEMENTS_PROGRAM, ...)                                                       \
   Elements::ProgramManager MANAGER {                                                                                   \
     std::unique_ptr<Elements::Program>{new ELEMENTS_PROGRAM{__VA_ARGS__}}, Elements::Project::versionString(),         \
         Elements::Project::name(), Elements::Project::vcsVersion(), Elements::Module::versionString(),                 \
         Elements::Module::name(), Elements::Project::searchDirectories(),                                              \
-        log4cpp::Priority::ELEMENTS_DEFAULT_LOGLEVEL, true                                                             \
+        log4cpp::Priority::ELEMENTS_DEFAULT_LOGLEVEL, HAS_NO_CONFIG_FILE, HAS_NO_DEFAULT_CONF                          \
   }
-#endif
 
 /**
  * @def CREATE_MANAGER(ELEMENTS_PROGRAM_NAME, MANAGER)

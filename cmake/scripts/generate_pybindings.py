@@ -33,10 +33,12 @@ if os.path.isfile('generate_pybindings.conf'):
     conf_fp = StringIO.StringIO(conf_string)
     conf_parser = ConfigParser.SafeConfigParser()
     conf_parser.readfp(conf_fp)
-    for (key, value) in conf_parser.items(conf_parser.sections()[0]):
+    for key, value in conf_parser.items(conf_parser.sections()[0]):
         args.append('--' + key + '=' + value)
 args.extend(sys.argv[1:])
 (options, args) = parser.parse_args(args)
+
+BYE = "Exiting..."
 
 # Check that the user gave a directory
 if not options.dmdir:
@@ -44,7 +46,7 @@ if not options.dmdir:
     exit(1)
 if options.dmdir and not path.isdir(options.dmdir):
     print("DM directory does not exist")
-    print("Exiting...")
+    print(BYE)
     exit(1)
 
 # Check that if the user gave a root module name, it is valid
@@ -52,7 +54,7 @@ if options.module:
     for subname in options.module.split('.'):
         if not subname or not re.match("[_A-Za-z][_a-zA-Z0-9]*$", subname) or keyword.iskeyword(subname):
             print("Invalid root module name")
-            print("Exiting...")
+            print(BYE)
             exit(1)
 
 # Check that the user gave the output directory and we can create it
@@ -63,7 +65,7 @@ if not path.exists(options.outdir):
     makedirs(options.outdir)
 if not path.isdir(options.outdir):
     print("Cannot create output directory")
-    print("Exiting...")
+    print(BYE)
     exit(1)
 
 # Create a list with all the XSD files in the given directory (recursively)

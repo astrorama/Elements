@@ -1,12 +1,6 @@
 if (NOT CYTHON_FOUND)
 
-    cmake_policy(PUSH)
-    if(POLICY CMP0148)
-      cmake_policy(SET CMP0148 OLD)
-    endif()
-    find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
-    find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION})
-    cmake_policy(POP)
+    find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development)
 
 
     set(explicit_cython)
@@ -15,8 +9,8 @@ if (NOT CYTHON_FOUND)
     endif()
 
 
-    if(PYTHONINTERP_FOUND)
-        get_filename_component(_python_path ${PYTHON_EXECUTABLE} PATH)
+    if(Python_Interpreter_FOUND)
+        get_filename_component(_python_path ${Python_EXECUTABLE} PATH)
         find_program(CYTHON_EXECUTABLE
                      NAMES ${explicit_cython} cython cython3
                      HINTS ${_python_path})
