@@ -31,6 +31,7 @@ from ElementsKernel.Auxiliary import configure, getAuxiliaryPath, getPath
 
 
 class AuxiliaryTest(unittest.TestCase):
+    """ TestCast for the Auxiliary feature """
 
     class TestFile(object):
 
