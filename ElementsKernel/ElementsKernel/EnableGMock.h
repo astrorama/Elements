@@ -54,12 +54,6 @@ public:
   }
 };
 
-#if BOOST_VERSION >= 105900
-BOOST_GLOBAL_FIXTURE(GoogleMockSetupFixture);
-#else
-BOOST_GLOBAL_FIXTURE(GoogleMockSetupFixture)
-#endif
-
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_ENABLEGMOCK_H_
 
 /**
