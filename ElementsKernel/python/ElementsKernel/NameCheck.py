@@ -38,7 +38,7 @@ from ElementsKernel import Exit
 try:
     from urllib2 import urlopen  # @UnusedImport @UnresolvedImport
     from urllib2 import URLError  # @UnusedImport @UnresolvedImport
-except:  # pylint: disable=bare-except
+except ImportError:  # pylint: disable=bare-except
     from urllib.request import urlopen  # @ImportRedefinition
     from urllib.error import URLError
 

@@ -8,12 +8,12 @@ include(ElementsUtils)
 
 find_program(generate_cppbinding_cmd generateCppBinding.py HINTS ${binary_paths})
 if(generate_cppbinding_cmd)
-  set(generate_cppbinding_cmd ${PYTHON_EXECUTABLE} ${generate_cppbinding_cmd})
+  set(generate_cppbinding_cmd ${Python_EXECUTABLE} ${generate_cppbinding_cmd})
 endif()
 
 find_program(generate_pybindings_cmd generate_pybindings.py HINTS ${binary_paths})
 if(generate_pybindings_cmd)
-  set(generate_pybindings_cmd ${PYTHON_EXECUTABLE} ${generate_pybindings_cmd})
+  set(generate_pybindings_cmd ${Python_EXECUTABLE} ${generate_pybindings_cmd})
 endif()
 
 

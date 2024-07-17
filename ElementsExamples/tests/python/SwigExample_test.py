@@ -18,6 +18,7 @@
 
 import unittest
 
+
 class SwigExampleTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -25,7 +26,7 @@ class SwigExampleTestCase(unittest.TestCase):
         try:
             import SwigExample
             self.has_swig = True
-        except:
+        except ImportError:
             self.has_swig = False
 
     def tearDown(self):
@@ -46,9 +47,10 @@ class SwigExampleTestCase(unittest.TestCase):
     def testClassPositionalArgsSwig(self):
         if self.has_swig:
             from SwigExample import SwigClassExample
-            a = SwigClassExample(dec = 3.0, ra = 2.0)
+            a = SwigClassExample(dec=3.0, ra=2.0)
             self.assertEqual(a.getRa(), 2.0)
             self.assertEqual(a.getDec(), 3.0)
+
 
 if __name__ == '__main__':
     unittest.main()
