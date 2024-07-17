@@ -2,12 +2,13 @@ cmake_minimum_required(VERSION 3.5)
 
 elements_subdir(ElementsKernel)
 
-find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex)
+find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex unit_test_framework)
 find_package(Log4CPP REQUIRED)
+find_package(GMock)
 
 #---Libraries---------------------------------------------------------------
 elements_add_library(ElementsKernel src/Lib/*.cpp
-                    LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP
+                    LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP GMock
                     INCLUDE_DIRS Boost Log4CPP
                     PUBLIC_HEADERS ElementsKernel)
 add_library(Elements::Kernel ALIAS ElementsKernel)

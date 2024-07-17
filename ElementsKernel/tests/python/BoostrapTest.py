@@ -30,6 +30,9 @@ import os, sys
 from importlib import reload
 
 from ElementsKernel.Temporary import TempEnv
+from ElementsKernel import Logging
+
+LOGGER = Logging.getLogger(__name__)
 
 
 def _updateSysPath(extra_list):
@@ -76,8 +79,8 @@ class BoostrapCase(unittest.TestCase):
         try:
             import site
             reload(site)
-        except:
-            pass
+        except ImportError as e:
+            LOGGER.error("Cannot reload the %s module", e.name)
 
         orig_sys_path = sys.path
 

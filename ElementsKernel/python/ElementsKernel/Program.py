@@ -32,6 +32,7 @@ from ElementsKernel import File
 
 __updated__ = "2024-06-05"
 
+SEP_LINE = "##########################################################"
 
 def str_to_bool(s):
     """Convert string to bool (in argparse context)."""
@@ -200,10 +201,8 @@ class Program(object):
         return all_options, variable_to_option_name
 
     def _logHeader(self):
-        self._logger.log(self._elements_loglevel,
-                         "##########################################################")
-        self._logger.log(self._elements_loglevel,
-                         "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
+        self._logger.log(self._elements_loglevel, SEP_LINE)
         self._logger.log(self._elements_loglevel,
                          "#")
         self._logger.log(self._elements_loglevel,
@@ -215,23 +214,19 @@ class Program(object):
         self._logger.debug("#")
 
     def _logFooter(self):
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
         self._logger.log(self._elements_loglevel,
                          "#")
         self._logger.log(self._elements_loglevel,
             "#    Python program: %s stops ", self._app_module.__name__)
         self._logger.log(self._elements_loglevel,
                          "#")
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
+        self._logger.log(self._elements_loglevel, SEP_LINE)
 
     def _logAllOptions(self, args, names):
 
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
         self._logger.log(self._elements_loglevel, "#")
         self._logger.log(self._elements_loglevel, "# List of all program options")
         self._logger.log(self._elements_loglevel, "# ---------------------------")
@@ -241,7 +236,7 @@ class Program(object):
         self._logger.log(self._elements_loglevel, "#")
 
     def _logTheEnvironment(self):
-        self._logger.debug("##########################################################")
+        self._logger.debug(SEP_LINE)
         self._logger.debug("#")
         self._logger.debug("# Environment of the Run")
         self._logger.debug("# ---------------------------")

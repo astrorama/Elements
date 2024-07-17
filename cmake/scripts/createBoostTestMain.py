@@ -30,7 +30,7 @@ def main():
 /**
  * @file BoostTestMain.cpp
  *
- * @date Feb 8, 2017
+ * @date 2017-02-08
  * @author Hubert Degaudenzi
  *
  * @copyright 2012-2020 Hubert Degaudenzi
