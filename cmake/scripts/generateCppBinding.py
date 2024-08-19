@@ -74,11 +74,11 @@ def generate(xsd_file, cpp_file, h_file, d_file,
         print(stderr)
 
     generated_h_file = "%s.h" % os.path.splitext(cpp_file)[0]
-    h_dir = createBaseDirectory(h_file)
+    createBaseDirectory(h_file)
     if generated_h_file != h_file:
         os.rename(generated_h_file, h_file)
     generated_d_file = "%s.d" % os.path.splitext(cpp_file)[0]
-    d_dir = createBaseDirectory(d_file)
+    createBaseDirectory(d_file)
     if generated_d_file != d_file:
         os.rename(generated_d_file, d_file)
 
