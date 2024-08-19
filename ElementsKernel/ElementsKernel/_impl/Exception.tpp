@@ -77,4 +77,4 @@ auto operator<<(Ex&& ex, const T& message) -> decltype(std::forward<Ex>(ex)) {
 
 }  // namespace Elements
 
-#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_AUXILIARY_IMPL_
+#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_EXCEPTION_IMPL_
