@@ -33,7 +33,8 @@ public:
 
     auto log = Logging::getLogger("Tbb");
 
-    const auto start = high_resolution_clock::now();
+    const auto          start = high_resolution_clock::now();
+    tbb::global_control control(tbb::global_control::max_allowed_parallelism, 8);
 
     const int first_number = 1;
     const int last_number  = 10001;
