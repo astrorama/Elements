@@ -11,6 +11,7 @@
 #include <iostream>
 #include <map>     // for maps
 #include <string>  // for strings
+#include <thread>  // for std::thread
 
 #include <oneapi/tbb.h>  // for the Threading Building Blocks
 
@@ -33,8 +34,13 @@ public:
 
     auto log = Logging::getLogger("Tbb");
 
+    const auto processor_count = std::thread::hardware_concurrency();
+    log.info() << "Number of native threads: " << processor_count;
+    const auto default_concurrency = tbb::info::default_concurrency();
+    log.info() << "TBB default concurrency: " << default_concurrency;
+
     const auto          start = high_resolution_clock::now();
-    tbb::global_control control(tbb::global_control::max_allowed_parallelism, 8);
+    tbb::global_control control(tbb::global_control::max_allowed_parallelism, processor_count);
 
     const int first_number = 1;
     const int last_number  = 10001;
