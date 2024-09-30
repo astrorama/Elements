@@ -1,6 +1,6 @@
 /**
  * @file FloatPrecision.cpp
- * @date October 30th, 2018
+ * @date 2018-10-30
  * @author Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
