@@ -5,7 +5,7 @@
 #
 # Commit Id: $Format:%H$
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.25)
 
 # FIXME: use of LOCATION property is deprecated and should be replaced with the
 #        generator expression $<TARGET_FILE>, but the way we use it requires
