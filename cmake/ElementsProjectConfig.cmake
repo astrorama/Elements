@@ -94,6 +94,9 @@ debug_message("    <---- Elements Main config: ${CMAKE_CURRENT_LIST_FILE} ----> 
 #-------------------------------------------------------------------------------
 # Basic configuration
 #-------------------------------------------------------------------------------
+find_program(CMAKE_CMAKE_PROGRAM NAMES cmake PATH $ENV{PATH})
+message(STATUS "CMake program: ${CMAKE_CMAKE_PROGRAM}")
+
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Ensure that the include directories added are always taken first.

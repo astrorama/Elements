@@ -43,8 +43,7 @@ set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH} CACHE STRING "The internal prefix pat
 reset_include_guards(GLOBAL)
 reset_message_guards()
 
-find_program(CMAKE_CMAKE_PROGRAM NAMES cmake PATH $ENV{PATH})
-message(STATUS "CMake program: ${CMAKE_CMAKE_PROGRAM}")
+
 
 
 set(USED_CMAKE_GENERATOR "${CMAKE_GENERATOR}" CACHE STRING "Expose CMAKE_GENERATOR" FORCE)
