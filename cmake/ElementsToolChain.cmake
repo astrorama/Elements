@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.25)
 
 
 if (NOT HAS_ELEMENTS_TOOLCHAIN)
@@ -42,6 +42,9 @@ set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH} CACHE STRING "The internal prefix pat
 
 reset_include_guards(GLOBAL)
 reset_message_guards()
+
+
+
 
 set(USED_CMAKE_GENERATOR "${CMAKE_GENERATOR}" CACHE STRING "Expose CMAKE_GENERATOR" FORCE)
 message(STATUS "Generator: ${USED_CMAKE_GENERATOR}")
