@@ -3,7 +3,7 @@
 # PYTHON_NUMPY_FOUND
 # will be set by this script
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.25)
 
 if(NOT NumPy_FOUND)
   if(NumPy_FIND_QUIETLY)
