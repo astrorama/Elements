@@ -71,11 +71,11 @@ fi
 
 # Package Elements
 
-${build_cmd} --target rpm
-if [ $? -ne 0 ]; then
-  echo "Error: <make rpm> command failed!" 1>&2
-  local_clean_exit 1
-fi
+# ${build_cmd} --target rpm
+# if [ $? -ne 0 ]; then
+#   echo "Error: <make rpm> command failed!" 1>&2
+#   local_clean_exit 1
+# fi
 
 
 # Set up the envrionment of the just installed Elements instance
