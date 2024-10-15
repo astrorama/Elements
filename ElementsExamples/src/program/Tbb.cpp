@@ -49,58 +49,57 @@ int simpleSum(const int& first_number, const int& last_number) {
   return (sum);
 }
 
+int parallelSum(const int& first_number, const int& last_number) {
+
+  int sum = tbb::parallel_reduce(
+      tbb::blocked_range<int>(first_number, last_number), 0,
+      [](tbb::blocked_range<int> const& r, int init) -> int {
+        for (int v = r.begin(); v != r.end(); v++) {
+          init += v;
+        }
+        return (init);
+      },
+      [](int lhs, int rhs) -> int {
+        return (lhs + rhs);
+      });
+
+  return (sum);
+}
+
 class Tbb : public Program {
 
 public:
   ///
   ExitCode mainMethod(ELEMENTS_UNUSED std::map<std::string, VariableValue>& args) override {
 
-    using namespace std::chrono;
+    namespace chrono = std::chrono;
 
-    const auto processor_count = std::thread::hardware_concurrency();
-    LOG.info() << "Number of native threads: " << processor_count;
-    const auto default_concurrency = tbb::info::default_concurrency();
-    LOG.info() << "TBB default concurrency: " << default_concurrency;
+    initTbb();
 
-    const auto          start = high_resolution_clock::now();
-    tbb::global_control control(tbb::global_control::max_allowed_parallelism, processor_count);
+    using clock = chrono::high_resolution_clock;
+    using ms    = chrono::microseconds;
+
+    const auto start = clock::now();
 
     const int first_number = 1;
     const int last_number  = 10001;
 
-    int simple_sum = 0;
-    for (auto i = first_number; i < last_number; i++) {
-      simple_sum += i;
-    }
-
+    const auto simple_sum = simpleSum(first_number, last_number);
     LOG.info() << "Simple sum: " << simple_sum;
 
-    const auto simple_stop     = high_resolution_clock::now();
-    const auto simple_duration = duration_cast<microseconds>(simple_stop - start);
-
+    const auto simple_stop     = clock::now();
+    const auto simple_duration = chrono::duration_cast<ms>(simple_stop - start);
     LOG.info() << "Simple duration: " << simple_duration.count();
 
-    int parallel_sum = tbb::parallel_reduce(
-        tbb::blocked_range<int>(first_number, last_number), 0,
-        [](tbb::blocked_range<int> const& r, int init) -> int {
-          for (int v = r.begin(); v != r.end(); v++) {
-            init += v;
-          }
-          return (init);
-        },
-        [](int lhs, int rhs) -> int {
-          return (lhs + rhs);
-        });
-
+    const auto parallel_sum = parallelSum(first_number, last_number);
     LOG.info() << "Parallel sum: " << parallel_sum;
 
-    const auto parallel_stop     = high_resolution_clock::now();
-    const auto parallel_duration = duration_cast<microseconds>(parallel_stop - simple_stop);
-
+    const auto parallel_stop     = clock::now();
+    const auto parallel_duration = chrono::duration_cast<ms>(parallel_stop - simple_stop);
     LOG.info() << "Parallel duration: " << parallel_duration.count();
 
-    const auto stop           = high_resolution_clock::now();
-    const auto total_duration = duration_cast<microseconds>(stop - start);
+    const auto stop           = clock::now();
+    const auto total_duration = chrono::duration_cast<ms>(stop - start);
 
     LOG.info() << "Total duration: " << total_duration.count();
 
