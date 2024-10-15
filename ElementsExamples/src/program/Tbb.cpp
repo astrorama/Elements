@@ -22,7 +22,32 @@
 namespace tbb = oneapi::tbb;
 
 namespace Elements {
+
+auto LOG = Logging::getLogger("Tbb");
+
 namespace Examples {
+
+void initTbb() {
+
+  const auto processor_count = std::thread::hardware_concurrency();
+  LOG.info() << "Number of native threads: " << processor_count;
+
+  const auto default_concurrency = tbb::info::default_concurrency();
+  LOG.info() << "TBB default concurrency: " << default_concurrency;
+
+  tbb::global_control control(tbb::global_control::max_allowed_parallelism, processor_count);
+}
+
+int simpleSum(const int& first_number, const int& last_number) {
+
+  int sum = 0;
+
+  for (auto i = first_number; i < last_number; i++) {
+    sum += i;
+  }
+
+  return (sum);
+}
 
 class Tbb : public Program {
 
@@ -32,12 +57,10 @@ public:
 
     using namespace std::chrono;
 
-    auto log = Logging::getLogger("Tbb");
-
     const auto processor_count = std::thread::hardware_concurrency();
-    log.info() << "Number of native threads: " << processor_count;
+    LOG.info() << "Number of native threads: " << processor_count;
     const auto default_concurrency = tbb::info::default_concurrency();
-    log.info() << "TBB default concurrency: " << default_concurrency;
+    LOG.info() << "TBB default concurrency: " << default_concurrency;
 
     const auto          start = high_resolution_clock::now();
     tbb::global_control control(tbb::global_control::max_allowed_parallelism, processor_count);
@@ -50,12 +73,12 @@ public:
       simple_sum += i;
     }
 
-    log.info() << "Simple sum: " << simple_sum;
+    LOG.info() << "Simple sum: " << simple_sum;
 
     const auto simple_stop     = high_resolution_clock::now();
     const auto simple_duration = duration_cast<microseconds>(simple_stop - start);
 
-    log.info() << "Simple duration: " << simple_duration.count();
+    LOG.info() << "Simple duration: " << simple_duration.count();
 
     int parallel_sum = tbb::parallel_reduce(
         tbb::blocked_range<int>(first_number, last_number), 0,
@@ -69,17 +92,17 @@ public:
           return (lhs + rhs);
         });
 
-    log.info() << "Parallel sum: " << parallel_sum;
+    LOG.info() << "Parallel sum: " << parallel_sum;
 
     const auto parallel_stop     = high_resolution_clock::now();
     const auto parallel_duration = duration_cast<microseconds>(parallel_stop - simple_stop);
 
-    log.info() << "Parallel duration: " << parallel_duration.count();
+    LOG.info() << "Parallel duration: " << parallel_duration.count();
 
     const auto stop           = high_resolution_clock::now();
     const auto total_duration = duration_cast<microseconds>(stop - start);
 
-    log.info() << "Total duration: " << total_duration.count();
+    LOG.info() << "Total duration: " << total_duration.count();
 
     return (ExitCode::OK);
   }
