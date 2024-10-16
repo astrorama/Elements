@@ -26,9 +26,12 @@ namespace Threading {
 ELEMENTS_API extern const std::string ENV_VAR;
 
 /// @brief Default number of cores.
-///        - 0: get the number from the system
+/// @details 0: get the number from the system
 /// @ingroup ElementsKernel
-ELEMENTS_API extern const std::size_t DEFAULT_CPU_CORE;
+ELEMENTS_API extern const std::size_t DEFAULT_CPU_CORES;
+
+/// @example ElementsExamples/src/program/Tbb.cpp
+/// This is an example of how to use the ElementsKernel/Threading.h module.
 
 }  // namespace Threading
 }  // namespace Kernel

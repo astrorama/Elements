@@ -20,7 +20,7 @@ namespace Threading {
 
 const string ENV_VAR{"PIPELINE_CPU_CORES"};
 
-const size_t DEFAULT_CPU_CORE{0};
+const size_t DEFAULT_CPU_CORES{0};
 
 }  // namespace Threading
 }  // namespace Kernel
