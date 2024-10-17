@@ -15,9 +15,10 @@
 
 #include <oneapi/tbb.h>  // for the Threading Building Blocks
 
-#include "ElementsKernel/Main.h"     // for MAIN_FOR
-#include "ElementsKernel/Program.h"  // for Program
-#include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
+#include "ElementsKernel/Main.h"       // for MAIN_FOR
+#include "ElementsKernel/Program.h"    // for Program
+#include "ElementsKernel/Threading.h"  // for initBuildingBlocks
+#include "ElementsKernel/Unused.h"     // for ELEMENTS_UNUSED
 
 namespace tbb = oneapi::tbb;
 
@@ -26,17 +27,6 @@ namespace Elements {
 auto LOG = Logging::getLogger("Tbb");
 
 namespace Examples {
-
-void initTbb() {
-
-  const auto processor_count = std::thread::hardware_concurrency();
-  LOG.info() << "Number of native threads: " << processor_count;
-
-  const auto default_concurrency = tbb::info::default_concurrency();
-  LOG.info() << "TBB default concurrency: " << default_concurrency;
-
-  tbb::global_control control(tbb::global_control::max_allowed_parallelism, processor_count);
-}
 
 int simpleSum(const int& first_number, const int& last_number) {
 
@@ -74,7 +64,7 @@ public:
 
     namespace chrono = std::chrono;
 
-    initTbb();
+    auto control = Threading::initBuildingBlocks();
 
     using clock = chrono::high_resolution_clock;
     using ms    = chrono::microseconds;
