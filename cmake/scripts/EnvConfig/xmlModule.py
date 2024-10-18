@@ -20,7 +20,7 @@ class XMLFile(object):
         self.xml_result += '<env:config xmlns:env="EnvSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="EnvSchema ./EnvSchema.xsd ">'
         self.xml_result += os.linesep
         self.declaredVars = []
-        self.log = logging.getLogger('XMLFile')
+        self.log = logging.getLogger(__name__)
 
     @staticmethod
     def variable(path, namespace='EnvSchema', name=None):

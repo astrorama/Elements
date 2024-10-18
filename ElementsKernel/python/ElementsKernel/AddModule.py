@@ -40,9 +40,9 @@ try:
 except ImportError:
     from __builtin__ import input
 
-__updated__ = "2024-06-05"
+__updated__ = "2024-10-18"
 
-logger = Logging.getLogger('AddElementsModule')
+LOGGER = Logging.getLogger(__name__)
 
 # Define constants
 CMAKE_LISTS_FILE = 'CMakeLists.txt'
@@ -146,15 +146,15 @@ def createModule(project_dir, module_name, dependency_list, standalone=False, an
     """
     # Create module directory
     mod_path = os.path.join(project_dir, module_name)
-    logger.info('# Creating the module: <%s> ', mod_path)
+    LOGGER.info('# Creating the module: <%s> ', mod_path)
     if os.path.exists(mod_path):
         # Ask user
-        logger.warning('<%s> module ALREADY exists on disk!!!', module_name)
+        LOGGER.warning('<%s> module ALREADY exists on disk!!!', module_name)
         if not answer_yes:
             response_key = input(
             'Do you want to replace the existing module (y/n), default: n)?')
         if answer_yes or response_key.lower() == "y":
-            logger.info('# Replacing the existing module: <%s>', module_name)
+            LOGGER.info('# Replacing the existing module: <%s>', module_name)
             ProjectCommonRoutines.eraseDirectory(mod_path)
         else:
             raise Exception()
@@ -226,9 +226,9 @@ def mainMethod(args):
 
     exit_code = Exit.Code["OK"]
 
-    logger.info('#')
-    logger.info('#  Logging from the mainMethod() of the AddModule script ')
-    logger.info('#')
+    LOGGER.info('#')
+    LOGGER.info('#  Logging from the mainMethod() of the AddModule script ')
+    LOGGER.info('#')
 
     module_name = args.module_name
     dependency_list = args.module_dependency
@@ -237,11 +237,11 @@ def mainMethod(args):
 
     # Default is the current directory
     project_dir = os.getcwd()
-    logger.info('# Current directory : %s', project_dir)
+    LOGGER.info('# Current directory : %s', project_dir)
 
     makeChecks(project_dir, module_name, dependency_list)
     createModule(project_dir, module_name, dependency_list, standalone, answer_yes)
-    logger.info('# <%s> module successfully created in <%s>.', module_name, project_dir)
+    LOGGER.info('# <%s> module successfully created in <%s>.', module_name, project_dir)
     # Print all files created
     ProjectCommonRoutines.printCreationList()
 

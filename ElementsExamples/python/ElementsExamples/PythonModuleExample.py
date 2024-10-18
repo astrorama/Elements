@@ -21,13 +21,11 @@
 """
 
 
-import ElementsKernel.Logging as log
-
 class ClassExample(object):
     """
     This is an example of the most basic Python class
     """
-    logger = log.getLogger('ClassExample')
+
     def __init__(self, my_list):
         """
         Constructor
@@ -43,7 +41,6 @@ class ClassExample(object):
         for element in self._m_list:
             my_sum += element
         return my_sum
-
 
     @staticmethod
     def product(first, second):

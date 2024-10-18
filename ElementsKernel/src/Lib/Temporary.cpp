@@ -37,7 +37,7 @@ using std::string;
 namespace Elements {
 
 namespace {
-auto log = Logging::getLogger();
+auto LOG = Logging::getLogger("Elements");
 }
 
 TempPath::TempPath(const string& arg_motif, const string& keep_var)
@@ -46,13 +46,13 @@ TempPath::TempPath(const string& arg_motif, const string& keep_var)
   using boost::filesystem::unique_path;
 
   if (m_motif.find('%') == string::npos) {
-    log.error() << "The '" << m_motif << "' motif is not random";
+    LOG.error() << "The '" << m_motif << "' motif is not random";
   }
 
   auto pattern = m_motif;
 
   if (pattern.empty()) {
-    log.warn() << "The motif has been replaced by \"" << DEFAULT_TMP_MOTIF << "\"";
+    LOG.warn() << "The motif has been replaced by \"" << DEFAULT_TMP_MOTIF << "\"";
     pattern = DEFAULT_TMP_MOTIF;
   }
 
@@ -64,11 +64,11 @@ TempPath::~TempPath() {
   Environment current;
 
   if (not current.hasKey(m_keep_var)) {
-    log.debug() << "Automatic destruction of the " << path() << " temporary path";
+    LOG.debug() << "Automatic destruction of the " << path() << " temporary path";
     const auto file_number = boost::filesystem::remove_all(m_path);
-    log.debug() << "Number of files removed: " << file_number;
+    LOG.debug() << "Number of files removed: " << file_number;
   } else {
-    log.info() << m_keep_var << " set: I do not remove the " << m_path.string() << " temporary path";
+    LOG.info() << m_keep_var << " set: I do not remove the " << m_path.string() << " temporary path";
   }
 }
 
@@ -82,7 +82,7 @@ string TempPath::motif() const {
 
 TempDir::TempDir(const string& arg_motif, const string& keep_var) : TempPath(arg_motif, keep_var) {
 
-  log.debug() << "Creation of the " << path() << " temporary directory";
+  LOG.debug() << "Creation of the " << path() << " temporary directory";
 
   boost::filesystem::create_directory(path());
 }
@@ -91,7 +91,7 @@ TempDir::~TempDir() = default;
 
 TempFile::TempFile(const string& arg_motif, const string& keep_var) : TempPath(arg_motif, keep_var) {
 
-  log.debug() << "Creation of the " << path() << " temporary file";
+  LOG.debug() << "Creation of the " << path() << " temporary file";
 
   boost::filesystem::ofstream ofs(path());
   ofs.close();

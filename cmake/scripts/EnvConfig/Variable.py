@@ -90,8 +90,8 @@ class EnvExpander(VariableProcessor):
         if m:
             try:
                 value = (value[:m.start()]
-                         + str(self._env[list(filter(None, m.groups()))[0]])
-                         + value[m.end():])
+                         +str(self._env[list(filter(None, m.groups()))[0]])
+                         +value[m.end():])
             except KeyError as k:
                 logging.debug(
                     'KeyError: %s unknown while expanding %s', k, value)
@@ -154,7 +154,6 @@ class EmptyDirsRemover(ListProcessor):
         return [s for s in value if s.endswith('.zip') or (isdir(s) and access(s, R_OK) and listdir(s))]
 
 
-
 class UsePythonZip(ListProcessor):
 
     '''
@@ -174,6 +173,7 @@ class UsePythonZip(ListProcessor):
             else:
                 val.append(s)
         return val
+
 
 # Default (minimal) set of processors.
 processors = [EnvExpander, PathNormalizer, DuplicatesRemover,
@@ -202,7 +202,7 @@ class VariableBase(object):
         self.var_name = name
         self.local = local
         self.expand_vars = True
-        self.log = logging.getLogger('Variable')
+        self.log = logging.getLogger(__name__)
 
     def process(self, value, env):
         '''

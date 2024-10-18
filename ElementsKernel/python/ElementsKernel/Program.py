@@ -30,9 +30,10 @@ from ElementsKernel.Configuration import getConfigurationPath, getConfigurationL
 from ElementsKernel import Exit
 from ElementsKernel import File
 
-__updated__ = "2024-06-05"
+__updated__ = "2024-10-18"
 
 SEP_LINE = "##########################################################"
+
 
 def str_to_bool(s):
     """Convert string to bool (in argparse context)."""
@@ -53,7 +54,7 @@ class Program(object):
                  use_config_file=True,
                  use_default_conf=True):
         self._app_module = importlib.import_module(app_module)
-        self._logger = Logging.getLogger('ElementsProgram')
+        self._logger = Logging.getLogger(__name__)
         self._elements_loglevel = elements_loglevel
         self._use_config_file = use_config_file
         self._use_default_conf = use_default_conf

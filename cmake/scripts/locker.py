@@ -144,7 +144,7 @@ class LockFile(object):
         self.name = name
         self.temporary = temporary
         self.file = None
-        self.log = logging.getLogger("LockFile")
+        self.log = logging.getLogger(__name__)
         self.log.info(
             "%s - Locking on %s", time.strftime("%Y-%m-%dT%H:%M:%S"), self.name)
         if not os.path.exists(name):

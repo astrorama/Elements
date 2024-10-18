@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-
 """ Small example for a python based script
 
 """
@@ -27,6 +26,8 @@ from ElementsKernel.Program import str_to_bool
 from ElementsExamples.PythonModuleExample import ClassExample
 
 from ElementsKernel import Exit
+
+LOGGER = Logging.getLogger(__name__)
 
 
 def myLocalLogTestFunc():
@@ -132,8 +133,7 @@ def mainMethod(args):
 
         See the ElementsProgram documentation for more details.
     """
-    logger = Logging.getLogger('ProgramExample')
-    logger.info('Entering ProgramExample mainMethod()')
+    LOGGER.info('Entering ProgramExample mainMethod()')
 
     #
     #  function with log messages
@@ -144,25 +144,25 @@ def mainMethod(args):
     #  Log some of the arguments
     #
     string_from_configuration = args.string_option
-    logger.info('Example string : %s', string_from_configuration)
+    LOGGER.info('Example string : %s', string_from_configuration)
     second_element = args.int_list_option[1]
-    logger.info('Second elements from the list : %s', str(second_element))
+    LOGGER.info('Second elements from the list : %s', str(second_element))
 
-    logger.info("the int_option value %d", args.int_option)
-    logger.info("the threshold value %.1f", args.threshold)
+    LOGGER.info("the int_option value %d", args.int_option)
+    LOGGER.info("the threshold value %.1f", args.threshold)
 
     #
     #  Calling a static method
     #
     result = ClassExample.product(3, 4)
-    logger.info('Static method result : %s', str(result))
+    LOGGER.info('Static method result : %s', str(result))
 
     #
     #  Calling the constructor and a method member
     #
     example_object = ClassExample(args.int_list_option)
-    logger.info('Sum of the list elements : %s', str(example_object.sumListValues()))
+    LOGGER.info('Sum of the list elements : %s', str(example_object.sumListValues()))
 
-    logger.info('Exiting ProgramExample mainMethod()')
+    LOGGER.info('Exiting ProgramExample mainMethod()')
 
     return Exit.Code["OK"]

@@ -50,7 +50,7 @@ namespace Elements {
 inline namespace Kernel {
 
 namespace {
-auto log = Logging::getLogger("PathSearch");
+auto LOG = Logging::getLogger("Elements");
 }
 
 // template instantiations
@@ -85,7 +85,7 @@ vector<Path::Item> pathSearchInEnvVariable(const string& file_name, const string
   if (current_env.hasKey(path_like_env_variable)) {
     multiple_path = current_env[path_like_env_variable];
   } else {
-    log.warn() << "Environment variable \"" << path_like_env_variable << "\" is not defined !";
+    LOG.warn() << "Environment variable \"" << path_like_env_variable << "\" is not defined !";
   }
 
   // Tokenize the path elements

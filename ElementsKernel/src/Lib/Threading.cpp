@@ -22,7 +22,9 @@ using std::string;
 
 namespace Elements {
 
-auto LOG = Logging::getLogger();
+namespace {
+auto LOG = Logging::getLogger("Elements");
+}
 
 inline namespace Kernel {
 namespace Threading {
