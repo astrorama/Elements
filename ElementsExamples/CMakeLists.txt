@@ -303,8 +303,8 @@ elements_add_test(OpenMPWorks COMMAND OpenMPExample LABELS OpenMP Build)
 find_package(TBB QUIET)
 if(TBB_FOUND)
 elements_add_executable(TbbExample src/program/Tbb.cpp
-                        LINK_LIBRARIES TBB::tbb ElementsExamples
-                        INCLUDE_DIRS TBB::tbb ElementsExamples)
+                        LINK_LIBRARIES ElementsExamples
+                        INCLUDE_DIRS ElementsExamples)
 elements_add_test(TbbWorks COMMAND TbbExample LABELS Tbb Build)
 endif()
 

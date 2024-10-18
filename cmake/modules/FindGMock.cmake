@@ -30,3 +30,13 @@ list(REMOVE_DUPLICATES GMOCK_LIBRARIES)
 list(REMOVE_DUPLICATES GMOCK_INCLUDE_DIRS)
 
 endif()
+
+if(GMOCK_FOUND AND NOT TARGET GMock::gmock)
+  add_library(GMock::gmock IMPORTED INTERFACE)
+  target_include_directories(GMock::gmock SYSTEM INTERFACE "${GMOCK_INCLUDE_DIRS}")
+  target_link_libraries(GMock::gmock INTERFACE "${GMOCK_LIBRARIES}")
+  # Display the imported target for the user to know
+  if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+    message(STATUS "  Import target: GMock::gmock")
+ endif()
+endif()
