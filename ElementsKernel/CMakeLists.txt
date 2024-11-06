@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.25)
 
 elements_subdir(ElementsKernel)
 
+cmake_policy(PUSH)
+cmake_policy(SET CMP0167 OLD)
 find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex unit_test_framework)
+cmake_policy(POP)
 find_package(Log4CPP REQUIRED)
 
 
