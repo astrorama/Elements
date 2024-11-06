@@ -3,9 +3,9 @@
 #
 # Authors: Hubert Degaudenzi
 #
-# Commit Id: $Format:%H$
-
+#
 cmake_minimum_required(VERSION 3.25)
+
 
 # FIXME: use of LOCATION property is deprecated and should be replaced with the
 #        generator expression $<TARGET_FILE>, but the way we use it requires
@@ -138,6 +138,14 @@ macro(elements_project project version)
   if(POLICY CMP0048)
     cmake_policy(GET CMP0048 project_vers_format)
   endif()
+
+  set(python_policy)
+  if(POLICY CMP0148)
+    cmake_policy(GET CMP0148 python_policy)
+  endif()
+
+  message(STATUS "Python policy: ${python_policy}")
+
 
   if("${project_vers_format}" STREQUAL "NEW" AND (NOT ${version} MATCHES "^HEAD.*"))
     project(${project} VERSION ${version})
