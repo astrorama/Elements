@@ -62,7 +62,7 @@ struct Path_Fixture {
     f.close();
   }
 
-  Path_Fixture() : m_top_dir{"Path_test-%%%%%%%"} {
+  Path_Fixture() : m_top_dir{"Path_test-%%%%%%%"}, m_item_list{}, m_file_list{}, m_directory_list{} {
 
     using boost::filesystem::create_directory;
     using std::for_each;

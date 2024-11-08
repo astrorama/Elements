@@ -52,7 +52,7 @@ struct PathSearch_Fixture {
   path   m_full_path_2   = m_root_path / "PathSearch//ElementsKernel";
   string m_multiple_path = "/opt/local/bin:" + m_full_path_1.string() + ":" + m_full_path_2.string() + ":/bin";
 
-  PathSearch_Fixture() = default;
+  PathSearch_Fixture() : m_env{} {}
 
   ~PathSearch_Fixture() = default;
 };
