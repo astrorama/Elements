@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.25)
 
 
 # Declare ElementsExamples as an Elements module
@@ -11,7 +11,12 @@ elements_depends_on_subdirs(ElementsKernel)
 # Declare external library dependencies
 #    This module is using the Boost C++ library
 #    CppUnit and GMock are optional dependencies
+
+cmake_policy(PUSH)
+cmake_policy(SET CMP0167 OLD)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
+cmake_policy(POP)
+find_package(Log4CPP REQUIRED)
 find_package(CppUnit)
 find_package(GMock)
 
@@ -125,8 +130,8 @@ elements_add_unit_test(FunctionExample2 tests/src/Boost/FunctionExample2_test.cp
 # LINK_LIBRARIES argument.
 elements_add_unit_test(BoostClassExampleWithMain tests/src/Boost/ClassExample_test.cpp tests/src/Boost/TestMain.cpp
                        EXECUTABLE BoostClassExampleWithMain_test
-                       INCLUDE_DIRS Boost::unit_test_framework ElementsExamples
-                       LINK_LIBRARIES Boost::unit_test_framework ElementsExamples)
+                       INCLUDE_DIRS Boost ElementsExamples
+                       LINK_LIBRARIES Boost ElementsExamples)
 
 elements_add_unit_test(ModuleInfo tests/src/Boost/ModuleInfo_test.cpp
                        EXECUTABLE ElementsExamplesModuleInfo_test
@@ -299,6 +304,15 @@ elements_add_executable(OpenMPExample src/program/OpenMP.cpp
                         LINK_LIBRARIES ElementsExamples
                         INCLUDE_DIRS ElementsExamples)
 elements_add_test(OpenMPWorks COMMAND OpenMPExample LABELS OpenMP Build)
+
+find_package(TBB QUIET)
+if(TBB_FOUND)
+elements_add_executable(TbbExample src/program/Tbb.cpp
+                        LINK_LIBRARIES ElementsExamples
+                        INCLUDE_DIRS ElementsExamples)
+elements_add_test(TbbWorks COMMAND TbbExample LABELS Tbb Build)
+endif()
+
 
 
 find_package(SWIG QUIET)

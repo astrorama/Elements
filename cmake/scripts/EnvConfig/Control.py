@@ -25,7 +25,7 @@ class Environment(object):
         If use_as_writer == True than every change to variables is recorded to XML file.
         reportLevel sets the level of messaging.
         '''
-        self.log = logging.getLogger('Environment')
+        self.log = logging.getLogger(__name__)
 
         self.separator = ':'
 

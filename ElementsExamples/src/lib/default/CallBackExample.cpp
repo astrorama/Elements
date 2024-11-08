@@ -31,17 +31,19 @@ using std::vector;
 namespace Elements {
 namespace Examples {
 
+namespace {
+auto LOG = Logging::getLogger("Elements");
+}
+
 double testCallBack(vector<double> x, const std::function<double(vector<double>)>& fun) {
 
-  auto log = Logging::getLogger("ElementsExamples");
-
-  log.info() << "Calling the Python function from C++";
+  LOG.info() << "Calling the Python function from C++";
 
   double f = fun(x);
 
-  log.info() << "The value of the function is " << f;
+  LOG.info() << "The value of the function is " << f;
 
-  log.info() << "Returning the result";
+  LOG.info() << "Returning the result";
 
   return (f);
 }

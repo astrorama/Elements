@@ -3,65 +3,8 @@
 #
 # Authors: Hubert Degaudenzi
 #
-# Commit Id: $Format:%H$
-
-cmake_minimum_required(VERSION 3.5)
-
-# FIXME: use of LOCATION property is deprecated and should be replaced with the
-#        generator expression $<TARGET_FILE>, but the way we use it requires
-#        CMake >= 2.8.12, so we must keep the old behavior until we bump the
-#        cmake_minimum_required version. (policy added in CMake 3.0)
-if(NOT CMAKE_VERSION VERSION_LESS 3.0) # i.e CMAKE_VERSION >= 3.0
-  if(NOT CMAKE_VERSION VERSION_LESS 3.9.0)
-    cmake_policy(SET CMP0026 NEW)
-  else()
-    cmake_policy(SET CMP0026 OLD)
-  endif()
-  if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
-    cmake_policy(SET CMP0042 OLD)
-  endif()
-endif()
-
-if(POLICY CMP0063)
-  # this policy is related to the symbol visibility
-  # please run "cmake --help-policy CMP0063" for more details
-  if(NOT CMAKE_VERSION VERSION_LESS 3.3) # i.e CMAKE_VERSION >= 3.3
-    cmake_policy(SET CMP0063 NEW)
-  endif()
-endif()
-
-if(POLICY CMP0048)
-  # this policy is related to the behavior of the project() macro
-  # please run "cmake --help-policy CMP0048" for more details
-  if(NOT CMAKE_VERSION VERSION_LESS 3.12.1) # i.e CMAKE_VERSION >= 3.3
-    cmake_policy(SET CMP0048 NEW)
-  else()
-    cmake_policy(SET CMP0048 OLD)
-  endif()
-endif()
-
-if(POLICY CMP0054)
-  # this policy is related to the string comparison
-  # please run "cmake --help-policy CMP0054" for more details
-  if(NOT CMAKE_VERSION VERSION_LESS 3.1) # i.e CMAKE_VERSION >= 3.3
-    cmake_policy(SET CMP0054 NEW)
-  else()
-    cmake_policy(SET CMP0054 OLD)
-  endif()
-endif()
-
-if(POLICY CMP0094)
-  cmake_policy(SET CMP0094 NEW)
-endif()
-
-
-if(POLICY CMP0148)
-  # this policy is related to the python find_package
-  # please run "cmake --help-policy CMP0148" for more details
-  if(NOT CMAKE_VERSION VERSION_LESS 3.12) # i.e CMAKE_VERSION >= 3.12
-    cmake_policy(SET CMP0148 OLD)
-  endif()
-endif()
+#
+cmake_minimum_required(VERSION 3.25)
 
 
 if (NOT HAS_ELEMENTS_TOOLCHAIN)
@@ -94,6 +37,9 @@ debug_message("    <---- Elements Main config: ${CMAKE_CURRENT_LIST_FILE} ----> 
 #-------------------------------------------------------------------------------
 # Basic configuration
 #-------------------------------------------------------------------------------
+find_program(CMAKE_CMAKE_PROGRAM NAMES cmake PATH $ENV{PATH})
+message(STATUS "CMake program: ${CMAKE_CMAKE_PROGRAM}")
+
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Ensure that the include directories added are always taken first.
@@ -136,6 +82,14 @@ macro(elements_project project version)
   if(POLICY CMP0048)
     cmake_policy(GET CMP0048 project_vers_format)
   endif()
+
+  set(python_policy)
+  if(POLICY CMP0148)
+    cmake_policy(GET CMP0148 python_policy)
+  endif()
+
+  message(STATUS "Python policy: ${python_policy}")
+
 
   if("${project_vers_format}" STREQUAL "NEW" AND (NOT ${version} MATCHES "^HEAD.*"))
     project(${project} VERSION ${version})
@@ -1844,7 +1798,10 @@ macro(_get_include_dir_from_package inc_dir pck)
     set(${inc_dir} ${CMAKE_SOURCE_DIR}/${pck})
   else()
     # ensure that the current directory knows about the package
-    find_package(${pck} QUIET)
+    cmake_policy(PUSH)
+    cmake_policy(SET CMP0167 OLD)
+      find_package(${pck} QUIET)
+    cmake_policy(POP)
     set(to_incl_var)
     string(TOUPPER ${pck} _pack_upper)
     if(${_pack_upper}_FOUND OR ${pck}_FOUND)
@@ -2601,12 +2558,12 @@ Provide source files and the NO_PUBLIC_HEADERS option for a plugin/module librar
   endif()
 
   set_target_properties(${library} PROPERTIES COMPILE_DEFINITIONS ELEMENTS_LINKER_LIBRARY)
-  target_link_libraries(${library} PRIVATE ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${library} PUBLIC ${ARG_LINK_LIBRARIES})
   _elements_detach_debinfo(${library})
 
   # Declare that the used headers are needed by the libraries linked against this one
   set_target_properties(${library} PROPERTIES
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+#    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
     REQUIRED_INCLUDE_DIRS "${ARG_INCLUDE_DIRS}"
     REQUIRED_LIBRARIES "${ARG_LINK_LIBRARIES}")
   set_property(GLOBAL APPEND PROPERTY LINKER_LIBRARIES ${library})
@@ -3375,7 +3332,10 @@ function(elements_add_test_executable name)
   if(NOT "${${name}_TEST_EXEC_TYPE}" STREQUAL "None")
 
     if ("${${name}_TEST_EXEC_TYPE}" STREQUAL "Boost")
+      cmake_policy(PUSH)
+      cmake_policy(SET CMP0167 OLD)
       find_package(Boost COMPONENTS unit_test_framework QUIET REQUIRED)
+      cmake_policy(POP)
     else()
       find_package(${${name}_TEST_EXEC_TYPE} QUIET REQUIRED)
     endif()
@@ -4475,8 +4435,10 @@ macro(elements_external_project_environment)
     if((NOT "${pack}" STREQUAL "ElementsProject") AND (elements_project_idx EQUAL -1) AND (NOT "${pack}" STREQUAL "PythonModules"))
       message(STATUS "    ${pack}")
       # this is needed to get the non-cache variables for the packages
-
+      cmake_policy(PUSH)
+      cmake_policy(SET CMP0167 OLD)
       find_package(${pack} QUIET)
+      cmake_policy(POP)
 
       if("${pack}" STREQUAL "PythonInterp" OR "${pack}" STREQUAL "PythonLibs" OR "${pack}" STREQUAL "Python")
         set(pack Python)

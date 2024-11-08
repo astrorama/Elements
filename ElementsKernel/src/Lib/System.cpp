@@ -123,7 +123,7 @@ unsigned long getProcedureByName(ImageHandle handle, const string& name, EntryPo
   }
 #elif defined(__APPLE__)
   *pFunction = (EntryPoint)::dlsym(handle, name.c_str());
-  if (not *pFunction) {
+  if (not*pFunction) {
     // Try with an underscore :
     string sname = "_" + name;
     *pFunction   = (EntryPoint)::dlsym(handle, sname.c_str());
@@ -273,7 +273,7 @@ const string& hostName() {
   if (host.empty()) {
     std::array<char, HOST_NAME_MAX + 1> buffer;
     ::gethostname(buffer.data(), HOST_NAME_MAX);
-    host = buffer.data();
+    host = string(buffer.data());
   }
   return host;
 }

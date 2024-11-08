@@ -1,15 +1,41 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.25)
 
 elements_subdir(ElementsKernel)
 
-find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex)
+cmake_policy(PUSH)
+cmake_policy(SET CMP0167 OLD)
+find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex unit_test_framework)
+cmake_policy(POP)
 find_package(Log4CPP REQUIRED)
 
+
 #---Libraries---------------------------------------------------------------
-elements_add_library(ElementsKernel src/Lib/*.cpp
+elements_add_library(ElementsKernel src/Lib/Auxiliary.cpp src/Lib/Configuration.cpp
+                                    src/Lib/Environment.cpp
+                                    src/Lib/Exception.cpp src/Lib/Logging.cpp
+                                    src/Lib/ModuleInfo.cpp src/Lib/Path.cpp
+                                    src/Lib/PathSearch.cpp src/Lib/Program.cpp
+                                    src/Lib/ProgramManager.cpp src/Lib/Real.cpp
+                                    src/Lib/SimpleProgram.cpp src/Lib/Sleep.cpp
+                                    src/Lib/Storage.cpp src/Lib/System.cpp
+                                    src/Lib/Temporary.cpp src/Lib/ThisModule.cpp
+                                    src/Lib/Version.cpp
                     LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP
-                    INCLUDE_DIRS Boost Log4CPP
+                    INCLUDE_DIRS Boost Log4CPP TBB::tbb
                     PUBLIC_HEADERS ElementsKernel)
+
+find_package(GMock)
+if(GMOCK_FOUND)
+  target_sources(ElementsKernel PRIVATE src/Lib/EnableGMock.cpp)
+  target_link_libraries(ElementsKernel PUBLIC GMock::gmock)
+endif()
+
+find_package(TBB QUIET)
+if(TBB_FOUND)
+  target_sources(ElementsKernel PRIVATE src/Lib/Threading.cpp)
+  target_link_libraries(ElementsKernel PUBLIC TBB::tbb)
+endif()
+
 add_library(Elements::Kernel ALIAS ElementsKernel)
 
 #---Tests-------------------------------------------------------------------

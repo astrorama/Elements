@@ -28,6 +28,8 @@ from ElementsKernel import Exit
 
 from testCallBack import test  # pylint: disable=no-name-in-module,import-error
 
+LOGGER = Logging.getLogger(__name__)
+
 
 def norm(x):
     """ function to return the norm of a scalar or a vector
@@ -61,19 +63,18 @@ def mainMethod(args):  # pylint: disable=unused-argument
     different classes created for the first developer's workshop. See the ElementsProgram
     documentation for more details.
     """
-    logger = Logging.getLogger('PyBind11ProgramExample')
-    logger.info('Entering PyBind11ProgramExample mainMethod()')
+    LOGGER.info('Entering PyBind11ProgramExample mainMethod()')
 
-    logger.info('Testing callback with an input tuple')
+    LOGGER.info('Testing callback with an input tuple')
 
     x = [1., 2.]
     test(x, norm)
 
-    logger.info('Testing callback with an input array')
+    LOGGER.info('Testing callback with an input array')
 
     x = np.array([1., 2.])
     test(x, norm)
 
-    logger.info('Exiting PyBind11ProgramExample mainMethod()')
+    LOGGER.info('Exiting PyBind11ProgramExample mainMethod()')
 
     return Exit.Code["OK"]

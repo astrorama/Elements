@@ -22,3 +22,12 @@ find_package_handle_standard_args(GTest  DEFAULT_MSG
 mark_as_advanced(GTEST_FOUND GTEST_INCLUDE_DIRS GTEST_LIBRARIES)
 
 endif()
+if(GTEST_FOUND AND NOT TARGET GTest::gtest)
+  add_library(GTest::gtest IMPORTED INTERFACE)
+  target_include_directories(GTest::gtest SYSTEM INTERFACE "${GTEST_INCLUDE_DIRS}")
+  target_link_libraries(GTest::gtest INTERFACE "${GTEST_LIBRARIES}")
+  # Display the imported target for the user to know
+  if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+    message(STATUS "  Import target: GTest::gtest")
+  endif()
+endif()

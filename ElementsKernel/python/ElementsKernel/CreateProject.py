@@ -32,7 +32,9 @@ from ElementsKernel import Logging
 from ElementsKernel import Project, ProjectCommonRoutines
 from ElementsKernel import Exit
 
-__updated__ = "2024-06-05"
+__updated__ = "2024-10-18"
+
+LOGGER = Logging.getLogger(__name__)
 
 
 def defineSpecificProgramOptions():
@@ -110,11 +112,9 @@ def mainMethod(args):
 
     exit_code = Exit.Code["OK"]
 
-    logger = Logging.getLogger('CreateElementsProject')
-
-    logger.info('#')
-    logger.info('#  Logging from the mainMethod() of the CreateElementsProject script')
-    logger.info('#')
+    LOGGER.info('#')
+    LOGGER.info('#  Logging from the mainMethod() of the CreateElementsProject script')
+    LOGGER.info('#')
 
     proj_name = args.project_name
     proj_version = args.project_version
@@ -127,7 +127,7 @@ def mainMethod(args):
     visibility = args.visibility
     answer_yes = args.yes
 
-    logger.info('# Installation directory : %s', destination_path)
+    LOGGER.info('# Installation directory : %s', destination_path)
 
     # Set the project directory
     project_dir = Project.getProjectDirectory(no_version_directory, destination_path, proj_name, proj_version)
@@ -141,6 +141,6 @@ def mainMethod(args):
     # Print all files created
     ProjectCommonRoutines.printCreationList()
 
-    logger.info('# <%s> project successfully created.', project_dir)
+    LOGGER.info('# <%s> project successfully created.', project_dir)
 
     return exit_code

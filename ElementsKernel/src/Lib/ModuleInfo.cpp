@@ -106,7 +106,7 @@ const string& moduleNameFull() {
       name[0]          = 0;
       const char* path = (reinterpret_cast<Dl_info*>(moduleHandle())->dli_fname);
       if (::realpath(path, name.data())) {
-        module = name.data();
+        module = string(name.data());
       }
     }
   }

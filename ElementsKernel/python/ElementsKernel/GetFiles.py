@@ -29,10 +29,12 @@ import argparse
 from ElementsKernel import Logging
 from ElementsKernel import Path, Exit
 
-__updated__ = "2024-06-05"
+__updated__ = "2024-10-18"
 
 DEFAULT_TYPE = "executable"
 TYPES = [DEFAULT_TYPE, "library", "python", "configuration", "auxiliary"]
+
+LOGGER = Logging.getLogger(__name__)
 
 
 def defineSpecificProgramOptions():
@@ -92,15 +94,13 @@ def mainMethod(args):
     similar to a main (and it is why it is called mainMethod()).
     """
 
-    logger = Logging.getLogger('GetElementsFiles')
-
     exit_code = Exit.Code["OK"]
 
     stem = args.file_stem
     file_type = args.type
 
     if stem.find(os.path.sep) != -1 and (not Path.HAS_SUBLEVELS[file_type]):
-        logger.error("The search stem cannot contain \"%s\" for the %s type", os.path.sep, file_type)
+        LOGGER.error("The search stem cannot contain \"%s\" for the %s type", os.path.sep, file_type)
         exit_code = Exit.Code["NOT_OK"]
 
     locations = Path.getLocations(file_type, exist_only=True, with_defaults=args.with_defaults)
@@ -108,7 +108,7 @@ def mainMethod(args):
     if stem:
         found_list = Path.getAllPathFromLocations(stem, locations)
     else:
-        logger.info("No stem provided. Listing all files")
+        LOGGER.info("No stem provided. Listing all files")
         found_list = []
         for l in locations:
             for root, _, files in os.walk(l):

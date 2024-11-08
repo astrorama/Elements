@@ -61,7 +61,7 @@ using std::vector;
 namespace Elements {
 
 namespace {
-auto log = Logging::getLogger("ElementsProgram");
+auto LOG = Logging::getLogger("Elements");
 }
 
 using System::getExecutablePath;
@@ -107,21 +107,21 @@ const Path::Item ProgramManager::getDefaultConfigFile(const Path::Item& program_
   // Construct and return the full path
   default_config_file = getConfigurationPath(conf_name.string(), false);
   if (default_config_file.empty()) {
-    log.warn() << "The " << conf_name << " default configuration file cannot be found in:";
+    LOG.warn() << "The " << conf_name << " default configuration file cannot be found in:";
     for (auto loc : getConfigurationLocations()) {
-      log.warn() << " " << loc;
+      LOG.warn() << " " << loc;
     }
     if (not module_name.empty()) {
       conf_name = Path::Item{module_name} / conf_name;
-      log.warn() << "Trying " << conf_name << ".";
+      LOG.warn() << "Trying " << conf_name << ".";
       default_config_file = getConfigurationPath(conf_name.string(), false);
     }
   }
 
   if (default_config_file.empty()) {
-    log.debug() << "Couldn't find " << conf_name << " default configuration file.";
+    LOG.debug() << "Couldn't find " << conf_name << " default configuration file.";
   } else {
-    log.debug() << "Found " << conf_name << " default configuration file at " << default_config_file;
+    LOG.debug() << "Found " << conf_name << " default configuration file at " << default_config_file;
   }
 
   return default_config_file;
@@ -275,22 +275,22 @@ const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
 }
 
 void ProgramManager::logHeader(string program_name) const {
-  log.log(m_elements_loglevel, "##########################################################");
-  log.log(m_elements_loglevel, "##########################################################");
-  log.log(m_elements_loglevel, "#");
-  log.log(m_elements_loglevel, "#  C++ program:  " + program_name + " starts ");
-  log.log(m_elements_loglevel, "#");
-  log.debug("# The Program Name: " + m_program_name.string());
-  log.debug("# The Program Path: " + m_program_path.string());
+  LOG.log(m_elements_loglevel, "##########################################################");
+  LOG.log(m_elements_loglevel, "##########################################################");
+  LOG.log(m_elements_loglevel, "#");
+  LOG.log(m_elements_loglevel, "#  C++ program:  " + program_name + " starts ");
+  LOG.log(m_elements_loglevel, "#");
+  LOG.debug("# The Program Name: " + m_program_name.string());
+  LOG.debug("# The Program Path: " + m_program_path.string());
 }
 
 void ProgramManager::logFooter(string program_name) const {
-  log.log(m_elements_loglevel, "##########################################################");
-  log.log(m_elements_loglevel, "#");
-  log.log(m_elements_loglevel, "#  C++ program:  " + program_name + " stops ");
-  log.log(m_elements_loglevel, "#");
-  log.log(m_elements_loglevel, "##########################################################");
-  log.log(m_elements_loglevel, "##########################################################");
+  LOG.log(m_elements_loglevel, "##########################################################");
+  LOG.log(m_elements_loglevel, "#");
+  LOG.log(m_elements_loglevel, "#  C++ program:  " + program_name + " stops ");
+  LOG.log(m_elements_loglevel, "#");
+  LOG.log(m_elements_loglevel, "##########################################################");
+  LOG.log(m_elements_loglevel, "##########################################################");
 }
 
 // Log all options with a header
@@ -298,11 +298,11 @@ void ProgramManager::logAllOptions() const {
   using std::int64_t;
   using std::stringstream;
 
-  log.log(m_elements_loglevel, "##########################################################");
-  log.log(m_elements_loglevel, "#");
-  log.log(m_elements_loglevel, "# List of all program options");
-  log.log(m_elements_loglevel, "# ---------------------------");
-  log.log(m_elements_loglevel, "#");
+  LOG.log(m_elements_loglevel, "##########################################################");
+  LOG.log(m_elements_loglevel, "#");
+  LOG.log(m_elements_loglevel, "# List of all program options");
+  LOG.log(m_elements_loglevel, "# ---------------------------");
+  LOG.log(m_elements_loglevel, "#");
 
   // Build a log message
   stringstream log_message{};
@@ -357,25 +357,25 @@ void ProgramManager::logAllOptions() const {
                   << " not supported in logging !" << endl;
     }
     // write the log message
-    log.log(m_elements_loglevel, log_message.str());
+    LOG.log(m_elements_loglevel, log_message.str());
     log_message.str("");
   }
-  log.log(m_elements_loglevel, "#");
+  LOG.log(m_elements_loglevel, "#");
 }
 
 // Log all options with a header
 void ProgramManager::logTheEnvironment() const {
-  log.debug() << "##########################################################";
-  log.debug() << "#";
-  log.debug() << "# Environment of the Run";
-  log.debug() << "# ---------------------------";
-  log.debug() << "#";
+  LOG.debug() << "##########################################################";
+  LOG.debug() << "#";
+  LOG.debug() << "# Environment of the Run";
+  LOG.debug() << "# ---------------------------";
+  LOG.debug() << "#";
 
   for (const auto& v : Path::VARIABLE) {
-    log.debug() << v.second << ": " << m_env[v.second];
+    LOG.debug() << v.second << ": " << m_env[v.second];
   }
 
-  log.debug() << "#";
+  LOG.debug() << "#";
 }
 
 void ProgramManager::bootstrapEnvironment(char* arg0) {
@@ -419,7 +419,7 @@ void ProgramManager::setup(int argc, char* argv[]) {
     m_variables_map = getProgramOptions(argc, argv);
   } catch (const OptionException& e) {
     auto exit_code = e.exitCode();
-    log.fatal() << "# Elements Exception : " << e.what();
+    LOG.fatal() << "# Elements Exception : " << e.what();
     std::_Exit(static_cast<int>(exit_code));
   }
 
@@ -447,7 +447,7 @@ void ProgramManager::setup(int argc, char* argv[]) {
 }
 
 void ProgramManager::tearDown(const ExitCode& c) {
-  log.debug() << "# Exit Code: " << int(c);
+  LOG.debug() << "# Exit Code: " << int(c);
 
   logFooter(m_program_name.string());
 }
@@ -476,29 +476,29 @@ void ProgramManager::onTerminate() noexcept {
 
   if (auto exc = std::current_exception()) {
 
-    log.fatal() << "Crash detected";
-    log.fatal() << "This is the back trace:";
+    LOG.fatal() << "Crash detected";
+    LOG.fatal() << "This is the back trace:";
     for (const auto& level : System::backTrace(21, 4)) {
-      log.fatal() << level;
+      LOG.fatal() << level;
     }
 
     // we have an exception
     try {
       std::rethrow_exception(exc);  // throw to recognise the type
     } catch (const Exception& exc1) {
-      log.fatal() << "# ";
-      log.fatal() << "# Elements Exception : " << exc1.what();
-      log.fatal() << "# ";
+      LOG.fatal() << "# ";
+      LOG.fatal() << "# Elements Exception : " << exc1.what();
+      LOG.fatal() << "# ";
       exit_code = exc1.exitCode();
     } catch (const std::exception& exc2) {
-      log.fatal() << "# ";
-      log.fatal() << "# Standard Exception : " << exc2.what();
-      log.fatal() << "# ";
+      LOG.fatal() << "# ";
+      LOG.fatal() << "# Standard Exception : " << exc2.what();
+      LOG.fatal() << "# ";
     } catch (...) {
-      log.fatal() << "# ";
-      log.fatal() << "# An exception of unknown type occurred, "
+      LOG.fatal() << "# ";
+      LOG.fatal() << "# An exception of unknown type occurred, "
                   << "i.e., an exception not deriving from std::exception ";
-      log.fatal() << "# ";
+      LOG.fatal() << "# ";
     }
 
     abort();

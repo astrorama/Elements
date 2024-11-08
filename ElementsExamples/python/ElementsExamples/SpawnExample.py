@@ -23,13 +23,15 @@
 import argparse
 import multiprocessing
 import time
-import ElementsKernel.Logging as log
+
+from ElementsKernel import Logging
+
+LOGGER = Logging.getLogger(__name__)
 
 
 def worker_func(i):
 
-    logger = log.getLogger('SpawnTest')
-    logger.info("Hello from %d", i)
+    LOGGER.info("Hello from %d", i)
 
 
 def defineSpecificProgramOptions():
@@ -58,12 +60,9 @@ def mainMethod(args):
     @details This method is the entry point to the program. In this sense, it is
     similar to a main (and it is why it is called mainMethod()).
     """
-
-    logger = log.getLogger('SpawnTest')
-
-    logger.info('#')
-    logger.info('# Entering SpawnTest mainMethod()')
-    logger.info('#')
+    LOGGER.info('#')
+    LOGGER.info('# Entering SpawnTest mainMethod()')
+    LOGGER.info('#')
 
     num_procs = 4
     time.sleep(2)
@@ -71,6 +70,6 @@ def mainMethod(args):
     with multiprocessing.get_context("spawn").Pool(num_procs) as p:
         p.map(worker_func, [i for i in range(num_procs)])
 
-    logger.info('#')
-    logger.info('# Exiting SpawnTest mainMethod()')
-    logger.info('#')
+    LOGGER.info('#')
+    LOGGER.info('# Exiting SpawnTest mainMethod()')
+    LOGGER.info('#')

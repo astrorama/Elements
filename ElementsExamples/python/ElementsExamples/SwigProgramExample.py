@@ -16,15 +16,16 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-
 """ Small example for a python based script
 """
 
 import argparse
-import ElementsKernel.Logging as log
-from ElementsKernel import Exit
+
+from ElementsKernel import Exit, Logging
 
 from SwigExample import functionExample
+
+LOGGER = Logging.getLogger(__name__)
 
 
 def defineSpecificProgramOptions():
@@ -40,6 +41,7 @@ def defineSpecificProgramOptions():
 
     return parser
 
+
 def mainMethod(args):
     """ The "main" method.
     This method is the entry point to the program. In this sense, it is similar to a main
@@ -47,8 +49,7 @@ def mainMethod(args):
     different classes created for the first developer's workshop. See the ElementsProgram
     documentation for more details.
     """
-    logger = log.getLogger('SwigProgramExample')
-    logger.info('Entering SwigProgramExample mainMethod()')
+    LOGGER.info('Entering SwigProgramExample mainMethod()')
 
     #
     #  Log some of the arguments
@@ -56,10 +57,10 @@ def mainMethod(args):
     int_from_configuration = args.int_option
     if not int_from_configuration:
         int_from_configuration = 9
-    logger.info('Example int : %d', int_from_configuration)
+    LOGGER.info('Example int : %d', int_from_configuration)
     func_result = functionExample(int_from_configuration)
-    logger.info('functionExample(%d) : %d', int_from_configuration, func_result)
+    LOGGER.info('functionExample(%d) : %d', int_from_configuration, func_result)
 
-    logger.info('Exiting SwigProgramExample mainMethod()')
+    LOGGER.info('Exiting SwigProgramExample mainMethod()')
 
     return Exit.Code["OK"]

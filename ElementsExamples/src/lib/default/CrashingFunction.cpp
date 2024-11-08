@@ -29,9 +29,13 @@
 namespace Elements {
 namespace Examples {
 
+namespace {
+auto LOG = Logging::getLogger("Elements");
+}
+
 void crashingFunction() {
-  auto log = Logging::getLogger("ElementsExamples");
-  log.info() << "Entering Crashing Function";
+
+  LOG.info() << "Entering Crashing Function";
 
   throw std::logic_error("arrg!");
 }
