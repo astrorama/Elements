@@ -345,8 +345,9 @@ if(CYTHON_FOUND AND Python_Development_FOUND)
     PUBLIC_HEADERS ElementsExamples)
 endif()
 
+find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development NumPy QUIET REQUIRED)
 find_package(pybind11)
-if(pybind11_FOUND AND Python_Development_FOUND)
+if(pybind11_FOUND)
   elements_add_pybind11_module(testCallBack src/pybind11/callback.cpp
     INCLUDE_DIRS ElementsExamples
     LINK_LIBRARIES ElementsExamples)
@@ -369,16 +370,16 @@ endif()
 
 
 #===== Test that the python program does run ========================================
-elements_add_test(PythonProgramExampleRun COMMAND PythonProgramExample)
-elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExampleNoConfigFile --config-file=toto.conf FAILS)
-elements_add_test(PythonProgramExampleNoDefaultConfRun COMMAND PythonProgramExampleNoDefaultConf)
+elements_add_test(PythonProgramExampleRun COMMAND PythonProgramExample LABELS Python)
+elements_add_test(PythonProgramExampleNoConfigFileRun COMMAND PythonProgramExampleNoConfigFile --config-file=toto.conf FAILS LABELS Python)
+elements_add_test(PythonProgramExampleNoDefaultConfRun COMMAND PythonProgramExampleNoDefaultConf LABELS Python)
 if(SWIG_FOUND AND Python_Development_FOUND)
   elements_add_test(SwigProgramExampleRun COMMAND SwigProgramExample LABELS Swig Build)
 endif()
 
 if(pybind11_FOUND)
   elements_add_python_program(PyBind11ProgramExample ElementsExamples.PyBind11ProgramExample)
-  elements_add_test(PyBind11ProgramExampleRun COMMAND PyBind11ProgramExample)
+  elements_add_test(PyBind11ProgramExampleRun COMMAND PyBind11ProgramExample LABELS PyBind11 Build)
 endif()
 
 elements_install_scripts()
