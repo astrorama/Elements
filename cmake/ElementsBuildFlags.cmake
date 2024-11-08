@@ -426,7 +426,7 @@ include(ElementsCheck)
 
 option(PYBIND11_FINDPYTHON
        "Pybind11 use the new FindPython cmake module"
-       ON)
+       OFF)
 
 
 
