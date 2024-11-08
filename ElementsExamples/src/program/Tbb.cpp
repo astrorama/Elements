@@ -11,17 +11,50 @@
 #include <iostream>
 #include <map>     // for maps
 #include <string>  // for strings
+#include <thread>  // for std::thread
 
 #include <oneapi/tbb.h>  // for the Threading Building Blocks
 
-#include "ElementsKernel/Main.h"     // for MAIN_FOR
-#include "ElementsKernel/Program.h"  // for Program
-#include "ElementsKernel/Unused.h"   // for ELEMENTS_UNUSED
+#include "ElementsKernel/Main.h"       // for MAIN_FOR
+#include "ElementsKernel/Program.h"    // for Program
+#include "ElementsKernel/Threading.h"  // for initBuildingBlocks
+#include "ElementsKernel/Unused.h"     // for ELEMENTS_UNUSED
 
 namespace tbb = oneapi::tbb;
 
 namespace Elements {
+
+auto LOG = Logging::getLogger("Tbb");
+
 namespace Examples {
+
+int simpleSum(const int& first_number, const int& last_number) {
+
+  int sum = 0;
+
+  for (auto i = first_number; i < last_number; i++) {
+    sum += i;
+  }
+
+  return (sum);
+}
+
+int parallelSum(const int& first_number, const int& last_number) {
+
+  int sum = tbb::parallel_reduce(
+      tbb::blocked_range<int>(first_number, last_number), 0,
+      [](tbb::blocked_range<int> const& r, int init) -> int {
+        for (int v = r.begin(); v != r.end(); v++) {
+          init += v;
+        }
+        return (init);
+      },
+      [](int lhs, int rhs) -> int {
+        return (lhs + rhs);
+      });
+
+  return (sum);
+}
 
 class Tbb : public Program {
 
@@ -29,51 +62,36 @@ public:
   ///
   ExitCode mainMethod(ELEMENTS_UNUSED std::map<std::string, VariableValue>& args) override {
 
-    using namespace std::chrono;
+    namespace chrono = std::chrono;
 
-    auto log = Logging::getLogger("Tbb");
+    auto control = Threading::initBuildingBlocks();
 
-    const auto          start = high_resolution_clock::now();
-    tbb::global_control control(tbb::global_control::max_allowed_parallelism, 8);
+    using clock = chrono::high_resolution_clock;
+    using ms    = chrono::microseconds;
+
+    const auto start = clock::now();
 
     const int first_number = 1;
     const int last_number  = 10001;
 
-    int simple_sum = 0;
-    for (auto i = first_number; i < last_number; i++) {
-      simple_sum += i;
-    }
+    const auto simple_sum = simpleSum(first_number, last_number);
+    LOG.info() << "Simple sum: " << simple_sum;
 
-    log.info() << "Simple sum: " << simple_sum;
+    const auto simple_stop     = clock::now();
+    const auto simple_duration = chrono::duration_cast<ms>(simple_stop - start);
+    LOG.info() << "Simple duration: " << simple_duration.count();
 
-    const auto simple_stop     = high_resolution_clock::now();
-    const auto simple_duration = duration_cast<microseconds>(simple_stop - start);
+    const auto parallel_sum = parallelSum(first_number, last_number);
+    LOG.info() << "Parallel sum: " << parallel_sum;
 
-    log.info() << "Simple duration: " << simple_duration.count();
+    const auto parallel_stop     = clock::now();
+    const auto parallel_duration = chrono::duration_cast<ms>(parallel_stop - simple_stop);
+    LOG.info() << "Parallel duration: " << parallel_duration.count();
 
-    int parallel_sum = tbb::parallel_reduce(
-        tbb::blocked_range<int>(first_number, last_number), 0,
-        [](tbb::blocked_range<int> const& r, int init) -> int {
-          for (int v = r.begin(); v != r.end(); v++) {
-            init += v;
-          }
-          return (init);
-        },
-        [](int lhs, int rhs) -> int {
-          return (lhs + rhs);
-        });
+    const auto stop           = clock::now();
+    const auto total_duration = chrono::duration_cast<ms>(stop - start);
 
-    log.info() << "Parallel sum: " << parallel_sum;
-
-    const auto parallel_stop     = high_resolution_clock::now();
-    const auto parallel_duration = duration_cast<microseconds>(parallel_stop - simple_stop);
-
-    log.info() << "Parallel duration: " << parallel_duration.count();
-
-    const auto stop           = high_resolution_clock::now();
-    const auto total_duration = duration_cast<microseconds>(stop - start);
-
-    log.info() << "Total duration: " << total_duration.count();
+    LOG.info() << "Total duration: " << total_duration.count();
 
     return (ExitCode::OK);
   }

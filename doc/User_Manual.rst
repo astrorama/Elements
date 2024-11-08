@@ -1764,7 +1764,7 @@ a project are
    build (CMake is adamant about that),
    ::
 
-       CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
+       CMAKE_MINIMUM_REQUIRED(VERSION 3.25)
 
 #. the line to locate the Elements CMake library
    ::
@@ -1780,7 +1780,7 @@ And then the *whole* file would read:
 
 ::
 
-   CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
+   CMAKE_MINIMUM_REQUIRED(VERSION 3.25)
 
 
    #---------------------------------------------------------------
