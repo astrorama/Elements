@@ -180,19 +180,24 @@ set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final su
 
 if(SQUEEZED_INSTALL)
 
+  set(custom_python_install_suffix)
+
   find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
   set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 
   execute_process(COMMAND "${Python_EXECUTABLE}" "-c"
                   "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"
                   OUTPUT_VARIABLE custom_python_install_suffix
-                  ERROR_QUIET
+                  ERROR_VARIABLE custom_python_install_suffix_error
+#                  ERROR_QUIET
+                  ECHO_OUTPUT_VARIABLE ECHO_ERROR_VARIABLE
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   set(PYTHON_INSTALL_SUFFIX ${custom_python_install_suffix} CACHE STRING "Final suffix for the install directory of the python files" FORCE)
-  set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the python binary files" FORCE)
 
 endif()
+
+set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the python binary files" FORCE)
 
 
 IF(ENV{CMAKE_PREFIX_PATH})
