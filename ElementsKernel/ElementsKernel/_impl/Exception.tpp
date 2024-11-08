@@ -54,13 +54,13 @@ template <typename Last>
 Exception::ExitCodeHelper<Last>::ExitCodeHelper(const Last& last) : code{getCode(last)} {}
 
 template <typename Last>
-template <typename T, typename std::enable_if<std::is_same<T, ExitCode>::value>::type*>
+template <typename T, std::enable_if_t<std::is_same_v<T, ExitCode>>*>
 ExitCode Exception::ExitCodeHelper<Last>::getCode(const T& t) {
   return t;
 }
 
 template <typename Last>
-template <typename T, typename std::enable_if<not std::is_same<T, ExitCode>::value>::type*>
+template <typename T, std::enable_if_t<not std::is_same_v<T, ExitCode>>*>
 ExitCode Exception::ExitCodeHelper<Last>::getCode(const T&) {
   return ExitCode::NOT_OK;
 }
@@ -77,4 +77,4 @@ auto operator<<(Ex&& ex, const T& message) -> decltype(std::forward<Ex>(ex)) {
 
 }  // namespace Elements
 
-#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_AUXILIARY_IMPL_
+#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_EXCEPTION_IMPL_

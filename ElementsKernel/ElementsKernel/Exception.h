@@ -134,11 +134,11 @@ private:
 
   private:
     // This method is used if the T is an ExitCode object
-    template <typename T, typename std::enable_if<std::is_same<T, ExitCode>::value>::type* = nullptr>
+    template <typename T, std::enable_if_t<std::is_same_v<T, ExitCode>>* = nullptr>
     ExitCode getCode(const T& t);
 
     // This method is used when the T is not an ExitCode object
-    template <typename T, typename std::enable_if<not std::is_same<T, ExitCode>::value>::type* = nullptr>
+    template <typename T, std::enable_if_t<not std::is_same_v<T, ExitCode>>* = nullptr>
     ExitCode getCode(const T&);
   };
 
@@ -150,8 +150,7 @@ private:
 };
 
 template <typename Ex, typename T,
-          typename = typename std::enable_if<
-              std::is_base_of<Exception, typename std::remove_reference<Ex>::type>::value>::type>
+          typename = std::enable_if_t<std::is_base_of_v<Exception, std::remove_reference_t<Ex>>>>
 ELEMENTS_API auto operator<<(Ex&& ex, const T& message) -> decltype(std::forward<Ex>(ex));
 
 }  // namespace Elements
