@@ -424,6 +424,11 @@ set(IWYU_MAPPING_FILE "" CACHE STRING "List of mapping files for IWYU")
 
 include(ElementsCheck)
 
+option(PYBIND11_FINDPYTHON
+       "Pybind11 use the new FindPython cmake module"
+       ON)
+
+
 
 #--- Compilation Flags ---------------------------------------------------------
 if(NOT ELEMENTS_FLAGS_SET)
