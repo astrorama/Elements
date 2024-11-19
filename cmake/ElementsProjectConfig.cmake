@@ -2768,6 +2768,8 @@ function(elements_add_python_module module)
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
 
   # require Python libraries
+  
+  set( Python_FIND_UNVERSIONED_NAMES FIRST )
 
   find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development NumPy QUIET REQUIRED)
 
