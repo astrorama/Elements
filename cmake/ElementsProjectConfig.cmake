@@ -2769,9 +2769,9 @@ function(elements_add_python_module module)
 
   # require Python libraries
   
-#   set( Python_FIND_UNVERSIONED_NAMES FIRST )
+ set( Python_FIND_STRATEGY  VERSION)
 
-  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development NumPy QUIET REQUIRED)
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development NumPy QUIET REQUIRED)
 
   elements_include_directories(AFTER ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS} )
   add_library(${module} MODULE ${srcs})
