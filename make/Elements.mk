@@ -143,16 +143,16 @@ ifneq ($(CMAKEFLAGS),)
 endif
 
 # default target
-all:
+all: ## Build
 
 # deep clean
-purge:
+purge: ## Remove the current config build directory
 	$(RM) -r $(BUILDDIR) $(CURDIR)/InstallArea/$(BINARY_TAG)
 	find $(CURDIR) "(" -name "InstallArea" -prune -o -name "*.pyc" -o -name "*.pyo" ")" -a -type f -exec $(RM) -v \{} \;
 	find $(CURDIR) -depth -type d -name "__pycache__" -exec $(RM) -rv \{} \;
 
 # Remove all the possible directories and the whole InstallArea as well
-mrproper:
+mrproper: ## Remove all build directories
 	$(RM) -r $(CURDIR)/build $(CURDIR)/build.* $(CURDIR)/InstallArea
 	find $(CURDIR) "(" -name "*.pyc" -o -name "*.pyo" ")" -a -type f -exec $(RM) -v \{} \;
 	find $(CURDIR) -depth -type d -name "__pycache__" -exec $(RM) -rv \{} \;
@@ -168,7 +168,7 @@ endif
 # aliases
 .PHONY: configure tests FORCE
 ifneq ($(wildcard $(BUILDDIR)/$(BUILD_CONF_FILE)),)
-configure: rebuild_cache
+configure: rebuild_cache ## Rebuild the CMake cache
 else
 configure: $(BUILDDIR)/$(BUILD_CONF_FILE)
 endif
@@ -180,7 +180,7 @@ endif
 
 # This wrapping around the test target is used to ensure the generation of
 # the XML output from ctest.
-test: $(BUILDDIR)/$(BUILD_CONF_FILE)
+test: $(BUILDDIR)/$(BUILD_CONF_FILE) ## Run the tests
 	$(RM) -r $(BUILDDIR)/Testing $(BUILDDIR)/html
 	-cd $(BUILDDIR) && $(CTEST) $(CTEST_ARGS) $(ARGS)
 	+$(BUILD_CMD) JUnitSummary
@@ -188,7 +188,7 @@ test: $(BUILDDIR)/$(BUILD_CONF_FILE)
 
 # This target ensures that the "all" target is called before
 # running the tests (unlike the "test" default target of CMake)
-tests: all
+tests: all ## make build and run the tests
 	$(RM) -r $(BUILDDIR)/Testing $(BUILDDIR)/html
 	-cd $(BUILDDIR) && $(CTEST) $(CTEST_ARGS) $(ARGS)
 	+$(BUILD_CMD) JUnitSummary
@@ -196,7 +196,7 @@ tests: all
 ifeq ($(VERBOSE),)
 # less verbose install
 # (emulate the default CMake install target)
-install: all
+install: all ## Install
 	cd $(BUILDDIR) && $(CMAKE) -P cmake_install.cmake | grep -v "^-- Up-to-date:"
 endif
 
@@ -212,8 +212,11 @@ $(MAKEFILE_LIST): ;
 
 
 # trigger CMake configuration
-$(BUILDDIR)/$(BUILD_CONF_FILE): | $(BUILDDIR)
+$(BUILDDIR)/$(BUILD_CONF_FILE): | $(BUILDDIR) ## Run CMake
 	cd $(BUILDDIR) && $(CMAKE) $(ALL_CMAKEFLAGS) $(CURDIR)
 
-$(BUILDDIR):
+$(BUILDDIR): ## Create the build directory
 	mkdir -p $(BUILDDIR)
+
+help: ## This help
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
