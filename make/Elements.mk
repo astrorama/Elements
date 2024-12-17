@@ -10,38 +10,7 @@
 # Only a few targets are actually provided: all the main targets are directly
 # delegated to the CMake Makefile.
 #
-# Main targets:
-#
-#     all
-#         (default) build everything
-#
-#     test
-#         run the declared tests
-#
-#     install
-#         populate the InstallArea with the products of the build
-#
-#     clean
-#         remove build products from the build directory
-#
-#     purge [*]_
-#         deep clean of the build, including InstallArea
-#         (requires re-configuration)
-#
-#     help
-#         print the list of available targets
-#
-#     configure [*]_
-#         alias to CMake 'rebuild_cache' target
-#
-#     tests [*]_
-#         backward-compatibility target for the CMT generic Makefile. Tt
-#         ensures that the "all" target has been called before.
-#
 # :Author: Hubert Degaudenzi
-#
-# .. [*] Targets defined by this Makefile.
-#
 ################################################################################
 
 # Default
@@ -143,16 +112,16 @@ ifneq ($(CMAKEFLAGS),)
 endif
 
 # default target
-all: ## Build
+all: ## (default) build everything
 
 # deep clean
-purge: ## Remove the current config build directory
+purge: ## deep clean of the build, including InstallArea (requires re-configuration)
 	$(RM) -r $(BUILDDIR) $(CURDIR)/InstallArea/$(BINARY_TAG)
 	find $(CURDIR) "(" -name "InstallArea" -prune -o -name "*.pyc" -o -name "*.pyo" ")" -a -type f -exec $(RM) -v \{} \;
 	find $(CURDIR) -depth -type d -name "__pycache__" -exec $(RM) -rv \{} \;
 
 # Remove all the possible directories and the whole InstallArea as well
-mrproper: ## Remove all build directories
+mrproper: ## Remove all build directories (requires re-configuration)
 	$(RM) -r $(CURDIR)/build $(CURDIR)/build.* $(CURDIR)/InstallArea
 	find $(CURDIR) "(" -name "*.pyc" -o -name "*.pyo" ")" -a -type f -exec $(RM) -v \{} \;
 	find $(CURDIR) -depth -type d -name "__pycache__" -exec $(RM) -rv \{} \;
@@ -168,7 +137,7 @@ endif
 # aliases
 .PHONY: configure tests FORCE
 ifneq ($(wildcard $(BUILDDIR)/$(BUILD_CONF_FILE)),)
-configure: rebuild_cache ## Rebuild the CMake cache
+configure: rebuild_cache ## Alias to CMake 'rebuild_cache' target
 else
 configure: $(BUILDDIR)/$(BUILD_CONF_FILE)
 endif
@@ -188,7 +157,7 @@ test: $(BUILDDIR)/$(BUILD_CONF_FILE) ## Run the tests
 
 # This target ensures that the "all" target is called before
 # running the tests (unlike the "test" default target of CMake)
-tests: all ## make build and run the tests
+tests: all ## build all and run the tests
 	$(RM) -r $(BUILDDIR)/Testing $(BUILDDIR)/html
 	-cd $(BUILDDIR) && $(CTEST) $(CTEST_ARGS) $(ARGS)
 	+$(BUILD_CMD) JUnitSummary
@@ -196,7 +165,7 @@ tests: all ## make build and run the tests
 ifeq ($(VERBOSE),)
 # less verbose install
 # (emulate the default CMake install target)
-install: all ## Install
+install: all ## Populate the InstallArea with the products of the build
 	cd $(BUILDDIR) && $(CMAKE) -P cmake_install.cmake | grep -v "^-- Up-to-date:"
 endif
 
