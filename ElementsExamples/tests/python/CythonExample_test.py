@@ -17,11 +17,11 @@
 #
 
 
-'''
+"""
 :date: Jun 14, 2017
 
 :author: hubert
-'''
+"""
 import unittest
 
 from ElementsKernel.Path import pyVersionWhich
