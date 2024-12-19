@@ -121,7 +121,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv_test, Temporary_Fixture) {
   BOOST_CHECK(exists(m_top_dir.path()));
   Path::Item test_tmpdir = m_top_dir.path() / "tmpdir";
   create_directory(test_tmpdir);
-  setEnv("TMPDIR", test_tmpdir.c_str(), 1);
+  setEnv("TMPDIR", test_tmpdir.c_str(), true);
   string tmp_env_val = getEnv("TMPDIR");
   // test that the variable is actually set in the environment
   // of the process

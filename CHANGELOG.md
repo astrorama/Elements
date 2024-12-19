@@ -59,7 +59,7 @@ This release essentially fixes problems met on the MacOS platform
     - It was already done for python by passing a NO_CONFIG_FILE CMake option to the elements_add_python_program function
     - For C++, a `-DNO_CONFIG_FILE` compile option seems to be the best candidate
 - Fix a lot of warnings when the `-Wno-dev` CMake option is not passed
-- Fix the the recursive globbing of python files in Elements
+- Fix the recursive globbing of python files in Elements
     - It was also picking up the `__pycache__` directory and the CMake glob cross-check was failing
 - Fix the compilation against the Gnuastro library
     - Its behavior has changed and it requires an extra arg in the examples
@@ -534,7 +534,7 @@ Integration of the DataSync service (Antoine Basset). A new ElementsServices mod
   ignored.
 - Add the USE_RPM_CMAKE_MACRO cmake switch. It forces the RPM spec file to use the
   %__cmake RPM macro for the build.
-    - By default it is OFF.
+    - By default, it is OFF.
     - If is ON, it implies that USE_ENV_FLAGS=ON for consistency with some platform
     RPM build scripts.
 - Add a CMake option (ELEMENTS_DEFAULT_LOGLEVEL) to set the default log level for
@@ -562,7 +562,7 @@ Integration of the DataSync service (Antoine Basset). A new ElementsServices mod
 ## [5.6] - 2019-04-12
 
 ### Added
-- LICENSE.md: add LGPL license file
+- LICENSE.md: add LGPL licence file
 - cmake/modules/FindRPM.cmake: add the CMake module for the RPM executable
 - Add support for the KEEPTEMPDIR env variable for C++. Like for python, the
   presence of this environment variable will avoid the self-destruction
@@ -576,7 +576,7 @@ Integration of the DataSync service (Antoine Basset). A new ElementsServices mod
   entries are added with the SYSTEM option. In that case, the "-isystem" gcc command
   line is used instead of the traditional "-I". The warnings coming from these
   directories are thenignored.
-- Add the HIDE_OTHERINC_WARNINGS CMake option. It prevent any compilation warnings
+- Add the HIDE_OTHERINC_WARNINGS CMake option. It prevents any compilation warnings
   coming not only from the system (or third party) libraries, but also from other
   Elements-based project as well.
 - Add fix for the version of rpmbuild >= 4.14. Fix the handling of the byte-compiled
@@ -590,7 +590,7 @@ Integration of the DataSync service (Antoine Basset). A new ElementsServices mod
 - Add support for bool on logging of options (Alejandro Álvarez Ayllón).
 - Add the VCS version of the project. This is the number that is produced
   by the "--version" of the executables. It boils down to the git tag if it exists.
-  Otherwise use a timestamp like 20190329. If git is not present, it falls back
+  Otherwise, use a timestamp like 20190329. If git is not present, it falls back
   to the CMake version of the project.
 - Add info make target. It is generating a cmake script called cmake_info.cmake
   that has to be called like "cmake -P cmake_info.cmake". for the moment the following
@@ -617,7 +617,7 @@ Integration of the DataSync service (Antoine Basset). A new ElementsServices mod
   in /usr/bin.
 - Factor out the creation of the compiled test executable. It allows to create
   a unit executable of CppUnit or Boost type without adding it to the list of
-  tests. This is useful to delay the usage of the executable in an other project
+  tests. This is useful to delay the usage of the executable in another project
   that runs some integration tests.
 - make/Elements.mk: Append the CMAKEFLAGS instead of prepending it. It allows
   to override some of the hardcoded CMake flags from the make library.
@@ -635,7 +635,7 @@ Integration of the DataSync service (Antoine Basset). A new ElementsServices mod
 - Add support for the numpy include dirs. This is located in the cmake/modules/FindNumPy.cmake
   file.
 - Add example for the SWIG interface to numpy.
-- Add a new script called GetElementsFile to located any runtime Elements
+- Add a new script called GetElementsFile to locate any runtime Elements
   resource. Run like:
   ```
   E-Run <project_name> <project_version> GetElementsFile -t executable
@@ -658,7 +658,7 @@ Integration of the DataSync service (Antoine Basset). A new ElementsServices mod
       default.
     - If INSTALL_DOC ist set to ON, the documentation is automatically built
       together with the default target (all)
-- Add the CONCEPT_CHECKS CMake option. This add the -D_GLIBCXX_CONCEPT_CHECKS
+- Add the CONCEPT_CHECKS CMake option. This adds the -D_GLIBCXX_CONCEPT_CHECKS
   compile macro. This activate some internal check from the std c++ library. See
   https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_macros.html. It is OFF by
   default.
@@ -723,7 +723,7 @@ Together with this Elements release, the EuclidEnv 3.3 helper package is release
 - Generate the correct new layout for the compiled py files for python 3 in the RPM
 - Fix the usage of the `HEAD` keyword for the project version. This is a usual substitute for sliding development versions.
 - Fix the lookup order in the Environment XML files. There was a bug where the system directories where looked up first.
-- Fix issue with incompatible `-pg` and `-pie` gcc options for executables. It is somehow related  with the glibc 2.17. The fix will only be used if the build is "Profile" and the gcc version is less that 5.0. The problem appears on CentOS 7 (and not on Fedora) when linking executables.
+- Fix issue with incompatible `-pg` and `-pie` gcc options for executables. It is somehow related  with the glibc 2.17. The fix will only be used if the build is "Profile" and the gcc version is less than 5.0. The problem appears on CentOS 7 (and not on Fedora) when linking executables.
 - Bug fixed: #2305 (Nicolas Morisset)
 - Fix a bug which was giving priority to the options from the configuration file over the ones from the command line (Nikos Apostolakos)
 
@@ -773,7 +773,7 @@ Together with this Elements release, the EuclidEnv 3.3 helper package is release
 - Fix issue with wrong default argument for the construction of Program
 - Fix issue with incompatible -pg and -pie for executable. It is somehow related
   with the glibc 2.17. the fix will only be used if the build is "Profile" and
-  the gcc version is less that 5.0. The problem appears on CentOS 7 (and not on
+  the gcc version is less than 5.0. The problem appears on CentOS 7 (and not on
   Fedora) when linking executables.
 - Fix the lookup order in the Environment XML files. There was a bug where the
   system directories where looked up first.
@@ -883,7 +883,7 @@ Together with this Elements release, the EuclidEnv 3.3 helper package is release
 
 ## [4.0] - 2016-03-22
 This release is foreseen for the Phosphoros version 0.5 project. It
-also include the first integration of the Sphinx/Doxygen implementation.
+also includes the first integration of the Sphinx/Doxygen implementation.
 
 ### Added
 - Add FindCCache, FindDistCC, FindSphinx, FindValgrind, FindPlantUML CMake modules
@@ -900,7 +900,7 @@ also include the first integration of the Sphinx/Doxygen implementation.
 - Add global options to enable Doxygen (USE_DOXYGEN) and Sphinx (USE_SPHINX) for
   the automatic documentation generation. They are both ON by default. The is also
   an option for the generation of the Sphinx API documentation (USE_SPHINX_APIDOC)
-  which is also ON by default. Please have a look at the user manual for more informations
+  which is also ON by default. Please have a look at the user manual for more information
   about the usage of these switches.
 
 ### Changed
@@ -946,7 +946,7 @@ This release is essentially an update for the release of the EDEN 1.2 version.
 - Fix a few issues for the symbol visibility and CMake 3.3
 - Cure redundant sub-namespaces.
 - Fix the CMake detection of the binary executables used at build time. The casing
-  of the of the name of the find module file must be the same as the one used for
+  of the name of the find module file must be the same as the one used for
   the FIND_PACKAGE_HANDLE_STANDARD_ARGS macro.
 
 
