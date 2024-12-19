@@ -63,6 +63,23 @@ if(POLICY CMP0148)
   endif()
 endif()
 
+if(POLICY CMP0160)
+  # this policy is related to the read-only target properties
+  # please run "cmake --help-policy CMP0160" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.29) # i.e CMAKE_VERSION >= 3.29
+    cmake_policy(SET CMP0160 OLD)
+  endif()
+endif()
+
+
+if(POLICY CMP0167)
+  # this policy is related to the Boost find_package
+  # please run "cmake --help-policy CMP0167" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.30) # i.e CMAKE_VERSION >= 3.30
+    cmake_policy(SET CMP0167 OLD)
+  endif()
+endif()
+
 
 if (NOT HAS_ELEMENTS_TOOLCHAIN)
   # this is the call to the preload_local_module_path is the toolchain has not been called
