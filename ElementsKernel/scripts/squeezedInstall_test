@@ -4,9 +4,9 @@ home_dir=${PWD}
 
 # Clean and exit
 local_clean_exit() {
-  cd ${home_dir}
-  rm -rf ${tmploc}
-  exit $1
+  cd "${home_dir}"
+  rm -rf "${tmploc}"
+  exit "$1"
 }
 
 # Create unique directory
@@ -14,13 +14,14 @@ tmploc=$(mktemp -dq -t temp.XXXXXX)
 
 #create the custom install prefix directory
 custom_prefix=${tmploc}/usr/local
-mkdir -p ${custom_prefix}
+mkdir -p "${custom_prefix}"
 
 cmake_full_cmd="cmake -DCMAKE_PREFIX_PATH=${custom_prefix} -DCMAKE_INSTALL_PREFIX=${custom_prefix} ${TESTCMAKEFLAGS}"
 build_cmd="cmake --build . "
 
 
 # prepare the environment
+unset CMAKE_GENERATOR
 unset ELEMENTS_CONF_PATH
 unset ELEMENTS_AUX_PATH
 unset ELEMENTSKERNELROOT
@@ -33,12 +34,16 @@ unset ELEMENTS_NAMING_DB_URL
 unset ELEMENTS_PROJECT_ROOT
 unset User_area
 
+if [ -n "${CUSTOM_CMAKE_GENERATOR}" ]; then
+  export CMAKE_GENERATOR="${CUSTOM_CMAKE_GENERATOR}"
+fi
+
 # Configure Elements
 elements_build_dir=${tmploc}/ElementsBuild
-mkdir -p ${elements_build_dir}
-cd ${elements_build_dir}
+mkdir -p "${elements_build_dir}"
+cd "${elements_build_dir}"
 
-${cmake_full_cmd} ${ELEMENTS_SOURCE_DIR}
+${cmake_full_cmd} "${ELEMENTS_SOURCE_DIR}"
 if [ $? -ne 0 ]; then
   echo "Error: <${cmake_full_cmd} ${ELEMENTS_SOURCE_DIR}> command failed!" 1>&2
   local_clean_exit 1
@@ -64,6 +69,7 @@ fi
 # Install Elements
 
 ${build_cmd} --target install
+# shellcheck disable=SC2181
 if [ $? -ne 0 ]; then
   echo "Error: <make install> command failed!" 1>&2
   local_clean_exit 1
@@ -108,9 +114,9 @@ projectB_version="1.2"
 
 export User_area=${tmploc}/Projects
 
-mkdir -p ${User_area}
+mkdir -p "${User_area}"
 
-cd ${User_area}
+cd "${User_area}"
 
 CreateElementsProject -n --yes ${projectB_name} ${projectB_version}
 if [ $? -ne 0 ]; then
@@ -128,7 +134,7 @@ AddElementsModule -s ${projectB_name}Second
 # Configure Elements
 projectb_build_dir=${tmploc}/ProjectBBuild
 mkdir -p ${projectb_build_dir}
-cd ${projectb_build_dir}
+cd "${projectb_build_dir}"
 
 ${cmake_full_cmd} ${projectb_source_dir}
 if [ $? -ne 0 ]; then
