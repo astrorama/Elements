@@ -16,7 +16,7 @@ What does it do?
 Architecture overview
 ---------------------
 
-Highlevel overview of the Module.
+High-level overview of the Module.
 
 How is it done?
 
