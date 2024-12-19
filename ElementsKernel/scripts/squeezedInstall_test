@@ -4,7 +4,7 @@ home_dir=${PWD}
 
 # Clean and exit
 local_clean_exit() {
-  cd "${home_dir}"
+  cd "${home_dir}" || exit
   rm -rf "${tmploc}"
   exit "$1"
 }
@@ -41,7 +41,7 @@ fi
 # Configure Elements
 elements_build_dir=${tmploc}/ElementsBuild
 mkdir -p "${elements_build_dir}"
-cd "${elements_build_dir}"
+cd "${elements_build_dir}" || exit
 
 ${cmake_full_cmd} "${ELEMENTS_SOURCE_DIR}"
 if [ $? -ne 0 ]; then
@@ -116,7 +116,7 @@ export User_area=${tmploc}/Projects
 
 mkdir -p "${User_area}"
 
-cd "${User_area}"
+cd "${User_area}" || exit
 
 CreateElementsProject -n --yes ${projectB_name} ${projectB_version}
 if [ $? -ne 0 ]; then
@@ -126,17 +126,17 @@ fi
 
 projectb_source_dir=${User_area}/${projectB_name}
 
-cd ${projectb_source_dir}
+cd "${projectb_source_dir}" || exit
 
 AddElementsModule ${projectB_name}
 AddElementsModule -s ${projectB_name}Second
 
 # Configure Elements
 projectb_build_dir=${tmploc}/ProjectBBuild
-mkdir -p ${projectb_build_dir}
-cd "${projectb_build_dir}"
+mkdir -p "${projectb_build_dir}"
+cd "${projectb_build_dir}" || exit
 
-${cmake_full_cmd} ${projectb_source_dir}
+${cmake_full_cmd} "${projectb_source_dir}"
 if [ $? -ne 0 ]; then
   echo "Error: <${cmake_full_cmd} ${projectb_source_dir}> command failed!" 1>&2
   local_clean_exit 1
@@ -155,52 +155,5 @@ if [ $? -ne 0 ]; then
   echo "Error: <make install> command failed!" 1>&2
   local_clean_exit 1
 fi
-
-# Construct and build a depdent unsqueezed project
-
-# projectA_name="ProjectA"
-# projectA_version="1.1"
-
-# export User_area=${tmploc}/Projects
-
-# mkdir -p ${User_area}
-
-# cd ${User_area}
-
-# CreateElementsProject $projectA_name $projectA_version --yes
-# if [ $? -ne 0 ]; then
-#    echo "Error: <CreateElementsProject $projectA_name $projectA_version> command failed!" 1>&2
-#   local_clean_exit 1
-# fi
-
-# cd $projectA_name/$projectA_version
-
-# AddElementsModule ${projectA_name}
-# AddElementsModule -s ${projectA_name}Second
-
-# make configure
-# if [ $? -ne 0 ]; then
-#   echo "Error: <Configuration of $projectA_name $projectA_version> failed!" 1>&2
-#   local_clean_exit 1
-# fi
-
-# make
-# if [ $? -ne 0 ]; then
-#    echo "Error: <Builld of $projectA_name $projectA_version> failed!" 1>&2
-#   local_clean_exit 1
-# fi
-
-# make install
-# if [ $? -ne 0 ]; then
-#    echo "Error: <Installation of $projectA_name $projectA_version> failed!" 1>&2
-#   local_clean_exit 1
-# fi
-
-# if [ ! -e InstallArea/${BINARY_TAG}/manifest.xml ]; then
-#   echo "Error: <Installation of $projectA_name $projectA_version> failed!" 1>&2
-#   local_clean_exit 1
-# fi
-
-
 
 local_clean_exit 0
