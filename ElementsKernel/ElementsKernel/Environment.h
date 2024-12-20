@@ -51,19 +51,19 @@ public:
   virtual ~Environment();
 
   Variable       operator[](const std::string&);
-  const Variable operator[](const std::string& index) const;
+  Variable       operator[](const std::string& index) const;
   Environment&   restore();
   Environment&   set(const std::string&, const std::string&);
   Environment&   unSet(const std::string&);
   Environment&   append(const std::string&, const std::string&);
-  Environment&   prepend(const std::string&, const std::string&);
-  std::string    get(const std::string& index, const std::string& default_value = "") const;
+  Environment&       prepend(const std::string&, const std::string&);
+  static std::string    get(const std::string& index, const std::string& default_value = "");
   static bool    hasKey(const std::string&);
   void           commit();
 
   enum ShellType { sh, csh };
 
-  std::string generateScript(ShellType) const;
+  std::string generateScript(const ShellType) const;
 
 private:
   /**
@@ -89,7 +89,7 @@ class Environment::Variable {
 
 public:
   Variable() = delete;
-  Variable(Environment& env, const std::string& index);
+  Variable(Environment& env, std::string  index);
   Variable(const Variable& other);
   Variable(Variable&& other);
   ~Variable() = default;
@@ -101,7 +101,7 @@ public:
   Variable&          append(const std::string&);
   Variable&          operator+=(const std::string&);
   Variable&          prepend(const std::string&);
-  Variable           operator+(const std::string&);
+  Variable           operator+(const std::string&) const;
   const std::string& index() const;
   Environment&       env() const;
   std::string        value() const;
@@ -111,7 +111,7 @@ public:
   bool exists() const;
 
 private:
-  void checkCompatibility(const Variable&);
+  void checkCompatibility(const Variable&) const;
 
   /// a copiable and movable reference
   std::reference_wrapper<Environment> m_env;

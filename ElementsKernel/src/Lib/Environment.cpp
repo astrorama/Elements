@@ -7,14 +7,14 @@
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
+ * Public Licence as published by the Free Software Foundation; either version 3.0 of the Licence, or (at your option)
  * any later version.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public Licence for more
  * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * You should have received a copy of the GNU Lesser General Public Licence along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
@@ -44,17 +44,17 @@ using System::isEnvSet;
 using System::setEnv;
 using System::unSetEnv;
 
-Environment::Variable::Variable(Environment& arg_env, const string& arg_index) : m_env{arg_env}, m_index{arg_index} {}
+Environment::Variable::Variable(Environment& env, string  index) : m_env{env}, m_index{std::move(index)} {}
 
-Environment::Variable::Variable(const Environment::Variable& other) : m_env{other.m_env} {
+Environment::Variable::Variable(const Variable& other) : m_env{other.m_env} {
   checkCompatibility(other);
 }
 
-Environment::Variable::Variable(Environment::Variable&& other) : m_env{other.m_env} {
+Environment::Variable::Variable(Variable&& other) : m_env{other.m_env} { // NOLINT(*-noexcept-move-constructor)
   checkCompatibility(other);
 }
 
-Environment::Variable& Environment::Variable::operator=(const Environment::Variable& other) {
+Environment::Variable& Environment::Variable::operator=(const Variable& other) {
   checkCompatibility(other);
 
   m_env = other.m_env;
@@ -62,7 +62,7 @@ Environment::Variable& Environment::Variable::operator=(const Environment::Varia
   return *this;
 }
 
-Environment::Variable& Environment::Variable::operator=(Environment::Variable&& other) {
+Environment::Variable& Environment::Variable::operator=(Variable&& other) { // NOLINT(*-noexcept-move-constructor)
   checkCompatibility(other);
 
   m_env = other.m_env;
@@ -110,9 +110,9 @@ Environment::Variable& Environment::Variable::prepend(const string& arg_value) {
   return *this;
 }
 
-Environment::Variable Environment::Variable::operator+(const string& arg_value) {
+Environment::Variable Environment::Variable::operator+(const string& arg_value) const {
 
-  Environment::Variable result(m_env, m_index);
+  Variable result(m_env, m_index);
 
   result.append(arg_value);
 
@@ -129,7 +129,7 @@ Environment& Environment::Variable::env() const {
 
 string Environment::Variable::value() const {
 
-  return m_env.get().get(m_index, "");
+  return get(m_index, "");
 }
 
 Environment::Variable::operator std::string() const {
@@ -141,10 +141,10 @@ bool Environment::Variable::empty() const {
 }
 
 bool Environment::Variable::exists() const {
-  return m_env.get().hasKey(m_index);
+  return hasKey(m_index);
 }
 
-void Environment::Variable::checkCompatibility(const Environment::Variable& other) {
+void Environment::Variable::checkCompatibility(const Variable& other) const {
 
   if (m_index != other.m_index) {
     stringstream error_buffer;
@@ -156,7 +156,7 @@ void Environment::Variable::checkCompatibility(const Environment::Variable& othe
 
 //----------------------------------------------------------------------------
 
-Environment::Environment(bool keep_same) : m_old_values{}, m_keep_same{keep_same}, m_added_variables{} {}
+Environment::Environment(bool keep_same) : m_keep_same{keep_same} {}
 
 Environment& Environment::restore() {
   for (const auto& v : m_added_variables) {
@@ -177,11 +177,11 @@ Environment::~Environment() {
 }
 
 Environment::Variable Environment::operator[](const string& index) {
-  return Environment::Variable(*this, index);
+  return Variable(*this, index);
 }
 
-const Environment::Variable Environment::operator[](const string& index) const {
-  return Environment::Variable(const_cast<Environment&>(*this), index);
+Environment::Variable Environment::operator[](const string& index) const {
+  return Variable(const_cast<Environment&>(*this), index);
 }
 
 Environment& Environment::set(const string& index, const string& value) {
@@ -237,7 +237,7 @@ Environment& Environment::prepend(const string& index, const string& value) {
   return *this;
 }
 
-string Environment::get(const string& index, const string& default_value) const {
+string Environment::get(const string& index, const string& default_value) {
   string value{default_value};
 
   if (hasKey(index)) {
@@ -258,15 +258,15 @@ void Environment::commit() {
   m_added_variables = {};
 }
 
-string Environment::generateScript(Environment::ShellType type) const {
+string Environment::generateScript(const ShellType type) const {
 
   using boost::format;
   using std::map;
 
   stringstream script_text{};
 
-  map<ShellType, string> set_cmd{{ShellType::sh, "export %s=%s"}, {ShellType::csh, "setenv %s %s"}};
-  map<ShellType, string> unset_cmd{{ShellType::sh, "unset %s"}, {ShellType::csh, "unsetenv %s"}};
+  map<ShellType, string> set_cmd{{sh, "export %s=%s"}, {csh, "setenv %s %s"}};
+  map<ShellType, string> unset_cmd{{sh, "unset %s"}, {csh, "unsetenv %s"}};
 
   for (const auto& v : m_old_values) {
     if (hasKey(v.first)) {
