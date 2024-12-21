@@ -19,13 +19,13 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/ProgramManager.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_PROGRAM_MANAGER_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/ProgramManager.h instead"
 #else
 
 #include <iostream>  // for operator<<, basic_ostream, char_traits, endl, cerr
-#include <stdlib.h>  // for exit
 
 #include <boost/filesystem/operations.hpp>  // for exists
 #include <boost/filesystem/path.hpp>        // for operator<<
@@ -42,16 +42,16 @@ namespace Elements {
 
 template <class charT>
 void ProgramManager::checkCommandLineOptions(
-    const boost::program_options::basic_parsed_options<charT>& cmd_parsed_options) {
+    const boost::program_options::basic_parsed_options<charT>& cmd_line_options) {
 
-  for (const auto& o : cmd_parsed_options.options) {
+  for (const auto& o : cmd_line_options.options) {
     if (o.string_key == "config-file") {
       if (o.value.size() != 1) {
         std::cerr << "Wrong usage of the --config-file option" << std::endl;
         exit(static_cast<int>(ExitCode::USAGE));
       } else {
         auto conf_file = Path::Item{o.value[0]};
-        if (not boost::filesystem::exists(conf_file)) {
+        if (not exists(conf_file)) {
           std::cerr << "The " << conf_file << " configuration file doesn't exist!" << std::endl;
           exit(static_cast<int>(ExitCode::CONFIG));
         }

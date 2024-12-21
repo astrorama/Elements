@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/ThisModule.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/ThisModule.h instead"

@@ -36,9 +36,9 @@ public:
   int y1;
   Rectangle(int xl, int yl, int xu, int yu);
   ~Rectangle();
-  int  getLength();
-  int  getHeight();
-  int  getArea();
+  int  getLength() const;
+  int  getHeight() const;
+  int  getArea() const;
   void move(int dx, int dy);
 };
 

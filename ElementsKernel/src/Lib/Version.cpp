@@ -49,13 +49,13 @@ string getVersionFromSvnKeywords(const string& svnUrl, const string& svnId) {
   // Loop over all elements of the URL
   for (auto it = urlElements.begin(); it != urlElements.end(); ++it) {
     // If "trunk" is detected...
-    if ((*it).find("trunk") != string::npos) {
+    if (it->find("trunk") != string::npos) {
       // ...return the SVN Id keyword
       version = svnId;
       break;
     }
     // If "tags" id detected ...
-    if ((*it).find("tags") != string::npos) {
+    if (it->find("tags") != string::npos) {
       // ...built a version from the project name and tags number
       version = *(boost::prior(it)) + " " + *(boost::next(it));
       break;

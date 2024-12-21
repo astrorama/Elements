@@ -33,8 +33,7 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class SimpleProgram
@@ -76,7 +75,6 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 MAIN_FOR(Elements::Examples::SimpleProgram)

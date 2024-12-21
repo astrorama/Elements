@@ -49,10 +49,10 @@ ELEMENTS_API bool webdavIsInstalled();
  * @brief A data synchronizer for WebDAV hosts.
  *
  */
-class ELEMENTS_API WebdavSynchronizer : public DataSynchronizer {
+class ELEMENTS_API WebdavSynchronizer final : public DataSynchronizer {
 
 public:
-  virtual ~WebdavSynchronizer() = default;
+  ~WebdavSynchronizer() override = default;
 
   WebdavSynchronizer(const ConnectionConfiguration& connection, const DependencyConfiguration& dependency);
 

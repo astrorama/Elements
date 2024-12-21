@@ -37,8 +37,8 @@ namespace Elements {
 inline namespace Services {
 namespace DataSync {
 
-ELEMENTS_API std::shared_ptr<DataSynchronizer> createSynchronizer(ConnectionConfiguration connection,
-                                                                  DependencyConfiguration dependency);
+ELEMENTS_API std::shared_ptr<DataSynchronizer> createSynchronizer(const ConnectionConfiguration& connection,
+                                                                  const DependencyConfiguration& dependency);
 
 }  // namespace DataSync
 }  // namespace Services

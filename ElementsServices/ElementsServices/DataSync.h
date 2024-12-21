@@ -56,12 +56,12 @@ public:
    * @param dependencyFile Path to the dependency configuration file
    * relative to the configuration directory.
    */
-  DataSync(path connectionFile, path dependencyFile);
+  DataSync(const path& connectionFile, const path& dependencyFile);
 
   /**
    * @brief Download the test data.
    */
-  void download();
+  void download() const;
 
   /**
    * @brief Download the test data and provide a fallback host
@@ -70,7 +70,7 @@ public:
    * @param connectionFile Path to the connection configuration file
    * of the fallback host relative to the configuration directory.
    */
-  void downloadWithFallback(path connectionFile);
+  void downloadWithFallback(const path& connectionFile);
 
   /**
    * @brief Get the absolute path to a local test file
@@ -89,7 +89,7 @@ public:
    * @warning This function must be used to access any data
    * downloaded by the DataSync tool.
    */
-  path absolutePath(path relativePath);
+  path absolutePath(const path& relativePath) const;
 
 private:
   ConnectionConfiguration m_connectionConfig;

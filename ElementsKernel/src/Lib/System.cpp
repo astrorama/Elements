@@ -44,8 +44,7 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 // --------------------------------------------------------------------------------------
 // Private functions
@@ -54,9 +53,9 @@ namespace System {
 namespace {
 
 unsigned long doLoad(const string& name, ImageHandle* handle) {
-  void* mh = ::dlopen(name.length() == 0 ? 0 : name.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+  void* mh = ::dlopen(name.empty() ? nullptr : name.c_str(), RTLD_LAZY | RTLD_GLOBAL);
   *handle  = mh;
-  if (0 == *handle) {
+  if (nullptr == *handle) {
     return getLastError();
   }
   return 1;
@@ -64,9 +63,9 @@ unsigned long doLoad(const string& name, ImageHandle* handle) {
 
 unsigned long loadWithoutEnvironment(const string& name, ImageHandle* handle) {
 
-  string dll_name = name;
-  size_t dll_len  = dll_name.size();
-  size_t suf_len  = SHLIB_SUFFIX.size();
+  string       dll_name = name;
+  const size_t dll_len  = dll_name.size();
+  const size_t suf_len  = SHLIB_SUFFIX.size();
 
   // Add the suffix at the end of the library name only if necessary
   if (dll_len >= suf_len && dll_name.compare(dll_len - suf_len, suf_len, SHLIB_SUFFIX) != 0) {
@@ -84,7 +83,7 @@ unsigned long loadWithoutEnvironment(const string& name, ImageHandle* handle) {
 unsigned long loadDynamicLib(const string& name, ImageHandle* handle) {
   unsigned long res;
   // if name is empty, just load it
-  if (name.length() == 0) {
+  if (name.empty()) {
     res = loadWithoutEnvironment(name, handle);
   } else {
     // If the name is a logical name (environment variable), the try
@@ -117,7 +116,7 @@ unsigned long unloadDynamicLib(ImageHandle handle) {
 unsigned long getProcedureByName(ImageHandle handle, const string& name, EntryPoint* pFunction) {
 #if defined(__linux__)
   *pFunction = FuncPtrCast<EntryPoint>(::dlsym(handle, name.c_str()));
-  if (0 == *pFunction) {
+  if (nullptr == *pFunction) {
     errno = static_cast<int>(0xAFFEDEAD);
     return 0;
   }
@@ -149,22 +148,22 @@ unsigned long getLastError() {
 }
 
 /// Retrieve last error code as string
-const string getLastErrorString() {
+string getLastErrorString() {
   const string errString = getErrorString(getLastError());
   return errString;
 }
 
 /// Retrieve error code as string for a given error
-const string getErrorString(unsigned long error) {
+string getErrorString(const unsigned long error) {
   string errString;
-  char*  cerrString(0);
+  char*  cerrString(nullptr);
   // Remember: for linux dl* routines must be handled differently!
   if (error == 0xAFFEDEAD) {
     cerrString = reinterpret_cast<char*>(::dlerror());
-    if (0 == cerrString) {
+    if (nullptr == cerrString) {
       cerrString = std::strerror(static_cast<int>(error));
     }
-    if (0 == cerrString) {
+    if (nullptr == cerrString) {
       cerrString = const_cast<char*>("Unknown error. No information found in strerror()!");
     }
     errString = string(cerrString);
@@ -176,11 +175,11 @@ const string getErrorString(unsigned long error) {
   return errString;
 }
 
-const string typeinfoName(const std::type_info& tinfo) {
+string typeinfoName(const std::type_info& tinfo) {
   return typeinfoName(tinfo.name());
 }
 
-const string typeinfoName(const char* class_name) {
+string typeinfoName(const char* class_name) {
   string result;
   if (strnlen(class_name, 1024) == 1) {
     // See http://www.realitydiluted.com/mirrors/reality.sgi.com/dehnert_engr/cxx/abi.pdf
@@ -249,14 +248,17 @@ const string typeinfoName(const char* class_name) {
     case 'z':
       result = "ellipsis";
       break;
+    default:
+      result = class_name;
+      break;
     }
   } else {
     int                                    status;
-    std::unique_ptr<char, decltype(free)*> realname(abi::__cxa_demangle(class_name, 0, 0, &status), free);
-    if (realname == nullptr) {
+    std::unique_ptr<char, decltype(free)*> real_name(abi::__cxa_demangle(class_name, nullptr, nullptr, &status), free);
+    if (real_name == nullptr) {
       return class_name;
     }
-    result = realname.get();
+    result = real_name.get();
     /// substitute ', ' with ','
     string::size_type pos = result.find(", ");
     while (string::npos != pos) {
@@ -271,7 +273,7 @@ const string typeinfoName(const char* class_name) {
 const string& hostName() {
   static string host{};
   if (host.empty()) {
-    std::array<char, HOST_NAME_MAX + 1> buffer;
+    std::array<char, HOST_NAME_MAX + 1> buffer{};
     ::gethostname(buffer.data(), HOST_NAME_MAX);
     host = string(buffer.data());
   }
@@ -280,8 +282,8 @@ const string& hostName() {
 
 /// OS name
 const string& osName() {
-  static string  osname = "";
-  struct utsname ut;
+  static string osname;
+  utsname       ut{};
   if (::uname(&ut) == 0) {
     osname = ut.sysname;
   } else {
@@ -292,8 +294,8 @@ const string& osName() {
 
 /// OS version
 const string& osVersion() {
-  static string  osver = "UNKNOWN";
-  struct utsname ut;
+  static string osver = "UNKNOWN";
+  utsname       ut{};
 
   if (uname(&ut) == 0) {
     osver = ut.release;
@@ -304,8 +306,8 @@ const string& osVersion() {
 
 /// Machine type
 const string& machineType() {
-  static string  mach = "UNKNOWN";
-  struct utsname ut;
+  static string mach = "UNKNOWN";
+  utsname       ut{};
 
   if (uname(&ut) == 0) {
     mach = ut.machine;
@@ -328,8 +330,7 @@ bool getEnv(const string& variable_name, string& variable_value) {
   bool found     = false;
   variable_value = "";
 
-  char* env = ::getenv(variable_name.c_str());
-  if (env != nullptr) {
+  if (const char* env = ::getenv(variable_name.c_str()); env != nullptr) {
     found          = true;
     variable_value = env;
   }
@@ -352,7 +353,7 @@ vector<string> getEnv() {
   static char** environ = *_NSGetEnviron();
 #endif
   vector<string> vars;
-  for (int i = 0; environ[i] != 0; ++i) {
+  for (int i = 0; environ[i] != nullptr; ++i) {
     vars.emplace_back(environ[i]);
   }
   return vars;
@@ -376,8 +377,8 @@ int unSetEnv(const string& name) {
 // -----------------------------------------------------------------------------
 // backtrace utilities
 // -----------------------------------------------------------------------------
-__attribute__((noinline)) int backTrace(ELEMENTS_UNUSED std::shared_ptr<void*> addresses,
-                                        ELEMENTS_UNUSED const int              depth) {
+__attribute__((noinline)) int backTrace(ELEMENTS_UNUSED const std::shared_ptr<void*>& addresses,
+                                        ELEMENTS_UNUSED const int                     depth) {
 
   int count = ::backtrace(addresses.get(), depth);
   if (count > 0) {
@@ -387,7 +388,7 @@ __attribute__((noinline)) int backTrace(ELEMENTS_UNUSED std::shared_ptr<void*> a
   }
 }
 
-const vector<string> backTrace(const int depth, const int offset) {
+vector<string> backTrace(const int depth, const int offset) {
 
   // Always hide the first two levels of the stack trace (that's us)
   const int      total_offset = offset + STACK_OFFSET;
@@ -397,15 +398,14 @@ const vector<string> backTrace(const int depth, const int offset) {
   std::shared_ptr<void*> addresses{new (std::nothrow) void*[static_cast<std::size_t>(total_depth)],
                                    std::default_delete<void*[]>()};
 
-  if (addresses.get() != nullptr) {
+  if (addresses != nullptr) {
 
     int count = backTrace(addresses, total_depth);
 
     for (int i = total_offset; i < count; ++i) {
-      void*  addr = 0;
       string fnc;
       string lib;
-      if (getStackLevel(addresses.get()[i], addr, fnc, lib)) {
+      if (void* addr = nullptr; getStackLevel(addresses.get()[i], addr, fnc, lib)) {
         std::ostringstream ost;
         ost << "#" << std::setw(3) << std::setiosflags(std::ios::left) << i - total_offset + 1;
         ost << std::hex << addr << std::dec << " " << fnc << "  [" << lib << "]";
@@ -417,20 +417,20 @@ const vector<string> backTrace(const int depth, const int offset) {
   return trace;
 }
 
-bool getStackLevel(void* addresses ELEMENTS_UNUSED, void*& addr ELEMENTS_UNUSED, string& fnc ELEMENTS_UNUSED,
+bool getStackLevel(const void* addresses ELEMENTS_UNUSED, void*& addr ELEMENTS_UNUSED, string& fnc ELEMENTS_UNUSED,
                    string& lib ELEMENTS_UNUSED) {
 
   Dl_info info;
 
   if (::dladdr(addresses, &info) && info.dli_fname && info.dli_fname[0] != '\0') {
-    const char* symbol = info.dli_sname && info.dli_sname[0] != '\0' ? info.dli_sname : 0;
+    const char* symbol = info.dli_sname && info.dli_sname[0] != '\0' ? info.dli_sname : nullptr;
 
     lib  = info.dli_fname;
     addr = info.dli_saddr;
 
-    if (symbol != 0) {
-      int                                    stat;
-      std::unique_ptr<char, decltype(free)*> dmg(abi::__cxa_demangle(symbol, 0, 0, &stat), free);
+    if (symbol != nullptr) {
+      int                                          stat;
+      const std::unique_ptr<char, decltype(free)*> dmg(abi::__cxa_demangle(symbol, nullptr, nullptr, &stat), free);
       fnc = string((stat == 0) ? dmg.get() : symbol);
     } else {
       fnc = "local";
@@ -441,5 +441,4 @@ bool getStackLevel(void* addresses ELEMENTS_UNUSED, void*& addr ELEMENTS_UNUSED,
   }
 }
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System

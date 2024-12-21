@@ -26,13 +26,11 @@ namespace Elements::System {
 class ModuleInfo;
 }
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 const System::ModuleInfo& getModuleInfo() {
 
   return System::getThisModuleInfo();
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

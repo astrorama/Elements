@@ -46,7 +46,7 @@ string getConfigurationVariableName() {
 template Path::Item getConfigurationPath(const Path::Item& file_name, bool raise_exception);
 template Path::Item getConfigurationPath(const string& file_name, bool raise_exception);
 
-std::vector<Path::Item> getConfigurationLocations(bool exist_only) {
+std::vector<Path::Item> getConfigurationLocations(const bool exist_only) {
 
   auto location_list = Path::getLocations(Path::Type::configuration, exist_only);
 
@@ -73,7 +73,7 @@ string getVariableName() {
 template Path::Item getPath(const Path::Item& file_name, bool raise_exception);
 template Path::Item getPath(const std::string& file_name, bool raise_exception);
 
-std::vector<Path::Item> getLocations(bool exist_only) {
+std::vector<Path::Item> getLocations(const bool exist_only) {
   return getConfigurationLocations(exist_only);
 }
 

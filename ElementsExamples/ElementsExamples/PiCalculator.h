@@ -31,7 +31,7 @@ namespace Elements::Examples {
 class ELEMENTS_API PiCalculator {
 public:
   PiCalculator() = default;
-  void calculate(unsigned int terms);
+  void calculate(unsigned int terms) const;
 
   typedef int (*show_result_callback_type)(double pi);
   void setShowResultCallback(show_result_callback_type f);

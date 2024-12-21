@@ -108,7 +108,7 @@ public:
    * @return
    *    The output of the method
    */
-  double fundamentalTypeMethod(const double input_variable) const;
+  static double fundamentalTypeMethod(const double input_variable);
 
   /**
    * @brief
@@ -126,7 +126,7 @@ public:
    * @throws
    *   EuclidException, if the second number is (close to) zero
    */
-  double divideNumbers(const double first, const double second) const;
+  static double divideNumbers(const double first, const double second);
 
   /**
    * @brief
@@ -142,7 +142,7 @@ public:
    * @param vector_unique_ptr
    *    Unique pointer to a vector object
    */
-  void passingUniquePointer(std::unique_ptr<std::vector<double>> vector_unique_ptr) const;
+  static void passingUniquePointer(const std::unique_ptr<std::vector<double>>& vector_unique_ptr);
 
   /**
    * @brief
@@ -157,7 +157,7 @@ public:
    * @param input_object
    *    a vector of double
    */
-  void passingObjectInGeneral(const std::vector<double>& input_object) const;
+  static void passingObjectInGeneral(const std::vector<double>& input_object);
 
   /**
    * Getter to access private sourceId

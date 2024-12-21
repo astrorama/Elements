@@ -31,12 +31,11 @@ using std::size_t;
 using std::string;
 using complex = std::complex<double>;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 static constexpr char CHARSET[] = ".,c8M@jawrpogOQEPGJ";
 
-class OpenMP : public Program {
+class OpenMP final : public Program {
 
 public:
   ExitCode mainMethod(map<string, VariableValue>& /*args*/) override {
@@ -84,12 +83,12 @@ public:
   }
 
 private:
-  static size_t mandelbrotCalculate(const complex c, const size_t maxiter) {
-    // iterates z = z + c until |z| >= 2 or maxiter is reached,
+  static size_t mandelbrotCalculate(const complex c, const size_t max_iterations) {
+    // iterates z = z + c until |z| >= 2 or max_iterations is reached,
     // returns the number of iterations.
     complex z = c;
     size_t  n = 0;
-    for (; n < maxiter; ++n) {
+    for (; n < max_iterations; ++n) {
       if (std::abs(z) >= 2.0) {
         break;
       }
@@ -99,8 +98,7 @@ private:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

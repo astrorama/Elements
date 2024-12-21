@@ -23,8 +23,7 @@
 
 #include <cstdlib>  // for size_t
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 double DataSourceUser::sumRecords(const DataSourceInterface& data_source) {
 
@@ -40,5 +39,4 @@ double DataSourceUser::sumRecords(const DataSourceInterface& data_source) {
   return sum;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

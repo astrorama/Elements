@@ -20,6 +20,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/PathSearch.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_PATHSEARCH_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/PathSearch.h instead"

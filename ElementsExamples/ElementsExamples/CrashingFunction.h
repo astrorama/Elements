@@ -1,5 +1,5 @@
 /**
- * @file crashingFunction.h
+ * @file CrashingFunction.h
  *
  * @date Nov 15, 2016
  * @author hubert

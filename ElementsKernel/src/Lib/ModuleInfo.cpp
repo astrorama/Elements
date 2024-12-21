@@ -188,7 +188,7 @@ Path::Item getSelfProc() {
 
   Path::Item exe = self_proc / "exe";
 
-  if (not boost::filesystem::exists(exe)) {
+  if (not exists(exe)) {
     std::stringstream self_str{};
     self_str << "/proc/" << ::getpid();
     self_proc = Path::Item(self_str.str());
@@ -217,7 +217,7 @@ vector<Path::Item> linkedModulePaths() {
       continue;
     }
     if (perms == "r-xp" and boost::filesystem::exists(pathname)) {
-      linked_modules.emplace_back(Path::Item(pathname));
+      linked_modules.emplace_back(pathname);
     }
   }
 
@@ -228,7 +228,7 @@ vector<Path::Item> linkedModulePaths() {
 
 const vector<string> linkedModules() {
 
-  if (s_linkedModules.size() == 0) {
+  if (s_linkedModules.empty()) {
 
     for (auto m : linkedModulePaths()) {
       s_linkedModules.emplace_back(m.string());

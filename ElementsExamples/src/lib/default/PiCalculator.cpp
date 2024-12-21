@@ -17,10 +17,9 @@
 
 #include "ElementsExamples/PiCalculator.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-void PiCalculator::calculate(unsigned int terms) {
+void PiCalculator::calculate(unsigned int terms) const {
 
   double pi = 0.0;
   // Leibniz formula for pi
@@ -43,5 +42,4 @@ void PiCalculator::setShowResultCallback(show_result_callback_type f) {
   m_show_result_callback = f;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

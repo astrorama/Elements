@@ -53,22 +53,22 @@ ELEMENTS_API extern const std::string DEFAULT_WORKDIR_VAR;
  */
 ELEMENTS_API extern const std::string WORKDIR_VAR_VAR;
 
-ELEMENTS_API path confFilePath(path filename);
+ELEMENTS_API path confFilePath(const path& filename);
 
 ELEMENTS_API bool checkCall(const std::string& command);
 
-ELEMENTS_API std::pair<std::string, std::string> runCommandAndCaptureOutErr(std::string command);
+ELEMENTS_API std::pair<std::string, std::string> runCommandAndCaptureOutErr(const std::string& command);
 
-ELEMENTS_API bool localDirExists(path localDir);
+ELEMENTS_API bool localDirExists(const path& local_dir);
 
-ELEMENTS_API void createLocalDirOf(path localFile);
+ELEMENTS_API void createLocalDirOf(const path& localFile);
 
 /**
  * @brief Get the value of an environment variable.
  * @ingroup ElementsServices
  * @return The value if the variable exists; "" otherwise.
  */
-ELEMENTS_API std::string environmentVariable(std::string name);
+ELEMENTS_API std::string environmentVariable(const std::string& name);
 
 /**
  * @brief Get the datasync workdir variable
@@ -88,7 +88,7 @@ ELEMENTS_API bool valueIsListed(const T& value, const std::vector<T>& list) {
   return std::find(begin, end, value) != end;
 }
 
-ELEMENTS_API bool containsInThisOrder(std::string input, std::vector<std::string> substrings);
+ELEMENTS_API bool containsInThisOrder(const std::string& input, const std::vector<std::string>& substrings);
 
 }  // namespace DataSync
 }  // namespace Services

@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/Path.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_PATH_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Path.h instead"

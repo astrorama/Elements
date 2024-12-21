@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/Logging.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_LOGGING_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Logging.h instead"

@@ -28,7 +28,7 @@
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_MODULE_H_
 
 #include <algorithm>  // for for_each
-#include <cstdint>    // for uing_least64_t
+#include <cstdint>    // for uint_least64_t
 #include <iostream>   // for ostream
 #include <string>     // for string
 #include <vector>     // for vector

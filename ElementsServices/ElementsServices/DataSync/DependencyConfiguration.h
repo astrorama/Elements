@@ -50,11 +50,11 @@ class ELEMENTS_API DependencyConfiguration {
 public:
   virtual ~DependencyConfiguration() = default;
 
-  DependencyConfiguration(path distantRoot, path localRoot, path configFile);
+  DependencyConfiguration(const path& distantRoot, const path& localRoot, const path& configFile);
 
   std::map<path, path> fileMap() const;
 
-  path distantPathOf(path localFile) const;
+  path distantPathOf(const path& localFile) const;
 
   std::size_t dependencyCount() const;
 
@@ -63,17 +63,17 @@ public:
   std::vector<path> localPaths() const;
 
 protected:
-  void parseConfigurationFile(path filename);
+  void parseConfigurationFile(const path& filename);
 
-  void parseConfigurationLine(std::string line);
+  void parseConfigurationLine(const std::string& line);
 
   char aliasSeparator() const;
 
-  bool lineHasAlias(std::string line) const;
+  bool lineHasAlias(const std::string& line) const;
 
-  void parseLineWithAlias(std::string line);
+  void parseLineWithAlias(const std::string& line);
 
-  void parseLineWithoutAlias(std::string line);
+  void parseLineWithoutAlias(const std::string& line);
 
 private:
   char                 m_aliasSeparator;

@@ -51,7 +51,7 @@ ELEMENTS_API bool irodsIsInstalled();
 class ELEMENTS_API IrodsSynchronizer : public DataSynchronizer {
 
 public:
-  virtual ~IrodsSynchronizer() = default;
+  ~IrodsSynchronizer() override = default;
 
   IrodsSynchronizer(const ConnectionConfiguration& connection, const DependencyConfiguration& dependency);
 

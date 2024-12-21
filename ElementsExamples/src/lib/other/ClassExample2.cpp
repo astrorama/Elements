@@ -32,31 +32,30 @@
 
 using std::vector;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 std::string ClassExample2::s_static_string = "This is a static field example";
 
-double ClassExample2::fundamentalTypeMethod(const double input_variable) const {
+double ClassExample2::fundamentalTypeMethod(const double input_variable) {
   return input_variable;
 }
 
 /*
  * This is a silly example just to have a method throwing an exception
  */
-double ClassExample2::divideNumbers(const double first, const double second) const {
+double ClassExample2::divideNumbers(const double first, const double second) {
   double tolerance = 1e-12;
   if (std::abs(second) < tolerance) {
-    throw Elements::Exception() << "Dividing by " << second << " exception in ClassExample2::divideNumbers(...)";
+    throw Exception() << "Dividing by " << second << " exception in ClassExample2::divideNumbers(...)";
   }
   return first / second;
 }
 
-void ClassExample2::passingUniquePointer(std::unique_ptr<vector<double>> vector_unique_ptr) const {
+void ClassExample2::passingUniquePointer(const std::unique_ptr<vector<double>>& vector_unique_ptr) {
   ELEMENTS_UNUSED auto vect_size = vector_unique_ptr->size();
 }
 
-void ClassExample2::passingObjectInGeneral(const vector<double>& input_object) const {
+void ClassExample2::passingObjectInGeneral(const vector<double>& input_object) {
   ELEMENTS_UNUSED auto object_size = input_object.size();
 }
 
@@ -64,5 +63,4 @@ ClassExample2 ClassExample2::factoryMethod(const std::int64_t source_id, const d
   return ClassExample2{source_id, ra};
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

@@ -44,55 +44,54 @@ const string DEFAULT_WORKDIR_VAR{"WORKSPACE"};
 
 const string WORKDIR_VAR_VAR{"DATASYNC_WORKDIR_VAR"};
 
-path confFilePath(path filename) {
+path confFilePath(const path& filename) {
   return Configuration::getPath(filename);
 }
 
 bool checkCall(const string& command) {
-  string    silent_command = command + " > /dev/null";
-  const int status         = std::system(silent_command.c_str());
+  const string silent_command = command + " > /dev/null";
+  const int    status         = std::system(silent_command.c_str());
   return status == 0;
 }
 
-std::pair<string, string> runCommandAndCaptureOutErr(string command) {
+std::pair<string, string> runCommandAndCaptureOutErr(const string& command) {
   string                   out;
   string                   err;
-  std::array<char, BUFSIZ> buffer;
-  std::shared_ptr<FILE>    cmdpipe(popen(command.c_str(), "r"), pclose);
-  if (not cmdpipe) {
+  std::array<char, BUFSIZ> buffer{};
+  std::shared_ptr<FILE>    command_pipe(popen(command.c_str(), "r"), pclose);
+  if (not command_pipe) {
     throw std::runtime_error(string("Unable to run command: ") + command);
   }
-  if (fgets(buffer.data(), BUFSIZ, cmdpipe.get()) != nullptr) {
+  if (fgets(buffer.data(), BUFSIZ, command_pipe.get()) != nullptr) {
     out += buffer.data();
   }
   // @TODO get standard error
   return std::make_pair(out, err);
 }
 
-bool localDirExists(path local_dir) {
-  return boost::filesystem::is_directory(local_dir);
+bool localDirExists(const path& local_dir) {
+  return is_directory(local_dir);
 }
 
-void createLocalDirOf(path local_file) {
+void createLocalDirOf(const path& local_file) {
   if (not local_file.has_parent_path()) {
     return;
   }
   const path dir = local_file.parent_path();
   if (not localDirExists(dir)) {
-    boost::filesystem::create_directories(dir);
+    create_directories(dir);
   }
 }
 
-string environmentVariable(string name) {
-  return Environment().get(name);  // Already returns "" if not found
+string environmentVariable(const string& name) {
+  return Environment::get(name);  // Already returns "" if not found
 }
 
 string getWorkdirVariable() {
 
-  string      workdir_variable = DEFAULT_WORKDIR_VAR;
-  Environment current;
+  string workdir_variable = DEFAULT_WORKDIR_VAR;
 
-  if (not current[WORKDIR_VAR_VAR].empty()) {
+  if (Environment current; not current[WORKDIR_VAR_VAR].empty()) {
     workdir_variable = current[WORKDIR_VAR_VAR];
   }
 
@@ -100,10 +99,10 @@ string getWorkdirVariable() {
 }
 
 path localWorkspacePrefix() {
-  const string workdir_variable = getWorkdirVariable();
-  const string codeen_prefix(workdir_variable);
-  const string prefix_env_variable(codeen_prefix);
-  return path(environmentVariable(prefix_env_variable));
+  const string  workdir_variable = getWorkdirVariable();
+  const string& codeen_prefix(workdir_variable);
+  const string& prefix_env_variable(codeen_prefix);
+  return path{environmentVariable(prefix_env_variable)};
 }
 
 string lower(string text) {
@@ -112,9 +111,9 @@ string lower(string text) {
   return uncased;
 }
 
-bool containsInThisOrder(string input, std::vector<string> substrings) {
+bool containsInThisOrder(const string& input, const std::vector<string>& substrings) {
   string::size_type offset(0);
-  for (auto substr : substrings) {
+  for (const auto& substr : substrings) {
     offset = input.find(substr, offset);
     if (offset == string::npos) {
       return false;

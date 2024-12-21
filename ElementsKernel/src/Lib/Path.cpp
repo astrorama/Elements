@@ -79,7 +79,7 @@ const std::map<Type, const bool> HAS_SUBLEVELS{
 
 // clang-format on
 
-vector<Item> getLocationsFromEnv(const string& path_variable, bool exist_only) {
+vector<Item> getLocationsFromEnv(const string& path_variable, const bool exist_only) {
 
   Environment current_env;
 
@@ -89,7 +89,7 @@ vector<Item> getLocationsFromEnv(const string& path_variable, bool exist_only) {
 
   if (exist_only) {
     auto new_end = std::remove_if(found_list.begin(), found_list.end(), [](const Item& p) {
-      return (not boost::filesystem::exists(p));
+      return (not exists(p));
     });
     found_list.erase(new_end, found_list.end());
   }
@@ -97,7 +97,7 @@ vector<Item> getLocationsFromEnv(const string& path_variable, bool exist_only) {
   return found_list;
 }
 
-vector<Item> getLocations(const Type& path_type, bool exist_only) {
+vector<Item> getLocations(const Type& path_type, const bool exist_only) {
   return getLocationsFromEnv(VARIABLE.at(path_type), exist_only);
 }
 

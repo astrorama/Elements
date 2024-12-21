@@ -30,8 +30,7 @@
 #include <cstring>      // for memcpy
 #include <type_traits>  // for is_pointer
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 /**
  * @brief Cast from void * to function pointer
@@ -49,8 +48,7 @@ namespace System {
 template <typename DESTPTR, typename SRC>
 constexpr DESTPTR FuncPtrCast(SRC* const src_p) noexcept;
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_FUNCPTRCAST_IMPL_
 #include "ElementsKernel/_impl/FuncPtrCast.tpp"  // IWYU pragma: export

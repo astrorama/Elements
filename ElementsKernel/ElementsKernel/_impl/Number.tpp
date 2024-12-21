@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/Number.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_NUMBER_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Number.h instead"

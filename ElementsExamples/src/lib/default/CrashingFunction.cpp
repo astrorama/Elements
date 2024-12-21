@@ -21,13 +21,11 @@
 
 #include "ElementsExamples/CrashingFunction.h"
 
-#include <memory>     // for allocator
 #include <stdexcept>  // for logic_error
 
 #include "ElementsKernel/Logging.h"  // for Logging
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 void crashingFunction() {
   auto log = Logging::getLogger("ElementsExamples");
@@ -36,5 +34,4 @@ void crashingFunction() {
   throw std::logic_error("arrg!");
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

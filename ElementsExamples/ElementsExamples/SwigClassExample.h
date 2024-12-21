@@ -28,7 +28,7 @@
 
 namespace Elements::Examples {
 
-class ELEMENTS_API SwigClassExample {
+class ELEMENTS_API SwigClassExample final {
 
 public:
   explicit SwigClassExample(const double ra = 0.0, const double dec = 0.0) : m_ra(ra), m_dec(dec) {}

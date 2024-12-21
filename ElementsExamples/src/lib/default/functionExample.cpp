@@ -21,12 +21,10 @@
 
 #include "ElementsExamples/functionExample.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 int functionExample(const int j) {
   return j * j;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

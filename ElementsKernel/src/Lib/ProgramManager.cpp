@@ -71,18 +71,17 @@ ProgramManager::ProgramManager(std::unique_ptr<Program> program_ptr, const strin
                                const string& parent_project_name, const string& parent_project_vcs_version,
                                const string& parent_module_version, const string& parent_module_name,
                                const vector<string>& search_dirs, const Priority::Value& elements_loglevel,
-                               bool no_config_file, bool no_default_conf)
+                               const bool no_config_file, const bool no_default_conf)
     : m_program_ptr(std::move(program_ptr))
-    , m_parent_project_version(std::move(parent_project_version))
-    , m_parent_project_name(std::move(parent_project_name))
-    , m_parent_project_vcs_version(std::move(parent_project_vcs_version))
-    , m_parent_module_version(std::move(parent_module_version))
-    , m_parent_module_name(std::move(parent_module_name))
-    , m_search_dirs(std::move(search_dirs))
-    , m_env{}
-    , m_elements_loglevel(std::move(elements_loglevel))
-    , m_no_config_file(std::move(no_config_file))
-    , m_no_default_conf(std::move(no_default_conf)) {}
+    , m_parent_project_version(parent_project_version)
+    , m_parent_project_name(parent_project_name)
+    , m_parent_project_vcs_version(parent_project_vcs_version)
+    , m_parent_module_version(parent_module_version)
+    , m_parent_module_name(parent_module_name)
+    , m_search_dirs(search_dirs)
+    , m_elements_loglevel(elements_loglevel)
+    , m_no_config_file(no_config_file)
+    , m_no_default_conf(no_default_conf) {}
 
 const Path::Item& ProgramManager::getProgramPath() const {
   return m_program_path;
@@ -97,7 +96,7 @@ const Path::Item& ProgramManager::getProgramName() const {
  * @todo check whether priotities are correct if more than one
  * config file is found in pathSearchInEnvVariable
  * */
-const Path::Item ProgramManager::getDefaultConfigFile(const Path::Item& program_name, const string& module_name) {
+Path::Item ProgramManager::getDefaultConfigFile(const Path::Item& program_name, const string& module_name) {
   Path::Item default_config_file{};
 
   // .conf is the standard extension for configuration file
@@ -127,14 +126,14 @@ const Path::Item ProgramManager::getDefaultConfigFile(const Path::Item& program_
   return default_config_file;
 }
 
-const Path::Item ProgramManager::setProgramName(ELEMENTS_UNUSED char* arg0) {
-  Path::Item full_path = getExecutablePath();
+Path::Item ProgramManager::setProgramName(ELEMENTS_UNUSED char* arg0) {
+  const Path::Item full_path = getExecutablePath();
 
   return full_path.filename();
 }
 
-const Path::Item ProgramManager::setProgramPath(ELEMENTS_UNUSED char* arg0) {
-  Path::Item full_path = getExecutablePath();
+Path::Item ProgramManager::setProgramPath(ELEMENTS_UNUSED char* arg0) {
+  const Path::Item full_path = getExecutablePath();
 
   return full_path.parent_path();
 }
@@ -142,7 +141,7 @@ const Path::Item ProgramManager::setProgramPath(ELEMENTS_UNUSED char* arg0) {
 /*
  * Get program options
  */
-const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
+VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
   using std::cout;
   using std::exit;
   using OptionsDescription = Program::OptionsDescription;
@@ -186,10 +185,10 @@ const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
   // Group all the generic options, for help output. Note that we add the
   // options one by one to avoid having empty lines between the groups
   OptionsDescription all_generic_options{"Generic options"};
-  for (auto o : cmd_only_generic_options.options()) {
+  for (const auto& o : cmd_only_generic_options.options()) {
     all_generic_options.add(o);
   }
-  for (auto o : cmd_and_file_generic_options.options()) {
+  for (const auto& o : cmd_and_file_generic_options.options()) {
     all_generic_options.add(o);
   }
 
@@ -274,7 +273,7 @@ const VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
   return var_map;
 }
 
-void ProgramManager::logHeader(string program_name) const {
+void ProgramManager::logHeader(const string& program_name) const {
   log.log(m_elements_loglevel, "##########################################################");
   log.log(m_elements_loglevel, "##########################################################");
   log.log(m_elements_loglevel, "#");
@@ -284,7 +283,7 @@ void ProgramManager::logHeader(string program_name) const {
   log.debug("# The Program Path: " + m_program_path.string());
 }
 
-void ProgramManager::logFooter(string program_name) const {
+void ProgramManager::logFooter(const string& program_name) const {
   log.log(m_elements_loglevel, "##########################################################");
   log.log(m_elements_loglevel, "#");
   log.log(m_elements_loglevel, "#  C++ program:  " + program_name + " stops ");
@@ -469,12 +468,12 @@ string ProgramManager::getVersion() const {
   return version;
 }
 
-ProgramManager::~ProgramManager() {}
+ProgramManager::~ProgramManager() = default;
 
 void ProgramManager::onTerminate() noexcept {
   ExitCode exit_code{ExitCode::NOT_OK};
 
-  if (auto exc = std::current_exception()) {
+  if (const auto exc = std::current_exception()) {
 
     log.fatal() << "Crash detected";
     log.fatal() << "This is the back trace:";
@@ -484,12 +483,11 @@ void ProgramManager::onTerminate() noexcept {
 
     // we have an exception
     try {
-      std::rethrow_exception(exc);  // throw to recognise the type
+      std::rethrow_exception(exc);  // throw to recognize the type
     } catch (const Exception& exc1) {
       log.fatal() << "# ";
       log.fatal() << "# Elements Exception : " << exc1.what();
       log.fatal() << "# ";
-      exit_code = exc1.exitCode();
     } catch (const std::exception& exc2) {
       log.fatal() << "# ";
       log.fatal() << "# Standard Exception : " << exc2.what();

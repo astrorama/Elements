@@ -29,14 +29,14 @@ namespace Elements {
 /** @brief Small variation on the sleep function for seconds sleep.
  * @author Hubert Degaudenzi
  */
-void normalSleep(int sec) {
+void normalSleep(const int sec) {
   sleep_for(std::chrono::seconds(sec));
 }
 
 /** @brief Small variation on the sleep function for nanoseconds sleep.
  * @author Hubert Degaudenzi
  */
-void nanoSleep(std::int64_t nsec) {
+void nanoSleep(const std::int64_t nsec) {
   sleep_for(std::chrono::nanoseconds(nsec));
 }
 

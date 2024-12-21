@@ -50,8 +50,7 @@ using boost::program_options::value;
 
 using std::int64_t;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @brief
@@ -80,7 +79,7 @@ void myLocalLogTestFunc() {
  *    All C++ executable must extend the Elements::Program base class
  *
  */
-class Program : public Elements::Program {
+class Program final : public Elements::Program {
 
 public:
   /**
@@ -181,7 +180,7 @@ public:
      * All fundamental type variables can be copied forth and back without significant
      * cost in (almost) all cases
      */
-    double method_result = example_class_object.fundamentalTypeMethod(input_variable);
+    const double method_result = ClassExample::fundamentalTypeMethod(input_variable);
     log.info() << "Some result: " << method_result;
 
     double first = 1.0;
@@ -190,8 +189,8 @@ public:
       log.info("#");
       log.info("#   Calling a method throwing an exception ");
       log.info("#");
-      double second   = 0.0;
-      division_result = example_class_object.divideNumbers(first, second);
+      constexpr double second = 0.0;
+      division_result         = ClassExample::divideNumbers(first, second);
       //
     } catch (const Exception& e) {
       log.info("#");
@@ -199,7 +198,7 @@ public:
       log.info("#");
       log.info("#   In this silly example we continue with a fake fix ");
       log.info("#");
-      division_result = example_class_object.divideNumbers(first, 0.000001);
+      division_result = ClassExample::divideNumbers(first, 0.000001);
     }
     log.info() << "Second result is: " << division_result;
 
@@ -209,15 +208,15 @@ public:
      * method called. The vector_unique_ptr cannot be used in this method anymore after the
      * call.
      */
-    std::unique_ptr<vector<double>> vector_unique_ptr{new vector<double>{1.0, 2.3, 4.5}};
-    example_class_object.passingUniquePointer(std::move(vector_unique_ptr));
+    const std::unique_ptr<vector<double>> vector_unique_ptr{new vector<double>{1.0, 2.3, 4.5}};
+    ClassExample::passingUniquePointer(vector_unique_ptr);
 
     /*
      * Illustration on how best to pass any object. The passingObjectInGeneral() is taking
      * a reference to this object.
      */
-    vector<double> object_example{vector<double>{1.0, 2.3, 4.5}};
-    example_class_object.passingObjectInGeneral(object_example);
+    const auto object_example{vector{1.0, 2.3, 4.5}};
+    ClassExample::passingObjectInGeneral(object_example);
 
     log.info() << "Function Example: " << functionExample(3);
 
@@ -239,8 +238,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

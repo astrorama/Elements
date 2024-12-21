@@ -30,7 +30,7 @@
 
 namespace Elements {
 
-SimpleProgram::~SimpleProgram() {}
+SimpleProgram::~SimpleProgram() = default;
 
 ExitCode SimpleProgram::run(int argc, char* argv[]) noexcept {
 

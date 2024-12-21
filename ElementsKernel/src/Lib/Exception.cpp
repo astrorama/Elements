@@ -20,15 +20,17 @@
  *
  */
 
+#include <utility>
+
 #include "ElementsKernel/Exception.h"
 
 namespace Elements {
 
-Exception::Exception(ExitCode e) : m_exit_code{e} {}
+Exception::Exception(const ExitCode e) : m_exit_code{e} {}
 
-Exception::Exception(const char* message, ExitCode e) : m_error_msg(message), m_exit_code{e} {}
+Exception::Exception(const char* message, const ExitCode e) : m_error_msg(message), m_exit_code{e} {}
 
-Exception::Exception(const std::string& message, ExitCode e) : m_error_msg(message), m_exit_code{e} {}
+Exception::Exception(std::string message, const ExitCode e) : m_error_msg(std::move(message)), m_exit_code{e} {}
 
 Exception::~Exception() noexcept = default;
 

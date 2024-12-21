@@ -50,16 +50,16 @@ public:
   explicit Environment(bool keep_same = true);
   virtual ~Environment();
 
-  Variable       operator[](const std::string&);
-  Variable       operator[](const std::string& index) const;
-  Environment&   restore();
-  Environment&   set(const std::string&, const std::string&);
-  Environment&   unSet(const std::string&);
-  Environment&   append(const std::string&, const std::string&);
+  Variable           operator[](const std::string&);
+  Variable           operator[](const std::string& index) const;
+  Environment&       restore();
+  Environment&       set(const std::string&, const std::string&);
+  Environment&       unSet(const std::string&);
+  Environment&       append(const std::string&, const std::string&);
   Environment&       prepend(const std::string&, const std::string&);
-  static std::string    get(const std::string& index, const std::string& default_value = "");
-  static bool    hasKey(const std::string&);
-  void           commit();
+  static std::string get(const std::string& index, const std::string& default_value = "");
+  static bool        hasKey(const std::string&);
+  void               commit();
 
   enum ShellType { sh, csh };
 
@@ -89,7 +89,7 @@ class Environment::Variable {
 
 public:
   Variable() = delete;
-  Variable(Environment& env, std::string  index);
+  Variable(Environment& env, std::string index);
   Variable(const Variable& other);
   Variable(Variable&& other);
   ~Variable() = default;

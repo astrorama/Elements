@@ -44,13 +44,13 @@ using System::isEnvSet;
 using System::setEnv;
 using System::unSetEnv;
 
-Environment::Variable::Variable(Environment& env, string  index) : m_env{env}, m_index{std::move(index)} {}
+Environment::Variable::Variable(Environment& env, string index) : m_env{env}, m_index{std::move(index)} {}
 
 Environment::Variable::Variable(const Variable& other) : m_env{other.m_env} {
   checkCompatibility(other);
 }
 
-Environment::Variable::Variable(Variable&& other) : m_env{other.m_env} { // NOLINT(*-noexcept-move-constructor)
+Environment::Variable::Variable(Variable&& other) : m_env{other.m_env} {  // NOLINT(*-noexcept-move-constructor)
   checkCompatibility(other);
 }
 
@@ -62,7 +62,7 @@ Environment::Variable& Environment::Variable::operator=(const Variable& other) {
   return *this;
 }
 
-Environment::Variable& Environment::Variable::operator=(Variable&& other) { // NOLINT(*-noexcept-move-constructor)
+Environment::Variable& Environment::Variable::operator=(Variable&& other) {  // NOLINT(*-noexcept-move-constructor)
   checkCompatibility(other);
 
   m_env = other.m_env;

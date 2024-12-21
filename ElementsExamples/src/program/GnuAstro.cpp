@@ -31,23 +31,22 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-class GnuAstro : public Program {
+class GnuAstro final : public Program {
 
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
     auto log = Logging::getLogger("GnuAstroExample");
 
-    string test_upper_string{"THATSTRING"};
+    const string test_upper_string{"THATSTRING"};
     log.info() << "This is the test upper string: " << test_upper_string;
 
-    double z{2.5};
-    double H0{67.66};
+    constexpr double z{2.5};
+    constexpr double H0{67.66};
 
-    auto age = gal_cosmology_age(z, H0, 0.0, 0.0, 0.0, 0);
+    const auto age = gal_cosmology_age(z, H0, 0.0, 0.0, 0.0, 0);
 
     log.info() << "Age of the Universe @ z = " << z << " : " << age << " GA";
 
@@ -55,8 +54,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

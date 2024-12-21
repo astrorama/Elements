@@ -16,7 +16,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <algorithm>  // for find
 #include <cstddef>    // for size_t
 #include <exception>  // for exception
 #include <stdexcept>  // for runtime_error
@@ -68,7 +67,7 @@ void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
     po::store(po::parse_config_file<char>(abs_path.c_str(), options), vm);
     po::notify(vm);
   } catch (std::exception& e) {
-    throw e;
+    throw std::runtime_error("Error while reading configuration file: " + abs_path.string() + " - " + e.what());
   }
 
   /* Configure object */

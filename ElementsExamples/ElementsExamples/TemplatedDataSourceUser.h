@@ -52,7 +52,7 @@ public:
    * @return The sum of the values of the records into the DataSource object
    */
   template <typename T>
-  double sumRecords(const T& data_source);
+  static double sumRecords(const T& data_source);
 };
 
 }  // namespace Elements::Examples

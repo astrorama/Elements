@@ -45,8 +45,8 @@ namespace DataSync {
  */
 class ELEMENTS_API DownloadFailed : public std::runtime_error {
 public:
-  virtual ~DownloadFailed() = default;
-  DownloadFailed(path distantFile, path localFile)
+  ~DownloadFailed() override = default;
+  DownloadFailed(const path& distantFile, const path& localFile)
       : std::runtime_error("Unable to download file: '" + distantFile.string() + "' as: '" + localFile.string() +
                            "'.") {}
 };
@@ -68,13 +68,13 @@ public:
   void downloadAllFiles() const;
 
 protected:
-  bool fileShouldBeWritten(path localFile) const;
+  bool fileShouldBeWritten(const path& localFile) const;
 
-  bool fileAlreadyExists(path localFile) const;
+  static bool fileAlreadyExists(const path& localFile);
 
-  void downloadOneFile(path distantFile, path localFile) const;
+  void downloadOneFile(const path& distantFile, const path& localFile) const;
 
-  bool hasBeenDownloaded(path distantFile, path localFile) const;
+  static bool hasBeenDownloaded(const path& distantFile, const path& localFile);
 
   virtual std::string createDownloadCommand(path distantFile, path localFile) const = 0;
 

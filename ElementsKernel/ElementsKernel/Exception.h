@@ -67,13 +67,13 @@ public:
    *  @param e: this is an optional exit code. By default is is set
    *            to NOT_OK.
    */
-  explicit Exception(const std::string& message, ExitCode e = ExitCode::NOT_OK);
+  explicit Exception(std::string message, ExitCode e = ExitCode::NOT_OK);
 
   /**
-   * @brief Constructs a new Exception with a message using format specifiers
-   *
-   * @param stringFormat The message containing the format specifiers
-   * @param args The values to replace the format specifiers with
+   *  Constructor (pointer to char).
+   *  @param message The error message.
+   *  @param e: this is an optional exit code. By default is is set
+   *            to NOT_OK.
    */
   template <typename... Args>
   explicit Exception(const char* string_format, Args&&... args);
@@ -86,7 +86,7 @@ public:
   /**
    * Virtual destructor.
    */
-  virtual ~Exception() noexcept;
+  ~Exception() noexcept override;
 
   /**
    *  Returns a pointer to the (constant) error description.

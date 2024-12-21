@@ -73,16 +73,15 @@ template vector<string>     pathSearch(const string& searched_name, string direc
  * and call pathSearch(...) for each of them
  */
 vector<Path::Item> pathSearchInEnvVariable(const string& file_name, const string& path_like_env_variable,
-                                           SearchType search_type) {
+                                           const SearchType search_type) {
   // Placeholder for the to-be-returned search result
   vector<Path::Item> search_results{};
 
   // get the multiple path from the environment variable
   string multiple_path{};
 
-  Environment current_env;
-
-  if (current_env.hasKey(path_like_env_variable)) {
+  if (Environment::hasKey(path_like_env_variable)) {
+    Environment current_env;
     multiple_path = current_env[path_like_env_variable];
   } else {
     log.warn() << "Environment variable \"" << path_like_env_variable << "\" is not defined !";
@@ -93,7 +92,7 @@ vector<Path::Item> pathSearchInEnvVariable(const string& file_name, const string
   boost::split(path_elements, multiple_path, boost::is_any_of(";:"));
 
   // Loop over all path elements
-  for (string path_element : path_elements) {
+  for (const string& path_element : path_elements) {
     // Check if directory exists
     if (boost::filesystem::exists(path_element) && boost::filesystem::is_directory(path_element)) {
       // loop recursively inside directory
