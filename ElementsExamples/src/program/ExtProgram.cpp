@@ -28,8 +28,8 @@
 #include <boost/program_options.hpp>  // for value, typed_value, options_description_easy_init, variable_value, bool_switch
 
 #include "ElementsExamples/ClassExample.h"     // for ClassExample
+#include "ElementsExamples/FunctionExample.h"  // for functionExample
 #include "ElementsExamples/PrintProject.h"     // for printProject
-#include "ElementsExamples/functionExample.h"  // for functionExample
 #include "ElementsKernel/Exception.h"          // for Exception
 #include "ElementsKernel/Main.h"               // for MAIN_FOR
 #include "ElementsKernel/Module.h"             // for Module

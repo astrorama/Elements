@@ -19,7 +19,7 @@
  *
  */
 
-#include "ElementsExamples/functionExample.h"
+#include "ElementsExamples/FunctionExample.h"
 
 namespace Elements::Examples {
 

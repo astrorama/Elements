@@ -51,13 +51,34 @@ inline namespace Kernel {
  */
 ELEMENTS_API std::string getAuxiliaryVariableName();
 
+/**
+ * @brief retrieve the path to an auxiliary file
+ * @ingroup ElementsKernel
+ * @param file_name
+ *   file name of the auxiliary file to be found.
+ * @param raise_exception
+ *   enable the raising of an exception if the file is not found
+ * @return
+ *   the path to the auxiliary file
+ */
 template <typename T>
 ELEMENTS_API Path::Item getAuxiliaryPath(const T& file_name, bool raise_exception = true);
 
-// instantiation of the most expected types
+/// instantiation of the most expected types
 extern template ELEMENTS_API Path::Item getAuxiliaryPath(const Path::Item& file_name, bool raise_exception);
 extern template ELEMENTS_API Path::Item getAuxiliaryPath(const std::string& file_name, bool raise_exception);
 
+/**
+ * @brief Retrieves the list of auxiliary file locations.
+ * This method returns a list of potential locations for auxiliary files,
+ * optionally filtering for only existing paths.
+ *
+ * @param exist_only
+ *   A boolean indicating whether to include only paths that currently exist
+ *   (true), or all potential paths (false).
+ * @return
+ *   A vector of Path::Item objects representing the auxiliary file locations.
+ */
 ELEMENTS_API std::vector<Path::Item> getAuxiliaryLocations(bool exist_only = false);
 
 namespace Auxiliary {
@@ -81,7 +102,7 @@ ELEMENTS_API std::string getVariableName();
 template <typename T>
 ELEMENTS_API Path::Item getPath(const T& file_name, bool raise_exception = true);
 
-// instantiation of the most expected types
+/// instantiation of the most expected types
 extern template ELEMENTS_API Path::Item getPath(const Path::Item& file_name, bool raise_exception);
 extern template ELEMENTS_API Path::Item getPath(const std::string& file_name, bool raise_exception);
 

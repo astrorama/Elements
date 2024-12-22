@@ -38,8 +38,8 @@
 #include "ElementsKernel/ThisModule.h"  // for getThisExecutableInfo
 
 #include "ElementsExamples/ClassExample.h"     // for ClassExample
+#include "ElementsExamples/FunctionExample.h"  // for functionExample
 #include "ElementsExamples/PrintProject.h"     // for printProject
-#include "ElementsExamples/functionExample.h"  // for functionExample
 
 using std::map;
 using std::string;

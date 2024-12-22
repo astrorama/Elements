@@ -51,13 +51,20 @@ inline namespace Kernel {
  */
 ELEMENTS_API std::string getConfigurationVariableName();
 
+/// @brief retrieve the path to a configuration file
 template <typename T>
 ELEMENTS_API Path::Item getConfigurationPath(const T& file_name, bool raise_exception = true);
 
-// Instantiation of the most expected types
+/// Instantiation of the most expected types
 extern template ELEMENTS_API Path::Item getConfigurationPath(const Path::Item& file_name, bool raise_exception);
 extern template ELEMENTS_API Path::Item getConfigurationPath(const std::string& file_name, bool raise_exception);
 
+/**
+ * @brief Retrieves a list of configuration file locations, optionally restricted to those that exist.
+ * @param exist_only A boolean flag. If true, only paths that exist on the filesystem will be included in the result.
+ * If false, all potential configuration locations will be returned.
+ * @return A vector of Path::Item objects representing the identified configuration locations.
+ */
 ELEMENTS_API std::vector<Path::Item> getConfigurationLocations(bool exist_only = false);
 
 namespace Configuration {

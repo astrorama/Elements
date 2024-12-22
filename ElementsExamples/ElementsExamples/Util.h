@@ -26,8 +26,23 @@
 extern "C" {
 #endif
 
+/**
+ * @brief A function that performs a specific operation.
+ *
+ * This function returns an integer value. The operation performed by
+ * the function is predefined and determined at implementation.
+ *
+ * @return An integer value representing the result of the operation.
+ */
 int myFunc(void);
 
+/**
+ * @brief A constant that defines a specific integral value.
+ *
+ * This constant is assigned the value 42 and is used throughout the program
+ * to represent a fixed, predefined value. Its purpose may vary depending on
+ * the context of use in different parts of the codebase.
+ */
 extern int MY_CONST;
 
 #ifdef __cplusplus
