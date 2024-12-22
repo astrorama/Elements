@@ -33,7 +33,14 @@
 #include "ElementsKernel/Export.h"
 
 namespace Elements::Examples {
-
+/**
+ * Executes a callback function provided as an argument with the given vector of double values.
+ * Logs the execution and the output of the callback function.
+ *
+ * @param x A vector of double values to be passed as input to the callback function.
+ * @param fun A callback function that takes a vector of double values and returns a double.
+ * @return The result of the callback function after being executed with the input vector.
+ */
 ELEMENTS_API double testCallBack(std::vector<double> x, const std::function<double(std::vector<double>)>& fun);
 
 }  // namespace Elements::Examples

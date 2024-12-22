@@ -71,8 +71,13 @@ public:
    */
   static ClassExample factoryMethod(const std::int64_t source_id, const double ra);
 
-  /*
-   * Getter to access the static private string
+  /**
+   * @brief
+   *    Retrieves the static string.
+   * @details
+   *    This method returns a reference to the static string member.
+   * @return
+   *    A constant reference to the static string.
    */
   static const std::string& getStaticString() {
     return s_static_string;

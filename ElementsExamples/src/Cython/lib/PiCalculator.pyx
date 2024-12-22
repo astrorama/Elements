@@ -1,3 +1,4 @@
+#cython: language_level=3
 #
 # Copyright (C) 2012-2020 Euclid Science Ground Segment
 #
