@@ -349,7 +349,7 @@ endif()
 
 find_package(pybind11)
 if(pybind11_FOUND AND Python_Development_FOUND)
-  elements_add_pybind11_module(testCallBack src/pybind11/callback.cpp
+  elements_add_pybind11_module(testCallBack src/pybind11/Callback.cpp
                                INCLUDE_DIRS ElementsExamples
                                LINK_LIBRARIES ElementsExamples)
 endif()

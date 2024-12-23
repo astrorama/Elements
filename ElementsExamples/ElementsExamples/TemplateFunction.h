@@ -42,8 +42,9 @@ namespace Elements::Examples {
 template <typename T>
 ELEMENTS_API void templateFunction();
 
-/// Explicit instantiation of the template function for int and double
+/// @brief Explicit instantiation of the template function for int
 extern template ELEMENTS_API void templateFunction<int>();
+/// @brief Explicit instantiation of the template function for double
 extern template ELEMENTS_API void templateFunction<double>();
 
 }  // namespace Elements::Examples

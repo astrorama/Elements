@@ -26,7 +26,8 @@
 #include <vector>   // for vector
 
 #include <boost/current_function.hpp>  // for BOOST_CURRENT_FUNCTION
-#include <boost/program_options.hpp>  // for value, typed_value, options_description_easy_init, variable_value, bool_switch
+#include <boost/program_options.hpp>   // for value, typed_value, options_description_easy_init,
+                                       //variable_value, bool_switch
 
 #include "ElementsKernel/Exception.h"   // for Exception
 #include "ElementsKernel/Logging.h"     // for Logging

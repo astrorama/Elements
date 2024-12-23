@@ -64,8 +64,9 @@ ELEMENTS_API std::string getAuxiliaryVariableName();
 template <typename T>
 ELEMENTS_API Path::Item getAuxiliaryPath(const T& file_name, bool raise_exception = true);
 
-/// instantiation of the most expected types
+/// @brief Instantiation of the most expected types: Path::Item
 extern template ELEMENTS_API Path::Item getAuxiliaryPath(const Path::Item& file_name, bool raise_exception);
+/// @brief Instantiation of the most expected types: std::string
 extern template ELEMENTS_API Path::Item getAuxiliaryPath(const std::string& file_name, bool raise_exception);
 
 /**
@@ -102,8 +103,9 @@ ELEMENTS_API std::string getVariableName();
 template <typename T>
 ELEMENTS_API Path::Item getPath(const T& file_name, bool raise_exception = true);
 
-/// instantiation of the most expected types
+/// @brief Instantiation of the most expected types: Path::Item
 extern template ELEMENTS_API Path::Item getPath(const Path::Item& file_name, bool raise_exception);
+/// @brief Instantiation of the most expected types: std::string
 extern template ELEMENTS_API Path::Item getPath(const std::string& file_name, bool raise_exception);
 
 /**
