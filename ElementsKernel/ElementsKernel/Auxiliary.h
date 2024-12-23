@@ -65,8 +65,28 @@ template <typename T>
 ELEMENTS_API Path::Item getAuxiliaryPath(const T& file_name, bool raise_exception = true);
 
 /// @brief Instantiation of the most expected types: Path::Item
+
+/**
+ * @brief retrieve the path to an auxiliary file
+ * @ingroup ElementsKernel
+ * @param file_name
+ *   file name of the auxiliary file to be found.
+ * @param raise_exception
+ *   enable the raising of an exception if the file is not found
+ * @return
+ *   the path to the auxiliary file
+ */
 extern template ELEMENTS_API Path::Item getAuxiliaryPath(const Path::Item& file_name, bool raise_exception);
-/// @brief Instantiation of the most expected types: std::string
+/**
+ * @brief retrieve the path to an auxiliary file
+ * @ingroup ElementsKernel
+ * @param file_name
+ *   file name of the auxiliary file to be found.
+ * @param raise_exception
+ *   enable the raising of an exception if the file is not found
+ * @return
+ *   the path to the auxiliary file
+ */
 extern template ELEMENTS_API Path::Item getAuxiliaryPath(const std::string& file_name, bool raise_exception);
 
 /**
