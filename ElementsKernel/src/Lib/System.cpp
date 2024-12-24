@@ -40,6 +40,8 @@
 #include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
 #include "ElementsKernel/Unused.h"       // for ELEMENTS_UNUSED
 
+#include <map>
+
 using std::size_t;
 using std::string;
 using std::vector;
@@ -180,81 +182,30 @@ string typeinfoName(const std::type_info& tinfo) {
 }
 
 string typeinfoName(const char* class_name) {
-  string result;
+  string                       result{class_name};
+  const std::map<char, string> type_initials = {{'v', "void"},        {'w', "wchar_t"},
+                                                {'b', "bool"},        {'c', "char"},
+                                                {'a', "signed char"}, {'h', "unsigned char"},
+                                                {'s', "short"},       {'t', "unsigned short"},
+                                                {'i', "int"},         {'j', "unsigned int"},
+                                                {'l', "long"},        {'m', "unsigned long"},
+                                                {'x', "long long"},   {'y', "unsigned long long"},
+                                                {'n', "__int128"},    {'o', "unsigned __int128"},
+                                                {'f', "float"},       {'d', "double"},
+                                                {'e', "long double"}, {'g', "__float128"},
+                                                {'z', "ellipsis"}};
   if (strnlen(class_name, 1024) == 1) {
     // See http://www.realitydiluted.com/mirrors/reality.sgi.com/dehnert_engr/cxx/abi.pdf
     // for details
-    switch (class_name[0]) {
-    case 'v':
-      result = "void";
-      break;
-    case 'w':
-      result = "wchar_t";
-      break;
-    case 'b':
-      result = "bool";
-      break;
-    case 'c':
-      result = "char";
-      break;
-    case 'a':
-      result = "signed char";
-      break;
-    case 'h':
-      result = "unsigned char";
-      break;
-    case 's':
-      result = "short";
-      break;
-    case 't':
-      result = "unsigned short";
-      break;
-    case 'i':
-      result = "int";
-      break;
-    case 'j':
-      result = "unsigned int";
-      break;
-    case 'l':
-      result = "long";
-      break;
-    case 'm':
-      result = "unsigned long";
-      break;
-    case 'x':
-      result = "long long";
-      break;
-    case 'y':
-      result = "unsigned long long";
-      break;
-    case 'n':
-      result = "__int128";
-      break;
-    case 'o':
-      result = "unsigned __int128";
-      break;
-    case 'f':
-      result = "float";
-      break;
-    case 'd':
-      result = "double";
-      break;
-    case 'e':
-      result = "long double";
-      break;
-    case 'g':
-      result = "__float128";
-      break;
-    case 'z':
-      result = "ellipsis";
-      break;
-    default:
-      result = class_name;
-      break;
+
+    if (const auto key = class_name[0]; type_initials.find(key) != type_initials.end()) {
+      result = type_initials.at(key);
     }
+
   } else {
-    int                                    status;
-    std::unique_ptr<char, decltype(free)*> real_name(abi::__cxa_demangle(class_name, nullptr, nullptr, &status), free);
+    int                                          status;
+    const std::unique_ptr<char, decltype(free)*> real_name(abi::__cxa_demangle(class_name, nullptr, nullptr, &status),
+                                                           free);
     if (real_name == nullptr) {
       return class_name;
     }

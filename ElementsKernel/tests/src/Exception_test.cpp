@@ -31,7 +31,7 @@ using std::string;
 
 namespace Elements {
 
-struct TestException : public Exception {
+struct TestException final : public Exception {
 
   explicit TestException(const string& message = "") : Exception(message, ExitCode::NOT_OK) {
     m_number = -1;
@@ -51,8 +51,8 @@ BOOST_AUTO_TEST_SUITE(Exception_test)
 BOOST_AUTO_TEST_CASE(SubclassStreamOperator_test) {
 
   // Given
-  string message_part_1 = "Part 1";
-  string message_part_2 = "Part 2";
+  const string message_part_1 = "Part 1";
+  const string message_part_2 = "Part 2";
 
   // When
   try {

@@ -52,13 +52,9 @@ struct ClassExample2Fixture {
 
   ClassExample2 example_class = ClassExample2::factoryMethod(source_id, ra);
 
-  ClassExample2Fixture() {
-    // call constructor if needed
-  }
+  ClassExample2Fixture() = default;
 
-  ~ClassExample2Fixture() {
-    // delete fixture object if needed
-  }
+  ~ClassExample2Fixture() = default;
 };
 
 BOOST_AUTO_TEST_SUITE(ClassExample2TestSuite)
@@ -80,7 +76,7 @@ BOOST_FIXTURE_TEST_CASE(exception_in_divideNumbers_test, ClassExample2Fixture) {
   BOOST_CHECK_EXCEPTION(example_class.divideNumbers(1.0, 0.0), Elements::Exception,
                         // below is a lambda function used as a predicate to check the exception error message
                         [](const Elements::Exception& e) {
-                          string exception_str = e.what();
+                          const string exception_str = e.what();
                           return exception_str.find("exception in ClassExample2::divideNumbers") != string::npos;
                         });
 
@@ -91,8 +87,8 @@ BOOST_FIXTURE_TEST_CASE(PassArguments_test, ClassExample2Fixture) {
 
   using std::vector;
 
-  vector<double> test_list{1.0, 2.0, 5.0};
-  auto           other_list = std::unique_ptr<vector<double>>(new vector<double>(3));
+  vector test_list{1.0, 2.0, 5.0};
+  auto   other_list = std::unique_ptr<vector<double>>(new vector<double>(3));
 
   BOOST_CHECK_NO_THROW(example_class.passingObjectInGeneral(test_list));
   BOOST_CHECK_NO_THROW(example_class.passingUniquePointer(std::move(other_list)));

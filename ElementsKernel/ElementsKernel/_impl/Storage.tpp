@@ -40,7 +40,7 @@ namespace Units {
 
 template <typename T>
 T roundToDigits(const T& value, const size_t& max_digits) {
-  std::int64_t factor = std::int64_t(std::pow(10, max_digits));
+  std::int64_t factor = static_cast<std::int64_t>(std::pow(10, max_digits));
   return std::round(value * static_cast<T>(factor)) / static_cast<T>(factor);
 }
 
