@@ -1,5 +1,5 @@
 /**
- * @file ElementsExamples/src/lib/default/PiCalculator.cpp
+ * @file PiCalculator.cpp
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
