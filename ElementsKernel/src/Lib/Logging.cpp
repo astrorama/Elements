@@ -2,7 +2,7 @@
  * @file Logging.cpp
  * @date January 13, 2014
  * @author Nikolaos Apostolakos
- *
+ * @brief Implementation of the Logging class
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General

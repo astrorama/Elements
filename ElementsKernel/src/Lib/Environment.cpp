@@ -1,6 +1,6 @@
 /**
  * @file Environment.cpp
- *
+ * @brief Implementation of the Environment functions
  * @date Jun 17, 2016
  * @author Hubert Degaudenzi
  *

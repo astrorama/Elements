@@ -1,6 +1,6 @@
 /**
  * @file Temporary.cpp
- *
+ * @brief Implementation of the Temporary classes
  * @date May 27, 2014
  * @author hubert degaudenzi
  *
@@ -64,7 +64,7 @@ TempPath::~TempPath() {
 
   if (Environment current; not Environment::hasKey(m_keep_var)) {
     log.debug() << "Automatic destruction of the " << path() << " temporary path";
-    const auto file_number = boost::filesystem::remove_all(m_path);
+    const auto file_number = remove_all(m_path);
     log.debug() << "Number of files removed: " << file_number;
   } else {
     log.info() << m_keep_var << " set: I do not remove the " << m_path.string() << " temporary path";
@@ -83,7 +83,7 @@ TempDir::TempDir(const string& arg_motif, const string& keep_var) : TempPath(arg
 
   log.debug() << "Creation of the " << path() << " temporary directory";
 
-  boost::filesystem::create_directory(path());
+  create_directory(path());
 }
 
 TempDir::~TempDir() = default;

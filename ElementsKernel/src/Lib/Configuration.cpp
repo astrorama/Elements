@@ -1,6 +1,6 @@
 /**
  * @file Configuration.cpp
- *
+ * @brief Implementation of the Configuration functions
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *
