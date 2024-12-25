@@ -51,43 +51,46 @@ def defineSpecificProgramOptions():
     """
     parser = argparse.ArgumentParser()
 
+    string_example_help = "A string example option"
+    int_example_help = "An int example option"
+
     parser.add_argument(
         '--string-option',
         type=str,
-        help='A string example option'
+        help=string_example_help
     )
 
     parser.add_argument(
         '--int-option',
         type=int,
         default=111,
-        help='An int example option'
+        help=int_example_help
     )
 
     parser.add_argument(
         '--int-option-with-default-and-default-in-conf',
         type=int,
         default=222,
-        help='A string example option'
+        help=int_example_help
     )
 
     parser.add_argument(
         '--int-option-with-default-no-default-in-conf',
         type=int,
         default=444,
-        help='A string example option'
+        help=int_example_help
     )
 
     parser.add_argument(
         '--int-option-no-default-not-defined-in-conf',
         type=int,
-        help='A string example option'
+        help=int_example_help
     )
 
     parser.add_argument(
         '--int-option-with-no-defaults-anywhere',
         type=int,
-        help='A string example option'
+        help=int_example_help
     )
 
     parser.add_argument(

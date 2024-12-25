@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 /// @file EnableGMock.cpp
-/// @brief Insanciation of the global fixture
+/// @brief Insantiation of the global fixture
 /// @date 2024-06-28
 /// @author Hubert Degaudenzi
 

@@ -1,8 +1,8 @@
 /**
- * @file functionExample.h
+ * @file FunctionExample2.cpp
  *
  * @date Feb 16, 2016
- * @author hubert
+ * @author Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -19,22 +19,12 @@
  *
  */
 
-/**
- * @addtogroup ElementsExamples ElementsExamples
- * @{
- */
-
-#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE_H_
-#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE_H_
-
-#include "ElementsKernel/Export.h"
+#include "ElementsExamples/FunctionExample2.h"
 
 namespace Elements::Examples {
 
-ELEMENTS_API int functionExample(const int j);
+int functionExample2(const int j) {
+  return j * j;
+}
 
 }  // namespace Elements::Examples
-
-#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE_H_
-
-/**@}*/

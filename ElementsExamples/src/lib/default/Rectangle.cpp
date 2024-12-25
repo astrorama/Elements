@@ -1,5 +1,5 @@
 /**
- * @file ElementsExamples/src/lib/default/Rectangle.cpp
+ * @file Rectangle.cpp
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *

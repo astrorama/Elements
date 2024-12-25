@@ -64,7 +64,7 @@ public:
 
     namespace chrono = std::chrono;
 
-    auto control = Threading::initBuildingBlocks();
+    Threading::initBuildingBlocks();
 
     using clock = chrono::high_resolution_clock;
     using ms    = chrono::microseconds;

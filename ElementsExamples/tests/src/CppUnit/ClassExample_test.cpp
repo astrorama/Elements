@@ -36,7 +36,7 @@ using std::string;
 /*
  * Fixture to compare the test result against reference values
  */
-class ClassExampleSuite : public CppUnit::TestFixture {
+class ClassExampleSuite final : public CppUnit::TestFixture {
 
   CPPUNIT_TEST_SUITE(ClassExampleSuite);
 

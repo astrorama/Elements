@@ -27,7 +27,7 @@ import ElementsKernel.Logging as log
 
 
 def worker_func(i):
-
+    """Worker function to be called by the pool"""
     logger = log.getLogger('SpawnTest')
     logger.info("Hello from %d", i)
 

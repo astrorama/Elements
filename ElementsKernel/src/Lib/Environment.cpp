@@ -1,6 +1,6 @@
 /**
  * @file Environment.cpp
- *
+ * @brief Implementation of the Environment functions
  * @date Jun 17, 2016
  * @author Hubert Degaudenzi
  *
@@ -127,11 +127,13 @@ Environment& Environment::Variable::env() const {
   return m_env;
 }
 
+// ReSharper disable once CppDFAConstantFunctionResult
 string Environment::Variable::value() const {
 
   return get(m_index, "");
 }
 
+// ReSharper disable once CppDFAConstantFunctionResult
 Environment::Variable::operator std::string() const {
   return value();
 }
@@ -156,15 +158,15 @@ void Environment::Variable::checkCompatibility(const Variable& other) const {
 
 //----------------------------------------------------------------------------
 
-Environment::Environment(bool keep_same) : m_keep_same{keep_same} {}
+Environment::Environment(const bool keep_same) : m_keep_same{keep_same} {}
 
 Environment& Environment::restore() {
   for (const auto& v : m_added_variables) {
     unSetEnv(v);
   }
 
-  for (const auto& v : m_old_values) {
-    setEnv(v.first, v.second);
+  for (const auto& [key, value] : m_old_values) {
+    setEnv(key, value);
   }
 
   m_old_values = {};
@@ -177,11 +179,11 @@ Environment::~Environment() {
 }
 
 Environment::Variable Environment::operator[](const string& index) {
-  return Variable(*this, index);
+  return {*this, index};
 }
 
 Environment::Variable Environment::operator[](const string& index) const {
-  return Variable(const_cast<Environment&>(*this), index);
+  return {const_cast<Environment&>(*this), index};
 }
 
 Environment& Environment::set(const string& index, const string& value) {
@@ -268,11 +270,11 @@ string Environment::generateScript(const ShellType type) const {
   map<ShellType, string> set_cmd{{sh, "export %s=%s"}, {csh, "setenv %s %s"}};
   map<ShellType, string> unset_cmd{{sh, "unset %s"}, {csh, "unsetenv %s"}};
 
-  for (const auto& v : m_old_values) {
-    if (hasKey(v.first)) {
-      script_text << format(set_cmd[type]) % v.first % get(v.first) << endl;
+  for (const auto& [key, value] : m_old_values) {
+    if (hasKey(key)) {
+      script_text << format(set_cmd[type]) % key % get(key) << endl;
     } else {
-      script_text << format(unset_cmd[type]) % v.first << endl;
+      script_text << format(unset_cmd[type]) % key << endl;
     }
   }
 
