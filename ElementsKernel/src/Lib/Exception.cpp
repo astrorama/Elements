@@ -1,6 +1,6 @@
 /**
  * @file Auxiliary.cpp
- *
+ * @brief Implementation of the Exception class
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *

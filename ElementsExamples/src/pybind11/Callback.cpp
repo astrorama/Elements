@@ -1,7 +1,7 @@
 /**
- * @file functionExample.cpp
+ * @file pybind11/Callback.cpp
  *
- * @date Feb 16, 2016
+ * @date Apr 1, 2020
  * @author Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -19,12 +19,14 @@
  *
  */
 
-#include "ElementsExamples/functionExample.h"
+#include <pybind11/functional.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pyerrors.h>
 
-namespace Elements::Examples {
+#include "ElementsExamples/CallBackExample.h"
+#include "ElementsKernel/Export.h"
 
-int functionExample(const int j) {
-  return j * j;
+ELEMENTS_API PYBIND11_MODULE(testCallBack, mod) {
+  mod.def("test", &Elements::Examples::testCallBack);
 }
-
-}  // namespace Elements::Examples

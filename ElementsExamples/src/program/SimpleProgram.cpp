@@ -43,7 +43,7 @@ namespace Elements::Examples {
  *    This class is an example of a program based on the ElementsProgram class. It can be copied/pasted
  *    conveniently to write a new program.
  */
-class SimpleProgram : public Program {
+class SimpleProgram final : public Program {
 
 public:
   /**

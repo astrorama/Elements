@@ -48,6 +48,10 @@ namespace Elements {
 inline namespace Kernel {
 namespace Path {
 
+/**
+ * @brief Represents different types of entities within a system or application.
+ * @ingroup SystemComponents
+ */
 enum class Type { executable, library, python, configuration, auxiliary };
 
 /**
@@ -139,7 +143,7 @@ ELEMENTS_API std::vector<Item> getLocations(const Type& path_type, bool exist_on
  */
 template <typename T, typename U>
 ELEMENTS_API Item getPathFromLocations(const T& file_name, const std::vector<U>& locations);
-// Template instantiation for the most common types
+
 extern template ELEMENTS_API Item getPathFromLocations(const Item& file_name, const std::vector<Item>& locations);
 extern template ELEMENTS_API Item getPathFromLocations(const Item&                     file_name,
                                                        const std::vector<std::string>& locations);
@@ -169,6 +173,7 @@ ELEMENTS_API std::vector<Item> getAllPathFromLocations(const T& file_name, const
 // Template instantiation for the most common types
 extern template ELEMENTS_API std::vector<Item> getAllPathFromLocations(const Item&              file_name,
                                                                        const std::vector<Item>& locations);
+
 extern template ELEMENTS_API std::vector<Item> getAllPathFromLocations(const Item&                     file_name,
                                                                        const std::vector<std::string>& locations);
 extern template ELEMENTS_API std::vector<Item> getAllPathFromLocations(const std::string&       file_name,
@@ -268,9 +273,10 @@ extern template ELEMENTS_API std::vector<Item> multiPathAppend(const std::vector
  */
 template <typename T>
 ELEMENTS_API std::vector<Item> removeDuplicates(const std::vector<T>& path_list);
-// Template instantiation for the most common types
+/// Template instantiation for the most common types
 extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vector<Item>& path_list);
 
+/// Template instantiation for the most common types
 extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vector<std::string>& path_list);
 
 }  // namespace Path

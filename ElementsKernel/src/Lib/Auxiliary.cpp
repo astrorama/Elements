@@ -1,6 +1,6 @@
 /**
  * @file Auxiliary.cpp
- *
+ * @brief Implementation of the Auxiliary functions
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *

@@ -154,7 +154,7 @@ private:
    */
   void setup(int argc, char* argv[]);
 
-  void tearDown(const ExitCode&);
+  void tearDown(const ExitCode&) const;
 
   /**
    * @brief Get the program options from the command line

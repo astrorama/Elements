@@ -19,7 +19,7 @@
  *
  */
 
-#include "ElementsExamples/functionExample.h"  // for functionExample
+#include "ElementsExamples/FunctionExample.h"  // for functionExample
 #include <boost/test/unit_test.hpp>
 
 using Elements::Examples::functionExample;

@@ -429,10 +429,9 @@ void ProgramManager::setup(int argc, char* argv[]) {
   } else {
     throw Exception("Required option log-level is not provided!", ExitCode::CONFIG);
   }
-  Path::Item log_file_name;
 
   if (m_variables_map.count("log-file")) {
-    log_file_name = m_variables_map["log-file"].as<Path::Item>();
+    const Path::Item log_file_name = m_variables_map["log-file"].as<Path::Item>();
     Logging::setLogFile(log_file_name);
   }
 
@@ -445,17 +444,17 @@ void ProgramManager::setup(int argc, char* argv[]) {
   logTheEnvironment();
 }
 
-void ProgramManager::tearDown(const ExitCode& c) {
-  log.debug() << "# Exit Code: " << int(c);
+void ProgramManager::tearDown(const ExitCode& c) const {
+  log.debug() << "# Exit Code: " << static_cast<int>(c);
 
   logFooter(m_program_name.string());
 }
 
 // This is the method call from the main which does everything
-ExitCode ProgramManager::run(int argc, char* argv[]) {
+ExitCode ProgramManager::run(const int argc, char* argv[]) {
   setup(argc, argv);
 
-  ExitCode exit_code = m_program_ptr->mainMethod(m_variables_map);
+  const ExitCode exit_code = m_program_ptr->mainMethod(m_variables_map);
 
   tearDown(exit_code);
 
@@ -471,7 +470,7 @@ string ProgramManager::getVersion() const {
 ProgramManager::~ProgramManager() = default;
 
 void ProgramManager::onTerminate() noexcept {
-  ExitCode exit_code{ExitCode::NOT_OK};
+  auto exit_code{ExitCode::NOT_OK};
 
   if (const auto exc = std::current_exception()) {
 

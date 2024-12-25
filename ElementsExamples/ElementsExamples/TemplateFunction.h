@@ -31,11 +31,24 @@
 
 namespace Elements::Examples {
 
+/**
+ * @brief A template function that demonstrates the use of template functions.
+ *
+ * This function is a template function that can be instantiated with different types.
+ * It is used to demonstrate the use of template functions in C++.
+ *
+ * @tparam T The type of the template function.
+ */
 template <typename T>
 ELEMENTS_API void templateFunction();
 
-// template instance declaration
+/**
+ * @brief Explicit instantiation of the template function for int
+ */
 extern template ELEMENTS_API void templateFunction<int>();
+/**
+ * @brief Explicit instantiation of the template function for double
+ */
 extern template ELEMENTS_API void templateFunction<double>();
 
 }  // namespace Elements::Examples

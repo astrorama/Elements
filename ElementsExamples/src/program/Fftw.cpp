@@ -18,7 +18,8 @@
  *
  */
 
-#include <fftw3.h>  // for fftw_destroy_plan, fftw_execute, fftw_plan_dft_1d, fftw_cleanup, fftw_complex, FFTW_ESTIMATE, fftw_plan, fftw_plan_s, FFTW_BACKWARD, FFTW_FORWARD
+#include <fftw3.h>  // for fftw_destroy_plan, fftw_execute, fftw_plan_dft_1d, fftw_cleanup, fftw_complex,
+                    // FFTW_ESTIMATE, fftw_plan, fftw_plan_s, FFTW_BACKWARD, FFTW_FORWARD
 
 #include <cmath>   // for cos
 #include <cstdio>  // for size_t, printf

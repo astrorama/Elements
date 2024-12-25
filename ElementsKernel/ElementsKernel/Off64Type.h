@@ -1,6 +1,6 @@
 /**
  * @file Off64Type.h
- *
+ * @brief This file is intended to iron out all the differences between different C++ standards for off64_t
  * @date 29 janv. 2019
  * @author Hubert Degaudenzi
  *
