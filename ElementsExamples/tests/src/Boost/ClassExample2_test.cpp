@@ -87,8 +87,8 @@ BOOST_FIXTURE_TEST_CASE(PassArguments_test, ClassExample2Fixture) {
 
   using std::vector;
 
-  vector test_list{1.0, 2.0, 5.0};
-  auto   other_list = std::make_unique<vector<double>>(3);
+  const vector test_list{1.0, 2.0, 5.0};
+  const auto   other_list = std::make_unique<vector<double>>(3);
 
   BOOST_CHECK_NO_THROW(example_class.passingObjectInGeneral(test_list));
   BOOST_CHECK_NO_THROW(example_class.passingUniquePointer(other_list));

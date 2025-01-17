@@ -54,7 +54,7 @@ std::vector<Path::Item> getConfigurationLocations(const bool exist_only) {
   location_list.emplace_back(Path::Item(System::DEFAULT_INSTALL_PREFIX) / "share" / "conf");
 
   if (exist_only) {
-    auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
+    const auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
       return (not boost::filesystem::exists(p));
     });
     location_list.erase(new_end, location_list.end());

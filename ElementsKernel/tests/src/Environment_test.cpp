@@ -44,12 +44,8 @@ struct Environment_fixture {
 
   const Environment base;
 
-  Environment_fixture() {
-    // setup
-  }
-  ~Environment_fixture() {
-    // teardown
-  }
+  Environment_fixture()  = default;
+  ~Environment_fixture() = default;
 };
 
 class ThatClass {
@@ -60,11 +56,11 @@ public:
   void setEnv(const string& var_name, const string& var_value) {
     m_env[var_name] = var_value;
   }
-  string getEnv(const string& var_name) const {
+  [[nodiscard]] string getEnv(const string& var_name) const {
     return m_env[var_name];
   }
 
-  bool checkInternalEnv() const {
+  [[nodiscard]] bool checkInternalEnv() const {
     using System::getEnv;
     return (getEnv(m_internal_var_name) == m_internal_var_value);
   }
@@ -237,11 +233,11 @@ BOOST_AUTO_TEST_CASE(GenScript_test) {
   first["blad3"] = "djjsd/d:";
 
   const string sh_script_text = first.generateScript(Environment::ShellType::sh);
-  regex        sh_set_rule{"\\s*export\\s+blad3=djjsd/d:\\s*$"};
+  const regex  sh_set_rule{R"(\s*export\s+blad3=djjsd/d:\s*$)"};
   BOOST_CHECK(regex_match(sh_script_text, sh_set_rule));
 
   const string csh_script_text = first.generateScript(Environment::ShellType::csh);
-  regex        csh_set_rule{"\\s*setenv\\s+blad3\\s+djjsd/d:\\s*$"};
+  const regex  csh_set_rule{R"(\s*setenv\s+blad3\s+djjsd/d:\s*$)"};
   BOOST_CHECK(regex_match(csh_script_text, csh_set_rule));
 }
 

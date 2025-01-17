@@ -59,7 +59,7 @@ void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
       "Path to local repository workspace")("tries", po::value<int>()->default_value(4), "Number of download tries");
 
   /* Get config file path */
-  path abs_path = confFilePath(filename);
+  const path abs_path = confFilePath(filename);
 
   /* Read config file */
   po::variables_map vm;
@@ -82,8 +82,7 @@ void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
 }
 
 void ConnectionConfiguration::parseHost(const string& name) {
-  const string uncased = lower(name);
-  if (uncased == "irods") {
+  if (const string uncased = lower(name); uncased == "irods") {
     host = DataHost::IRODS;
   } else if (uncased == "webdav") {
     host = DataHost::WEBDAV;
@@ -99,8 +98,7 @@ void ConnectionConfiguration::parseOverwritingPolicy(const string& policy) {
   const vector<string> overwrite_allowed_options   = {"true", "yes", "y"};
   const vector<string> overwrite_forbidden_options = {"false", "no", "n"};
 
-  string uncased = lower(policy);
-  if (valueIsListed(uncased, overwrite_allowed_options)) {
+  if (string uncased = lower(policy); valueIsListed(uncased, overwrite_allowed_options)) {
     overwritingPolicy = OverwritingPolicy::OVERWRITE;
   } else if (valueIsListed(uncased, overwrite_forbidden_options)) {
     overwritingPolicy = OverwritingPolicy::ABORT;

@@ -23,13 +23,13 @@ namespace DataSync = ElementsServices::DataSync;
 using DataSync::path;
 using std::string;
 
-MockDataSynchronizer::MockDataSynchronizer(DataSync::path connection, path dependency)
+MockDataSynchronizer::MockDataSynchronizer(const DataSync::path& connection, const path& dependency)
     : DataSync::DataSynchronizer(
           DataSync::ConnectionConfiguration(connection),
           DataSync::DependencyConfiguration(theWebdavFrDistantWorkspace(), theLocalWorkspace(), dependency)) {}
 
-string MockDataSynchronizer::createDownloadCommand(path distantFile, path localFile) const {
-  string cmd = string("echo ") + distantFile.string() + "\t" + localFile.string();
+string MockDataSynchronizer::createDownloadCommand(const path distant_file, const path local_file) const {
+  string cmd = string("echo ") + distant_file.string() + "\t" + local_file.string();
   return cmd;
 }
 

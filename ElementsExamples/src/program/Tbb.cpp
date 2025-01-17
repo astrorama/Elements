@@ -20,7 +20,7 @@
 #include "ElementsKernel/Threading.h"  // for initBuildingBlocks
 #include "ElementsKernel/Unused.h"     // for ELEMENTS_UNUSED
 
-namespace tbb = oneapi::tbb;
+using namespace oneapi::tbb;
 
 namespace Elements {
 
@@ -41,7 +41,7 @@ int simpleSum(const int& first_number, const int& last_number) {
 
 int parallelSum(const int& first_number, const int& last_number) {
 
-  int sum = tbb::parallel_reduce(
+  const int sum = tbb::parallel_reduce(
       tbb::blocked_range<int>(first_number, last_number), 0,
       [](tbb::blocked_range<int> const& r, int init) -> int {
         for (int v = r.begin(); v != r.end(); v++) {
@@ -49,17 +49,23 @@ int parallelSum(const int& first_number, const int& last_number) {
         }
         return (init);
       },
-      [](int lhs, int rhs) -> int {
+      [](const int lhs, const int rhs) -> int {
         return (lhs + rhs);
       });
 
   return (sum);
 }
 
-class Tbb : public Program {
+class Tbb final : public Program {
 
 public:
-  ///
+  /**
+   * Executes the main operation of the program. This method serves as the entry point
+   * for the application's logic and handles the primary workflow of the system.
+   *
+   * @param args an array of command-line arguments passed to the program
+   * @return void does not return any value as it serves as a procedural entry point
+   */
   ExitCode mainMethod(ELEMENTS_UNUSED std::map<std::string, VariableValue>& args) override {
 
     namespace chrono = std::chrono;
@@ -71,8 +77,8 @@ public:
 
     const auto start = clock::now();
 
-    const int first_number = 1;
-    const int last_number  = 10001;
+    constexpr int first_number = 1;
+    constexpr int last_number  = 10001;
 
     const auto simple_sum = simpleSum(first_number, last_number);
     LOG.info() << "Simple sum: " << simple_sum;

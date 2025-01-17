@@ -104,7 +104,8 @@ constexpr int STACK_OFFSET{2};
 #endif
 
 /// Definition of an image handle
-using ImageHandle = void*;
+using ImageHandle      = void*;
+using ConstImageHandle = const void*;
 /// Definition of the process handle
 using ProcessHandle = void*;
 /// Definition of the "generic" DLL entry point function

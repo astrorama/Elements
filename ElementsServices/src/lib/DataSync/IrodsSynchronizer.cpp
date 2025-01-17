@@ -43,9 +43,9 @@ IrodsSynchronizer::IrodsSynchronizer(const ConnectionConfiguration& connection,
   }
 }
 
-std::string IrodsSynchronizer::createDownloadCommand(path distantFile, path localFile) const {
+std::string IrodsSynchronizer::createDownloadCommand(const path distant_file, const path local_file) const {
   std::string cmd = "irsync i:";
-  cmd += distantFile.string() + " " + localFile.string();
+  cmd += distant_file.string() + " " + local_file.string();
   return cmd;
 }
 

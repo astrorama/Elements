@@ -19,7 +19,7 @@
 
 namespace Elements::Examples {
 
-void PiCalculator::calculate(unsigned int terms) const {
+void PiCalculator::calculate(const unsigned int terms) const {
 
   double pi = 0.0;
   // Leibniz formula for pi
@@ -37,7 +37,7 @@ void PiCalculator::calculate(unsigned int terms) const {
   m_show_result_callback(pi);
 }
 
-void PiCalculator::setShowResultCallback(show_result_callback_type f) {
+void PiCalculator::setShowResultCallback(const show_result_callback_type f) {
 
   m_show_result_callback = f;
 }

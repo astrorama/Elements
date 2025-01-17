@@ -20,21 +20,19 @@
 
 #include "ElementsKernel/Logging.h"
 
-#include <cstdlib>   // for rand, srand
 #include <ctime>     // for time
 #include <fstream>   // IWYU pragma: keep
 #include <iomanip>   // for operator<<, setprecision, _Setprecision
 #include <iostream>  // for cerr, cout
+#include <random>    // for minstd_rand
 #include <sstream>  // for basic_istream, basic_ostream, operator<<, basic_ostream::operator<<, stringstream, basic_ios::rdbuf, ifstream, endl, ostream, basic_ios::clear, streambuf
 #include <string>   // for basic_string, char_traits, string, allocator, getline, operator+, operator<<
 #include <tuple>    // for tuple, tie, ignore, make_tuple
-#include <variant>  // for tuple
 #include <vector>   // for vector
 
 #include <boost/algorithm/string.hpp>       // for ends_with, trim, trim_left
 #include <boost/filesystem/operations.hpp>  // for exists
 #include <boost/test/unit_test.hpp>
-#include <boost/version.hpp>  // for BOOST_VERSION
 
 #include "ElementsKernel/MathConstants.h"  // for pi
 #include "ElementsKernel/Temporary.h"      // for TempDir
@@ -49,15 +47,6 @@ using std::tuple;
 using std::vector;
 
 using boost::filesystem::exists;
-
-// A map to translate strings to logging levels
-// std::map<string, Logging::Level> levelMap {
-//  {"DEBUG", Logging::Level::DEBUG},
-//  {"INFO", Logging::Level::INFO},
-//  {"WARN", Logging::Level::WARN},
-//  {"ERROR", Logging::Level::ERROR},
-//  {"FATAL", Logging::Level::FATAL}
-//};
 
 // A class which takes over the given stream and keeps track of the log messages
 // sent to it. It recovers the given stream in its previous state during destruction.
@@ -90,7 +79,7 @@ public:
       // Logging::Level logLevel = levelMap[logLevelString];
       string name = line.substr(0, line.rfind(' '));
       trim(name);
-      messages.emplace_back(std::make_tuple(timestamp, logLevelString, name, message));
+      messages.emplace_back(timestamp, logLevelString, name, message);
     }
     return messages;
   }
@@ -107,25 +96,14 @@ struct ElementsLogging_Fixture {
   // This tracker will record all messages written in the stderr. The Elements
   // logging system guarantees that the messages will appear there.
   LogMessageTracker m_tracker{std::cerr};
+  std::minstd_rand  m_simple_rand;
   ElementsLogging_Fixture() {
     Logging::setLevel("INFO");
     Logging::setLogFile("");
+    m_simple_rand.seed(std::time(nullptr));
   }
-  ~ElementsLogging_Fixture() {}
+  ~ElementsLogging_Fixture() = default;
 };
-
-class SetRandomSeed {
-public:
-  SetRandomSeed() {
-    std::srand(static_cast<unsigned>(std::time(nullptr)));
-  }
-};
-
-#if BOOST_VERSION >= 105900
-BOOST_GLOBAL_FIXTURE(SetRandomSeed);
-#else
-BOOST_GLOBAL_FIXTURE(SetRandomSeed)
-#endif
 
 //-----------------------------------------------------------------------------
 
@@ -140,14 +118,14 @@ BOOST_FIXTURE_TEST_CASE(loggerNames_test, ElementsLogging_Fixture) {
   using std::tie;
 
   // Given
-  auto logger2 = Logging::getLogger("TestLogger2");
+  const auto logger2 = Logging::getLogger("TestLogger2");
 
   // When
   m_logger.info("From logger 1");
   logger2.info("From logger 2");
 
   // Then
-  auto messages = m_tracker.getMessages();
+  const auto messages = m_tracker.getMessages();
   BOOST_CHECK_EQUAL(messages.size(), 2);
   string name1;
   tie(ignore, ignore, name1, ignore) = messages[0];
@@ -164,7 +142,7 @@ BOOST_FIXTURE_TEST_CASE(loggerNames_test, ElementsLogging_Fixture) {
 BOOST_FIXTURE_TEST_CASE(messageTextAndLevel_test, ElementsLogging_Fixture) {
 
   // Given
-  m_logger.setLevel("DEBUG");
+  Elements::Logging::setLevel("DEBUG");
 
   // When
   m_logger.debug("Debug message");
@@ -186,7 +164,7 @@ BOOST_FIXTURE_TEST_CASE(messageTextAndLevel_test, ElementsLogging_Fixture) {
   std::cout << "Pi:" << std::setprecision(9) << Elements::Units::pi << std::endl;
 
   // Then
-  auto messages = m_tracker.getMessages();
+  const auto messages = m_tracker.getMessages();
   BOOST_CHECK_EQUAL(messages.size(), 16);
   string logLevel;
   string message;
@@ -247,7 +225,7 @@ BOOST_FIXTURE_TEST_CASE(messageTextAndLevel_test, ElementsLogging_Fixture) {
 BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
-  m_logger.setLevel("DEBUG");
+  Elements::Logging::setLevel("DEBUG");
 
   // When
   m_logger.debug("Debug message");
@@ -262,7 +240,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  m_logger.setLevel("INFO");
+  Elements::Logging::setLevel("INFO");
 
   // When
   m_logger.debug("Debug message");
@@ -277,7 +255,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  m_logger.setLevel("WARN");
+  Elements::Logging::setLevel("WARN");
 
   // When
   m_logger.debug("Debug message");
@@ -292,7 +270,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  m_logger.setLevel("ERROR");
+  Elements::Logging::setLevel("ERROR");
 
   // When
   m_logger.debug("Debug message");
@@ -307,7 +285,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  m_logger.setLevel("FATAL");
+  Elements::Logging::setLevel("FATAL");
 
   // When
   m_logger.debug("Debug message");
@@ -331,7 +309,7 @@ BOOST_FIXTURE_TEST_CASE(setLogFile_test, ElementsLogging_Fixture) {
 
   // Given
   stringstream logFileName{};
-  logFileName << m_tmpdir.path().string() + "/" << std::time(nullptr) << std::rand() << ".log";
+  logFileName << m_tmpdir.path().string() + "/" << std::time(nullptr) << m_simple_rand() << ".log";
   Logging::setLogFile(logFileName.str());
 
   // When
@@ -362,9 +340,9 @@ BOOST_FIXTURE_TEST_CASE(singleLogFile_test, ElementsLogging_Fixture) {
 
   // Given
   stringstream logFileName1{};
-  logFileName1 << m_tmpdir.path().string() + "/" << std::time(nullptr) << std::rand() << ".log";
+  logFileName1 << m_tmpdir.path().string() + "/" << std::time(nullptr) << m_simple_rand() << ".log";
   stringstream logFileName2{};
-  logFileName2 << m_tmpdir.path().string() + "/" << std::time(nullptr) << std::rand() << ".log";
+  logFileName2 << m_tmpdir.path().string() + "/" << std::time(nullptr) << m_simple_rand() << ".log";
 
   // When
 

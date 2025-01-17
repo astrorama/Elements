@@ -88,7 +88,7 @@ vector<Item> getLocationsFromEnv(const string& path_variable, const bool exist_o
   vector<Item> found_list = split(env_content);
 
   if (exist_only) {
-    auto new_end = std::remove_if(found_list.begin(), found_list.end(), [](const Item& p) {
+    const auto new_end = std::remove_if(found_list.begin(), found_list.end(), [](const Item& p) {
       return (not exists(p));
     });
     found_list.erase(new_end, found_list.end());

@@ -55,10 +55,10 @@ bool checkCall(const string& command) {
 }
 
 std::pair<string, string> runCommandAndCaptureOutErr(const string& command) {
-  string                   out;
-  string                   err;
-  std::array<char, BUFSIZ> buffer{};
-  std::shared_ptr<FILE>    command_pipe(popen(command.c_str(), "r"), pclose);
+  string                      out;
+  string                      err;
+  std::array<char, BUFSIZ>    buffer{};
+  const std::shared_ptr<FILE> command_pipe(popen(command.c_str(), "r"), pclose);
   if (not command_pipe) {
     throw std::runtime_error(string("Unable to run command: ") + command);
   }
@@ -77,8 +77,7 @@ void createLocalDirOf(const path& local_file) {
   if (not local_file.has_parent_path()) {
     return;
   }
-  const path dir = local_file.parent_path();
-  if (not localDirExists(dir)) {
+  if (const path dir = local_file.parent_path(); not localDirExists(dir)) {
     create_directories(dir);
   }
 }

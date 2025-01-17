@@ -317,7 +317,7 @@ e.g AddCppClass class_name or
 
     parser.add_argument('class_name', metavar='class-name',
                         type=str,
-                        help='Class name without extention. e.g my_class_name or subdir/my_class_name')
+                        help='Class name without extension. e.g my_class_name or subdir/my_class_name')
     parser.add_argument('-ed', '--elements-dependency', metavar='module_name',
                         action='append', type=str,
                         help='Dependency module name e.g. "-ed ElementsKernel"')

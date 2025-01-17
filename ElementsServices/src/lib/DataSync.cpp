@@ -44,7 +44,7 @@ void DataSync::download() const {
 void DataSync::downloadWithFallback(const path& connectionFile) {
   try {
     download();
-  } catch (std::exception& e) {
+  } catch (std::exception&) {
     m_connectionConfig = ConnectionConfiguration(connectionFile);
     download();
   }

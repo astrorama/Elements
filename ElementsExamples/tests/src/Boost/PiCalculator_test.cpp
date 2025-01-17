@@ -29,7 +29,7 @@ using Elements::Examples::PiCalculator;
 // Starts a test suite and name it.
 BOOST_AUTO_TEST_SUITE(PiCalculator_test_suite)
 
-int callBackFunction(double pi) {
+int callBackFunction(const double pi) {
 
   std::cout << "Here is the pi value: " << pi << std::endl;
 

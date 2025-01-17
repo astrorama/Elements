@@ -45,12 +45,11 @@ class Fftw final : public Program {
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("FftwExample");
+    const auto log = Logging::getLogger("FftwExample");
 
     fftw_complex in[N]; /* double [2] */
     fftw_complex out[N];
     fftw_complex in2[N];
-    fftw_plan    q;
 
     using std::cos;
 
@@ -70,7 +69,7 @@ public:
 
     /* backward Fourier transform, save the result in 'in2' */
     printf("\nInverse transform:\n");
-    q = fftw_plan_dft_1d(N, out, in2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    fftw_plan q = fftw_plan_dft_1d(N, out, in2, FFTW_BACKWARD, FFTW_ESTIMATE);
     fftw_execute(q);
     /* normalize */
     for (auto& i : in2) {

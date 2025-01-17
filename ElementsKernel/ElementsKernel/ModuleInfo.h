@@ -45,9 +45,9 @@ class ELEMENTS_API ModuleInfo {
 public:
   ModuleInfo();
   explicit ModuleInfo(void*);
-  const std::string name() const;
-  const std::string libraryName() const;
-  const void*       addresse() const;
+  std::string name() const;
+  std::string libraryName() const;
+  const void* addresse() const;
   operator const Dl_info&() const;
   bool isEmpty() const;
 
@@ -72,7 +72,7 @@ ELEMENTS_API ImageHandle exeHandle();
 /// Name of the executable file running
 ELEMENTS_API const std::string& exeName();
 /// Vector of names of linked modules
-ELEMENTS_API const std::vector<std::string> linkedModules();
+ELEMENTS_API std::vector<std::string> linkedModules();
 ELEMENTS_API std::vector<Path::Item> linkedModulePaths();
 /// Attach module handle
 ELEMENTS_API void setModuleHandle(ImageHandle handle);

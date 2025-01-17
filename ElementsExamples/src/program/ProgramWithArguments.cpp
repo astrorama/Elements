@@ -64,7 +64,7 @@ public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
     // Get logger and log the entry into the mainMethod
-    auto log = Logging::getLogger();
+    const auto log = Logging::getLogger();
 
     log.info("This Works");
 

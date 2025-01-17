@@ -38,7 +38,7 @@ tbb::global_control initBuildingBlocks(const std::string& var, const std::size_t
   size_t concurrency{0};
 
   if (Environment env; env[var].exists()) {
-    if (auto var_concurrency = std::stoi(env[var]); var_concurrency >= 0) {
+    if (const auto var_concurrency = std::stoi(env[var]); var_concurrency >= 0) {
       concurrency = static_cast<size_t>(var_concurrency);
     }
   }
@@ -56,7 +56,7 @@ tbb::global_control initBuildingBlocks(const std::string& var, const std::size_t
   tbb::global_control control(tbb::global_control::max_allowed_parallelism, concurrency);
   LOG.debug() << "Set the TBB max allowed parallelism to" << concurrency;
 
-  return (control);
+  return control;
 }
 
 }  // namespace Threading

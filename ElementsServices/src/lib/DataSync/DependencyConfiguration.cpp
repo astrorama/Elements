@@ -36,8 +36,8 @@ namespace DataSync {
 using std::string;
 using std::vector;
 
-DependencyConfiguration::DependencyConfiguration(const path& distantRoot, const path& localRoot, const path& configFile)
-    : m_aliasSeparator('\t'), m_distantRoot(distantRoot), m_localRoot(localRoot), m_fileMap() {
+DependencyConfiguration::DependencyConfiguration(path distantRoot, path localRoot, const path& configFile)
+    : m_aliasSeparator('\t'), m_distantRoot(std::move(distantRoot)), m_localRoot(std::move(localRoot)), m_fileMap() {
   parseConfigurationFile(configFile);
 }
 
@@ -55,22 +55,22 @@ std::size_t DependencyConfiguration::dependencyCount() const {
 
 vector<path> DependencyConfiguration::distantPaths() const {
   vector<path> distant_paths;
-  for (const auto& item : m_fileMap) {
-    distant_paths.emplace_back(item.second);
+  for (const auto& [local, distant] : m_fileMap) {
+    distant_paths.emplace_back(distant);
   }
   return distant_paths;
 }
 
 vector<path> DependencyConfiguration::localPaths() const {
   vector<path> local_paths;
-  for (const auto& item : m_fileMap) {
-    local_paths.emplace_back(item.first);
+  for (const auto& [local, distant] : m_fileMap) {
+    local_paths.emplace_back(local);
   }
   return local_paths;
 }
 
 void DependencyConfiguration::parseConfigurationFile(const path& filename) {
-  path          abs_path = confFilePath(filename);
+  const path    abs_path = confFilePath(filename);
   std::ifstream inputStream(abs_path.c_str());
   string        line;
   while (std::getline(inputStream, line)) {

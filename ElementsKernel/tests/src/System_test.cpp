@@ -7,14 +7,14 @@
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
+ * Public Licence as published by the Free Software Foundation; either version 3.0 of the Licence, or (at your option)
  * any later version.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public Licence for more
  * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * You should have received a copy of the GNU Lesser General Public Licence along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
@@ -57,8 +57,8 @@ BOOST_AUTO_TEST_CASE(HostName_test) {
 
 BOOST_AUTO_TEST_CASE(osName_test) {
 
-  string         osname{"UNKNOWN"};
-  struct utsname ut{};
+  string  osname{"UNKNOWN"};
+  utsname ut{};
   if (::uname(&ut) == 0) {
     osname = ut.sysname;
   }
@@ -68,8 +68,8 @@ BOOST_AUTO_TEST_CASE(osName_test) {
 
 BOOST_AUTO_TEST_CASE(osVersion_test) {
 
-  string         os_version{"UNKNOWN"};
-  struct utsname ut{};
+  string  os_version{"UNKNOWN"};
+  utsname ut{};
   if (uname(&ut) == 0) {
     os_version = ut.release;
   }

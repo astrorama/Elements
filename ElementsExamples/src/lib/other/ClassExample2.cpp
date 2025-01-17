@@ -44,8 +44,7 @@ double ClassExample2::fundamentalTypeMethod(const double input_variable) {
  * This is a silly example just to have a method throwing an exception
  */
 double ClassExample2::divideNumbers(const double first, const double second) {
-  double tolerance = 1e-12;
-  if (std::abs(second) < tolerance) {
+  if (double tolerance = 1e-12; std::abs(second) < tolerance) {
     throw Exception() << "Dividing by " << second << " exception in ClassExample2::divideNumbers(...)";
   }
   return first / second;

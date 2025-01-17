@@ -38,9 +38,9 @@ class GnuAstro final : public Program {
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("GnuAstroExample");
+    const auto log = Logging::getLogger("GnuAstroExample");
 
-    const string test_upper_string{"THATSTRING"};
+    const string test_upper_string{"THAT_STRING"};
     log.info() << "This is the test upper string: " << test_upper_string;
 
     constexpr double z{2.5};

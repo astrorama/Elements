@@ -81,7 +81,7 @@ public:
   /**
    * Explicit default copy constructor
    */
-  Exception(const Exception& rhs) = default;
+  Exception(const Exception& rhs) noexcept;
 
   /**
    * Virtual destructor.

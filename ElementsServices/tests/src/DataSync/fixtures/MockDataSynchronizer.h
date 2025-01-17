@@ -19,12 +19,12 @@
 
 #include "ConfigFilesFixture.h"  // for theDependencyConfig, theWebdavFrConfig, WorkspaceFixture
 
-struct MockDataSynchronizer : public ElementsServices::DataSync::DataSynchronizer, WorkspaceFixture {
+struct MockDataSynchronizer : ElementsServices::DataSync::DataSynchronizer, WorkspaceFixture {
 
   virtual ~MockDataSynchronizer() = default;
 
-  MockDataSynchronizer(ElementsServices::DataSync::path connection = theWebdavFrConfig(),
-                       ElementsServices::DataSync::path dependency = theDependencyConfig());
+  MockDataSynchronizer(const ElementsServices::DataSync::path& connection = theWebdavFrConfig(),
+                       const ElementsServices::DataSync::path& dependency = theDependencyConfig());
 
   std::string createDownloadCommand(ElementsServices::DataSync::path distantFile,
                                     ElementsServices::DataSync::path localFile) const override;

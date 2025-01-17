@@ -41,7 +41,7 @@ class Xerces final : public Program {
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("XercesExample");
+    const auto log = Logging::getLogger("XercesExample");
 
     ::Xerces::XMLPlatformUtils::Initialize();
 

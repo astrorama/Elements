@@ -208,8 +208,8 @@ Environment& Environment::unSet(const string& index) {
   checkOutOfRange(index);
 
   if (m_old_values.find(index) == m_old_values.end()) {
-    auto found_index = std::find(m_added_variables.begin(), m_added_variables.end(), index);
-    if (found_index != m_added_variables.end()) {
+    if (auto found_index = std::find(m_added_variables.begin(), m_added_variables.end(), index);
+        found_index != m_added_variables.end()) {
       m_added_variables.erase(found_index);
     } else {
       m_old_values[index] = getEnv(index);

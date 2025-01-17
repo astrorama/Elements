@@ -49,13 +49,9 @@ struct ClassExampleFixture {
 
   ClassExample example_class = ClassExample::factoryMethod(source_id, ra);
 
-  ClassExampleFixture() {
-    // call constructor if needed
-  }
+  ClassExampleFixture() = default;
 
-  ~ClassExampleFixture() {
-    // delete fixture object if needed
-  }
+  ~ClassExampleFixture() = default;
 };
 
 BOOST_AUTO_TEST_SUITE(ClassExampleTestSuite)
@@ -77,7 +73,7 @@ BOOST_FIXTURE_TEST_CASE(exception_in_divideNumbers_test, ClassExampleFixture) {
   BOOST_CHECK_EXCEPTION(example_class.divideNumbers(1.0, 0.0), Elements::Exception,
                         // below is a lambda function used as a predicate to check the exception error message
                         [](const Elements::Exception& e) {
-                          string exception_str = e.what();
+                          const string exception_str = e.what();
                           return exception_str.find("exception in ClassExample::divideNumbers") != string::npos;
                         });
 }

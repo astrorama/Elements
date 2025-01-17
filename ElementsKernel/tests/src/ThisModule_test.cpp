@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(ThisExeName_test) {
 
 BOOST_AUTO_TEST_CASE(ThisModuleConversion_test) {
 
-  Dl_info info = System::getThisModuleInfo();
+  const Dl_info info = System::getThisModuleInfo();
 
   BOOST_CHECK_EQUAL(::basename(const_cast<char*>(info.dli_fname)), "ThisModule_test");
 }

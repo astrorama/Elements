@@ -32,6 +32,8 @@ Exception::Exception(const char* message, const ExitCode e) : m_error_msg(messag
 
 Exception::Exception(std::string message, const ExitCode e) : m_error_msg(std::move(message)), m_exit_code{e} {}
 
+Exception::Exception(const Exception& rhs) noexcept = default;
+
 Exception::~Exception() noexcept = default;
 
 const char* Exception::what() const noexcept {

@@ -33,7 +33,7 @@ namespace Elements::Examples {
 
 double testCallBack(vector<double> x, const std::function<double(vector<double>)>& fun) {
 
-  auto log = Logging::getLogger("ElementsExamples");
+  const auto log = Logging::getLogger("ElementsExamples");
 
   log.info() << "Calling the Python function from C++";
 
