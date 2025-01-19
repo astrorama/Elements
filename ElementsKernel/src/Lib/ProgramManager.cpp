@@ -248,9 +248,8 @@ VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
 
     if (not m_no_config_file) {
       // Parse from the configuration file if it exists
-      if (not config_file.empty() and boost::filesystem::exists(config_file)) {
-        std::ifstream ifs{config_file.string()};
-        if (ifs) {
+      if (not config_file.empty() and exists(config_file)) {
+        if (std::ifstream ifs{config_file.string()}) {
           auto parsed_cfgfile_options = parse_config_file(ifs, all_cmd_and_file_options);
           store(parsed_cfgfile_options, var_map);
         }
@@ -389,7 +388,7 @@ void ProgramManager::bootstrapEnvironment(char* arg0) {
 
   // insert local parent dir if it is not already
   // the first one of the list
-  const Path::Item this_parent_path = boost::filesystem::canonical(m_program_path.parent_path());
+  const Path::Item this_parent_path = canonical(m_program_path.parent_path());
   if (local_search_paths[0] != this_parent_path) {
     const auto b = local_search_paths.begin();
     local_search_paths.insert(b, this_parent_path);

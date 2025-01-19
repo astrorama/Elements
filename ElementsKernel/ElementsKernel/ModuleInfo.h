@@ -38,8 +38,7 @@
 #include "ElementsKernel/Path.h"    // for Path::Item
 #include "ElementsKernel/System.h"  // LIB_PREFIX, LIB_EXTENSION
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 class ELEMENTS_API ModuleInfo {
 public:
@@ -81,8 +80,7 @@ ELEMENTS_API Path::Item getExecutablePath();
 /// Get the path to the /proc directory of the process
 ELEMENTS_API Path::Item getSelfProc();
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_MODULEINFO_H_
 

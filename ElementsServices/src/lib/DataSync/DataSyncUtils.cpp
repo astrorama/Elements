@@ -106,7 +106,7 @@ path localWorkspacePrefix() {
 
 string lower(string text) {
   string uncased(text);
-  std::transform(text.begin(), text.end(), uncased.begin(), ::tolower);
+  std::transform(text.begin(), text.end(), uncased.begin(), tolower);
   return uncased;
 }
 

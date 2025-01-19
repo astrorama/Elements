@@ -50,7 +50,7 @@ std::vector<Path::Item> getAuxiliaryLocations(const bool exist_only) {
 
   using System::DEFAULT_INSTALL_PREFIX;
 
-  auto location_list = Path::getLocations(Path::Type::auxiliary, exist_only);
+  auto location_list = getLocations(Path::Type::auxiliary, exist_only);
 
   // extended to /usr/share/aux{dir,}
   location_list.emplace_back(Path::Item(DEFAULT_INSTALL_PREFIX) / "share" / "auxdir");
@@ -59,7 +59,7 @@ std::vector<Path::Item> getAuxiliaryLocations(const bool exist_only) {
 
   if (exist_only) {
     const auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
-      return not boost::filesystem::exists(p);
+      return not exists(p);
     });
     location_list.erase(new_end, location_list.end());
   }

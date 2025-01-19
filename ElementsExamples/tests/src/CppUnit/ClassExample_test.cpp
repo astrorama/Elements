@@ -107,7 +107,7 @@ void ClassExampleSuite::exceptionInDivideNumbersTest() {
   } catch (const Elements::Exception& e) {
     // exception = true;
     const string exception_str = e.what();
-    exception                  = (exception_str.find("exception in ClassExample::divideNumbers") != string::npos);
+    exception                  = exception_str.find("exception in ClassExample::divideNumbers") != string::npos;
   }
   CPPUNIT_ASSERT(exception);
 }

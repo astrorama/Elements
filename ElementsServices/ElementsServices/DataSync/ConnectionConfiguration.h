@@ -80,7 +80,7 @@ public:
   /**
    * @brief Create a dependency configuration by reading a configuration file.
    */
-  explicit ConnectionConfiguration(const path& configFile);
+  explicit ConnectionConfiguration(const path& filename);
 
   /**
    * @brief Check whether existing local files can be overwritten.
@@ -96,13 +96,13 @@ protected:
 
 public:
   DataHost          host;
-  std::string       hostUrl;
+  std::string       host_url;
   std::string       user;
   std::string       password;
-  OverwritingPolicy overwritingPolicy;
+  OverwritingPolicy overwriting_policy;
   size_t            tries{};
-  path              distantRoot;
-  path              localRoot;
+  path              distant_root;
+  path              local_root;
 };
 
 }  // namespace DataSync

@@ -30,9 +30,9 @@ using std::make_shared;
 std::shared_ptr<DataSynchronizer> createSynchronizer(const ConnectionConfiguration& connection,
                                                      const DependencyConfiguration& dependency) {
   switch (connection.host) {
-  case DataHost::IRODS:
+  case IRODS:
     return make_shared<IrodsSynchronizer>(connection, dependency);
-  case DataHost::WEBDAV:
+  case WEBDAV:
     return make_shared<WebdavSynchronizer>(connection, dependency);
   default:
     throw UnknownHost();

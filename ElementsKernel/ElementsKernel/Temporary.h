@@ -52,16 +52,16 @@ private:
   const std::string m_keep_var;
 };
 
-class ELEMENTS_API TempDir : public TempPath {
+class ELEMENTS_API TempDir final : public TempPath {
 public:
   explicit TempDir(const std::string& motif = DEFAULT_TMP_MOTIF, const std::string& keep_var = DEFAULT_TMP_KEEP_VAR);
-  virtual ~TempDir();
+  ~TempDir() override;
 };
 
-class ELEMENTS_API TempFile : public TempPath {
+class ELEMENTS_API TempFile final : public TempPath {
 public:
   explicit TempFile(const std::string& motif = DEFAULT_TMP_MOTIF, const std::string& keep_var = DEFAULT_TMP_KEEP_VAR);
-  virtual ~TempFile();
+  ~TempFile() override;
 };
 
 using TempEnv = Environment;

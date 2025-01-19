@@ -17,4 +17,4 @@ using DataSync::path;
 
 DependencyConfigurationPublic::DependencyConfigurationPublic(const path& distant_root, const path& local_root,
                                                              const path& config_file)
-    : DataSync::DependencyConfiguration(distant_root, local_root, config_file) {}
+    : DependencyConfiguration(distant_root, local_root, config_file) {}

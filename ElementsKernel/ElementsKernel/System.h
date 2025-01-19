@@ -142,7 +142,7 @@ ELEMENTS_API const std::string& machineType();
 ELEMENTS_API std::string getEnv(const std::string& var);
 /// get a particular environment variable, storing the value in the passed string if the
 /// variable is set. Returns true if the variable is set, false otherwise.
-ELEMENTS_API bool getEnv(const std::string& var, std::string& value);
+ELEMENTS_API bool getEnv(const std::string& variable_name, std::string& variable_value);
 /// get all environment variables
 ELEMENTS_API std::vector<std::string> getEnv();
 /// Set an environment variables.
@@ -154,7 +154,7 @@ ELEMENTS_API int setEnv(const std::string& name, const std::string& value, bool 
 /// Simple wrap around unsetenv for strings
 ELEMENTS_API int unSetEnv(const std::string& name);
 /// Check if an environment variable is set or not.
-ELEMENTS_API bool isEnvSet(const std::string& var);
+ELEMENTS_API bool isEnvSet(const std::string& variable_name);
 
 ELEMENTS_API int backTrace(ELEMENTS_UNUSED const std::shared_ptr<void*>& addresses, ELEMENTS_UNUSED const int depth);
 ELEMENTS_API std::vector<std::string> backTrace(const int depth, const int offset = 0);

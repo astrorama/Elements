@@ -209,7 +209,7 @@ public:
      * method called. The vector_unique_ptr cannot be used in this method any more after the
      * call.
      */
-    const std::unique_ptr<vector<double>> vector_unique_ptr{new vector<double>{1.0, 2.3, 4.5}};
+    const std::unique_ptr<vector<double>> vector_unique_ptr{new vector{1.0, 2.3, 4.5}};
     ClassExample::passingUniquePointer(vector_unique_ptr);
 
     /*
@@ -221,7 +221,7 @@ public:
 
     log.info() << "Function Example: " << functionExample(3);
 
-    log.info() << "This executable name: " << Elements::System::getThisExecutableInfo().name();
+    log.info() << "This executable name: " << System::getThisExecutableInfo().name();
 
     myLocalLogTestFunc();
 

@@ -89,7 +89,7 @@ vector<Path::Item> pathSearchInEnvVariable(const string& file_name, const string
 
   // Tokenize the path elements
   vector<string> path_elements;
-  boost::split(path_elements, multiple_path, boost::is_any_of(";:"));
+  split(path_elements, multiple_path, boost::is_any_of(";:"));
 
   // Loop over all path elements
   for (const string& path_element : path_elements) {

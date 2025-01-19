@@ -58,7 +58,7 @@ struct PathSearch_Fixture {
 };
 
 void createTemporaryStructure(const path& top_path) {
-  boost::filesystem::create_directories(top_path / "tests" / "data" / "PathSearch");
+  create_directories(top_path / "tests" / "data" / "PathSearch");
 }
 
 BOOST_AUTO_TEST_SUITE(PathSearch_test)

@@ -36,14 +36,14 @@ int simpleSum(const int& first_number, const int& last_number) {
     sum += i;
   }
 
-  return (sum);
+  return sum;
 }
 
 int parallelSum(const int& first_number, const int& last_number) {
 
-  const int sum = tbb::parallel_reduce(
-      tbb::blocked_range<int>(first_number, last_number), 0,
-      [](tbb::blocked_range<int> const& r, int init) -> int {
+  const int sum = parallel_reduce(
+      blocked_range(first_number, last_number), 0,
+      [](blocked_range<int> const& r, int init) -> int {
         for (int v = r.begin(); v != r.end(); v++) {
           init += v;
         }
@@ -53,7 +53,7 @@ int parallelSum(const int& first_number, const int& last_number) {
         return (lhs + rhs);
       });
 
-  return (sum);
+  return sum;
 }
 
 class Tbb final : public Program {
@@ -99,7 +99,7 @@ public:
 
     LOG.info() << "Total duration: " << total_duration.count();
 
-    return (ExitCode::OK);
+    return ExitCode::OK;
   }
 };
 

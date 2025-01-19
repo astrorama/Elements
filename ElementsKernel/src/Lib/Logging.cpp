@@ -151,7 +151,7 @@ void Logging::log(const Priority::Value level, const std::string& logMessage) co
 }
 
 /// @cond Doxygen_Suppress
-Logging::LogMessageStream::LogMessageStream(Category& logger, P_log_func log_func)
+Logging::LogMessageStream::LogMessageStream(Category& logger, const P_log_func log_func)
     : m_logger(logger), m_log_func{log_func} {}
 /// @endcond Doxygen_Suppress
 

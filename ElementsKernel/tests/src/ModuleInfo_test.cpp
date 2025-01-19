@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(addresse_test) {
 
   const System::ModuleInfo& info = System::getThisModuleInfo();
 
-  BOOST_CHECK_EQUAL(info.addresse(), static_cast<void*>(0));
+  BOOST_CHECK_EQUAL(info.addresse(), static_cast<void*>(nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(moduleName_test) {
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(exeHandle_test) {
 
   const auto exe_handle = System::exeHandle();
 
-  BOOST_CHECK_NE(exe_handle, static_cast<void*>(0));
+  BOOST_CHECK_NE(exe_handle, static_cast<void*>(nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(linkedModules_test) {

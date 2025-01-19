@@ -42,7 +42,7 @@ namespace Elements::Examples {
 
 constexpr int PRINT_PRECISION = 32;
 
-template <typename T>
+template <typename>
 void printTitle() {
   cout << "================================================================================" << endl;
   cout << "Float:" << endl;

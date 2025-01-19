@@ -48,14 +48,14 @@ template Path::Item getConfigurationPath(const string& file_name, bool raise_exc
 
 std::vector<Path::Item> getConfigurationLocations(const bool exist_only) {
 
-  auto location_list = Path::getLocations(Path::Type::configuration, exist_only);
+  auto location_list = getLocations(Path::Type::configuration, exist_only);
 
   // the search is extended to the default system /usr/share/conf
   location_list.emplace_back(Path::Item(System::DEFAULT_INSTALL_PREFIX) / "share" / "conf");
 
   if (exist_only) {
     const auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
-      return (not boost::filesystem::exists(p));
+      return not exists(p);
     });
     location_list.erase(new_end, location_list.end());
   }

@@ -33,7 +33,7 @@ using std::string;
 
 namespace Elements {
 
-template <class T>
+template <class>
 struct X {};
 
 BOOST_AUTO_TEST_SUITE(System_test)
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(osName_test) {
 
   string  osname{"UNKNOWN"};
   utsname ut{};
-  if (::uname(&ut) == 0) {
+  if (uname(&ut) == 0) {
     osname = ut.sysname;
   }
 

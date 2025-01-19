@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(runCommand_out_test) {
 
 BOOST_FIXTURE_TEST_CASE(localWorkspacePrefix_test, WorkspaceFixture) {
   const string localEv = DataSync::environmentVariable("NOPREFIX");
-  if (localEv == "") {
+  if (localEv.empty()) {
     BOOST_CHECK_NE(DataSync::localWorkspacePrefix(), "");
   } else {
     BOOST_CHECK_EQUAL(DataSync::localWorkspacePrefix(), "");

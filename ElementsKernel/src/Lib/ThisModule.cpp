@@ -31,8 +31,8 @@ namespace Elements::System {
 const ModuleInfo& getThisExecutableInfo() {
   static ModuleInfo this_module;
   if (this_module.isEmpty()) {
-    if (void* handle = ::dlopen(nullptr, RTLD_LAZY); nullptr != handle) {
-      if (void* func = ::dlsym(handle, "main"); nullptr != func) {
+    if (void* handle = dlopen(nullptr, RTLD_LAZY); nullptr != handle) {
+      if (void* func = dlsym(handle, "main"); nullptr != func) {
         this_module = ModuleInfo(FuncPtrCast<void*>(func));
       }
     }

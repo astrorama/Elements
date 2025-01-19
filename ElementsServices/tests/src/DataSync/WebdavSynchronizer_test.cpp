@@ -41,8 +41,8 @@ BOOST_FIXTURE_TEST_SUITE(WebdavSynchronizer_test, WorkspaceFixture)
 
 DataSync::WebdavSynchronizer createTestSynchronizer() {
   DataSync::ConnectionConfiguration connection(theWebdavFrConfig());
-  const auto                        distant_root = connection.distantRoot;
-  const auto                        local_root   = connection.localRoot;
+  const auto                        distant_root = connection.distant_root;
+  const auto                        local_root   = connection.local_root;
   DataSync::DependencyConfiguration dependencies(distant_root, local_root, theDependencyConfig());
   return {connection, dependencies};
 }

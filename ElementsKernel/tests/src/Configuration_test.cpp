@@ -71,7 +71,7 @@ struct Configuration_Fixture {
     m_item_list.emplace_back(m_top_dir.path() / "test3");
 
     for_each(m_item_list.cbegin(), m_item_list.cend(), [](const Path::Item& p) {
-      boost::filesystem::create_directory(p);
+      create_directory(p);
     });
 
     m_item_list.emplace_back(m_top_dir.path() / "test4");

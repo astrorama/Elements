@@ -59,7 +59,7 @@ ModuleInfo::ModuleInfo() : m_dlinfo{nullptr} {}
 
 ModuleInfo::ModuleInfo(void* funct) {
   m_dlinfo = std::make_unique<Dl_info>();
-  ::dladdr(FuncPtrCast<void*>(funct), m_dlinfo.get());
+  dladdr(FuncPtrCast<void*>(funct), m_dlinfo.get());
 }
 
 string ModuleInfo::name() const {
@@ -89,8 +89,8 @@ ImageHandle s_module_handle = nullptr;
 const string& moduleName() {
   static string module{};
   if (module.empty()) {
-    if ((processHandle() != nullptr) && (moduleHandle() != nullptr)) {
-      string mod = ::basename(const_cast<char*>((static_cast<Dl_info*>(moduleHandle()))->dli_fname));
+    if (processHandle() != nullptr && moduleHandle() != nullptr) {
+      string mod = ::basename(const_cast<char*>(static_cast<Dl_info*>(moduleHandle())->dli_fname));
       module     = mod.substr(0, mod.find('.'));
     }
   }
@@ -104,8 +104,8 @@ const string& moduleNameFull() {
     if (processHandle() and moduleHandle()) {
       std::array<char, PATH_MAX> name{"Unknown.module"};
       name[0]          = 0;
-      const char* path = (static_cast<Dl_info*>(moduleHandle())->dli_fname);
-      if (::realpath(path, name.data())) {
+      const char* path = static_cast<Dl_info*>(moduleHandle())->dli_fname;
+      if (realpath(path, name.data())) {
         module = string(name.data());
       }
     }
@@ -134,7 +134,7 @@ ModuleType moduleType() {
 
 /// Retrieve process handle
 void* processHandle() {
-  static std::int64_t pid = ::getpid();
+  static std::int64_t pid = getpid();
   static auto         hP  = reinterpret_cast<void*>(pid);
   return hP;
 }
@@ -147,7 +147,7 @@ ImageHandle moduleHandle() {
   if (nullptr == s_module_handle) {
     if (processHandle() != nullptr) {
       static Dl_info info;
-      if (0 != ::dladdr(FuncPtrCast<void*>(moduleHandle), &info)) {
+      if (0 != dladdr(FuncPtrCast<void*>(moduleHandle), &info)) {
         return &info;
       }
     }
@@ -161,9 +161,9 @@ ImageHandle exeHandle() {
   static Dl_info* info;
 
   if (nullptr == info) {
-    if (void* handle = ::dlopen(nullptr, RTLD_LAZY); nullptr != handle) {
-      if (const void* func = ::dlsym(handle, "main"); nullptr != func) {
-        if (0 != ::dladdr(func, &infoBuf)) {
+    if (void* handle = dlopen(nullptr, RTLD_LAZY); nullptr != handle) {
+      if (const void* func = dlsym(handle, "main"); nullptr != func) {
+        if (0 != dladdr(func, &infoBuf)) {
           info = &infoBuf;
         }
       }
@@ -186,7 +186,7 @@ Path::Item getSelfProc() {
 
   if (const Path::Item exe = self_proc / "exe"; not exists(exe)) {
     std::stringstream self_str{};
-    self_str << "/proc/" << ::getpid();
+    self_str << "/proc/" << getpid();
     self_proc = Path::Item(self_str.str());
   }
 
@@ -247,7 +247,7 @@ Path::Item getExecutablePath() {
 
 #endif
 
-  return boost::filesystem::canonical(self_exe);
+  return canonical(self_exe);
 }
 
 }  // namespace Elements::System

@@ -33,6 +33,19 @@
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 
+/**
+ * @class BoostTestAdapter
+ * @brief A listener class that integrates Google Test results with Boost Test.
+ *
+ * This class extends `testing::EmptyTestEventListener` to intercept test result
+ * events in Google Test and adapt them for use in Boost Unit Test Framework.
+ * It aids in relaying Google Test's test result failures into Boost Test's
+ * reporting mechanism.
+ *
+ * Functional specifics:
+ * - Overrides the `OnTestPartResult` method from `testing::EmptyTestEventListener`.
+ * - Converts Google Test failures into Boost Test errors using the `BOOST_ERROR` macro.
+ */
 class BoostTestAdapter final : public testing::EmptyTestEventListener {
 
   void OnTestPartResult(const testing::TestPartResult& testPartResult) override {

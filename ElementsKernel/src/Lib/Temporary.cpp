@@ -79,7 +79,7 @@ string TempPath::motif() const {
   return m_motif;
 }
 
-TempDir::TempDir(const string& arg_motif, const string& keep_var) : TempPath(arg_motif, keep_var) {
+TempDir::TempDir(const string& motif, const string& keep_var) : TempPath(motif, keep_var) {
 
   log.debug() << "Creation of the " << path() << " temporary directory";
 
@@ -88,7 +88,7 @@ TempDir::TempDir(const string& arg_motif, const string& keep_var) : TempPath(arg
 
 TempDir::~TempDir() = default;
 
-TempFile::TempFile(const string& arg_motif, const string& keep_var) : TempPath(arg_motif, keep_var) {
+TempFile::TempFile(const string& motif, const string& keep_var) : TempPath(motif, keep_var) {
 
   log.debug() << "Creation of the " << path() << " temporary file";
 

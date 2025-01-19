@@ -48,7 +48,7 @@ std::string WebdavSynchronizer::createDownloadCommand(const path distant_file, c
   cmd += " --user=" + m_connection.user;
   cmd += " --password=" + m_connection.password;
   cmd += " -O " + local_file.string();
-  cmd += " " + m_connection.hostUrl + "/" + distant_file.string();
+  cmd += " " + m_connection.host_url + "/" + distant_file.string();
   cmd += " --tries " + std::to_string(m_connection.tries);
   return cmd;
 }

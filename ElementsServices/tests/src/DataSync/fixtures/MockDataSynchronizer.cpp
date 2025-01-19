@@ -23,8 +23,8 @@ namespace DataSync = ElementsServices::DataSync;
 using DataSync::path;
 using std::string;
 
-MockDataSynchronizer::MockDataSynchronizer(const DataSync::path& connection, const path& dependency)
-    : DataSync::DataSynchronizer(
+MockDataSynchronizer::MockDataSynchronizer(const path& connection, const path& dependency)
+    : DataSynchronizer(
           DataSync::ConnectionConfiguration(connection),
           DataSync::DependencyConfiguration(theWebdavFrDistantWorkspace(), theLocalWorkspace(), dependency)) {}
 

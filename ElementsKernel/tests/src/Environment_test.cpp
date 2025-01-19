@@ -50,7 +50,7 @@ struct Environment_fixture {
 
 class ThatClass {
 public:
-  ThatClass() : m_env{}, m_internal_var_name{"duhfbs"}, m_internal_var_value{"titi"} {
+  ThatClass() : m_internal_var_name{"duhfbs"}, m_internal_var_value{"titi"} {
     m_env[m_internal_var_name] = m_internal_var_value;
   }
   void setEnv(const string& var_name, const string& var_value) {
@@ -62,7 +62,7 @@ public:
 
   [[nodiscard]] bool checkInternalEnv() const {
     using System::getEnv;
-    return (getEnv(m_internal_var_name) == m_internal_var_value);
+    return getEnv(m_internal_var_name) == m_internal_var_value;
   }
 
 private:

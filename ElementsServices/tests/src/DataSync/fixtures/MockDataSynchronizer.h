@@ -26,8 +26,8 @@ struct MockDataSynchronizer : ElementsServices::DataSync::DataSynchronizer, Work
   MockDataSynchronizer(const ElementsServices::DataSync::path& connection = theWebdavFrConfig(),
                        const ElementsServices::DataSync::path& dependency = theDependencyConfig());
 
-  std::string createDownloadCommand(ElementsServices::DataSync::path distantFile,
-                                    ElementsServices::DataSync::path localFile) const override;
+  std::string createDownloadCommand(ElementsServices::DataSync::path distant_file,
+                                    ElementsServices::DataSync::path local_file) const override;
 
   std::map<ElementsServices::DataSync::path, ElementsServices::DataSync::path> fileMap();
 };
