@@ -195,6 +195,7 @@ public:
   Environment&       env() const;
   std::string        value() const;
   /// to string converter
+  // ReSharper disable once CppNonExplicitConversionOperator
   operator std::string() const;
   bool empty() const;
   bool exists() const;
