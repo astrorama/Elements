@@ -28,12 +28,10 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 
+#include "ElementsKernel/Exit.h"     // for ExitCode
 #include "ElementsKernel/Export.h"   // for ELEMENTS_API
 #include "ElementsKernel/Logging.h"  // for Logging
 #include "ElementsKernel/Path.h"     // for Item
-#include "ElementsKernel/Exit.h"   // for ExitCode
-
-
 
 namespace Elements {
 
@@ -48,7 +46,6 @@ namespace Elements {
 class ELEMENTS_API SimpleProgram {
 
 public:
-
   ExitCode          run(int argc, char** argv) noexcept;
   const Path::Item& getProgramPath() const;
   const Path::Item& getProgramName() const;

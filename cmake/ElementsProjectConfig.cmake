@@ -432,17 +432,20 @@ macro(elements_project project version)
   #--- Project Installations------------------------------------------------------------------------
   if(NOT SQUEEZED_INSTALL OR ("${CMAKE_PROJECT_NAME}" STREQUAL "Elements"))
 
-  install(DIRECTORY cmake/ DESTINATION ${CMAKE_INSTALL_SUFFIX}
-                           FILES_MATCHING
-                             PATTERN "*.cmake"
-                             PATTERN "*.in"
-                             PATTERN "*.dox"
-                             PATTERN "*.py"
-                             PATTERN "*.sh"
-                             PATTERN "*.csh"
-                             PATTERN "*.bat"
-                             PATTERN ".svn" EXCLUDE
-                             PATTERN ".git" EXCLUDE)
+  install(DIRECTORY cmake/
+          DESTINATION ${CMAKE_INSTALL_SUFFIX}
+          USE_SOURCE_PERMISSIONS
+          FILES_MATCHING
+            PATTERN "*.cmake"
+            PATTERN "*.in"
+            PATTERN "*.dox"
+            PATTERN "*.py"
+            PATTERN "*.sh"
+            PATTERN "*.csh"
+            PATTERN "*.bat"
+            PATTERN ".svn" EXCLUDE
+            PATTERN ".git" EXCLUDE
+  )
 
   set_property(GLOBAL APPEND PROPERTY PROJ_HAS_CMAKE TRUE)
 
@@ -4127,6 +4130,7 @@ endfunction()
 macro(elements_install_cmake_modules)
   install(DIRECTORY cmake/
           DESTINATION ${CMAKE_INSTALL_SUFFIX}
+          USE_SOURCE_PERMISSIONS
           FILES_MATCHING
             PATTERN "*.cmake"
             PATTERN "*.in"

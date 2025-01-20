@@ -34,7 +34,7 @@ namespace DataSync {
 
 using std::string;
 
-ConnectionConfiguration::ConnectionConfiguration(const path& filename): host(WEBDAV),overwriting_policy(ABORT) {
+ConnectionConfiguration::ConnectionConfiguration(const path& filename) : host(WEBDAV), overwriting_policy(ABORT) {
   parseConfigurationFile(filename);
 }
 
@@ -72,13 +72,13 @@ void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
 
   /* Configure object */
   parseHost(vm["host"].as<string>());
-  host_url  = vm["host-url"].as<string>();
+  host_url = vm["host-url"].as<string>();
   user     = vm["user"].as<string>();
   password = vm["password"].as<string>();
   parseOverwritingPolicy(vm["overwrite"].as<string>());
   distant_root = vm["distant-workspace"].as<string>();
   local_root   = localWorkspacePrefix() / vm["local-workspace"].as<string>();
-  tries       = static_cast<std::size_t>(vm["tries"].as<int>());
+  tries        = static_cast<std::size_t>(vm["tries"].as<int>());
 }
 
 void ConnectionConfiguration::parseHost(const string& name) {
