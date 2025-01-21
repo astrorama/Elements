@@ -61,7 +61,7 @@ def checkCmakelistFileExist(project_directory):
     """
     cmake_file = os.path.join(project_directory, CMAKE_LISTS_FILE)
     if not os.path.isfile(cmake_file):
-        raise Exception("<%s> cmake project file is missing! Are you inside "
+        raise FileNotFoundError("<%s> cmake project file is missing! Are you inside "
                                 "a project directory?" % cmake_file)
     else:
         # Check the make file is an Elements cmake file
@@ -145,6 +145,7 @@ def createModule(project_dir, module_name, dependency_list, standalone=False, an
     # Create module directory
     mod_path = os.path.join(project_dir, module_name)
     logger.info('# Creating the module: <%s> ', mod_path)
+    response_key = None
     if os.path.exists(mod_path):
         # Ask user
         logger.warning('<%s> module ALREADY exists on disk!!!', module_name)
