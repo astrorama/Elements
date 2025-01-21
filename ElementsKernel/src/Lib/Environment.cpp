@@ -186,19 +186,19 @@ Environment::Variable Environment::operator[](const string& index) const {
   return {const_cast<Environment&>(*this), index};
 }
 
-Environment& Environment::set(const string& index, const string& value) {
+Environment& Environment::set(const string& key, const string& value) {
 
-  if (m_old_values.find(index) == m_old_values.end()) {
-    if (hasKey(index)) {
-      if ((not m_keep_same) || (getEnv(index) != value)) {
-        m_old_values[index] = getEnv(index);
+  if (m_old_values.find(key) == m_old_values.end()) {
+    if (hasKey(key)) {
+      if ((not m_keep_same) || (getEnv(key) != value)) {
+        m_old_values[key] = getEnv(key);
       }
     } else {
-      m_added_variables.emplace_back(index);
+      m_added_variables.emplace_back(key);
     }
   }
 
-  setEnv(index, value);
+  setEnv(key, value);
 
   return *this;
 }

@@ -78,7 +78,7 @@ public:
    *
    * @return True if the set operation is successful, false otherwise.
    */
-  Environment& set(const std::string&, const std::string&);
+  Environment& set(const std::string& key, const std::string& value);
   /**
    * @brief Unsets a value in the container associated with the specified key.
    *
@@ -86,7 +86,7 @@ public:
    *
    * @return True if the unset operation is successful, false otherwise.
    */
-  Environment& unSet(const std::string&);
+  Environment& unSet(const std::string& key);
   /**
    * @brief Appends a string value to the existing value of the specified environment variable.
    *
@@ -97,7 +97,7 @@ public:
    * @param value The value to be appended to the specified environment variable.
    * @return A reference to the current Environment object, allowing method chaining.
    */
-  Environment& append(const std::string&, const std::string&);
+  Environment& append(const std::string& index, const std::string& value);
   /**
    * @brief Prepends the specified value to the value of the given environment variable.
    *
@@ -109,7 +109,7 @@ public:
    * @param value The value to prepend to the current value of the specified environment variable.
    * @return A reference to the updated Environment object.
    */
-  Environment& prepend(const std::string&, const std::string&);
+  Environment& prepend(const std::string& index, const std::string& value);
   /**
    * @brief Retrieves the value associated with a given index from the environment.
    * If the index does not exist, the provided default value is returned.
@@ -127,7 +127,7 @@ public:
    * @param index The key to check for existence in the environment.
    * @return True if the key exists, false otherwise.
    */
-  static bool hasKey(const std::string&);
+  static bool hasKey(const std::string& index);
   /**
    * @brief Commits changes to the environment, saving the current state and capturing
    *        any added or modified environment variables.
@@ -152,7 +152,7 @@ public:
    *             Supported shell types (e.g., sh, csh) determine the script syntax.
    * @return A string containing the generated shell script.
    */
-  std::string generateScript(const ShellType) const;
+  std::string generateScript(const ShellType type) const;
 
 private:
   /**
@@ -194,6 +194,7 @@ public:
   Environment&       env() const;
   std::string        value() const;
   /// to string converter
+  // ReSharper disable once CppNonExplicitConversionOperator
   operator std::string() const;
   bool empty() const;
   bool exists() const;
