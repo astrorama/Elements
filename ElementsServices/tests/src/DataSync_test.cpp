@@ -40,8 +40,8 @@ BOOST_AUTO_TEST_SUITE(DataSync_test)
 
 //-----------------------------------------------------------------------------
 
-void checkDownload(path connectionConfig) {
-  auto sync = DataSync::DataSync(connectionConfig, theDependencyConfig());
+void checkDownload(const path& connection_config) {
+  const auto sync = DataSync::DataSync(connection_config, theDependencyConfig());
   sync.download();
   for (const auto& file : theLocalFiles()) {
     const path abs_path = sync.absolutePath(file);
@@ -50,10 +50,10 @@ void checkDownload(path connectionConfig) {
   }
 }
 
-void checkFallback(path fallbackConfig) {
+void checkFallback(const path& fallback_config) {
   auto sync = DataSync::DataSync(aBadConnectionConfig(), theDependencyConfig());
   BOOST_CHECK_THROW(sync.download(), std::exception);
-  sync.downloadWithFallback(fallbackConfig);
+  sync.downloadWithFallback(fallback_config);
   for (const auto& file : theLocalFiles()) {
     const path abs_path = sync.absolutePath(file);
     BOOST_CHECK(boost::filesystem::is_regular_file(abs_path));

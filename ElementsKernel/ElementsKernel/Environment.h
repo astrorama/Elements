@@ -127,7 +127,7 @@ public:
    * @param index The key to check for existence in the environment.
    * @return True if the key exists, false otherwise.
    */
-  static bool hasKey(const std::string& index);
+  static bool hasKey(const std::string&);
   /**
    * @brief Commits changes to the environment, saving the current state and capturing
    *        any added or modified environment variables.
@@ -171,7 +171,8 @@ private:
 };
 
 /**
- *
+ * @brief Represents a variable or a symbolic placeholder
+ * @ingroup ElementsKernel
  */
 class Environment::Variable {
 

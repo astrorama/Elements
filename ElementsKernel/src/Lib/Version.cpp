@@ -44,7 +44,7 @@ string getVersionFromSvnKeywords(const string& svnUrl, const string& svnId) {
   // vector of elements of the URL between pairs of "/"
   vector<string> urlElements{};
   // Build a string vector with the URL elements
-  boost::split(urlElements, svnUrl, boost::is_any_of(delim));
+  split(urlElements, svnUrl, boost::is_any_of(delim));
 
   // Loop over all elements of the URL
   for (auto it = urlElements.begin(); it != urlElements.end(); ++it) {
@@ -57,7 +57,7 @@ string getVersionFromSvnKeywords(const string& svnUrl, const string& svnId) {
     // If "tags" id detected ...
     if (it->find("tags") != string::npos) {
       // ...built a version from the project name and tags number
-      version = *(boost::prior(it)) + " " + *(boost::next(it));
+      version = *boost::prior(it) + " " + *boost::next(it);
       break;
     }
   }

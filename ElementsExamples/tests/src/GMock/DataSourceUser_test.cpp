@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_SUITE(DataSourceUser_test_suite)
 BOOST_AUTO_TEST_CASE(sumRecords_test) {
 
   // Setup mock
-  Elements::Examples::DataSourceInterfaceMock data_source_mock;
+  const Elements::Examples::DataSourceInterfaceMock data_source_mock;
 
   EXPECT_CALL(data_source_mock, countRecords()).Times(1).WillOnce(Return(5));
 
@@ -44,8 +44,7 @@ BOOST_AUTO_TEST_CASE(sumRecords_test) {
   }
 
   // object to test
-  Elements::Examples::DataSourceUser user{};
-  double                             result = user.sumRecords(data_source_mock);
+  const double result = Elements::Examples::DataSourceUser::sumRecords(data_source_mock);
 
   BOOST_CHECK_MESSAGE(Elements::isEqual(result, 15.), "Expected value :" << 15. << " Actual value :" << result);
 }

@@ -61,7 +61,7 @@ ELEMENTS_API std::pair<std::string, std::string> runCommandAndCaptureOutErr(cons
 
 ELEMENTS_API bool localDirExists(const path& local_dir);
 
-ELEMENTS_API void createLocalDirOf(const path& localFile);
+ELEMENTS_API void createLocalDirOf(const path& local_file);
 
 /**
  * @brief Get the value of an environment variable.

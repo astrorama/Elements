@@ -109,7 +109,7 @@ public:
 
     using Elements::Examples::ClassExample;
 
-    auto log = Logging::getLogger("ExtProgram");
+    const auto log = Logging::getLogger("ExtProgram");
     log.info("Entering mainMethod()");
     log.info("#");
     /*
@@ -159,8 +159,8 @@ public:
     const double method_result = ClassExample::fundamentalTypeMethod(input_variable);
     log.info() << "Some result: " << method_result;
 
-    double first = 1.0;
-    double division_result;
+    constexpr double first = 1.0;
+    double           division_result;
     try {
       log.info("#");
       log.info("#   Calling a method throwing an exception ");

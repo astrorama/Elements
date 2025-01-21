@@ -194,10 +194,10 @@ VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
 
   // Get the definition of the specific options and arguments (positional
   // options) from the derived class
-  auto               specific_options  = m_program_ptr->defineSpecificProgramOptions();
-  auto               program_arguments = m_program_ptr->defineProgramArguments();
+  auto specific_options                                    = m_program_ptr->defineSpecificProgramOptions();
+  auto [option_description, positional_option_description] = m_program_ptr->defineProgramArguments();
   OptionsDescription all_specific_options{};
-  all_specific_options.add(specific_options).add(program_arguments.first);
+  all_specific_options.add(specific_options).add(option_description);
 
   // Put together all the options to parse from the cmd line and the file
   OptionsDescription all_cmd_and_file_options{};
@@ -241,16 +241,15 @@ VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
 
     auto parsed_cmdline_options = command_line_parser(leftover_cmd_options)
                                       .options(all_cmd_and_file_options)
-                                      .positional(program_arguments.second)
+                                      .positional(positional_option_description)
                                       .run();
 
     store(parsed_cmdline_options, var_map);
 
     if (not m_no_config_file) {
       // Parse from the configuration file if it exists
-      if (not config_file.empty() and boost::filesystem::exists(config_file)) {
-        std::ifstream ifs{config_file.string()};
-        if (ifs) {
+      if (not config_file.empty() and exists(config_file)) {
+        if (std::ifstream ifs{config_file.string()}) {
           auto parsed_cfgfile_options = parse_config_file(ifs, all_cmd_and_file_options);
           store(parsed_cfgfile_options, var_map);
         }
@@ -307,53 +306,53 @@ void ProgramManager::logAllOptions() const {
   stringstream log_message{};
 
   // Loop over all options included in the variable_map
-  for (const auto& v : m_variables_map) {
+  for (const auto& [name, content] : m_variables_map) {
     // string option
-    if (v.second.value().type() == typeid(string)) {
-      log_message << v.first << " = " << v.second.as<string>();
+    if (content.value().type() == typeid(string)) {
+      log_message << name << " = " << content.as<string>();
       // double option
-    } else if (v.second.value().type() == typeid(double)) {
-      log_message << v.first << " = " << v.second.as<double>();
+    } else if (content.value().type() == typeid(double)) {
+      log_message << name << " = " << content.as<double>();
       // int64_t option
-    } else if (v.second.value().type() == typeid(int64_t)) {
-      log_message << v.first << " = " << v.second.as<int64_t>();
+    } else if (content.value().type() == typeid(int64_t)) {
+      log_message << name << " = " << content.as<int64_t>();
       // int option
-    } else if (v.second.value().type() == typeid(int)) {
-      log_message << v.first << " = " << v.second.as<int>();
+    } else if (content.value().type() == typeid(int)) {
+      log_message << name << " = " << content.as<int>();
       // bool option
-    } else if (v.second.value().type() == typeid(bool)) {
-      log_message << v.first << " = " << v.second.as<bool>();
+    } else if (content.value().type() == typeid(bool)) {
+      log_message << name << " = " << content.as<bool>();
       // path option
-    } else if (v.second.value().type() == typeid(Path::Item)) {
-      log_message << v.first << " = " << v.second.as<Path::Item>();
+    } else if (content.value().type() == typeid(Path::Item)) {
+      log_message << name << " = " << content.as<Path::Item>();
       // int vector option
-    } else if (v.second.value().type() == typeid(vector<int>)) {
-      vector<int>  intVec = v.second.as<vector<int>>();
+    } else if (content.value().type() == typeid(vector<int>)) {
+      auto         intVec = content.as<vector<int>>();
       stringstream vecContent{};
       for (const auto& i : intVec) {
         vecContent << " " << i;
       }
-      log_message << v.first << " = {" << vecContent.str() << " }";
+      log_message << name << " = {" << vecContent.str() << " }";
       // double vector option
-    } else if (v.second.value().type() == typeid(vector<double>)) {
-      vector<double> intVec = v.second.as<vector<double>>();
-      stringstream   vecContent{};
+    } else if (content.value().type() == typeid(vector<double>)) {
+      auto         intVec = content.as<vector<double>>();
+      stringstream vecContent{};
       for (const auto& i : intVec) {
         vecContent << " " << i;
       }
-      log_message << v.first << " = {" << vecContent.str() << " }";
+      log_message << name << " = {" << vecContent.str() << " }";
       // string vector option
-    } else if (v.second.value().type() == typeid(vector<string>)) {
-      vector<string> intVec = v.second.as<vector<string>>();
-      stringstream   vecContent{};
+    } else if (content.value().type() == typeid(vector<string>)) {
+      auto         intVec = content.as<vector<string>>();
+      stringstream vecContent{};
       for (const auto& i : intVec) {
         vecContent << " " << i;
       }
-      log_message << v.first << " = {" << vecContent.str() << " }";
+      log_message << name << " = {" << vecContent.str() << " }";
       // if nothing else
     } else {
-      log_message << "Option " << v.first << " of type " << v.second.value().type().name()
-                  << " not supported in logging !" << endl;
+      log_message << "Option " << name << " of type " << content.value().type().name() << " not supported in logging !"
+                  << endl;
     }
     // write the log message
     log.log(m_elements_loglevel, log_message.str());
@@ -370,8 +369,8 @@ void ProgramManager::logTheEnvironment() const {
   log.debug() << "# ---------------------------";
   log.debug() << "#";
 
-  for (const auto& v : Path::VARIABLE) {
-    log.debug() << v.second << ": " << m_env[v.second];
+  for (const auto& [type, name] : Path::VARIABLE) {
+    log.debug() << name << ": " << m_env[name];
   }
 
   log.debug() << "#";
@@ -389,26 +388,26 @@ void ProgramManager::bootstrapEnvironment(char* arg0) {
 
   // insert local parent dir if it is not already
   // the first one of the list
-  const Path::Item this_parent_path = boost::filesystem::canonical(m_program_path.parent_path());
+  const Path::Item this_parent_path = canonical(m_program_path.parent_path());
   if (local_search_paths[0] != this_parent_path) {
-    auto b = local_search_paths.begin();
+    const auto b = local_search_paths.begin();
     local_search_paths.insert(b, this_parent_path);
   }
 
   using Path::joinPath;
   using Path::multiPathAppend;
 
-  for (const auto& v : Path::VARIABLE) {
-    if (m_env[v.second].exists()) {
-      m_env[v.second] += Path::PATH_SEP + joinPath(multiPathAppend(local_search_paths, Path::SUFFIXES.at(v.first)));
+  for (const auto& [type, name] : Path::VARIABLE) {
+    if (m_env[name].exists()) {
+      m_env[name] += Path::PATH_SEP + joinPath(multiPathAppend(local_search_paths, Path::SUFFIXES.at(type)));
     } else {
-      m_env[v.second] = joinPath(multiPathAppend(local_search_paths, Path::SUFFIXES.at(v.first)));
+      m_env[name] = joinPath(multiPathAppend(local_search_paths, Path::SUFFIXES.at(type)));
     }
   }
 }
 
 // Get the program options and setup logging
-void ProgramManager::setup(int argc, char* argv[]) {
+void ProgramManager::setup(const int argc, char* argv[]) {
   // store the program name and path in class variable
   // and retrieve the local environment
   bootstrapEnvironment(argv[0]);

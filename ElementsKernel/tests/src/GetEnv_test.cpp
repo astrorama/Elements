@@ -37,8 +37,8 @@ BOOST_AUTO_TEST_SUITE(GetEnv_test)
 
 BOOST_AUTO_TEST_CASE(Raw_test) {
 
-  string path_var{};
-  char*  tmp = getenv("PATH");
+  string      path_var{};
+  const char* tmp = getenv("PATH");
   if (tmp != nullptr) {
     path_var = tmp;
   }
@@ -48,8 +48,8 @@ BOOST_AUTO_TEST_CASE(Raw_test) {
   // check that it is not empty
   BOOST_CHECK(not path_var.empty());
 
-  string not_existing_path{};
-  char*  tmp_2 = getenv("Jlhjdji43k");
+  string      not_existing_path{};
+  const char* tmp_2 = getenv("Jlhjdji43k");
   if (tmp_2 != nullptr) {
     not_existing_path = tmp_2;
   }
@@ -62,13 +62,13 @@ BOOST_AUTO_TEST_CASE(Raw_test) {
 
 BOOST_AUTO_TEST_CASE(RawEmpty_test) {
 
-  string var_name{"Dldoed7dja7c"};
+  const string var_name{"Dldoed7dja7c"};
 
   // create empty test env variable
   setenv(var_name.c_str(), "", 1);
 
-  string path_var{};
-  char*  tmp = getenv(var_name.c_str());
+  string      path_var{};
+  const char* tmp = getenv(var_name.c_str());
   if (tmp != nullptr) {
     path_var = tmp;
   }
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(EmptyEnv_test) {
 
   using System::getEnv;
 
-  string rnd_name{"Dldoed7dja7c"};
+  const string rnd_name{"Dldoed7dja7c"};
 
   const string name_var{"PATH"};
   string       value_var{};
@@ -136,23 +136,23 @@ BOOST_AUTO_TEST_CASE(Set_test) {
   using System::isEnvSet;
   using System::setEnv;
 
-  string rnd_name{"Dldoed7dja7c"};
+  const string rnd_name{"Dldoed7dja7c"};
 
   BOOST_CHECK(not isEnvSet(rnd_name));
 
-  int r = setEnv(rnd_name, "");
+  const int r = setEnv(rnd_name, "");
 
   BOOST_CHECK(r == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
   BOOST_CHECK(getEnv(rnd_name) == "");
 
-  int r2 = setEnv(rnd_name, "toto", false);
+  const int r2 = setEnv(rnd_name, "toto", false);
 
   BOOST_CHECK(r2 == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
   BOOST_CHECK(getEnv(rnd_name) == "");
 
-  int r3 = setEnv(rnd_name, "titi");
+  const int r3 = setEnv(rnd_name, "titi");
 
   BOOST_CHECK(r3 == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
@@ -166,15 +166,15 @@ BOOST_AUTO_TEST_CASE(UnSet_test) {
   using System::setEnv;
   using System::unSetEnv;
 
-  string rnd_name{"Dldoed7dja7c"};
+  const string rnd_name{"Dldoed7dja7c"};
 
-  int r = setEnv(rnd_name, "");
+  const int r = setEnv(rnd_name, "");
 
   BOOST_CHECK(r == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
   BOOST_CHECK(getEnv(rnd_name) == "");
 
-  int r2 = unSetEnv(rnd_name);
+  const int r2 = unSetEnv(rnd_name);
   BOOST_CHECK(r2 == 0);
   BOOST_CHECK(not isEnvSet(rnd_name));
   BOOST_CHECK(getEnv(rnd_name) == "");

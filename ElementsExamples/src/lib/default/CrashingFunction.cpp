@@ -28,7 +28,7 @@
 namespace Elements::Examples {
 
 void crashingFunction() {
-  auto log = Logging::getLogger("ElementsExamples");
+  const auto log = Logging::getLogger("ElementsExamples");
   log.info() << "Entering Crashing Function";
 
   throw std::logic_error("arrg!");

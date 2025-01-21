@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_SUITE(Real_test)
 
 BOOST_AUTO_TEST_CASE(FloatCompare_test) {
 
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare_test) {
 
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare2_test) {
 
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare2_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare2_test) {
 
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare2_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare3_test) {
 
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare3_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare3_test) {
 
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare3_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare4_test) {
 
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare4_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare4_test) {
 
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -242,7 +242,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare4_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare5_test) {
 
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare5_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare5_test) {
 
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -290,7 +290,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare5_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare6_test) {
 
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -314,7 +314,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare6_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare6_test) {
 
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -343,7 +343,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare6_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare7_test) {
 
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -367,7 +367,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare7_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare7_test) {
 
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 

@@ -38,7 +38,6 @@
 #include "ElementsKernel/Compat.h"     // for NON_REDUNDANT_MOVE
 #include "ElementsKernel/Exception.h"  // for Exception
 #include "ElementsKernel/Exit.h"       // for ExitCode
-#include "ElementsKernel/Memory.h"     // for make_unique
 #include "ElementsKernel/Path.h"       // for Item
 
 namespace log4cpp {
@@ -66,7 +65,7 @@ static const std::map<string, const int> LOG_LEVEL{
 // clang-format on
 
 unique_ptr<Layout> getLogLayout() {
-  auto layout = make_unique<log4cpp::PatternLayout>();
+  auto layout = std::make_unique<log4cpp::PatternLayout>();
   layout->setConversionPattern("%d{%FT%T%Z} %c %5p : %m%n");
   return NON_REDUNDANT_MOVE(layout);
 }
@@ -75,9 +74,9 @@ Logging::Logging(Category& log4cppLogger) : m_log4cppLogger(log4cppLogger) {}
 
 Logging Logging::getLogger(const string& name) {
   if (Category::getRoot().getAppender("console") == nullptr) {
-    auto* consoleAppender = new log4cpp::OstreamAppender{"console", &std::cerr};
-    consoleAppender->setLayout(getLogLayout().release());
-    Category::getRoot().addAppender(consoleAppender);
+    auto console_appender = std::make_unique<log4cpp::OstreamAppender>("console", &std::cerr);
+    console_appender->setLayout(getLogLayout().release());
+    Category::getRoot().addAppender(console_appender.release());
     if (Category::getRoot().getPriority() == Priority::NOTSET) {
       Category::setRootPriority(Priority::INFO);
     }
@@ -101,58 +100,58 @@ void Logging::setLogFile(const Path::Item& fileName) {
   Category& root = Category::getRoot();
   root.removeAppender(root.getAppender("file"));
   if (fileName.has_filename()) {
-    auto* fileAppender = new log4cpp::FileAppender("file", fileName.string());
-    fileAppender->setLayout(getLogLayout().release());
-    root.addAppender(fileAppender);
+    auto file_appender = std::make_unique<log4cpp::FileAppender>("file", fileName.string());
+    file_appender->setLayout(getLogLayout().release());
+    root.addAppender(file_appender.release());
   }
   root.setPriority(root.getPriority());
 }
 
-void Logging::debug(const std::string& logMessage) {
+void Logging::debug(const std::string& logMessage) const {
   m_log4cppLogger.debug(logMessage);
 }
 
-Logging::LogMessageStream Logging::debug() {
-  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::debug};
+Logging::LogMessageStream Logging::debug() const {
+  return LogMessageStream{m_log4cppLogger, &Category::debug};
 }
 
-void Logging::info(const std::string& logMessage) {
+void Logging::info(const std::string& logMessage) const {
   m_log4cppLogger.info(logMessage);
 }
 
-Logging::LogMessageStream Logging::info() {
-  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::info};
+Logging::LogMessageStream Logging::info() const {
+  return LogMessageStream{m_log4cppLogger, &Category::info};
 }
 
-void Logging::warn(const std::string& logMessage) {
+void Logging::warn(const std::string& logMessage) const {
   m_log4cppLogger.warn(logMessage);
 }
 
-Logging::LogMessageStream Logging::warn() {
-  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::warn};
+Logging::LogMessageStream Logging::warn() const {
+  return LogMessageStream{m_log4cppLogger, &Category::warn};
 }
 
-void Logging::error(const std::string& logMessage) {
+void Logging::error(const std::string& logMessage) const {
   m_log4cppLogger.error(logMessage);
 }
-Logging::LogMessageStream Logging::error() {
-  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::error};
+Logging::LogMessageStream Logging::error() const {
+  return LogMessageStream{m_log4cppLogger, &Category::error};
 }
 
-void Logging::fatal(const std::string& logMessage) {
+void Logging::fatal(const std::string& logMessage) const {
   m_log4cppLogger.fatal(logMessage);
 }
 
-Logging::LogMessageStream Logging::fatal() {
-  return Logging::LogMessageStream{m_log4cppLogger, &log4cpp::Category::fatal};
+Logging::LogMessageStream Logging::fatal() const {
+  return LogMessageStream{m_log4cppLogger, &Category::fatal};
 }
 
-void Logging::log(log4cpp::Priority::Value level, const std::string& logMessage) {
+void Logging::log(const Priority::Value level, const std::string& logMessage) const {
   m_log4cppLogger.log(level, logMessage);
 }
 
 /// @cond Doxygen_Suppress
-Logging::LogMessageStream::LogMessageStream(log4cpp::Category& logger, P_log_func log_func)
+Logging::LogMessageStream::LogMessageStream(Category& logger, const P_log_func log_func)
     : m_logger(logger), m_log_func{log_func} {}
 /// @endcond Doxygen_Suppress
 

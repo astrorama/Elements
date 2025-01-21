@@ -28,22 +28,24 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 
+#include "ElementsKernel/Exit.h"     // for ExitCode
 #include "ElementsKernel/Export.h"   // for ELEMENTS_API
 #include "ElementsKernel/Logging.h"  // for Logging
 #include "ElementsKernel/Path.h"     // for Item
 
 namespace Elements {
-enum class ExitCode;
-}
 
-namespace Elements {
-
+/**
+ * @class SimpleProgram
+ * @brief Provides a framework for creating structured programs with customizable logic.
+ *
+ * SimpleProgram is a base class for defining programs that adhere to a specific execution
+ * structure. It manages program setup, execution, and offers a way to define program-specific
+ * functionality by overriding virtual methods.
+ */
 class ELEMENTS_API SimpleProgram {
 
 public:
-  using ExitCode = Elements::ExitCode;
-  using Logging  = Elements::Logging;
-
   ExitCode          run(int argc, char** argv) noexcept;
   const Path::Item& getProgramPath() const;
   const Path::Item& getProgramName() const;

@@ -19,21 +19,21 @@
 
 namespace Elements::Examples {
 
-Rectangle::Rectangle(const int X0, const int Y0, const int X1, const int Y1) {
-  x0 = X0;
-  y0 = Y0;
-  x1 = X1;
-  y1 = Y1;
+Rectangle::Rectangle(const int xl, const int yl, const int xu, const int yu) {
+  x0 = xl;
+  y0 = yl;
+  x1 = xu;
+  y1 = yu;
 }
 
 Rectangle::~Rectangle() = default;
 
 int Rectangle::getLength() const {
-  return (x1 - x0);
+  return x1 - x0;
 }
 
 int Rectangle::getHeight() const {
-  return (y1 - y0);
+  return y1 - y0;
 }
 
 int Rectangle::getArea() const {

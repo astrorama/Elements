@@ -39,31 +39,31 @@ BOOST_AUTO_TEST_SUITE(ModuleInfo_test)
 //-----------------------------------------------------------------------------
 struct ModuleInfo_Fixture {
 
-  ModuleInfo_Fixture() {}
+  ModuleInfo_Fixture() = default;
 
-  ~ModuleInfo_Fixture() {}
+  ~ModuleInfo_Fixture() = default;
 };
 
 //-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_CASE(GetExecutablePath_test) {
 
-  auto exe_path = System::getExecutablePath();
+  const auto exe_path = System::getExecutablePath();
 
   BOOST_CHECK(exe_path.filename().string() == "ModuleInfo_test");
 }
 
 BOOST_AUTO_TEST_CASE(ExeName_test) {
 
-  auto   exe_path = System::getExecutablePath();
-  string name     = System::exeName();
+  const auto    exe_path = System::getExecutablePath();
+  const string& name     = System::exeName();
 
   BOOST_CHECK_EQUAL(exe_path.string(), name);
 }
 
 BOOST_AUTO_TEST_CASE(SelfProc_test) {
 
-  auto proc_path = System::getSelfProc();
+  const auto proc_path = System::getSelfProc();
 
   BOOST_CHECK(not proc_path.empty());
 }
@@ -78,19 +78,19 @@ BOOST_AUTO_TEST_CASE(addresse_test) {
 
   const System::ModuleInfo& info = System::getThisModuleInfo();
 
-  BOOST_CHECK_EQUAL(info.addresse(), static_cast<void*>(0));
+  BOOST_CHECK_EQUAL(info.addresse(), static_cast<void*>(nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(moduleName_test) {
 
-  auto module_name = System::moduleName();
+  const auto& module_name = System::moduleName();
 
   BOOST_CHECK_EQUAL(module_name, "libElementsKernel");
 }
 
 BOOST_AUTO_TEST_CASE(moduleNameFull_test) {
 
-  auto module_name_full = System::moduleNameFull();
+  const auto& module_name_full = System::moduleNameFull();
 
   string module = ::basename(const_cast<char*>(module_name_full.c_str()));
 
@@ -99,21 +99,21 @@ BOOST_AUTO_TEST_CASE(moduleNameFull_test) {
 
 BOOST_AUTO_TEST_CASE(exeHandle_test) {
 
-  auto exe_handle = System::exeHandle();
+  const auto exe_handle = System::exeHandle();
 
-  BOOST_CHECK_NE(exe_handle, static_cast<void*>(0));
+  BOOST_CHECK_NE(exe_handle, static_cast<void*>(nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(linkedModules_test) {
 
-  auto linked_modules = System::linkedModules();
+  const auto linked_modules = System::linkedModules();
 
   BOOST_CHECK(linked_modules.size() > 0);
 }
 
 BOOST_AUTO_TEST_CASE(linkedModulePaths_test) {
 
-  auto linked_module_path = System::linkedModulePaths();
+  const auto linked_module_path = System::linkedModulePaths();
 
   BOOST_CHECK(linked_module_path.size() > 0);
 }

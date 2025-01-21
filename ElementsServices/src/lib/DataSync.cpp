@@ -32,8 +32,8 @@ namespace DataSync {
 
 DataSync::DataSync(const path& connectionFile, const path& dependencyFile)
     : m_connectionConfig(connectionFile)
-    , m_distantRoot(m_connectionConfig.distantRoot)
-    , m_localRoot(m_connectionConfig.localRoot)
+    , m_distantRoot(m_connectionConfig.distant_root)
+    , m_localRoot(m_connectionConfig.local_root)
     , m_dependencyConfig(m_distantRoot, m_localRoot, dependencyFile) {}
 
 void DataSync::download() const {
@@ -44,7 +44,7 @@ void DataSync::download() const {
 void DataSync::downloadWithFallback(const path& connectionFile) {
   try {
     download();
-  } catch (std::exception& e) {
+  } catch (std::exception&) {
     m_connectionConfig = ConnectionConfiguration(connectionFile);
     download();
   }

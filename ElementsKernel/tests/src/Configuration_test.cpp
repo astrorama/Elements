@@ -70,8 +70,8 @@ struct Configuration_Fixture {
     m_item_list.emplace_back(m_top_dir.path() / "test2");
     m_item_list.emplace_back(m_top_dir.path() / "test3");
 
-    for_each(m_item_list.cbegin(), m_item_list.cend(), [](Path::Item p) {
-      boost::filesystem::create_directory(p);
+    for_each(m_item_list.cbegin(), m_item_list.cend(), [](const Path::Item& p) {
+      create_directory(p);
     });
 
     m_item_list.emplace_back(m_top_dir.path() / "test4");
@@ -81,20 +81,20 @@ struct Configuration_Fixture {
     m_target_item_list.emplace_back(Path::Item(System::DEFAULT_INSTALL_PREFIX) / "share" / "conf");
 
     m_real_item_list.resize(m_item_list.size());
-    auto it = copy_if(m_item_list.begin(), m_item_list.end(), m_real_item_list.begin(), [](const Path::Item& p) {
+    const auto it = copy_if(m_item_list.begin(), m_item_list.end(), m_real_item_list.begin(), [](const Path::Item& p) {
       return exists(p);
     });
     m_real_item_list.erase(it, m_real_item_list.end());
 
     m_target_real_item_list.resize(m_target_item_list.size());
-    auto it2 = copy_if(m_target_item_list.begin(), m_target_item_list.end(), m_target_real_item_list.begin(),
-                       [](const Path::Item& p) {
-                         return exists(p);
-                       });
+    const auto it2 = copy_if(m_target_item_list.begin(), m_target_item_list.end(), m_target_real_item_list.begin(),
+                             [](const Path::Item& p) {
+                               return exists(p);
+                             });
     m_target_real_item_list.erase(it2, m_target_real_item_list.end());
   }
 
-  ~Configuration_Fixture() {}
+  ~Configuration_Fixture() = default;
 };
 
 BOOST_AUTO_TEST_SUITE(Configuration_test)

@@ -40,24 +40,24 @@ class OpenMP final : public Program {
 public:
   ExitCode mainMethod(map<string, VariableValue>& /*args*/) override {
 
-    auto log = Logging::getLogger("OpenMP");
+    const auto log = Logging::getLogger("OpenMP");
 
-    const int width      = 78;
-    const int height     = 44;
-    const int num_pixels = width * height;
+    constexpr int width      = 78;
+    constexpr int height     = 44;
+    constexpr int num_pixels = width * height;
 
     const complex center(-.7, 0);
     const complex span(2.7, -(4 / 3.0) * 2.7 * height / width);
-    const complex begin   = center - span / 2.0;  //, end = center+span/2.0;
-    const int     maxiter = 100000;
+    const complex begin = center - span / 2.0;  //, end = center+span/2.0;
 
 #pragma omp parallel for ordered schedule(dynamic)
     for (int pix = 0; pix < num_pixels; ++pix) {
+      constexpr int maxiter = 100000;
 
       const int x = pix % width;
       const int y = pix / width;
 
-      complex c = begin + complex(x * span.real() / (width + 1.0), y * span.imag() / (height + 1.0));
+      const complex c = begin + complex(x * span.real() / (width + 1.0), y * span.imag() / (height + 1.0));
 
       size_t n = mandelbrotCalculate(c, maxiter);
       if (n == maxiter) {

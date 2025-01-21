@@ -37,13 +37,9 @@
  */
 struct ModuleInfoFixture {
 
-  ModuleInfoFixture() {
-    // call the constructor
-  }
+  ModuleInfoFixture() = default;
 
-  ~ModuleInfoFixture() {
-    // delete fixture object
-  }
+  ~ModuleInfoFixture() = default;
 };
 
 //-----------------------------------------------------------------------------

@@ -62,13 +62,13 @@ namespace Elements::Examples {
 
 void myLocalLogTestFunc() {
 
-  auto logger = Logging::getLogger();
+  const auto logger = Logging::getLogger();
   logger.info("Test of Message");
 
-  auto logger2 = Logging::getLogger(__func__);
+  const auto logger2 = Logging::getLogger(__func__);
   logger2.info("Test2 of Message");
 
-  auto logger3 = Logging::getLogger(BOOST_CURRENT_FUNCTION);
+  const auto logger3 = Logging::getLogger(BOOST_CURRENT_FUNCTION);
   logger3.info("Test3 of Message");
 }
 
@@ -134,7 +134,7 @@ public:
    */
   ExitCode mainMethod(map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("Program");
+    const auto log = Logging::getLogger("Program");
     log.info("Entering mainMethod()");
     log.info("#");
     /*
@@ -163,16 +163,16 @@ public:
      * The string-option has a default empty string value, so that it can always be
      * printed event as an empty string
      */
-    string string_example{args["string-option"].as<string>()};
+    const auto string_example{args["string-option"].as<string>()};
     log.info() << "String option value: " << string_example;
 
     log.info() << "The int-option value is " << args["int-option"].as<int>();
     log.info() << "The threshold value is " << args["threshold"].as<double>();
 
     // Some initialization
-    double  input_variable = 3.4756;
-    int64_t source_id      = 12345;
-    double  ra             = 45.637;
+    constexpr double  input_variable = 3.4756;
+    constexpr int64_t source_id      = 12345;
+    constexpr double  ra             = 45.637;
 
     // Factory method example
     ClassExample example_class_object = ClassExample::factoryMethod(source_id, ra);
@@ -184,8 +184,8 @@ public:
     const double method_result = ClassExample::fundamentalTypeMethod(input_variable);
     log.info() << "Some result: " << method_result;
 
-    double first = 1.0;
-    double division_result;
+    constexpr double first = 1.0;
+    double           division_result;
     try {
       log.info("#");
       log.info("#   Calling a method throwing an exception ");
@@ -206,10 +206,10 @@ public:
     /*
      * Illustration on how best to use smart pointer (regular pointer should not
      * be used anymore). The move() indicate that the ownership of the pointer is given to the
-     * method called. The vector_unique_ptr cannot be used in this method anymore after the
+     * method called. The vector_unique_ptr cannot be used in this method any more after the
      * call.
      */
-    const std::unique_ptr<vector<double>> vector_unique_ptr{new vector<double>{1.0, 2.3, 4.5}};
+    const std::unique_ptr<vector<double>> vector_unique_ptr{new vector{1.0, 2.3, 4.5}};
     ClassExample::passingUniquePointer(vector_unique_ptr);
 
     /*
@@ -221,7 +221,7 @@ public:
 
     log.info() << "Function Example: " << functionExample(3);
 
-    log.info() << "This executable name: " << Elements::System::getThisExecutableInfo().name();
+    log.info() << "This executable name: " << System::getThisExecutableInfo().name();
 
     myLocalLogTestFunc();
 

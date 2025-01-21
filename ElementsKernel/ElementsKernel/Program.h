@@ -117,7 +117,7 @@ public:
   virtual ExitCode mainMethod(std::map<std::string, VariableValue>& args) = 0;
 };
 
-/** These are examples of how to create a executable program using
+/** These are examples of how to create an executable program using
  * the Program class.
  * @example ElementsExamples/src/program/SimpleProgram.cpp
  * @include ElementsExamples/src/program/Program.cpp

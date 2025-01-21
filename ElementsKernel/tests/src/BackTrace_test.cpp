@@ -44,12 +44,10 @@ BOOST_AUTO_TEST_CASE(Raw_test) {
   using std::size_t;
   using std::string;
 
-  const size_t depth = 21;
+  constexpr size_t depth = 21;
 
-  std::vector<string> trace = System::backTrace(depth);
-
-  if (not trace.empty()) {
-    size_t found = trace[0].find("BackTrace_test");
+  if (std::vector<string> trace = System::backTrace(depth); not trace.empty()) {
+    const size_t found = trace[0].find("BackTrace_test");
     BOOST_CHECK_NE(found, string::npos);
   }
 }

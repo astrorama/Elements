@@ -40,7 +40,7 @@ public:
 
     using ::Eigen::MatrixXd;
 
-    auto log = Logging::getLogger("EigenExample");
+    const auto log = Logging::getLogger("EigenExample");
 
     MatrixXd m(2, 2);
     m(0, 0) = 3;

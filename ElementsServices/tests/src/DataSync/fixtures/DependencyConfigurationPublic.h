@@ -26,9 +26,9 @@
 class DependencyConfigurationPublic : public ElementsServices::DataSync::DependencyConfiguration {
 public:
   virtual ~DependencyConfigurationPublic() = default;
-  DependencyConfigurationPublic(ElementsServices::DataSync::path distantRoot,
-                                ElementsServices::DataSync::path localRoot,
-                                ElementsServices::DataSync::path configFile);
+  DependencyConfigurationPublic(const ElementsServices::DataSync::path& distant_root,
+                                const ElementsServices::DataSync::path& local_root,
+                                const ElementsServices::DataSync::path& config_file);
   using ElementsServices::DataSync::DependencyConfiguration::aliasSeparator;
   using ElementsServices::DataSync::DependencyConfiguration::lineHasAlias;
   using ElementsServices::DataSync::DependencyConfiguration::parseLineWithAlias;

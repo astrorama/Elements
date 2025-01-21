@@ -59,11 +59,9 @@ BOOST_AUTO_TEST_CASE(checkCall_test) {
 }
 
 BOOST_AUTO_TEST_CASE(runCommand_out_test) {
-  const string            msg("toto");
-  const auto              outerr = DataSync::runCommandAndCaptureOutErr("echo " + msg);
-  auto                    output = outerr.first;
-  const string::size_type size   = output.size();
-  if (output[size - 1] == '\n') {
+  const string msg("toto");
+  auto [output, error] = DataSync::runCommandAndCaptureOutErr("echo " + msg);
+  if (const string::size_type size = output.size(); output[size - 1] == '\n') {
     output.resize(size - 1);
   }
   BOOST_CHECK_EQUAL(output, msg);
@@ -71,7 +69,7 @@ BOOST_AUTO_TEST_CASE(runCommand_out_test) {
 
 BOOST_FIXTURE_TEST_CASE(localWorkspacePrefix_test, WorkspaceFixture) {
   const string localEv = DataSync::environmentVariable("NOPREFIX");
-  if (localEv == "") {
+  if (localEv.empty()) {
     BOOST_CHECK_NE(DataSync::localWorkspacePrefix(), "");
   } else {
     BOOST_CHECK_EQUAL(DataSync::localWorkspacePrefix(), "");
@@ -117,7 +115,7 @@ BOOST_AUTO_TEST_CASE(getWorkdirVariable_test) {
     local[DataSync::WORKDIR_VAR_VAR] = "THIS_WORKDIR";
     BOOST_CHECK_EQUAL(DataSync::getWorkdirVariable(), "THIS_WORKDIR");
     if (local["THIS_WORKDIR"].empty()) {
-      TempPath this_workdir;
+      const TempPath this_workdir;
       local["THIS_WORKDIR"] = this_workdir.path().string();
     }
     BOOST_CHECK_EQUAL(DataSync::localWorkspacePrefix(), string(local[local[DataSync::WORKDIR_VAR_VAR]]));

@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_SUITE(ConnectionConfiguration_test)
 
 //-----------------------------------------------------------------------------
 
-void checkHostParsing(DataHost host, vector<string> names) {
+void checkHostParsing(const DataHost host, const vector<string>& names) {
   ConnectionConfigurationPublic config;
   for (const auto& name : names) {
     config.parseHost(name);
@@ -61,18 +61,18 @@ BOOST_AUTO_TEST_CASE(host_parsing_test) {
 }
 
 BOOST_AUTO_TEST_CASE(overwriting_policy_test) {
-  ConnectionConfiguration config(theWebdavFrConfig());
-  ConnectionConfiguration configNoOverwrite(theNoOverwriteConfig());
+  const ConnectionConfiguration config(theWebdavFrConfig());
+  const ConnectionConfiguration configNoOverwrite(theNoOverwriteConfig());
   BOOST_CHECK(config.overwritingAllowed());
   BOOST_CHECK(not configNoOverwrite.overwritingAllowed());
 }
 
 BOOST_FIXTURE_TEST_CASE(webdav_fr_config_test, WorkspaceFixture) {
-  ConnectionConfiguration config(theWebdavFrConfig());
+  const ConnectionConfiguration config(theWebdavFrConfig());
   BOOST_CHECK(config.host == DataHost::WEBDAV);
-  BOOST_CHECK(config.overwritingPolicy == DataSync::OverwritingPolicy::OVERWRITE);
-  BOOST_CHECK_EQUAL(config.distantRoot.string(), "/euclid-fr/ct/mock_test_data");
-  BOOST_CHECK_EQUAL(config.localRoot.string(), thePrefixedLocalWorkspace());
+  BOOST_CHECK(config.overwriting_policy == DataSync::OverwritingPolicy::OVERWRITE);
+  BOOST_CHECK_EQUAL(config.distant_root.string(), "/euclid-fr/ct/mock_test_data");
+  BOOST_CHECK_EQUAL(config.local_root.string(), thePrefixedLocalWorkspace());
   BOOST_CHECK_EQUAL(config.tries, 8);
 }
 

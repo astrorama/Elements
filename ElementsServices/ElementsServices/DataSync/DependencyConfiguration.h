@@ -50,7 +50,7 @@ class ELEMENTS_API DependencyConfiguration {
 public:
   virtual ~DependencyConfiguration() = default;
 
-  DependencyConfiguration(const path& distantRoot, const path& localRoot, const path& configFile);
+  DependencyConfiguration(path distantRoot, path localRoot, const path& configFile);
 
   std::map<path, path> fileMap() const;
 

@@ -43,7 +43,7 @@ namespace DataSync {
  * @ingroup ElementsServices
  * @brief An exception raised when downloading fails.
  */
-class ELEMENTS_API DownloadFailed : public std::runtime_error {
+class ELEMENTS_API DownloadFailed final : public std::runtime_error {
 public:
   ~DownloadFailed() override = default;
   DownloadFailed(const path& distantFile, const path& localFile)

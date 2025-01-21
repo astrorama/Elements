@@ -41,11 +41,18 @@ class ModuleInfo;
  */
 static const ModuleInfo& getThisModuleInfo();
 
-/** @example ElementsExamples/src/lib/default/ModuleInfo.cpp
- * This is an example of how to use the getThisModuleInfo function.
- * The call has to be compiled in the module (library)
+/**
+ * @brief Function to retrieve the information of the current executable.
+ * @ingroup ElementsKernel
+ *
+ * This function provides runtime metadata about the module associated with
+ * the current executable. It dynamically loads the main function symbol to
+ * construct the module information if it has not been initialized yet.
+ * The function is thread-safe due to the use of a static variable.
+ *
+ * @return A reference to the ModuleInfo instance containing the information
+ * about the current executable.
  */
-
 ELEMENTS_API const ModuleInfo& getThisExecutableInfo();
 
 }  // namespace Elements::System
