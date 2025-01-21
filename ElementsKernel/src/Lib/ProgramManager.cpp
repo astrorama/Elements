@@ -92,9 +92,9 @@ const Path::Item& ProgramManager::getProgramName() const {
 }
 
 /**
- * @brief Get default config file
- * @todo check whether priotities are correct if more than one
- * config file is found in pathSearchInEnvVariable
+ * @brief Get default configuration file
+ * @todo check whether priorities are correct if more than one
+ * configuration file is found in pathSearchInEnvVariable
  * */
 Path::Item ProgramManager::getDefaultConfigFile(const Path::Item& program_name, const string& module_name) {
   Path::Item default_config_file{};
