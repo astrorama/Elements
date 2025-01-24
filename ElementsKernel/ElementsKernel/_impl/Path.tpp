@@ -26,7 +26,6 @@
 #else
 
 #include <algorithm>      // IWYU pragma: keep
-#include <iosfwd>         // for ptrdiff_t
 #include <string>         // for string
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for forward, pair
@@ -47,7 +46,7 @@ Item getPathFromLocations(const T& file_name, const std::vector<U>& locations) {
   Item file_path{file_name};
 
   auto found_pos = std::find_if(locations.cbegin(), locations.cend(), [file_path](const U& l) {
-    return boost::filesystem::exists(Item{l} / file_path);
+    return exists(Item{l} / file_path);
   });
 
   if (found_pos != locations.cend()) {
@@ -68,7 +67,7 @@ std::vector<Item> getAllPathFromLocations(const T& file_name, const std::vector<
   });
 
   auto found_pos = std::remove_if(file_list.begin(), file_list.end(), [](const Item& p) {
-    return not boost::filesystem::exists(p);
+    return not exists(p);
   });
 
   file_list.erase(found_pos, file_list.end());

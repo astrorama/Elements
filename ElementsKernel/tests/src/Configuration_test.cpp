@@ -21,7 +21,7 @@
 
 #include "ElementsKernel/Configuration.h"  // header to test
 
-#include <boost/filesystem/operations.hpp>  // for exists, create_directory, is_regular
+#include <boost/filesystem/operations.hpp>  // for exists, create_directory
 #include <boost/filesystem/path.hpp>        // for operator/, path
 #include <boost/test/unit_test.hpp>
 
@@ -38,8 +38,7 @@
 using std::string;
 using std::vector;
 
-using boost::filesystem::exists;
-using boost::filesystem::is_regular;
+using std::filesystem::exists;
 
 namespace Elements {
 

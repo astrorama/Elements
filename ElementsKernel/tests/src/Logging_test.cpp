@@ -46,7 +46,7 @@ using std::tie;
 using std::tuple;
 using std::vector;
 
-using boost::filesystem::exists;
+using std::filesystem::exists;
 
 // A class which takes over the given stream and keeps track of the log messages
 // sent to it. It recovers the given stream in its previous state during destruction.

@@ -41,6 +41,7 @@
 #include <vector>   // for vector
 
 #include <boost/filesystem/path.hpp>  // for path
+#include <filesystem>
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 
@@ -58,7 +59,7 @@ enum class Type { executable, library, python, configuration, auxiliary };
  * @typedef local alias for the path
  * @ingroup ElementsKernel
  */
-using Item = boost::filesystem::path;
+using Item = std::filesystem::path;
 
 /**
  * @brief Separator of path entries. Usually ":" on Unix.
