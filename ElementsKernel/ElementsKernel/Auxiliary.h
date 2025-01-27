@@ -2,7 +2,7 @@
  * @file ElementsKernel/Auxiliary.h
  *
  * @brief provide functions to retrieve auxiliary files
- * @date 2017-02-08
+ * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment

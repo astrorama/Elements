@@ -35,7 +35,8 @@
 using std::string;
 using std::vector;
 
-using std::filesystem::exists;
+using boost::filesystem::exists;
+using boost::filesystem::is_regular;
 
 namespace Elements {
 

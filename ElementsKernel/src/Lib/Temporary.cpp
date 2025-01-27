@@ -22,7 +22,6 @@
 #include "ElementsKernel/Temporary.h"
 
 #include <string>  // for string
-#include <filesystem>
 
 #include <boost/filesystem/fstream.hpp>     // for fstream
 #include <boost/filesystem/operations.hpp>  // for create_directory, remove_all, temp_directory_path, unique_path
@@ -33,7 +32,7 @@
 #include "ElementsKernel/Logging.h"      // for Logging
 #include "ElementsKernel/Path.h"         // for Item
 
-using std::filesystem::temp_directory_path;
+using boost::filesystem::temp_directory_path;
 using std::string;
 
 namespace Elements {
@@ -58,7 +57,7 @@ TempPath::TempPath(string motif, string keep_var)
     pattern = DEFAULT_TMP_MOTIF;
   }
 
-  m_path /= unique_path(pattern).string();
+  m_path /= unique_path(pattern);
 }
 
 TempPath::~TempPath() {
@@ -93,8 +92,7 @@ TempFile::TempFile(const string& motif, const string& keep_var) : TempPath(motif
 
   log.debug() << "Creation of the " << path() << " temporary file";
 
-  std::ofstream ofs(path());
-
+  boost::filesystem::ofstream ofs(path());
   ofs.close();
 }
 
