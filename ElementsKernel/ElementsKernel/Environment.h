@@ -45,7 +45,6 @@ class ELEMENTS_API Environment {
 public:
   class Variable;
 
-public:
   /// default constructor
   explicit Environment(bool keep_same = true);
   /**
@@ -127,7 +126,7 @@ public:
    * @param index The key to check for existence in the environment.
    * @return True if the key exists, false otherwise.
    */
-  static bool hasKey(const std::string&);
+  static bool hasKey(const std::string& index);
   /**
    * @brief Commits changes to the environment, saving the current state and capturing
    *        any added or modified environment variables.
