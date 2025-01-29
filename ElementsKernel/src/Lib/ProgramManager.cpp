@@ -107,7 +107,7 @@ Path::Item ProgramManager::getDefaultConfigFile(const Path::Item& program_name, 
   default_config_file = getConfigurationPath(conf_name.string(), false);
   if (default_config_file.empty()) {
     log.warn() << "The " << conf_name << " default configuration file cannot be found in:";
-    for (auto loc : getConfigurationLocations()) {
+    for (const auto& loc : getConfigurationLocations()) {
       log.warn() << " " << loc;
     }
     if (not module_name.empty()) {
@@ -250,8 +250,8 @@ VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
       // Parse from the configuration file if it exists
       if (not config_file.empty() and exists(config_file)) {
         if (std::ifstream ifs{config_file.string()}) {
-          auto parsed_cfgfile_options = parse_config_file(ifs, all_cmd_and_file_options);
-          store(parsed_cfgfile_options, var_map);
+          auto parsed_config_file_options = parse_config_file(ifs, all_cmd_and_file_options);
+          store(parsed_config_file_options, var_map);
         }
       }
     }
@@ -412,7 +412,7 @@ void ProgramManager::setup(const int argc, char* argv[]) {
   // and retrieve the local environment
   bootstrapEnvironment(argv[0]);
 
-  // get all program options into the varaiable_map
+  // get all program options into the variable_map
   try {
     m_variables_map = getProgramOptions(argc, argv);
   } catch (const OptionException& e) {

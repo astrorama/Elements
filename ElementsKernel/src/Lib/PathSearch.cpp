@@ -21,7 +21,6 @@
 
 #include "ElementsKernel/PathSearch.h"
 
-#include <iterator>  // for operator!=
 #include <string>    // for allocator, string, basic_string
 #include <vector>    // for vector
 

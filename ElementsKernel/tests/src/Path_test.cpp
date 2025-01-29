@@ -131,9 +131,9 @@ BOOST_AUTO_TEST_CASE(PathConstructor_test) {
   const Path::Item test_path3{};
   BOOST_CHECK(test_path3.empty());
 
-  BOOST_CHECK(test_path3.string() == "");
-  BOOST_CHECK(test_path3.filename() == "");
-  BOOST_CHECK(test_path3.parent_path() == "");
+  BOOST_CHECK(test_path3.string().empty());
+  BOOST_CHECK(test_path3.filename().empty());
+  BOOST_CHECK(test_path3.parent_path().empty());
 }
 
 BOOST_FIXTURE_TEST_CASE(getFromLocations_test, Path_Fixture) {
@@ -142,10 +142,10 @@ BOOST_FIXTURE_TEST_CASE(getFromLocations_test, Path_Fixture) {
 
   const auto that_file = getPathFromLocations("Bla", m_item_list);
 
-  BOOST_CHECK(that_file.filename() == "");
+  BOOST_CHECK(that_file.filename().empty());
 
   const auto that_dir = getPathFromLocations("foo", m_item_list);
-  BOOST_CHECK(that_dir.filename() != "");
+  BOOST_CHECK(!that_dir.filename().empty());
   BOOST_CHECK(exists(that_dir));
 
   const Path::Item f_path{m_top_dir.path() / "test2" / "bar"};
@@ -153,7 +153,7 @@ BOOST_FIXTURE_TEST_CASE(getFromLocations_test, Path_Fixture) {
   create_test_file(f_path);
 
   const auto that_file2 = getPathFromLocations("bar", m_item_list);
-  BOOST_CHECK(that_file2.filename() != "");
+  BOOST_CHECK(!that_file2.filename().empty());
   BOOST_CHECK(exists(that_file2));
   BOOST_CHECK(is_regular_file(that_file2));
 }
@@ -197,10 +197,10 @@ BOOST_FIXTURE_TEST_CASE(getFromStringLocations_test, Path_Fixture) {
 
   const auto that_file = getPathFromLocations("Bla", str_item_list);
 
-  BOOST_CHECK(that_file.filename() == "");
+  BOOST_CHECK(that_file.filename().empty());
 
   const auto that_dir = getPathFromLocations("foo", str_item_list);
-  BOOST_CHECK(that_dir.filename() != "");
+  BOOST_CHECK(!that_dir.filename().empty());
   BOOST_CHECK(exists(that_dir));
 
   const Path::Item f_path{m_top_dir.path() / "test2" / "bar"};
@@ -208,7 +208,7 @@ BOOST_FIXTURE_TEST_CASE(getFromStringLocations_test, Path_Fixture) {
   create_test_file(f_path);
 
   const auto that_file2 = getPathFromLocations("bar", str_item_list);
-  BOOST_CHECK(that_file2.filename() != "");
+  BOOST_CHECK(!that_file2.filename().empty());
   BOOST_CHECK(exists(that_file2));
   BOOST_CHECK(is_regular_file(that_file2));
 }

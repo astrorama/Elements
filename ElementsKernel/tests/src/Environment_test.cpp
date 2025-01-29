@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(SetVariable_test) {
   first[var_name_2] = "";
 
   BOOST_CHECK(isEnvSet(var_name_2));
-  BOOST_CHECK("" == string(first[var_name_2]));
+  BOOST_CHECK(string(first[var_name_2]).empty());
 
   unSetEnv(var_name_2);
 }
