@@ -51,7 +51,7 @@ _localUrlOpen = urlopen
 
 
 def getInfo(name, db_url, entity_type=DEFAULT_TYPE):
-    """ Get the informations about a given entity of a specific type """
+    """ Get the information about a given entity of a specific type """
     full_url = db_url + "/NameCheck/exists?name=%s&type=%s" % (name, entity_type)
     LOGGER.debug("The url for the name request: %s", full_url)
     info = json.loads(_localUrlOpen(full_url).read().decode("utf-8"))

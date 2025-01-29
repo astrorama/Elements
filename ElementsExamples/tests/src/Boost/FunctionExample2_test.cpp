@@ -1,5 +1,5 @@
 /**
- * @file functionExample2_test.cpp
+ * @file FunctionExample2_test.cpp
  *
  * Created on: Feb 22nd, 2017
  *     Author: Pierre Dubath

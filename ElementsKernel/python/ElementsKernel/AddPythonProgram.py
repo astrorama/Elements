@@ -201,7 +201,7 @@ def mainMethod(args):
         LOGGER.info('# Current directory : %s', current_dir)
         LOGGER.info('')
 
-        # We absolutely need a Elements cmake file
+        # We absolutely need an Elements cmake file
         module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
 
         program_file_path = os.path.join(current_dir, 'python', module_name, program_name + '.py')

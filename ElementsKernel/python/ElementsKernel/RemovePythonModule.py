@@ -132,7 +132,7 @@ def mainMethod(args):
     LOGGER.info('')
 
     try:
-        # We absolutely need a Elements cmake file
+        # We absolutely need an Elements cmake file
         module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
 
         # Default is the current directory

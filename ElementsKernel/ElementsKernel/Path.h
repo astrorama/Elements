@@ -86,7 +86,7 @@ ELEMENTS_API extern const std::map<Type, const std::vector<std::string>> SUFFIXE
 ELEMENTS_API extern const std::map<Type, const std::vector<std::string>> DEFAULT_LOCATIONS;
 
 /**
- * @brief map containing the sub-level property of the path components
+ * @brief map containing the sublevel property of the path components
  * @ingroup ElementsKernel
  */
 ELEMENTS_API extern const std::map<Type, const bool> HAS_SUBLEVELS;
@@ -101,7 +101,7 @@ ELEMENTS_API extern const std::map<Type, const bool> HAS_SUBLEVELS;
  * @param path_variable
  *    name of the environment variable
  * @param exist_only
- *    if true returns only existing locations. by default it is set
+ *    if true returns only existing locations. by default, it is set
  *    to false.
  * @return
  *    return a list of boost filesystem paths
@@ -118,7 +118,7 @@ ELEMENTS_API std::vector<Item> getLocationsFromEnv(const std::string& path_varia
  * @param path_type
  *    type of the path
  * @param exist_only
- *    if true returns only existing locations. by default it is set
+ *    if true returns only existing locations. by default, it is set
  *    to false.
  * @return
  *    return a list of boost filesystem paths
