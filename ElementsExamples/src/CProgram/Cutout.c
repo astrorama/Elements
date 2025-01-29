@@ -1,5 +1,5 @@
 /**
- * @file ElementsExamples/src/CProgram/Cutout.c
+ * @file Cutout.c
  * @date 2015-01-09
  * @author Pierre Dubath
  *

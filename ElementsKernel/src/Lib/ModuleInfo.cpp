@@ -1,5 +1,5 @@
 /**
- * @file ElementsKernel/src/Lib/ModuleInfo.cpp
+ * @file ModuleInfo.cpp
  * @brief OS specific details to access at run-time the module
  * configuration of the process.
  * @date 2014-12-01
