@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(moduleNameFull_test) {
 
   string module = ::basename(const_cast<char*>(module_name_full.c_str()));
 
-  BOOST_CHECK_EQUAL(module.substr(static_cast<string::size_type>(0), module.find('.')), "libElementsKernel");
+  BOOST_CHECK_EQUAL(module.substr(0, module.find('.')), "libElementsKernel");
 }
 
 BOOST_AUTO_TEST_CASE(exeHandle_test) {

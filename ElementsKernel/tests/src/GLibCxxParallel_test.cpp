@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(GLibCxxParallelWorks) {
 
   constexpr std::size_t val_size_t = 1000;
 
-  std::vector<double> vals(val_size_t, 1.0);
+  std::vector vals(val_size_t, 1.0);
 
   std::iota(vals.begin(), vals.end(), 0.0);
 

@@ -64,7 +64,7 @@ public:
 
     log.info("This Works");
 
-    Elements::nanoSleep(4);
+    nanoSleep(4);
 
     std::cout << "This Works too!" << std::endl;
 

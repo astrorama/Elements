@@ -146,7 +146,7 @@ unsigned long getProcedureByName(ImageHandle handle, const string& name, Creator
 /// Retrieve last error code
 unsigned long getLastError() {
   // convert errno (int) to unsigned long
-  return static_cast<unsigned long>(static_cast<unsigned int>(errno));
+  return static_cast<unsigned int>(errno);
 }
 
 /// Retrieve last error code as string
@@ -161,7 +161,7 @@ string getErrorString(const unsigned long error) {
   char*  cerrString(nullptr);
   // Remember: for linux dl* routines must be handled differently!
   if (error == 0xAFFEDEAD) {
-    cerrString = reinterpret_cast<char*>(dlerror());
+    cerrString = dlerror();
     if (nullptr == cerrString) {
       cerrString = std::strerror(static_cast<int>(error));
     }
@@ -213,7 +213,7 @@ string typeinfoName(const char* class_name) {
     /// substitute ', ' with ','
     string::size_type pos = result.find(", ");
     while (string::npos != pos) {
-      result.replace(pos, static_cast<string::size_type>(2), ",");
+      result.replace(pos, 2, ",");
       pos = result.find(", ");
     }
   }

@@ -53,7 +53,7 @@ using boost::filesystem::exists;
 class LogMessageTracker {
 public:
   explicit LogMessageTracker(std::ostream& stream)
-      : m_messages{}, m_stream(stream), m_old{stream.rdbuf(m_messages.rdbuf())} {}
+      : m_stream(stream), m_old{stream.rdbuf(m_messages.rdbuf())} {}
   ~LogMessageTracker() {
     m_stream.rdbuf(m_old);
   }
@@ -142,7 +142,7 @@ BOOST_FIXTURE_TEST_CASE(loggerNames_test, ElementsLogging_Fixture) {
 BOOST_FIXTURE_TEST_CASE(messageTextAndLevel_test, ElementsLogging_Fixture) {
 
   // Given
-  Elements::Logging::setLevel("DEBUG");
+  Logging::setLevel("DEBUG");
 
   // When
   m_logger.debug("Debug message");
@@ -225,7 +225,7 @@ BOOST_FIXTURE_TEST_CASE(messageTextAndLevel_test, ElementsLogging_Fixture) {
 BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
-  Elements::Logging::setLevel("DEBUG");
+  Logging::setLevel("DEBUG");
 
   // When
   m_logger.debug("Debug message");
@@ -240,7 +240,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  Elements::Logging::setLevel("INFO");
+  Logging::setLevel("INFO");
 
   // When
   m_logger.debug("Debug message");
@@ -255,7 +255,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  Elements::Logging::setLevel("WARN");
+  Logging::setLevel("WARN");
 
   // When
   m_logger.debug("Debug message");
@@ -270,7 +270,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  Elements::Logging::setLevel("ERROR");
+  Logging::setLevel("ERROR");
 
   // When
   m_logger.debug("Debug message");
@@ -285,7 +285,7 @@ BOOST_FIXTURE_TEST_CASE(setLevel_test, ElementsLogging_Fixture) {
 
   // Given
   m_tracker.reset();
-  Elements::Logging::setLevel("FATAL");
+  Logging::setLevel("FATAL");
 
   // When
   m_logger.debug("Debug message");

@@ -388,8 +388,8 @@ void ProgramManager::bootstrapEnvironment(char* arg0) {
 
   // insert local parent dir if it is not already
   // the first one of the list
-  const Path::Item this_parent_path = canonical(m_program_path.parent_path());
-  if (local_search_paths[0] != this_parent_path) {
+  if (const Path::Item this_parent_path = canonical(m_program_path.parent_path());
+      local_search_paths[0] != this_parent_path) {
     const auto b = local_search_paths.begin();
     local_search_paths.insert(b, this_parent_path);
   }

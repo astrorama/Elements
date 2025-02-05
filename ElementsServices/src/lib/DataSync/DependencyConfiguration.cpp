@@ -37,7 +37,7 @@ using std::string;
 using std::vector;
 
 DependencyConfiguration::DependencyConfiguration(path distantRoot, path localRoot, const path& configFile)
-    : m_aliasSeparator('\t'), m_distantRoot(std::move(distantRoot)), m_localRoot(std::move(localRoot)), m_fileMap() {
+    : m_aliasSeparator('\t'), m_distantRoot(std::move(distantRoot)), m_localRoot(std::move(localRoot)) {
   parseConfigurationFile(configFile);
 }
 

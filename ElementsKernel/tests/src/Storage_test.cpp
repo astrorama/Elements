@@ -31,8 +31,8 @@ using std::int64_t;
 
 namespace Elements {
 
-using Kernel::Units::storageConvert;
-using Kernel::Units::StorageType;
+using Units::storageConvert;
+using Units::StorageType;
 
 //-----------------------------------------------------------------------------
 //

@@ -41,7 +41,6 @@ bool almostEqual2sComplement(const float& left, const float& right, const int& m
   using std::int32_t;
   using std::uint32_t;
 
-  // int a_int = *(int*)&a;
   int32_t a_int;
   std::memcpy(&a_int, &left, sizeof(int32_t));
   // Make a_int lexicographically ordered as a twos-complement int
@@ -49,14 +48,12 @@ bool almostEqual2sComplement(const float& left, const float& right, const int& m
     a_int = static_cast<int32_t>(0x80000000 - static_cast<uint32_t>(a_int));
   }
   // Make b_int lexicographically ordered as a twos-complement int
-  //    int b_int = *(int*)&b;
   int32_t b_int;
   std::memcpy(&b_int, &right, sizeof(int32_t));
   if (b_int < 0) {
     b_int = static_cast<int32_t>(0x80000000 - static_cast<uint32_t>(b_int));
   }
-  int32_t int_diff = abs(a_int - b_int);
-  if (int_diff <= max_ulps && -max_ulps <= int_diff) {
+  if (int32_t int_diff = abs(a_int - b_int); int_diff <= max_ulps && -max_ulps <= int_diff) {
     return true;
   }
   return false;
@@ -67,8 +64,6 @@ bool almostEqual2sComplement(const double& left, const double& right, const int&
   using std::int64_t;
   using std::uint64_t;
 
-  // long long a_int = *(long long*)&a;
-
   int64_t a_int;
   std::memcpy(&a_int, &left, sizeof(a_int));
   // Make a_int lexicographically ordered as a twos-complement int
@@ -76,14 +71,12 @@ bool almostEqual2sComplement(const double& left, const double& right, const int&
     a_int = static_cast<int64_t>(0x8000000000000000LL - static_cast<uint64_t>(a_int));
   }
   // Make b_int lexicographically ordered as a twos-complement int
-  //    long long b_int = *(long long*)&b;
   int64_t b_int;
   std::memcpy(&b_int, &right, sizeof(b_int));
   if (b_int < 0) {
     b_int = static_cast<int64_t>(0x8000000000000000LL - static_cast<uint64_t>(b_int));
   }
-  int64_t int_diff = abs(a_int - b_int);
-  if (int_diff <= max_ulps && -max_ulps <= int_diff) {
+  if (int64_t int_diff = abs(a_int - b_int); int_diff <= max_ulps && -max_ulps <= int_diff) {
     return true;
   }
   return false;
