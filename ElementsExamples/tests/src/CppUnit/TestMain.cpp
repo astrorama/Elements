@@ -19,8 +19,6 @@
  *
  */
 
-#include <memory>  // for allocator
-
 #include <cppunit/extensions/TestFactoryRegistry.h>  // for TestFactoryRegistry
 #include <cppunit/ui/text/TestRunner.h>              // for TestRunner
 

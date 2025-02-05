@@ -28,7 +28,7 @@ This release essentially fixes problems met on the MacOS platform
     - The `elements_install_aux_files` gets a `WITH_CONFIGURE` option to enable the configure phase
 - Add the support for `include-what-you-use` (IWYU, https://github.com/include-what-you-use/include-what-you-use)
     - A new `iwyu` gmake target has been added
-    - Alernatively, the IWYU can also be run at compile time by using the `-DUSE_IWYU=ON` CMake option
+    - Alternatively, the IWYU can also be run at compile time by using the `-DUSE_IWYU=ON` CMake option
 - Add a CMake option to print the test command lines
     - the option name is PRINT_TEST_COMMANDS
     - it is set to OFF by default
