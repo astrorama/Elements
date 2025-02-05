@@ -47,10 +47,10 @@ int parallelSum(const int& first_number, const int& last_number) {
         for (int v = r.begin(); v != r.end(); v++) {
           init += v;
         }
-        return (init);
+        return init;
       },
       [](const int lhs, const int rhs) -> int {
-        return (lhs + rhs);
+        return lhs + rhs;
       });
 
   return sum;

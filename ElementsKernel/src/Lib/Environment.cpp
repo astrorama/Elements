@@ -190,7 +190,7 @@ Environment& Environment::set(const string& key, const string& value) {
 
   if (m_old_values.find(key) == m_old_values.end()) {
     if (hasKey(key)) {
-      if ((not m_keep_same) || (getEnv(key) != value)) {
+      if (not m_keep_same || getEnv(key) != value) {
         m_old_values[key] = getEnv(key);
       }
     } else {
