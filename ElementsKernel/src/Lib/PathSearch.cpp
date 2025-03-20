@@ -21,8 +21,8 @@
 
 #include "ElementsKernel/PathSearch.h"
 
-#include <string>    // for allocator, string, basic_string
-#include <vector>    // for vector
+#include <string>  // for allocator, string, basic_string
+#include <vector>  // for vector
 
 #include <boost/algorithm/string.hpp>       // for is_any_ofF, is_any_of, split
 #include <boost/filesystem/operations.hpp>  // for exists, is_directory

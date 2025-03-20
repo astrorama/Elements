@@ -52,8 +52,7 @@ using boost::filesystem::exists;
 // sent to it. It recovers the given stream in its previous state during destruction.
 class LogMessageTracker {
 public:
-  explicit LogMessageTracker(std::ostream& stream)
-      : m_stream(stream), m_old{stream.rdbuf(m_messages.rdbuf())} {}
+  explicit LogMessageTracker(std::ostream& stream) : m_stream(stream), m_old{stream.rdbuf(m_messages.rdbuf())} {}
   ~LogMessageTracker() {
     m_stream.rdbuf(m_old);
   }
