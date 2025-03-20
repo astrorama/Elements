@@ -38,6 +38,21 @@
 
 namespace Elements {
 
+/**
+ * @class Project
+ * @brief Represents a project with basic attributes and functionality.
+ *
+ * The Project class is designed to encapsulate details about a project,
+ * allowing for management and retrieval of its properties. This class
+ * provides mechanisms to set and get project attributes such as name,
+ * description, status, and other related attributes.
+ *
+ * This class can be extended to include more specialized project
+ * management functionalities.
+ *
+ * Potential enhancements may include integration with collaborators,
+ * advanced reporting, and dependency management between projects.
+ */
 struct Project {
 
   static std::string name();

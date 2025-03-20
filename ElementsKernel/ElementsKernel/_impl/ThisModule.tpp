@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/ThisModule.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/ThisModule.h instead"
@@ -27,8 +28,7 @@
 #include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
 #include "ElementsKernel/ModuleInfo.h"   // for ModuleInfo
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 inline const ModuleInfo& getThisModuleInfo() {
   static ModuleInfo this_module;
@@ -39,7 +39,6 @@ inline const ModuleInfo& getThisModuleInfo() {
   return this_module;
 }
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_

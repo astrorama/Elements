@@ -57,7 +57,7 @@ public:
    * @throws Elements::Exception
    *    If the given vector is empty
    */
-  double average(const std::vector<int>& v);
+  static double average(const std::vector<int>& v);
 };
 
 }  // namespace Elements::Examples

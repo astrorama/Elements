@@ -33,15 +33,14 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-class Gsl : public Program {
+class Gsl final : public Program {
 
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("GslExample");
+    const auto log = Logging::getLogger("GslExample");
 
     log.info() << "GSL version: " << gsl_version;
 
@@ -54,8 +53,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

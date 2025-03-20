@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(parse_line_without_alias_test) {
   const path                    local_root   = "local";
   DependencyConfigurationPublic config(distant_root, local_root, theDependencyConfig());
   const path                    distant_file = "test/some_file.fits";
-  const string                  line         = distant_file.string();
+  const string&                 line         = distant_file.string();
   BOOST_CHECK(not config.lineHasAlias(line));
   config.parseLineWithoutAlias(line);
   const path found_distant_file = config.distantPathOf(local_root / distant_file);
@@ -69,8 +69,8 @@ BOOST_AUTO_TEST_CASE(parse_line_with_alias_test) {
 }
 
 BOOST_AUTO_TEST_CASE(conf_dependencies_test) {
-  DataSync::DependencyConfiguration config("", "", theDependencyConfig());
-  const auto                        found_files = config.localPaths();
+  const DataSync::DependencyConfiguration config("", "", theDependencyConfig());
+  const auto                              found_files = config.localPaths();
   BOOST_CHECK_EQUAL(found_files.size(), theLocalFiles().size());
   for (const auto& expected : theLocalFiles()) {
     BOOST_CHECK(DataSync::valueIsListed(expected, found_files));

@@ -36,7 +36,7 @@ namespace Elements::Examples {
  *    This class is an example of a program based on the SimpleProgram class. It can be copied/pasted
  *    conveniently to write a new program.
  */
-class AnotherSimpleProgram : public SimpleProgram {
+class AnotherSimpleProgram final : public SimpleProgram {
 
 public:
   void defineOptions() override {}

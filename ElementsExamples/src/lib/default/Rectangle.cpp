@@ -1,5 +1,5 @@
 /**
- * @file ElementsExamples/src/lib/default/Rectangle.cpp
+ * @file Rectangle.cpp
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -17,36 +17,34 @@
 
 #include "ElementsExamples/Rectangle.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-Rectangle::Rectangle(int X0, int Y0, int X1, int Y1) {
-  x0 = X0;
-  y0 = Y0;
-  x1 = X1;
-  y1 = Y1;
+Rectangle::Rectangle(const int xl, const int yl, const int xu, const int yu) {
+  x0 = xl;
+  y0 = yl;
+  x1 = xu;
+  y1 = yu;
 }
 
-Rectangle::~Rectangle() {}
+Rectangle::~Rectangle() = default;
 
-int Rectangle::getLength() {
-  return (x1 - x0);
+int Rectangle::getLength() const {
+  return x1 - x0;
 }
 
-int Rectangle::getHeight() {
-  return (y1 - y0);
+int Rectangle::getHeight() const {
+  return y1 - y0;
 }
 
-int Rectangle::getArea() {
+int Rectangle::getArea() const {
   return (x1 - x0) * (y1 - y0);
 }
 
-void Rectangle::move(int dx, int dy) {
+void Rectangle::move(const int dx, const int dy) {
   x0 += dx;
   y0 += dy;
   x1 += dx;
   y1 += dy;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

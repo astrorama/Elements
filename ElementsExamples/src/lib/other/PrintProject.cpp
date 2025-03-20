@@ -25,12 +25,10 @@
 
 #include "ElementsKernel/Project.h"  // for Project
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 void printProject() {
   std::cout << Project() << std::endl;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

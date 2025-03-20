@@ -36,8 +36,8 @@ namespace DataSync {
 using std::string;
 using std::vector;
 
-DependencyConfiguration::DependencyConfiguration(path distantRoot, path localRoot, path configFile)
-    : m_aliasSeparator('\t'), m_distantRoot(distantRoot), m_localRoot(localRoot), m_fileMap() {
+DependencyConfiguration::DependencyConfiguration(path distantRoot, path localRoot, const path& configFile)
+    : m_aliasSeparator('\t'), m_distantRoot(std::move(distantRoot)), m_localRoot(std::move(localRoot)) {
   parseConfigurationFile(configFile);
 }
 
@@ -45,7 +45,7 @@ std::map<path, path> DependencyConfiguration::fileMap() const {
   return m_fileMap;
 }
 
-path DependencyConfiguration::distantPathOf(path localFile) const {
+path DependencyConfiguration::distantPathOf(const path& localFile) const {
   return m_fileMap.at(localFile);  // @TODO error handling
 }
 
@@ -55,22 +55,22 @@ std::size_t DependencyConfiguration::dependencyCount() const {
 
 vector<path> DependencyConfiguration::distantPaths() const {
   vector<path> distant_paths;
-  for (const auto& item : m_fileMap) {
-    distant_paths.emplace_back(item.second);
+  for (const auto& [local, distant] : m_fileMap) {
+    distant_paths.emplace_back(distant);
   }
   return distant_paths;
 }
 
 vector<path> DependencyConfiguration::localPaths() const {
   vector<path> local_paths;
-  for (const auto& item : m_fileMap) {
-    local_paths.emplace_back(item.first);
+  for (const auto& [local, distant] : m_fileMap) {
+    local_paths.emplace_back(local);
   }
   return local_paths;
 }
 
-void DependencyConfiguration::parseConfigurationFile(path filename) {
-  path          abs_path = confFilePath(filename);
+void DependencyConfiguration::parseConfigurationFile(const path& filename) {
+  const path    abs_path = confFilePath(filename);
   std::ifstream inputStream(abs_path.c_str());
   string        line;
   while (std::getline(inputStream, line)) {
@@ -78,7 +78,7 @@ void DependencyConfiguration::parseConfigurationFile(path filename) {
   }
 }
 
-void DependencyConfiguration::parseConfigurationLine(string line) {
+void DependencyConfiguration::parseConfigurationLine(const string& line) {
   if (lineHasAlias(line)) {
     parseLineWithAlias(line);
   } else {
@@ -90,21 +90,21 @@ char DependencyConfiguration::aliasSeparator() const {
   return m_aliasSeparator;
 }
 
-bool DependencyConfiguration::lineHasAlias(string line) const {
-  string::size_type offset = line.find(m_aliasSeparator);
+bool DependencyConfiguration::lineHasAlias(const string& line) const {
+  const string::size_type offset = line.find(m_aliasSeparator);
   return offset != string::npos;
 }
 
-void DependencyConfiguration::parseLineWithAlias(string line) {
-  string::size_type offset          = line.find(m_aliasSeparator);
-  const string      distantFilename = line.substr(0, offset);
-  const string      localFilename   = line.substr(offset + 1);
-  const path        distantPath     = m_distantRoot / distantFilename;
-  const path        localPath       = m_localRoot / localFilename;
-  m_fileMap[localPath]              = distantPath;
+void DependencyConfiguration::parseLineWithAlias(const string& line) {
+  const string::size_type offset          = line.find(m_aliasSeparator);
+  const string            distantFilename = line.substr(0, offset);
+  const string            localFilename   = line.substr(offset + 1);
+  const path              distantPath     = m_distantRoot / distantFilename;
+  const path              localPath       = m_localRoot / localFilename;
+  m_fileMap[localPath]                    = distantPath;
 }
 
-void DependencyConfiguration::parseLineWithoutAlias(string line) {
+void DependencyConfiguration::parseLineWithoutAlias(const string& line) {
   const path distantPath = m_distantRoot / line;
   const path localPath   = m_localRoot / line;
   m_fileMap[localPath]   = distantPath;

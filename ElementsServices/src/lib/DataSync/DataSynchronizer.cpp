@@ -38,28 +38,28 @@ DataSynchronizer::DataSynchronizer(const ConnectionConfiguration& connection, co
     : m_connection(connection), m_fileMap(dependency.fileMap()) {}
 
 void DataSynchronizer::downloadAllFiles() const {
-  for (const auto& item : m_fileMap) {
-    const auto& localFile   = item.first;
-    const auto& distantFile = item.second;
+  for (const auto& [fst, snd] : m_fileMap) {
+    const auto& localFile   = fst;
+    const auto& distantFile = snd;
     if (fileShouldBeWritten(localFile)) {
       downloadOneFile(distantFile, localFile);
     }
   }
 }
 
-bool DataSynchronizer::fileShouldBeWritten(path localFile) const {
+bool DataSynchronizer::fileShouldBeWritten(const path& localFile) const {
   if (not fileAlreadyExists(localFile)) {
     return true;
   }
   return m_connection.overwritingAllowed();
 }
 
-bool DataSynchronizer::fileAlreadyExists(path localFile) const {
-  return boost::filesystem::is_regular_file(localFile);
+bool DataSynchronizer::fileAlreadyExists(const path& localFile) {
+  return is_regular_file(localFile);
 }
 
-void DataSynchronizer::downloadOneFile(path distantFile, path localFile) const {
-  std::string command = createDownloadCommand(distantFile, localFile);
+void DataSynchronizer::downloadOneFile(const path& distantFile, const path& localFile) const {
+  const std::string command = createDownloadCommand(distantFile, localFile);
   createLocalDirOf(localFile);
   const auto outErr = runCommandAndCaptureOutErr(command);
   if (not hasBeenDownloaded(distantFile, localFile)) {
@@ -67,11 +67,11 @@ void DataSynchronizer::downloadOneFile(path distantFile, path localFile) const {
   }
 }
 
-bool DataSynchronizer::hasBeenDownloaded(ELEMENTS_UNUSED path distantFile, path localFile) const {
-  if (not boost::filesystem::is_regular_file(localFile)) {
+bool DataSynchronizer::hasBeenDownloaded(ELEMENTS_UNUSED const path& distantFile, const path& localFile) {
+  if (not is_regular_file(localFile)) {
     return false;
   }
-  return boost::filesystem::file_size(localFile) > 0;
+  return file_size(localFile) > 0;
 }
 
 }  // namespace DataSync

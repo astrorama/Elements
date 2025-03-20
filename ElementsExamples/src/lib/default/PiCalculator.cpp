@@ -1,5 +1,5 @@
 /**
- * @file ElementsExamples/src/lib/default/PiCalculator.cpp
+ * @file PiCalculator.cpp
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -17,10 +17,9 @@
 
 #include "ElementsExamples/PiCalculator.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-void PiCalculator::calculate(unsigned int terms) {
+void PiCalculator::calculate(const unsigned int terms) const {
 
   double pi = 0.0;
   // Leibniz formula for pi
@@ -38,10 +37,9 @@ void PiCalculator::calculate(unsigned int terms) {
   m_show_result_callback(pi);
 }
 
-void PiCalculator::setShowResultCallback(show_result_callback_type f) {
+void PiCalculator::setShowResultCallback(const show_result_callback_type f) {
 
   m_show_result_callback = f;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

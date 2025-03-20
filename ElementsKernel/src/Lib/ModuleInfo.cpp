@@ -1,5 +1,5 @@
 /**
- * @file ElementsKernel/src/Lib/ModuleInfo.cpp
+ * @file ModuleInfo.cpp
  * @brief OS specific details to access at run-time the module
  * configuration of the process.
  * @date 2014-12-01
@@ -21,15 +21,15 @@
 
 #include "ElementsKernel/ModuleInfo.h"
 
+#include <climits>   // for PATH_MAX
 #include <dlfcn.h>   // for dladdr, Dl_info, (anonymous), dlopen, dlsym, RTLD_LAZY
 #include <libgen.h>  // for __xpg_basename, basename
-#include <limits.h>  // for PATH_MAX
 #include <unistd.h>  // for getpid
 
 #include <array>    // for array
 #include <cstdint>  // for int64_t
-#include <cstdlib>  // for realpath, size_t
 #include <fstream>  // IWYU pragma: keep
+#include <memory>
 #include <sstream>  // for basic_istream, basic_ostream, basic_ostream::operator<<, operator<<, basic_ios, ifstream, istringstream, stringstream
 #include <string>   // for char_traits, basic_string, string, operator>>, getline, operator==
 #include <vector>   // for vector
@@ -52,21 +52,20 @@ namespace {
 vector<string> s_linkedModules;
 }
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 ModuleInfo::ModuleInfo() : m_dlinfo{nullptr} {}
 
 ModuleInfo::ModuleInfo(void* funct) {
-  m_dlinfo.reset(new Dl_info);
-  ::dladdr(FuncPtrCast<void*>(funct), m_dlinfo.get());
+  m_dlinfo = std::make_unique<Dl_info>();
+  dladdr(FuncPtrCast<void*>(funct), m_dlinfo.get());
 }
 
-const string ModuleInfo::name() const {
+string ModuleInfo::name() const {
   return ::basename(const_cast<char*>(m_dlinfo->dli_fname));
 }
 
-const string ModuleInfo::libraryName() const {
+string ModuleInfo::libraryName() const {
   return const_cast<char*>(m_dlinfo->dli_fname);
 }
 
@@ -75,7 +74,7 @@ const void* ModuleInfo::addresse() const {
 }
 
 bool ModuleInfo::isEmpty() const {
-  return (m_dlinfo == nullptr);
+  return m_dlinfo == nullptr;
 }
 
 ModuleInfo::operator const Dl_info&() const {
@@ -89,9 +88,9 @@ ImageHandle s_module_handle = nullptr;
 const string& moduleName() {
   static string module{};
   if (module.empty()) {
-    if ((processHandle() != nullptr) && (moduleHandle() != nullptr)) {
-      string mod = ::basename(const_cast<char*>((reinterpret_cast<Dl_info*>(moduleHandle()))->dli_fname));
-      module     = mod.substr(static_cast<string::size_type>(0), mod.find('.'));
+    if (processHandle() != nullptr && moduleHandle() != nullptr) {
+      string mod = ::basename(const_cast<char*>(static_cast<Dl_info*>(moduleHandle())->dli_fname));
+      module     = mod.substr(0, mod.find('.'));
     }
   }
   return module;
@@ -104,8 +103,7 @@ const string& moduleNameFull() {
     if (processHandle() and moduleHandle()) {
       std::array<char, PATH_MAX> name{"Unknown.module"};
       name[0]          = 0;
-      const char* path = (reinterpret_cast<Dl_info*>(moduleHandle())->dli_fname);
-      if (::realpath(path, name.data())) {
+      if (const char* path = static_cast<Dl_info*>(moduleHandle())->dli_fname; realpath(path, name.data())) {
         module = string(name.data());
       }
     }
@@ -115,11 +113,10 @@ const string& moduleNameFull() {
 
 /// Get type of the module
 ModuleType moduleType() {
-  static ModuleType type = ModuleType::UNKNOWN;
+  static auto type = ModuleType::UNKNOWN;
   if (type == ModuleType::UNKNOWN) {
     const string& module = moduleNameFull();
-    std::size_t   loc    = module.rfind('.') + 1;
-    if (loc == 0) {
+    if (const std::size_t loc = module.rfind('.') + 1; loc == 0) {
       type = ModuleType::EXECUTABLE;
     } else if (module[loc] == 'e' or module[loc] == 'E') {
       type = ModuleType::EXECUTABLE;
@@ -134,20 +131,20 @@ ModuleType moduleType() {
 
 /// Retrieve process handle
 void* processHandle() {
-  static std::int64_t pid = ::getpid();
-  static void*        hP  = reinterpret_cast<void*>(pid);
+  static std::int64_t pid = getpid();
+  static auto         hP  = reinterpret_cast<void*>(pid);
   return hP;
 }
 
-void setModuleHandle(ImageHandle handle) {
-  s_module_handle = handle;
+void setModuleHandle(const void* const handle) {
+  s_module_handle = const_cast<ImageHandle>(handle);
 }
 
 ImageHandle moduleHandle() {
   if (nullptr == s_module_handle) {
     if (processHandle() != nullptr) {
       static Dl_info info;
-      if (0 != ::dladdr(FuncPtrCast<void*>(moduleHandle), &info)) {
+      if (0 != dladdr(FuncPtrCast<void*>(moduleHandle), &info)) {
         return &info;
       }
     }
@@ -161,11 +158,9 @@ ImageHandle exeHandle() {
   static Dl_info* info;
 
   if (nullptr == info) {
-    void* handle = ::dlopen(nullptr, RTLD_LAZY);
-    if (nullptr != handle) {
-      void* func = ::dlsym(handle, "main");
-      if (nullptr != func) {
-        if (0 != ::dladdr(func, &infoBuf)) {
+    if (void* handle = dlopen(nullptr, RTLD_LAZY); nullptr != handle) {
+      if (const void* func = dlsym(handle, "main"); nullptr != func) {
+        if (0 != dladdr(func, &infoBuf)) {
           info = &infoBuf;
         }
       }
@@ -175,7 +170,7 @@ ImageHandle exeHandle() {
 }
 
 const string& exeName() {
-  static string module{""};
+  static string module;
   if (module.empty()) {
     module = getExecutablePath().string();
   }
@@ -186,11 +181,9 @@ Path::Item getSelfProc() {
 
   Path::Item self_proc{"/proc/self"};
 
-  Path::Item exe = self_proc / "exe";
-
-  if (not boost::filesystem::exists(exe)) {
+  if (const Path::Item exe = self_proc / "exe"; not exists(exe)) {
     std::stringstream self_str{};
-    self_str << "/proc/" << ::getpid();
+    self_str << "/proc/" << getpid();
     self_proc = Path::Item(self_str.str());
   }
 
@@ -217,7 +210,7 @@ vector<Path::Item> linkedModulePaths() {
       continue;
     }
     if (perms == "r-xp" and boost::filesystem::exists(pathname)) {
-      linked_modules.emplace_back(Path::Item(pathname));
+      linked_modules.emplace_back(pathname);
     }
   }
 
@@ -226,11 +219,11 @@ vector<Path::Item> linkedModulePaths() {
   return linked_modules;
 }
 
-const vector<string> linkedModules() {
+vector<string> linkedModules() {
 
-  if (s_linkedModules.size() == 0) {
+  if (s_linkedModules.empty()) {
 
-    for (auto m : linkedModulePaths()) {
+    for (const auto& m : linkedModulePaths()) {
       s_linkedModules.emplace_back(m.string());
     }
   }
@@ -251,8 +244,7 @@ Path::Item getExecutablePath() {
 
 #endif
 
-  return boost::filesystem::canonical(self_exe);
+  return canonical(self_exe);
 }
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System

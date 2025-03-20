@@ -56,9 +56,9 @@ enum OverwritingPolicy {
  * @ingroup ElementsServices
  * @brief Exception raised when a hosting solution is not supported by the tool.
  */
-class ELEMENTS_API UnknownHost : public std::runtime_error {
+class ELEMENTS_API UnknownHost final : public std::runtime_error {
 public:
-  virtual ~UnknownHost() = default;
+  ~UnknownHost() override = default;
   UnknownHost() : std::runtime_error("I don't know this hosting solution!") {}
   explicit UnknownHost(const std::string& hostName)
       : std::runtime_error("I don't know this hosting solution: " + hostName) {}
@@ -80,7 +80,7 @@ public:
   /**
    * @brief Create a dependency configuration by reading a configuration file.
    */
-  explicit ConnectionConfiguration(const path& configFile);
+  explicit ConnectionConfiguration(const path& filename);
 
   /**
    * @brief Check whether existing local files can be overwritten.
@@ -96,13 +96,13 @@ protected:
 
 public:
   DataHost          host;
-  std::string       hostUrl;
+  std::string       host_url;
   std::string       user;
   std::string       password;
-  OverwritingPolicy overwritingPolicy;
-  size_t            tries;
-  path              distantRoot;
-  path              localRoot;
+  OverwritingPolicy overwriting_policy;
+  size_t            tries{};
+  path              distant_root;
+  path              local_root;
 };
 
 }  // namespace DataSync

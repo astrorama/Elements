@@ -86,7 +86,7 @@ public:
    *
    * @return The sum of the values of the records into the DataSource object
    */
-  double sumRecords(const DataSourceInterface& data_source);
+  static double sumRecords(const DataSourceInterface& data_source);
 };
 
 }  // namespace Elements::Examples

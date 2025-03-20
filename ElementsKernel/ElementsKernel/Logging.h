@@ -7,14 +7,14 @@
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
+ * Public Licence as published by the Free Software Foundation; either version 3.0 of the Licence, or (at your option)
  * any later version.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public Licence for more
  * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * You should have received a copy of the GNU Lesser General Public Licence along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
@@ -83,9 +83,9 @@ namespace Elements {
  * If the Elements::Program API is used, the logging level and the log file
  * can be set by using the command line parameters <b>--log-level</b> and
  * <b>--log-file</b> and no direct use of the Elements::Logging::setLevel and
- * Elements::Logging::setLogFile should be performed. Exception of this rule is
+ * Elements::Logging::setLogFile should be performed. Exception to this rule is
  * any log messages which are sent before the command line parameters are handled
- * (like global or static variable initialisations, or any other action before
+ * (like global or static variable initializations, or any other action before
  * the call of the main method). These messages (without an explicit call to the
  * Elements::Logging::setLogFile method) will only appear in the standard error
  * stream.
@@ -112,7 +112,7 @@ public:
    * @details
    * This call has effect to all the loggers already retrieved as well as loggers
    * which will be retrieved in the future. Exceptions are loggers which have
-   * been fine tuned using the underlying framework configuration methods.
+   * been fine-tuned using the underlying framework configuration methods.
    *
    * @param level The new message level
    */
@@ -140,7 +140,7 @@ public:
    * Logs a debug message.
    * @param logMessage The message to log
    */
-  void debug(const std::string& logMessage);
+  void debug(const std::string& logMessage) const;
 
   /**
    * Logs a debug message using format specifiers.
@@ -148,20 +148,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void debug(const char* stringFormat, Args&&... args);
+  void debug(const char* stringFormat, Args&&... args) const;
 
   /**
    * Returns an object which can be used for logging a debug message using the
    * "<<" operator.
    * @return An object used for logging a debug message using the "<<" opearator
    */
-  LogMessageStream debug();
+  LogMessageStream debug() const;
 
   /**
    * Logs an info message.
    * @param logMessage The message to log
    */
-  void info(const std::string& logMessage);
+  void info(const std::string& logMessage) const;
 
   /**
    * Logs an info message using format specifiers.
@@ -169,20 +169,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void info(const char* stringFormat, Args&&... args);
+  void info(const char* stringFormat, Args&&... args) const;
 
   /**
-   * Returns an object which can be used for logging a info message using the
+   * Returns an object which can be used for logging an info message using the
    * "<<" operator.
-   * @return An object used for logging a info message using the "<<" opearator
+   * @return An object used for logging an info message using the "<<" opearator
    */
-  LogMessageStream info();
+  LogMessageStream info() const;
 
   /**
    * Logs a warning message.
    * @param logMessage The message to log
    */
-  void warn(const std::string& logMessage);
+  void warn(const std::string& logMessage) const;
 
   /**
    * Logs a warning message using format specifiers.
@@ -190,20 +190,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void warn(const char* stringFormat, Args&&... args);
+  void warn(const char* stringFormat, Args&&... args) const;
 
   /**
    * Returns an object which can be used for logging a warn message using the
    * "<<" operator.
    * @return An object used for logging a warn message using the "<<" opearator
    */
-  LogMessageStream warn();
+  LogMessageStream warn() const;
 
   /**
    * Logs an error message.
    * @param logMessage The message to log
    */
-  void error(const std::string& logMessage);
+  void error(const std::string& logMessage) const;
 
   /**
    * Logs an error message using format specifiers.
@@ -211,20 +211,20 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void error(const char* stringFormat, Args&&... args);
+  void error(const char* stringFormat, Args&&... args) const;
 
   /**
-   * Returns an object which can be used for logging a error message using the
+   * Returns an object which can be used for logging an error message using the
    * "<<" operator.
-   * @return An object used for logging a error message using the "<<" opearator
+   * @return An object used for logging an error message using the "<<" opearator
    */
-  LogMessageStream error();
+  LogMessageStream error() const;
 
   /**
    * Logs a fatal message.
    * @param logMessage The message to log
    */
-  void fatal(const std::string& logMessage);
+  void fatal(const std::string& logMessage) const;
 
   /**
    * Logs a fatal message using format specifiers.
@@ -232,30 +232,30 @@ public:
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void fatal(const char* stringFormat, Args&&... args);
+  void fatal(const char* stringFormat, Args&&... args) const;
 
   /**
    * Returns an object which can be used for logging a fatal message using the
    * "<<" operator.
    * @return An object used for logging a fatal message using the "<<" opearator
    */
-  LogMessageStream fatal();
+  LogMessageStream fatal() const;
 
   /**
    * Logs a message.
    * @param level The logging level of the message
    * @param logMessage The message to log
    */
-  void log(log4cpp::Priority::Value level, const std::string& logMessage);
+  void log(log4cpp::Priority::Value level, const std::string& logMessage) const;
 
   /**
-   * Logs an log message using a level and format specifiers.
+   * Logs a log message using a level and format specifiers.
    * @param level The logging level of the message
    * @param stringFormat The message containing the format specifiers
    * @param args The values to replace the format specifiers with
    */
   template <typename... Args>
-  void log(log4cpp::Priority::Value level, const char* stringFormat, Args&&... args);
+  void log(log4cpp::Priority::Value level, const char* stringFormat, Args&&... args) const;
 
 private:
   explicit Logging(log4cpp::Category& log4cppLogger);

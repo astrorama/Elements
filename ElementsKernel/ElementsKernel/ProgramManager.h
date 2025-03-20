@@ -125,7 +125,7 @@ private:
    * @return
    *   A complete name/path to the default configuration file
    */
-  static const Path::Item getDefaultConfigFile(const Path::Item& program_name, const std::string& module_name = "");
+  static Path::Item getDefaultConfigFile(const Path::Item& program_name, const std::string& module_name = "");
 
   /**
    * @brief
@@ -135,7 +135,7 @@ private:
    * @return
    *    A BOOST path with the program name
    */
-  static const Path::Item setProgramName(char* arg0);
+  static Path::Item setProgramName(char* arg0);
 
   /**
    * @brief
@@ -145,7 +145,7 @@ private:
    * @return
    *    A BOOST path with the program path
    */
-  static const Path::Item setProgramPath(char* arg0);
+  static Path::Item setProgramPath(char* arg0);
 
   /**
    * @brief
@@ -154,7 +154,7 @@ private:
    */
   void setup(int argc, char* argv[]);
 
-  void tearDown(const ExitCode&);
+  void tearDown(const ExitCode&) const;
 
   /**
    * @brief Get the program options from the command line
@@ -163,17 +163,17 @@ private:
    *  @return
    *    A BOOST variable_map
    */
-  const Program::VariablesMap getProgramOptions(int argc, char* argv[]);
+  Program::VariablesMap getProgramOptions(int argc, char* argv[]);
 
   /**
    * @brief Log Header
    */
-  void logHeader(std::string program_name) const;
+  void logHeader(const std::string& program_name) const;
 
   /**
    * @brief Log Footer
    */
-  void logFooter(std::string program_name) const;
+  void logFooter(const std::string& program_name) const;
 
   /**
    * @brief Log all program options

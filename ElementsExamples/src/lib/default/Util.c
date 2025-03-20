@@ -1,5 +1,5 @@
 /**
- * @file util.c
+ * @file Util.c
  *
  * @date 2015-01-09
  * @author Pierre Dubath

@@ -26,7 +26,8 @@ import numpy as np
 from ElementsKernel import Logging
 from ElementsKernel import Exit
 
-from testCallBack import test  # pylint: disable=no-name-in-module,import-error
+# pylint: disable=no-name-in-module,import-error
+from testCallBack import test
 
 
 def norm(x):
@@ -53,8 +54,8 @@ def defineSpecificProgramOptions():
 
     return parser
 
-
-def mainMethod(args):  # pylint: disable=unused-argument
+# pylint: disable=unused-argument
+def mainMethod(args):
     """ The "main" method.
     This method is the entry point to the program. In this sense, it is similar to a main
     (and it is why it is called mainMethod()). The code below contains the calls to the

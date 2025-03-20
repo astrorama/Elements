@@ -33,8 +33,7 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class SimpleProgram
@@ -44,7 +43,7 @@ namespace Examples {
  *    This class is an example of a program based on the ElementsProgram class. It can be copied/pasted
  *    conveniently to write a new program.
  */
-class SimpleProgram : public Program {
+class SimpleProgram final : public Program {
 
 public:
   /**
@@ -61,11 +60,11 @@ public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
     // Get logger and log the entry into the mainMethod
-    auto log = Logging::getLogger();
+    const auto log = Logging::getLogger();
 
     log.info("This Works");
 
-    Elements::nanoSleep(4);
+    nanoSleep(4);
 
     std::cout << "This Works too!" << std::endl;
 
@@ -76,7 +75,6 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 MAIN_FOR(Elements::Examples::SimpleProgram)

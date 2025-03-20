@@ -30,15 +30,14 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-class Healpix : public Program {
+class Healpix final : public Program {
 
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("HealpixExample");
+    const auto log = Logging::getLogger("HealpixExample");
 
     Healpix_Map<double> map;
 
@@ -48,8 +47,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

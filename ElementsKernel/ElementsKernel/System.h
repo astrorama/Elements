@@ -31,8 +31,6 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 
-#include <unistd.h>
-
 // STL include files
 #include <memory>
 #include <string>
@@ -89,7 +87,7 @@ const std::string SHLIB_SUFFIX{LIB_SUFFIX};
  */
 const std::string DEFAULT_INSTALL_PREFIX{"/usr"};
 
-const int STACK_OFFSET{2};
+constexpr int STACK_OFFSET{2};
 
 #if defined(__linux__) || defined(__APPLE__)
 #define TEMPLATE_SPECIALIZATION
@@ -106,7 +104,8 @@ const int STACK_OFFSET{2};
 #endif
 
 /// Definition of an image handle
-using ImageHandle = void*;
+using ImageHandle      = void*;
+using ConstImageHandle = const void*;
 /// Definition of the process handle
 using ProcessHandle = void*;
 /// Definition of the "generic" DLL entry point function
@@ -125,12 +124,12 @@ ELEMENTS_API unsigned long getProcedureByName(ImageHandle handle, const std::str
 /// Get last system known error
 ELEMENTS_API unsigned long getLastError();
 /// Get last system error as string
-ELEMENTS_API const std::string getLastErrorString();
+ELEMENTS_API std::string getLastErrorString();
 /// Retrieve error code as string for a given error
-ELEMENTS_API const std::string getErrorString(unsigned long error);
+ELEMENTS_API std::string getErrorString(unsigned long error);
 /// Get platform independent information about the class type
-ELEMENTS_API const std::string typeinfoName(const std::type_info&);
-ELEMENTS_API const std::string typeinfoName(const char*);
+ELEMENTS_API std::string typeinfoName(const std::type_info&);
+ELEMENTS_API std::string typeinfoName(const char*);
 /// Host name
 ELEMENTS_API const std::string& hostName();
 /// OS name
@@ -141,9 +140,9 @@ ELEMENTS_API const std::string& osVersion();
 ELEMENTS_API const std::string& machineType();
 /// get a particular environment variable
 ELEMENTS_API std::string getEnv(const std::string& var);
-/// get a particular environment variable, storing the value in the passed string if the
+/// get a particular environment variable, storing the value in the variable_value string if the
 /// variable is set. Returns true if the variable is set, false otherwise.
-ELEMENTS_API bool getEnv(const std::string& var, std::string& value);
+ELEMENTS_API bool getEnv(const std::string& variable_name, std::string& variable_value);
 /// get all environment variables
 ELEMENTS_API std::vector<std::string> getEnv();
 /// Set an environment variables.
@@ -155,12 +154,12 @@ ELEMENTS_API int setEnv(const std::string& name, const std::string& value, bool 
 /// Simple wrap around unsetenv for strings
 ELEMENTS_API int unSetEnv(const std::string& name);
 /// Check if an environment variable is set or not.
-ELEMENTS_API bool isEnvSet(const std::string& var);
+ELEMENTS_API bool isEnvSet(const std::string& variable_name);
 
-ELEMENTS_API int   backTrace(ELEMENTS_UNUSED std::shared_ptr<void*> addresses, ELEMENTS_UNUSED const int depth);
-ELEMENTS_API const std::vector<std::string> backTrace(const int depth, const int offset = 0);
+ELEMENTS_API int backTrace(ELEMENTS_UNUSED const std::shared_ptr<void*>& addresses, ELEMENTS_UNUSED const int depth);
+ELEMENTS_API std::vector<std::string> backTrace(const int depth, const int offset = 0);
 
-ELEMENTS_API bool getStackLevel(ELEMENTS_UNUSED void* addresses, ELEMENTS_UNUSED void*& addr,
+ELEMENTS_API bool getStackLevel(ELEMENTS_UNUSED const void* addresses, ELEMENTS_UNUSED void*& addr,
                                 ELEMENTS_UNUSED std::string& fnc, ELEMENTS_UNUSED std::string& lib);
 
 }  // namespace Elements::System

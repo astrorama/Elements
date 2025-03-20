@@ -31,10 +31,10 @@ namespace Elements {
 
 namespace System {
 
-template <typename DESTPTR, typename SRC>
-constexpr DESTPTR FuncPtrCast(SRC* const src_p) noexcept {
-  static_assert(std::is_pointer<DESTPTR>::value, "must be a pointer");
-  DESTPTR dst_p = nullptr;  // must initialize to be a valid constexpr...
+template <typename DEST, typename SRC>
+constexpr DEST FuncPtrCast(SRC* const src_p) noexcept {
+  static_assert(std::is_pointer_v<DEST>, "must be a pointer");
+  DEST dst_p = nullptr;  // must initialize to be a valid constexpr...
   std::memcpy(&dst_p, &src_p, sizeof(dst_p));
   return dst_p;
 }

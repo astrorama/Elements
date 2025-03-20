@@ -30,27 +30,27 @@ namespace Elements {
 inline namespace Services {
 namespace DataSync {
 
-DataSync::DataSync(path connectionFile, path dependencyFile)
+DataSync::DataSync(const path& connectionFile, const path& dependencyFile)
     : m_connectionConfig(connectionFile)
-    , m_distantRoot(m_connectionConfig.distantRoot)
-    , m_localRoot(m_connectionConfig.localRoot)
+    , m_distantRoot(m_connectionConfig.distant_root)
+    , m_localRoot(m_connectionConfig.local_root)
     , m_dependencyConfig(m_distantRoot, m_localRoot, dependencyFile) {}
 
-void DataSync::download() {
+void DataSync::download() const {
   const auto& synchronizer = createSynchronizer(m_connectionConfig, m_dependencyConfig);
   synchronizer->downloadAllFiles();
 }
 
-void DataSync::downloadWithFallback(path connectionFile) {
+void DataSync::downloadWithFallback(const path& connectionFile) {
   try {
     download();
-  } catch (std::exception& e) {
+  } catch (std::exception&) {
     m_connectionConfig = ConnectionConfiguration(connectionFile);
     download();
   }
 }
 
-path DataSync::absolutePath(path relativePath) {
+path DataSync::absolutePath(const path& relativePath) const {
   return m_localRoot / relativePath;
 }
 

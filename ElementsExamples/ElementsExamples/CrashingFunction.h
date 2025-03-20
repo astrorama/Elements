@@ -1,5 +1,5 @@
 /**
- * @file crashingFunction.h
+ * @file CrashingFunction.h
  *
  * @date Nov 15, 2016
  * @author hubert
@@ -31,6 +31,15 @@
 
 namespace Elements::Examples {
 
+/**
+ * @brief A function that demonstrates intentional throwing of an exception.
+ *
+ * This method logs an entry message and then throws a logic_error exception
+ * with a specified error message. It is primarily used for testing and
+ * demonstrating error handling or crash scenarios.
+ *
+ * @throws std::logic_error Always throws an exception with the message "arrg!".
+ */
 ELEMENTS_API void crashingFunction();
 
 }  // namespace Elements::Examples

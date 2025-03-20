@@ -20,6 +20,7 @@ Vendor:         @CPACK_PACKAGE_VENDOR@
 %global _python_bytecompile_errors_terminate_build @BYTECOMPILE_ERRORS_TERMINATE_BUILD@
 %global __cmake @CMAKE_CMAKE_PROGRAM@
 %global cmake @CMAKE_CMAKE_PROGRAM@
+%global _missing_build_ids_terminate_build 0
 
 @CPACK_RPM_AUTOREQ_LINE@
 

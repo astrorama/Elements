@@ -18,7 +18,8 @@
  *
  */
 
-#include <fftw3.h>  // for fftw_destroy_plan, fftw_execute, fftw_plan_dft_1d, fftw_cleanup, fftw_complex, FFTW_ESTIMATE, fftw_plan, fftw_plan_s, FFTW_BACKWARD, FFTW_FORWARD
+#include <fftw3.h>  // for fftw_destroy_plan, fftw_execute, fftw_plan_dft_1d, fftw_cleanup, fftw_complex,
+                    // FFTW_ESTIMATE, fftw_plan, fftw_plan_s, FFTW_BACKWARD, FFTW_FORWARD
 
 #include <cmath>   // for cos
 #include <cstdio>  // for size_t, printf
@@ -37,21 +38,18 @@ using std::string;
 
 constexpr std::size_t N = 32;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-class Fftw : public Program {
+class Fftw final : public Program {
 
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("FftwExample");
+    const auto log = Logging::getLogger("FftwExample");
 
     fftw_complex in[N]; /* double [2] */
     fftw_complex out[N];
     fftw_complex in2[N];
-    fftw_plan    p;
-    fftw_plan    q;
 
     using std::cos;
 
@@ -62,7 +60,7 @@ public:
     }
 
     /* forward Fourier transform, save the result in 'out' */
-    p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftw_plan_s* const p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
     fftw_execute(p);
     for (size_t i = 0; i < N; i++) {
       log.info() << boost::format("freq: %3d %+9.5f %+9.5f I") % i % out[i][0] % out[i][1];
@@ -71,12 +69,12 @@ public:
 
     /* backward Fourier transform, save the result in 'in2' */
     printf("\nInverse transform:\n");
-    q = fftw_plan_dft_1d(N, out, in2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    fftw_plan_s* const q = fftw_plan_dft_1d(N, out, in2, FFTW_BACKWARD, FFTW_ESTIMATE);
     fftw_execute(q);
     /* normalize */
-    for (size_t i = 0; i < N; i++) {
-      in2[i][0] *= 1. / N;
-      in2[i][1] *= 1. / N;
+    for (auto& i : in2) {
+      i[0] *= 1. / N;
+      i[1] *= 1. / N;
     }
     for (size_t i = 0; i < N; i++) {
       log.info() << boost::format("recover: %3d %+9.5f %+9.5f I vs. %+9.5f %+9.5f I") % i % in[i][0] % in[i][1] %
@@ -92,8 +90,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

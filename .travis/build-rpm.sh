@@ -10,7 +10,7 @@ source /etc/os-release
 
 CMAKEFLAGS="-DINSTALL_DOC=ON"
 
-if [ $NAME == 'Fedora' ] && [ $VERSION_ID -ge 30 ]; then
+if [ "$NAME" == 'Fedora' ] && [ "$VERSION_ID" -ge 30 ]; then
   PYTHON="python3"
   CMAKEFLAGS="$CMAKEFLAGS -DPYTHON_EXPLICIT_VERSION=3"
 else

@@ -37,8 +37,7 @@ using std::vector;
 
 using boost::program_options::value;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class ProgramWithArguments
@@ -48,7 +47,7 @@ namespace Examples {
  *    This class is an example of a program based on the ElementsProgram class. It can be copied/pasted
  *    conveniently to write a new program.
  */
-class ProgramWithArguments : public Program {
+class ProgramWithArguments final : public Program {
 
 public:
   /**
@@ -65,7 +64,7 @@ public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
     // Get logger and log the entry into the mainMethod
-    auto log = Logging::getLogger();
+    const auto log = Logging::getLogger();
 
     log.info("This Works");
 
@@ -75,7 +74,7 @@ public:
     cout << "This Works too!" << endl;
 
     if (args.count("input-files") > 0) {
-      vector<string> files = args["input-files"].as<vector<string>>();
+      auto files = args["input-files"].as<vector<string>>();
       for (const string& file : files) {
         cout << "Input file " << file << endl;
       }
@@ -96,7 +95,6 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 MAIN_FOR(Elements::Examples::ProgramWithArguments)

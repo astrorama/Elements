@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsExamples/TemplatedDataSourceUser.h"
+#pragma once
 
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
 #error "This file should not be included directly! Use ElementsExamples/TemplatedDataSourceUser.h instead"

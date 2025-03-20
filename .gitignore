@@ -85,3 +85,4 @@ gmon.out
 /.checkstyle
 /.pylintrc
 /.justfile
+/.eclipse-pmd

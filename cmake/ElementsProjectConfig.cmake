@@ -273,6 +273,7 @@ macro(elements_project project version)
   foreach(modp ${CMAKE_MODULE_PATH})
     if(EXISTS ${modp}/scripts)
       set(binary_paths ${binary_paths} ${modp}/scripts)
+      message(STATUS "Adding ${modp}/scripts to the build binary paths")
     endif()
   endforeach()
 
@@ -380,7 +381,7 @@ macro(elements_project project version)
     set(thismodheader_cmd ${Python_EXECUTABLE} ${thismodheader_cmd})
   endif()
 
-  find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
+  find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths} REQUIRED)
   if(Boost_testmain_cmd)
     set(Boost_testmain_cmd ${Python_EXECUTABLE} ${Boost_testmain_cmd})
   endif()
@@ -431,17 +432,20 @@ macro(elements_project project version)
   #--- Project Installations------------------------------------------------------------------------
   if(NOT SQUEEZED_INSTALL OR ("${CMAKE_PROJECT_NAME}" STREQUAL "Elements"))
 
-  install(DIRECTORY cmake/ DESTINATION ${CMAKE_INSTALL_SUFFIX}
-                           FILES_MATCHING
-                             PATTERN "*.cmake"
-                             PATTERN "*.in"
-                             PATTERN "*.dox"
-                             PATTERN "*.py"
-                             PATTERN "*.sh"
-                             PATTERN "*.csh"
-                             PATTERN "*.bat"
-                             PATTERN ".svn" EXCLUDE
-                             PATTERN ".git" EXCLUDE)
+  install(DIRECTORY cmake/
+          DESTINATION ${CMAKE_INSTALL_SUFFIX}
+          USE_SOURCE_PERMISSIONS
+          FILES_MATCHING
+            PATTERN "*.cmake"
+            PATTERN "*.in"
+            PATTERN "*.dox"
+            PATTERN "*.py"
+            PATTERN "*.sh"
+            PATTERN "*.csh"
+            PATTERN "*.bat"
+            PATTERN ".svn" EXCLUDE
+            PATTERN ".git" EXCLUDE
+  )
 
   set_property(GLOBAL APPEND PROPERTY PROJ_HAS_CMAKE TRUE)
 
@@ -4128,6 +4132,7 @@ endfunction()
 macro(elements_install_cmake_modules)
   install(DIRECTORY cmake/
           DESTINATION ${CMAKE_INSTALL_SUFFIX}
+          USE_SOURCE_PERMISSIONS
           FILES_MATCHING
             PATTERN "*.cmake"
             PATTERN "*.in"

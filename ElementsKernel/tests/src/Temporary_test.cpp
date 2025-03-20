@@ -58,9 +58,7 @@ struct Temporary_Fixture {
     // setup
     m_env[WORKDIR_VAR] = (m_top_dir.path() / "work").string();
   }
-  ~Temporary_Fixture() {
-    // teardown
-  }
+  ~Temporary_Fixture() = default;
 };
 
 BOOST_AUTO_TEST_SUITE(Temporary_test)
@@ -119,10 +117,10 @@ BOOST_FIXTURE_TEST_CASE(TempEnv_test, Temporary_Fixture) {
 
   // test if the global temporary directory exists.
   BOOST_CHECK(exists(m_top_dir.path()));
-  Path::Item test_tmpdir = m_top_dir.path() / "tmpdir";
+  const Path::Item test_tmpdir = m_top_dir.path() / "tmpdir";
   create_directory(test_tmpdir);
   setEnv("TMPDIR", test_tmpdir.c_str(), true);
-  string tmp_env_val = getEnv("TMPDIR");
+  const string tmp_env_val = getEnv("TMPDIR");
   // test that the variable is actually set in the environment
   // of the process
   BOOST_CHECK(tmp_env_val == test_tmpdir.string());
@@ -130,7 +128,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv_test, Temporary_Fixture) {
   // create a new temporary directory that should be rooted at the
   // value of the TMPDIR directory.
 
-  TempDir new_one;
+  const TempDir new_one;
 
   // test that the new tmp directory has been created in the right
   // directory (in $TMPDIR)
@@ -139,7 +137,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv_test, Temporary_Fixture) {
   // remove the environment variable
   unSetEnv("TMPDIR");
   // check that it is gone
-  BOOST_CHECK(getEnv("TMPDIR") == "");
+  BOOST_CHECK(getEnv("TMPDIR").empty());
   BOOST_CHECK(exists(test_tmpdir));
 }
 
@@ -151,7 +149,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
 
   // test if the global temporary directory exists.
   BOOST_CHECK(exists(m_top_dir.path()));
-  Path::Item test_tmpdir = m_top_dir.path() / "tmpdir2";
+  const Path::Item test_tmpdir = m_top_dir.path() / "tmpdir2";
   create_directory(test_tmpdir);
 
   {
@@ -162,7 +160,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
     local[WORKDIR_VAR] = "that_work";
     BOOST_CHECK(local[WORKDIR_VAR].value() == "that_work");
     BOOST_CHECK(m_env[WORKDIR_VAR].value() == "that_work");
-    string tmp_env_val = getEnv("TMPDIR");
+    const string tmp_env_val = getEnv("TMPDIR");
     // test that the variable is actually set in the environment
     // of the process
     BOOST_CHECK(tmp_env_val == test_tmpdir.string());
@@ -171,7 +169,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
 
   BOOST_CHECK(m_env[WORKDIR_VAR].value() == (m_top_dir.path() / "work").string());
 
-  BOOST_CHECK(getEnv("TMPDIR") == "");
+  BOOST_CHECK(getEnv("TMPDIR").empty());
   BOOST_CHECK(exists(test_tmpdir));
 }
 
@@ -184,7 +182,7 @@ BOOST_AUTO_TEST_CASE(KeepTmpDir_test) {
   Path::Item that_path;
 
   {
-    TempDir that;
+    const TempDir that;
     that_path = that.path();
     BOOST_CHECK(exists(that_path));
   }
@@ -198,12 +196,12 @@ BOOST_AUTO_TEST_CASE(Fake_test) {
   using boost::filesystem::temp_directory_path;
   using boost::filesystem::unique_path;
 
-  const string motif1 = "";
+  const string motif1;
   const string motif2 = "toto-%%%";
 
-  auto path1  = temp_directory_path() / unique_path(motif1);
-  auto path1p = temp_directory_path() / unique_path();
-  auto path2  = temp_directory_path() / unique_path(motif2);
+  const auto path1  = temp_directory_path() / unique_path(motif1);
+  const auto path1p = temp_directory_path() / unique_path();
+  const auto path2  = temp_directory_path() / unique_path(motif2);
 
   using std::cout;
   using std::endl;

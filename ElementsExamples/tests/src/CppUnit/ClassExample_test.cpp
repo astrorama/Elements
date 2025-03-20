@@ -36,7 +36,7 @@ using std::string;
 /*
  * Fixture to compare the test result against reference values
  */
-class ClassExampleSuite : public CppUnit::TestFixture {
+class ClassExampleSuite final : public CppUnit::TestFixture {
 
   CPPUNIT_TEST_SUITE(ClassExampleSuite);
 
@@ -53,10 +53,10 @@ public:
   ClassExampleSuite() = default;
 
 protected:
-  void fundamentalTypeMethodTest();
-  void fundamentalTypeMethodSecondTest();
-  void gettersTest();
-  void exceptionInDivideNumbersTest();
+  void        fundamentalTypeMethodTest();
+  void        fundamentalTypeMethodSecondTest();
+  void        gettersTest();
+  static void exceptionInDivideNumbersTest();
 
 private:
   // Elements::ClassExample m_class_example {};
@@ -103,11 +103,11 @@ void ClassExampleSuite::exceptionInDivideNumbersTest() {
 
   bool exception = false;
   try {
-    m_class_example.divideNumbers(1.0, 0.0);
+    ClassExample::divideNumbers(1.0, 0.0);
   } catch (const Elements::Exception& e) {
     // exception = true;
-    string exception_str = e.what();
-    exception            = (exception_str.find("exception in ClassExample::divideNumbers") != string::npos);
+    const string exception_str = e.what();
+    exception                  = exception_str.find("exception in ClassExample::divideNumbers") != string::npos;
   }
   CPPUNIT_ASSERT(exception);
 }

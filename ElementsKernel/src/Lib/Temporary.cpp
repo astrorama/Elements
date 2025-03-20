@@ -1,6 +1,6 @@
 /**
  * @file Temporary.cpp
- *
+ * @brief Implementation of the Temporary classes
  * @date May 27, 2014
  * @author hubert degaudenzi
  *
@@ -26,6 +26,7 @@
 #include <boost/filesystem/fstream.hpp>     // for fstream
 #include <boost/filesystem/operations.hpp>  // for create_directory, remove_all, temp_directory_path, unique_path
 #include <boost/filesystem/path.hpp>        // for operator<<
+#include <utility>
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging
@@ -40,8 +41,8 @@ namespace {
 auto log = Logging::getLogger();
 }
 
-TempPath::TempPath(const string& arg_motif, const string& keep_var)
-    : m_motif(arg_motif), m_path(temp_directory_path()), m_keep_var(keep_var) {
+TempPath::TempPath(string motif, string keep_var)
+    : m_motif(std::move(motif)), m_path(temp_directory_path()), m_keep_var(std::move(keep_var)) {
 
   using boost::filesystem::unique_path;
 
@@ -61,11 +62,9 @@ TempPath::TempPath(const string& arg_motif, const string& keep_var)
 
 TempPath::~TempPath() {
 
-  Environment current;
-
-  if (not current.hasKey(m_keep_var)) {
+  if (Environment current; not Environment::hasKey(m_keep_var)) {
     log.debug() << "Automatic destruction of the " << path() << " temporary path";
-    const auto file_number = boost::filesystem::remove_all(m_path);
+    const auto file_number = remove_all(m_path);
     log.debug() << "Number of files removed: " << file_number;
   } else {
     log.info() << m_keep_var << " set: I do not remove the " << m_path.string() << " temporary path";
@@ -80,16 +79,16 @@ string TempPath::motif() const {
   return m_motif;
 }
 
-TempDir::TempDir(const string& arg_motif, const string& keep_var) : TempPath(arg_motif, keep_var) {
+TempDir::TempDir(const string& motif, const string& keep_var) : TempPath(motif, keep_var) {
 
   log.debug() << "Creation of the " << path() << " temporary directory";
 
-  boost::filesystem::create_directory(path());
+  create_directory(path());
 }
 
 TempDir::~TempDir() = default;
 
-TempFile::TempFile(const string& arg_motif, const string& keep_var) : TempPath(arg_motif, keep_var) {
+TempFile::TempFile(const string& motif, const string& keep_var) : TempPath(motif, keep_var) {
 
   log.debug() << "Creation of the " << path() << " temporary file";
 

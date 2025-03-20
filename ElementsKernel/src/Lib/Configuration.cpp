@@ -1,6 +1,6 @@
 /**
  * @file Configuration.cpp
- *
+ * @brief Implementation of the Configuration functions
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *
@@ -23,7 +23,6 @@
 #include "ElementsKernel/Configuration.h"
 
 #include <algorithm>  // for remove_if
-#include <map>        // for map
 #include <string>     // for string
 #include <vector>     // for vector
 
@@ -46,16 +45,16 @@ string getConfigurationVariableName() {
 template Path::Item getConfigurationPath(const Path::Item& file_name, bool raise_exception);
 template Path::Item getConfigurationPath(const string& file_name, bool raise_exception);
 
-std::vector<Path::Item> getConfigurationLocations(bool exist_only) {
+std::vector<Path::Item> getConfigurationLocations(const bool exist_only) {
 
-  auto location_list = Path::getLocations(Path::Type::configuration, exist_only);
+  auto location_list = getLocations(Path::Type::configuration, exist_only);
 
   // the search is extended to the default system /usr/share/conf
   location_list.emplace_back(Path::Item(System::DEFAULT_INSTALL_PREFIX) / "share" / "conf");
 
   if (exist_only) {
-    auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
-      return (not boost::filesystem::exists(p));
+    const auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
+      return not exists(p);
     });
     location_list.erase(new_end, location_list.end());
   }
@@ -73,7 +72,7 @@ string getVariableName() {
 template Path::Item getPath(const Path::Item& file_name, bool raise_exception);
 template Path::Item getPath(const std::string& file_name, bool raise_exception);
 
-std::vector<Path::Item> getLocations(bool exist_only) {
+std::vector<Path::Item> getLocations(const bool exist_only) {
   return getConfigurationLocations(exist_only);
 }
 

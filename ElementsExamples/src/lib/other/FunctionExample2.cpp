@@ -1,5 +1,5 @@
 /**
- * @file functionExample2.cpp
+ * @file FunctionExample2.cpp
  *
  * @date Feb 16, 2016
  * @author Hubert Degaudenzi
@@ -19,14 +19,12 @@
  *
  */
 
-#include "ElementsExamples/functionExample2.h"
+#include "ElementsExamples/FunctionExample2.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 int functionExample2(const int j) {
   return j * j;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

@@ -1,5 +1,5 @@
 /**
- * @file functionExample.h
+ * @file FunctionExample2.h
  *
  * @date Feb 16, 2016
  * @author hubert
@@ -24,17 +24,25 @@
  * @{
  */
 
-#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE_H_
-#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE_H_
+#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE2_H_
+#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE2_H_
 
 #include "ElementsKernel/Export.h"
 
 namespace Elements::Examples {
 
-ELEMENTS_API int functionExample(const int j);
+/**
+ * @brief A simple function that returns the square of the input integer.
+ *
+ * This function takes an integer as input and returns the square of that integer.
+ *
+ * @param j The integer value to square.
+ * @return The square of the input integer.
+ */
+ELEMENTS_API int functionExample2(const int j);
 
 }  // namespace Elements::Examples
 
-#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE_H_
+#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_FUNCTIONEXAMPLE2_H_
 
 /**@}*/

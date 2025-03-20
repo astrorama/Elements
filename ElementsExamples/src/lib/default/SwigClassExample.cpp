@@ -18,8 +18,7 @@
 
 #include "ElementsExamples/SwigClassExample.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 double SwigClassExample::getRa() const {
   return m_ra;
@@ -29,5 +28,4 @@ double SwigClassExample::getDec() const {
   return m_dec;
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

@@ -31,16 +31,16 @@ BOOST_AUTO_TEST_SUITE(GLibCxxParallel_test)
 
 BOOST_AUTO_TEST_CASE(GLibCxxParallelWorks) {
 
-  const std::size_t val_size_t = 1000;
+  constexpr std::size_t val_size_t = 1000;
 
-  std::vector<double> vals(val_size_t, 1.0);
+  std::vector vals(val_size_t, 1.0);
 
   std::iota(vals.begin(), vals.end(), 0.0);
 
-  auto   squared  = std::accumulate(vals.begin(), vals.end(), 0.0, [](const double& tot, const double& vA) {
+  const auto squared  = std::accumulate(vals.begin(), vals.end(), 0.0, [](const double& tot, const double& vA) {
     return tot + vA * vA;
   });
-  double squared2 = 0.0;
+  double     squared2 = 0.0;
   for (const auto& v : vals) {
     squared2 += v * v;
   }

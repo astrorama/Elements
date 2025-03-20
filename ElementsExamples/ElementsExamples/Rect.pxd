@@ -1,3 +1,4 @@
+#cython: language_level=3
 cimport ElementsExamples.CRectangle
 from ElementsExamples.CRectangle cimport Rectangle as CRectangle
 

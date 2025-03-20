@@ -31,6 +31,16 @@
 
 namespace Elements::Examples {
 
+/**
+ * @brief Prints the project information to the standard output.
+ *
+ * This method retrieves information about the current project, such as its
+ * name or version, and outputs it to the console. It is a basic utility
+ * function designed to display project details in a human-readable format.
+ *
+ * Usage of this method may be helpful for logging or debugging purposes to
+ * provide contextual information about the project execution environment.
+ */
 ELEMENTS_API void printProject();
 
 }  // namespace Elements::Examples

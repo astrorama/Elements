@@ -48,6 +48,10 @@ namespace Elements {
 inline namespace Kernel {
 namespace Path {
 
+/**
+ * @brief Represents different types of entities within a system or application.
+ * @ingroup SystemComponents
+ */
 enum class Type { executable, library, python, configuration, auxiliary };
 
 /**
@@ -82,7 +86,7 @@ ELEMENTS_API extern const std::map<Type, const std::vector<std::string>> SUFFIXE
 ELEMENTS_API extern const std::map<Type, const std::vector<std::string>> DEFAULT_LOCATIONS;
 
 /**
- * @brief map containing the sub-level property of the path components
+ * @brief map containing the sublevel property of the path components
  * @ingroup ElementsKernel
  */
 ELEMENTS_API extern const std::map<Type, const bool> HAS_SUBLEVELS;
@@ -97,7 +101,7 @@ ELEMENTS_API extern const std::map<Type, const bool> HAS_SUBLEVELS;
  * @param path_variable
  *    name of the environment variable
  * @param exist_only
- *    if true returns only existing locations. by default it is set
+ *    if true returns only existing locations. by default, it is set
  *    to false.
  * @return
  *    return a list of boost filesystem paths
@@ -114,7 +118,7 @@ ELEMENTS_API std::vector<Item> getLocationsFromEnv(const std::string& path_varia
  * @param path_type
  *    type of the path
  * @param exist_only
- *    if true returns only existing locations. by default it is set
+ *    if true returns only existing locations. by default, it is set
  *    to false.
  * @return
  *    return a list of boost filesystem paths
@@ -139,7 +143,7 @@ ELEMENTS_API std::vector<Item> getLocations(const Type& path_type, bool exist_on
  */
 template <typename T, typename U>
 ELEMENTS_API Item getPathFromLocations(const T& file_name, const std::vector<U>& locations);
-// Template instantiation for the most common types
+
 extern template ELEMENTS_API Item getPathFromLocations(const Item& file_name, const std::vector<Item>& locations);
 extern template ELEMENTS_API Item getPathFromLocations(const Item&                     file_name,
                                                        const std::vector<std::string>& locations);
@@ -169,6 +173,7 @@ ELEMENTS_API std::vector<Item> getAllPathFromLocations(const T& file_name, const
 // Template instantiation for the most common types
 extern template ELEMENTS_API std::vector<Item> getAllPathFromLocations(const Item&              file_name,
                                                                        const std::vector<Item>& locations);
+
 extern template ELEMENTS_API std::vector<Item> getAllPathFromLocations(const Item&                     file_name,
                                                                        const std::vector<std::string>& locations);
 extern template ELEMENTS_API std::vector<Item> getAllPathFromLocations(const std::string&       file_name,
@@ -268,9 +273,10 @@ extern template ELEMENTS_API std::vector<Item> multiPathAppend(const std::vector
  */
 template <typename T>
 ELEMENTS_API std::vector<Item> removeDuplicates(const std::vector<T>& path_list);
-// Template instantiation for the most common types
+/// Template instantiation for the most common types
 extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vector<Item>& path_list);
 
+/// Template instantiation for the most common types
 extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vector<std::string>& path_list);
 
 }  // namespace Path

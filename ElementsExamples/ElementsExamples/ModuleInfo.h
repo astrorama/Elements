@@ -35,6 +35,11 @@ class ModuleInfo;
 
 namespace Elements::Examples {
 
+/**
+ * Retrieves the module information.
+ *
+ * @return A reference to the `ModuleInfo` object associated with the system.
+ */
 ELEMENTS_API const System::ModuleInfo& getModuleInfo();
 
 }  // namespace Elements::Examples

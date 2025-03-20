@@ -1,5 +1,5 @@
 /**
- * @file functionExample2_test.cpp
+ * @file FunctionExample2_test.cpp
  *
  * Created on: Feb 22nd, 2017
  *     Author: Pierre Dubath
@@ -19,7 +19,7 @@
  *
  */
 
-#include "ElementsExamples/functionExample2.h"  // for functionExample2
+#include "ElementsExamples/FunctionExample2.h"  // for functionExample2
 #include <boost/test/unit_test.hpp>
 
 using Elements::Examples::functionExample2;

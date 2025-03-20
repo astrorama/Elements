@@ -21,11 +21,9 @@
 
 #include "ElementsExamples/TemplateFunction.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 template void templateFunction<int>();
 template void templateFunction<double>();
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

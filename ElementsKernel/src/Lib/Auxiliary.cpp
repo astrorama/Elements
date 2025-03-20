@@ -1,6 +1,6 @@
 /**
  * @file Auxiliary.cpp
- *
+ * @brief Implementation of the Auxiliary functions
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *
@@ -23,7 +23,6 @@
 #include "ElementsKernel/Auxiliary.h"
 
 #include <algorithm>  // for remove_if
-#include <map>        // for map
 #include <string>     // for string
 #include <vector>     // for vector
 
@@ -46,11 +45,11 @@ string getAuxiliaryVariableName() {
 template Path::Item getAuxiliaryPath(const Path::Item& file_name, bool raise_exception);
 template Path::Item getAuxiliaryPath(const string& file_name, bool raise_exception);
 
-std::vector<Path::Item> getAuxiliaryLocations(bool exist_only) {
+std::vector<Path::Item> getAuxiliaryLocations(const bool exist_only) {
 
   using System::DEFAULT_INSTALL_PREFIX;
 
-  auto location_list = Path::getLocations(Path::Type::auxiliary, exist_only);
+  auto location_list = getLocations(Path::Type::auxiliary, exist_only);
 
   // extended to /usr/share/aux{dir,}
   location_list.emplace_back(Path::Item(DEFAULT_INSTALL_PREFIX) / "share" / "auxdir");
@@ -58,8 +57,8 @@ std::vector<Path::Item> getAuxiliaryLocations(bool exist_only) {
   location_list.emplace_back(Path::Item(DEFAULT_INSTALL_PREFIX) / "share" / "aux");
 
   if (exist_only) {
-    auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
-      return (not boost::filesystem::exists(p));
+    const auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
+      return not exists(p);
     });
     location_list.erase(new_end, location_list.end());
   }
@@ -77,7 +76,7 @@ string getVariableName() {
 template Path::Item getPath(const Path::Item& file_name, bool raise_exception);
 template Path::Item getPath(const std::string& file_name, bool raise_exception);
 
-std::vector<Path::Item> getLocations(bool exist_only) {
+std::vector<Path::Item> getLocations(const bool exist_only) {
   return getAuxiliaryLocations(exist_only);
 }
 

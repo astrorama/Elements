@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/Real.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_REAL_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Real.h instead"

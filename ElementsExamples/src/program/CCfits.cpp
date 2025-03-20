@@ -26,7 +26,6 @@
 #include <CCfits/FITSUtil.h>  // for lowerCase
 
 #include "ElementsKernel/Auxiliary.h"  // for getPath
-#include "ElementsKernel/Exception.h"  // for operator<<
 #include "ElementsKernel/Main.h"       // for MAIN_FOR
 #include "ElementsKernel/Program.h"    // for Program
 #include "ElementsKernel/Unused.h"     // for ELEMENTS_UNUSED
@@ -34,25 +33,24 @@
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-class CCfits : public Program {
+class CCfits final : public Program {
 
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
 
-    auto log = Logging::getLogger("CCfits");
+    const auto log = Logging::getLogger("CCfits");
 
-    string test_upper_string{"THATSTRING"};
+    const string test_upper_string{"THATSTRING"};
     log.info() << "This is the test upper string: " << test_upper_string;
 
-    string test_lower_string = ::CCfits::FITSUtil::lowerCase(test_upper_string);
+    const string test_lower_string = ::CCfits::FITSUtil::lowerCase(test_upper_string);
     log.info() << "This is the test lower string: " << test_lower_string;
 
     log.info() << "done with test program! ";
 
-    auto fits_file_path = Auxiliary::getPath("ElementsExamples/phz_cat.fits");
+    const auto fits_file_path = Auxiliary::getPath("ElementsExamples/phz_cat.fits");
     log.info() << "Opening the file " << fits_file_path.string();
     ::CCfits::FITS fits_file(fits_file_path.string());
 
@@ -64,8 +62,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

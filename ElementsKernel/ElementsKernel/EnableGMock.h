@@ -33,7 +33,20 @@
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 
-class BoostTestAdapter : public testing::EmptyTestEventListener {
+/**
+ * @class BoostTestAdapter
+ * @brief A listener class that integrates Google Test results with Boost Test.
+ *
+ * This class extends `testing::EmptyTestEventListener` to intercept test result
+ * events in Google Test and adapt them for use in Boost Unit Test Framework.
+ * It aids in relaying Google Test's test result failures into Boost Test's
+ * reporting mechanism.
+ *
+ * Functional specifics:
+ * - Overrides the `OnTestPartResult` method from `testing::EmptyTestEventListener`.
+ * - Converts Google Test failures into Boost Test errors using the `BOOST_ERROR` macro.
+ */
+class BoostTestAdapter final : public testing::EmptyTestEventListener {
 
   void OnTestPartResult(const testing::TestPartResult& testPartResult) override {
     if (testPartResult.failed()) {
@@ -42,6 +55,23 @@ class BoostTestAdapter : public testing::EmptyTestEventListener {
   }
 };
 
+/**
+ * @class GoogleMockSetupFixture
+ * @brief A fixture class that integrates Google Mock with Boost Test.
+ *
+ * This class is responsible for initializing Google Mock within the context of
+ * a Boost Test framework. It sets up necessary command-line arguments for Google Mock
+ * and replaces the default result printer with a Boost Test adapter.
+ *
+ * The fixture is typically used to provide seamless integration of Google Mock's
+ * functionality into tests that utilize Boost Unit Test Framework.
+ *
+ * Functional specifics:
+ * - Initializes Google Mock using the command-line arguments from Boost Test's
+ *   master test suite.
+ * - Replaces the default Google Mock result printer to properly route test
+ *   results into the Boost Test reporting mechanism.
+ */
 class GoogleMockSetupFixture {
 
 public:

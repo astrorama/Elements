@@ -3,7 +3,7 @@
 %{
 
 #include "ElementsKernel/Export.h"
-#include "ElementsExamples/functionExample.h"
+#include "ElementsExamples/FunctionExample.h"
 #include "ElementsExamples/SwigClassExample.h"
 #include "ElementsExamples/ClassExample.h"
 

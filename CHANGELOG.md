@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [6.3.3] - 2025-02-27
+This release essentially fixes problem met on github deployment
+
+### Fixed
+- Add mandatory python-dnf for the github workflows (Marc Schefer)
+
+
+## [6.3.2] - 2024-06-04
+This release essentially fixes problem met on github
+
+### Fixed
+- Add mandatory setuptools for the python prefix guessing.
+    - This is needed for the github build
+    - apparently the distuils package has been removed from the core python package and it is now available in the setuptools package
+
+
 ## [6.3.1] - 2024-05-22
 This release essentially fixes problems met on the MacOS platform
 
@@ -28,7 +45,7 @@ This release essentially fixes problems met on the MacOS platform
     - The `elements_install_aux_files` gets a `WITH_CONFIGURE` option to enable the configure phase
 - Add the support for `include-what-you-use` (IWYU, https://github.com/include-what-you-use/include-what-you-use)
     - A new `iwyu` gmake target has been added
-    - Alernatively, the IWYU can also be run at compile time by using the `-DUSE_IWYU=ON` CMake option
+    - Alternatively, the IWYU can also be run at compile time by using the `-DUSE_IWYU=ON` CMake option
 - Add a CMake option to print the test command lines
     - the option name is PRINT_TEST_COMMANDS
     - it is set to OFF by default

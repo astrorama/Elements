@@ -21,6 +21,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/Storage.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_STORAGE_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Storage.h instead"
@@ -39,21 +40,21 @@ namespace Units {
 
 template <typename T>
 T roundToDigits(const T& value, const size_t& max_digits) {
-  std::int64_t factor = std::int64_t(std::pow(10, max_digits));
+  std::int64_t factor = static_cast<std::int64_t>(std::pow(10, max_digits));
   return std::round(value * static_cast<T>(factor)) / static_cast<T>(factor);
 }
 
 template <std::size_t max_digits, typename T>
-T storageConvert(const T& size, StorageType source_unit, StorageType target_unit) {
+T storageConvert(const T& size, const StorageType source_unit, const StorageType target_unit) {
 
   using std::log10;
 
   T converted_value = size;
 
   if (source_unit != target_unit) {
-    T       size_in_bytes = size * T(StorageFactor[source_unit]);
-    int64_t target_factor = StorageFactor[target_unit];
-    double  value = roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor), max_digits);
+    T             size_in_bytes = size * T(StorageFactor[source_unit]);
+    const int64_t target_factor = StorageFactor[target_unit];
+    const double  value = roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor), max_digits);
     converted_value = Elements::numberCast<T>(value);
   }
 
@@ -61,16 +62,16 @@ T storageConvert(const T& size, StorageType source_unit, StorageType target_unit
 }
 
 template <typename T>
-T storageConvert(const T& size, StorageType source_unit, StorageType target_unit) {
+T storageConvert(const T& size, const StorageType source_unit, const StorageType target_unit) {
 
   using std::log10;
 
   T converted_value = size;
 
   if (source_unit != target_unit) {
-    T       size_in_bytes = size * T(StorageFactor[source_unit]);
-    int64_t target_factor = StorageFactor[target_unit];
-    double  value         = roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor),
+    T             size_in_bytes = size * T(StorageFactor[source_unit]);
+    const int64_t target_factor = StorageFactor[target_unit];
+    const double  value         = roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor),
                                           static_cast<size_t>(log10(static_cast<double>(target_factor))));
     converted_value       = Elements::numberCast<T>(value);
   }

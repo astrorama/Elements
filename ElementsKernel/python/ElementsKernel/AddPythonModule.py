@@ -21,7 +21,7 @@
 :file: ElementsKernel/AddPythonModule.py
 :author: Nicolas Morisset
 
-:date: 01/07/15
+:date: 2015-07-01
 
 """
 
@@ -176,7 +176,7 @@ def mainMethod(args):
         LOGGER.info('Current directory : %s', current_dir)
         LOGGER.info('')
 
-        # We absolutely need a Elements cmake file
+        # We absolutely need an Elements cmake file
         module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
 
         module_file_path = os.path.join(current_dir, 'python', module_name,

@@ -38,12 +38,11 @@ using std::endl;
 using std::map;
 using std::string;
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 constexpr int PRINT_PRECISION = 32;
 
-template <typename T>
+template <typename>
 void printTitle() {
   cout << "================================================================================" << endl;
   cout << "Float:" << endl;
@@ -65,77 +64,77 @@ void printTitle<long double>() {
 }
 
 template <typename T>
-constexpr T Zero() {
+constexpr T zero() {
   return 0.0f;
 }
 
 template <>
-constexpr double Zero<double>() {
+constexpr double zero<double>() {
   return 0.0;
 }
 
 template <>
-constexpr long double Zero<long double>() {
+constexpr long double zero<long double>() {
   return 0.0l;
 }
 
 template <typename T>
-constexpr T One() {
+constexpr T one() {
   return 1.0f;
 }
 
 template <>
-constexpr double One<double>() {
+constexpr double one<double>() {
   return 1.0;
 }
 
 template <>
-constexpr long double One<long double>() {
+constexpr long double one<long double>() {
   return 1.0l;
 }
 
 template <typename T>
-constexpr T Two() {
+constexpr T two() {
   return 2.0f;
 }
 
 template <>
-constexpr double Two<double>() {
+constexpr double two<double>() {
   return 2.0;
 }
 
 template <>
-constexpr long double Two<long double>() {
+constexpr long double two<long double>() {
   return 2.0l;
 }
 
 template <typename T>
-constexpr T Seven() {
+constexpr T seven() {
   return 7.0f;
 }
 
 template <>
-constexpr double Seven<double>() {
+constexpr double seven<double>() {
   return 7.0;
 }
 
 template <>
-constexpr long double Seven<long double>() {
+constexpr long double seven<long double>() {
   return 7.0l;
 }
 
 template <typename T>
-constexpr T Ten() {
+constexpr T ten() {
   return 10.0f;
 }
 
 template <>
-constexpr double Ten<double>() {
+constexpr double ten<double>() {
   return 10.0;
 }
 
 template <>
-constexpr long double Ten<long double>() {
+constexpr long double ten<long double>() {
   return 10.0l;
 }
 
@@ -152,24 +151,24 @@ void printFloatPrecision() {
 
   printTitle<T>();
 
-  auto zero             = Zero<T>();
-  auto zero_plus        = float_next(zero);
-  auto next_after_zero  = nextafter(zero, Two<T>());
-  auto next_zero_toward = nexttoward(zero, Two<long double>());
+  auto the_zero         = zero<T>();
+  auto zero_plus        = float_next(the_zero);
+  auto next_after_zero  = nextafter(the_zero, two<T>());
+  auto next_zero_toward = nexttoward(the_zero, two<long double>());
 
-  cout << "zero: " << zero << endl;
+  cout << "zero: " << the_zero << endl;
   cout << "next to zero: " << zero_plus << endl;
   cout << "next after zero: " << next_after_zero << endl;
   cout << "next after zero toward two: " << next_zero_toward << endl;
 
-  auto one                    = One<T>();
-  auto one_plus               = float_next(one);
-  auto next_after_one         = nextafter(one, Two<T>());
-  auto next_one_toward        = nexttoward(one, Two<long double>());
-  auto cos_pi_over_7          = cos(pi<T>() / Seven<T>());
-  auto default_test_tolerance = pow(Ten<T>(), -numeric_limits<T>::digits10);
+  auto the_one                = one<T>();
+  auto one_plus               = float_next(the_one);
+  auto next_after_one         = nextafter(the_one, two<T>());
+  auto next_one_toward        = nexttoward(the_one, two<long double>());
+  auto cos_pi_over_7          = cos(pi<T>() / seven<T>());
+  auto default_test_tolerance = pow(ten<T>(), -numeric_limits<T>::digits10);
 
-  cout << "one: " << one << endl;
+  cout << "one: " << the_one << endl;
   cout << "next to one: " << one_plus << endl;
   cout << "next after one: " << next_after_one << endl;
   cout << "next after one toward two: " << next_one_toward << endl;
@@ -191,7 +190,7 @@ void printFloatPrecision() {
   cout << "The sizeof in bits: " << 8 * sizeof(T) << endl;
 }
 
-class FloatPrecision : public Program {
+class FloatPrecision final : public Program {
 
 public:
   ExitCode mainMethod(ELEMENTS_UNUSED map<string, VariableValue>& args) override {
@@ -208,8 +207,7 @@ public:
   }
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 /**
  * Implementation of a main using a base class macro

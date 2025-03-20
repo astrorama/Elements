@@ -1,6 +1,6 @@
 /**
  * @file Auxiliary.cpp
- *
+ * @brief Implementation of the Exception class
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *
@@ -20,15 +20,19 @@
  *
  */
 
+#include <utility>
+
 #include "ElementsKernel/Exception.h"
 
 namespace Elements {
 
-Exception::Exception(ExitCode e) : m_exit_code{e} {}
+Exception::Exception(const ExitCode e) : m_exit_code{e} {}
 
-Exception::Exception(const char* message, ExitCode e) : m_error_msg(message), m_exit_code{e} {}
+Exception::Exception(const char* message, const ExitCode e) : m_error_msg(message), m_exit_code{e} {}
 
-Exception::Exception(const std::string& message, ExitCode e) : m_error_msg(message), m_exit_code{e} {}
+Exception::Exception(std::string message, const ExitCode e) : m_error_msg(std::move(message)), m_exit_code{e} {}
+
+Exception::Exception(const Exception& rhs) noexcept = default;
 
 Exception::~Exception() noexcept = default;
 

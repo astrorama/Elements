@@ -19,6 +19,7 @@
  */
 
 // IWYU pragma: private, include "ElementsKernel/Version.h"
+#pragma once
 
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_IMPL_
 #error "This file should not be included directly! Use ElementsKernel/Version.h instead"

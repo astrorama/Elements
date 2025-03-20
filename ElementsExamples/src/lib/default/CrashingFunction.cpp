@@ -1,5 +1,5 @@
 /**
- * @file crashingFunction.cpp
+ * @file CrashingFunction.cpp
  *
  * @date Nov 15, 2016
  * @author hubert
@@ -21,20 +21,17 @@
 
 #include "ElementsExamples/CrashingFunction.h"
 
-#include <memory>     // for allocator
 #include <stdexcept>  // for logic_error
 
 #include "ElementsKernel/Logging.h"  // for Logging
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 void crashingFunction() {
-  auto log = Logging::getLogger("ElementsExamples");
+  const auto log = Logging::getLogger("ElementsExamples");
   log.info() << "Entering Crashing Function";
 
   throw std::logic_error("arrg!");
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

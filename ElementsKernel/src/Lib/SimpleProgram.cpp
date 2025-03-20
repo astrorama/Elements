@@ -30,9 +30,9 @@
 
 namespace Elements {
 
-SimpleProgram::~SimpleProgram() {}
+SimpleProgram::~SimpleProgram() = default;
 
-ExitCode SimpleProgram::run(int argc, char* argv[]) noexcept {
+ExitCode SimpleProgram::run(const int argc, char* argv[]) noexcept {
 
   ExitCode exit_code;
 
@@ -56,7 +56,7 @@ ExitCode SimpleProgram::run(int argc, char* argv[]) noexcept {
 
 void SimpleProgram::setup(ELEMENTS_UNUSED int argc, char* argv[]) {
 
-  Path::Item prog_path{argv[0]};
+  const Path::Item prog_path{argv[0]};
 
   m_program_name = prog_path.filename();
   m_program_path = prog_path.parent_path();

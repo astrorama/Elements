@@ -1,5 +1,5 @@
 /**
- * @file ElementsExamples/src/lib/default/ModuleInfo.cpp
+ * @file ModuleInfo.cpp
  *
  * @date Feb 12, 2015
  * @author hubert
@@ -26,13 +26,11 @@ namespace Elements::System {
 class ModuleInfo;
 }
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 const System::ModuleInfo& getModuleInfo() {
 
   return System::getThisModuleInfo();
 }
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples

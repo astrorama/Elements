@@ -38,16 +38,15 @@
 #include "ElementsKernel/Path.h"    // for Path::Item
 #include "ElementsKernel/System.h"  // LIB_PREFIX, LIB_EXTENSION
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 class ELEMENTS_API ModuleInfo {
 public:
   ModuleInfo();
   explicit ModuleInfo(void*);
-  const std::string name() const;
-  const std::string libraryName() const;
-  const void*       addresse() const;
+  std::string name() const;
+  std::string libraryName() const;
+  const void* addresse() const;
   operator const Dl_info&() const;
   bool isEmpty() const;
 
@@ -72,7 +71,7 @@ ELEMENTS_API ImageHandle exeHandle();
 /// Name of the executable file running
 ELEMENTS_API const std::string& exeName();
 /// Vector of names of linked modules
-ELEMENTS_API const std::vector<std::string> linkedModules();
+ELEMENTS_API std::vector<std::string> linkedModules();
 ELEMENTS_API std::vector<Path::Item> linkedModulePaths();
 /// Attach module handle
 ELEMENTS_API void setModuleHandle(ImageHandle handle);
@@ -81,8 +80,7 @@ ELEMENTS_API Path::Item getExecutablePath();
 /// Get the path to the /proc directory of the process
 ELEMENTS_API Path::Item getSelfProc();
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_MODULEINFO_H_
 

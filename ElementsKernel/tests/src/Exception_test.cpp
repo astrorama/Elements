@@ -31,7 +31,7 @@ using std::string;
 
 namespace Elements {
 
-struct TestException : public Exception {
+struct TestException final : Exception {
 
   explicit TestException(const string& message = "") : Exception(message, ExitCode::NOT_OK) {
     m_number = -1;
@@ -51,8 +51,8 @@ BOOST_AUTO_TEST_SUITE(Exception_test)
 BOOST_AUTO_TEST_CASE(SubclassStreamOperator_test) {
 
   // Given
-  string message_part_1 = "Part 1";
-  string message_part_2 = "Part 2";
+  const string message_part_1 = "Part 1";
+  const string message_part_2 = "Part 2";
 
   // When
   try {
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(SubclassStreamOperator_test) {
   } catch (const TestException& ex) {
     BOOST_CHECK_EQUAL(ex.what(), message_part_1);
     BOOST_CHECK_EQUAL(ex.m_number, -1);
-  } catch (const Exception& ex) {
+  } catch (const Exception&) {
     BOOST_FAIL("Exception subclass thrown as Elements::Exception");
   } catch (...) {
     BOOST_FAIL("Unknown type of exception instead of TestException");
@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(SubclassStreamOperator_test) {
   } catch (const TestException& ex) {
     BOOST_CHECK_EQUAL(ex.what(), message_part_1 + message_part_2);
     BOOST_CHECK_EQUAL(ex.m_number, 5);
-  } catch (const Exception& ex) {
+  } catch (const Exception&) {
     BOOST_FAIL("Exception subclass thrown as Elements::Exception");
   } catch (...) {
     BOOST_FAIL("Unknown type of exception instead of TestException");

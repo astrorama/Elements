@@ -49,14 +49,14 @@ ELEMENTS_API bool webdavIsInstalled();
  * @brief A data synchronizer for WebDAV hosts.
  *
  */
-class ELEMENTS_API WebdavSynchronizer : public DataSynchronizer {
+class ELEMENTS_API WebdavSynchronizer final : public DataSynchronizer {
 
 public:
-  virtual ~WebdavSynchronizer() = default;
+  ~WebdavSynchronizer() override = default;
 
   WebdavSynchronizer(const ConnectionConfiguration& connection, const DependencyConfiguration& dependency);
 
-  std::string createDownloadCommand(path distantFile, path localFile) const override;
+  std::string createDownloadCommand(path distant_file, path local_file) const override;
 };
 
 }  // namespace DataSync
