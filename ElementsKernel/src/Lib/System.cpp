@@ -109,7 +109,7 @@ unsigned long loadDynamicLib(const string& name, ImageHandle* handle) {
 }
 
 /// unload dynamic link library
-unsigned long unloadDynamicLib(ImageHandle handle) {
+unsigned long unloadDynamicLib(void* const handle) {
   dlclose(handle);
   return 1;
 }
@@ -139,7 +139,7 @@ unsigned long getProcedureByName(ImageHandle handle, const string& name, EntryPo
 }
 
 /// Get a specific function defined in the DLL
-unsigned long getProcedureByName(ImageHandle handle, const string& name, Creator* pFunction) {
+unsigned long getProcedureByName(void* const handle, const string& name, Creator* pFunction) {
   return getProcedureByName(handle, name, reinterpret_cast<EntryPoint*>(pFunction));
 }
 
