@@ -140,7 +140,7 @@ ELEMENTS_API const std::string& osVersion();
 ELEMENTS_API const std::string& machineType();
 /// get a particular environment variable
 ELEMENTS_API std::string getEnv(const std::string& var);
-/// get a particular environment variable, storing the value in the passed string if the
+/// get a particular environment variable, storing the value in the variable_value string if the
 /// variable is set. Returns true if the variable is set, false otherwise.
 ELEMENTS_API bool getEnv(const std::string& variable_name, std::string& variable_value);
 /// get all environment variables

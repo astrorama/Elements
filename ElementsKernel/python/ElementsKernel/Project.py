@@ -210,7 +210,7 @@ def getProjectDirectory(no_version_directory, destination_path, proj_name, proj_
 
 def lookForDirectories(project_dir):
     """
-    Look for any version directory in the project directory e.g HEAD, 1.2.3, 1.0 etc...
+    Look for any version directory in the project directory e.g. HEAD, 1.2.3, 1.0 etc...
     """
     match_list = []
     dirlist = [elt for elt in os.listdir(project_dir) if os.path.isdir(os.path.join(project_dir, elt)) ]
