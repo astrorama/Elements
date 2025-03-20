@@ -260,9 +260,8 @@ VariablesMap ProgramManager::getProgramOptions(int argc, char* argv[]) {
     if (boost::starts_with(e.what(), "unrecognised option") or
         boost::starts_with(e.what(), "too many positional options")) {
       throw OptionException(e.what());
-    } else {
-      throw;
     }
+    throw;
   }
   // After parsing both the command line and the conf file notify the variables
   // map, so we can get any messages for missing parameters
