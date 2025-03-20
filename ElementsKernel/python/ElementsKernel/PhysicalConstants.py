@@ -32,7 +32,7 @@ The basic units are :
               radian
               steradian
 
-Below is a non exhaustive list of Physical CONSTANTS,
+Below is a non-exhaustive list of Physical CONSTANTS,
 computed in the Internal HEP System Of Units.
 
 Most of them are extracted from the Particle Data Book :

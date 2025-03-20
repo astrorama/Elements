@@ -28,7 +28,6 @@
 
 #include <array>    // for array
 #include <cstdint>  // for int64_t
-#include <cstdlib>  // for realpath, size_t
 #include <fstream>  // IWYU pragma: keep
 #include <memory>
 #include <sstream>  // for basic_istream, basic_ostream, basic_ostream::operator<<, operator<<, basic_ios, ifstream, istringstream, stringstream
@@ -104,8 +103,7 @@ const string& moduleNameFull() {
     if (processHandle() and moduleHandle()) {
       std::array<char, PATH_MAX> name{"Unknown.module"};
       name[0]          = 0;
-      const char* path = static_cast<Dl_info*>(moduleHandle())->dli_fname;
-      if (realpath(path, name.data())) {
+      if (const char* path = static_cast<Dl_info*>(moduleHandle())->dli_fname; realpath(path, name.data())) {
         module = string(name.data());
       }
     }
@@ -118,8 +116,7 @@ ModuleType moduleType() {
   static auto type = ModuleType::UNKNOWN;
   if (type == ModuleType::UNKNOWN) {
     const string& module = moduleNameFull();
-    std::size_t   loc    = module.rfind('.') + 1;
-    if (loc == 0) {
+    if (const std::size_t loc = module.rfind('.') + 1; loc == 0) {
       type = ModuleType::EXECUTABLE;
     } else if (module[loc] == 'e' or module[loc] == 'E') {
       type = ModuleType::EXECUTABLE;
@@ -139,7 +136,7 @@ void* processHandle() {
   return hP;
 }
 
-void setModuleHandle(ConstImageHandle handle) {
+void setModuleHandle(const void* const handle) {
   s_module_handle = const_cast<ImageHandle>(handle);
 }
 

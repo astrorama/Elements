@@ -60,7 +60,7 @@ public:
     }
 
     /* forward Fourier transform, save the result in 'out' */
-    fftw_plan p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+    fftw_plan_s* const p = fftw_plan_dft_1d(N, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
     fftw_execute(p);
     for (size_t i = 0; i < N; i++) {
       log.info() << boost::format("freq: %3d %+9.5f %+9.5f I") % i % out[i][0] % out[i][1];
@@ -69,7 +69,7 @@ public:
 
     /* backward Fourier transform, save the result in 'in2' */
     printf("\nInverse transform:\n");
-    fftw_plan q = fftw_plan_dft_1d(N, out, in2, FFTW_BACKWARD, FFTW_ESTIMATE);
+    fftw_plan_s* const q = fftw_plan_dft_1d(N, out, in2, FFTW_BACKWARD, FFTW_ESTIMATE);
     fftw_execute(q);
     /* normalize */
     for (auto& i : in2) {

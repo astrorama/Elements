@@ -108,14 +108,14 @@ BOOST_AUTO_TEST_CASE(linkedModules_test) {
 
   const auto linked_modules = System::linkedModules();
 
-  BOOST_CHECK(linked_modules.size() > 0);
+  BOOST_CHECK(!linked_modules.empty());
 }
 
 BOOST_AUTO_TEST_CASE(linkedModulePaths_test) {
 
   const auto linked_module_path = System::linkedModulePaths();
 
-  BOOST_CHECK(linked_module_path.size() > 0);
+  BOOST_CHECK(!linked_module_path.empty());
 }
 
 BOOST_AUTO_TEST_SUITE_END()
