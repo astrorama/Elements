@@ -17,7 +17,7 @@
  */
 
 /**
- * @file tests/src/DataSynchronizerMaker_test.cpp
+ * @file DataSynchronizerMaker_test.cpp
  * @date 04/13/18
  * @author user
  */
