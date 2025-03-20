@@ -137,7 +137,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv_test, Temporary_Fixture) {
   // remove the environment variable
   unSetEnv("TMPDIR");
   // check that it is gone
-  BOOST_CHECK(getEnv("TMPDIR") == "");
+  BOOST_CHECK(getEnv("TMPDIR").empty());
   BOOST_CHECK(exists(test_tmpdir));
 }
 
@@ -169,7 +169,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
 
   BOOST_CHECK(m_env[WORKDIR_VAR].value() == (m_top_dir.path() / "work").string());
 
-  BOOST_CHECK(getEnv("TMPDIR") == "");
+  BOOST_CHECK(getEnv("TMPDIR").empty());
   BOOST_CHECK(exists(test_tmpdir));
 }
 

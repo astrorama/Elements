@@ -144,13 +144,13 @@ BOOST_AUTO_TEST_CASE(Set_test) {
 
   BOOST_CHECK(r == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
-  BOOST_CHECK(getEnv(rnd_name) == "");
+  BOOST_CHECK(getEnv(rnd_name).empty());
 
   const int r2 = setEnv(rnd_name, "toto", false);
 
   BOOST_CHECK(r2 == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
-  BOOST_CHECK(getEnv(rnd_name) == "");
+  BOOST_CHECK(getEnv(rnd_name).empty());
 
   const int r3 = setEnv(rnd_name, "titi");
 
