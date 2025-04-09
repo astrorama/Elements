@@ -38,8 +38,9 @@
 #include <vector>
 
 // Framework include files
-#include "ElementsKernel/Export.h"  // ELEMENTS_API
-#include "ElementsKernel/Unused.h"  // ELEMENTS_UNUSED
+#include "ElementsKernel/Export.h"     // ELEMENTS_API
+#include "ElementsKernel/Stringify.h"  // _str"
+#include "ElementsKernel/Unused.h"     // ELEMENTS_UNUSED
 
 namespace Elements::System {
 
@@ -101,6 +102,14 @@ constexpr int STACK_OFFSET{2};
 #define HOST_NAME_MAX 255
 #endif
 
+#endif
+
+#ifdef __aarch64__
+#define Float128 _Float128
+#define Float128_str _str(_Float128)
+#else
+#define Float128 __float128
+#define Float128_str _str(__float128)
 #endif
 
 /// Definition of an image handle
