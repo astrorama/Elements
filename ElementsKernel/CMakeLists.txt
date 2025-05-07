@@ -12,21 +12,13 @@ endif()
 
 find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex unit_test_framework)
 find_package(Log4CPP REQUIRED)
-
+find_package(GMock)
+find_package(TBB REQUIRED)
 
 #---Libraries---------------------------------------------------------------
-elements_add_library(ElementsKernel src/Lib/Auxiliary.cpp src/Lib/Configuration.cpp
-                                    src/Lib/Environment.cpp
-                                    src/Lib/Exception.cpp src/Lib/Logging.cpp
-                                    src/Lib/ModuleInfo.cpp src/Lib/Path.cpp
-                                    src/Lib/PathSearch.cpp src/Lib/Program.cpp
-                                    src/Lib/ProgramManager.cpp src/Lib/Real.cpp
-                                    src/Lib/SimpleProgram.cpp src/Lib/Sleep.cpp
-                                    src/Lib/Storage.cpp src/Lib/System.cpp
-                                    src/Lib/Temporary.cpp src/Lib/ThisModule.cpp
-                                    src/Lib/Version.cpp
-                    LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP
-                    INCLUDE_DIRS Boost Log4CPP TBB::tbb
+elements_add_library(ElementsKernel src/Lib/*.cpp
+                    LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP GMock
+                    INCLUDE_DIRS Boost Log4CPP TBB
                     PUBLIC_HEADERS ElementsKernel)
 
 find_package(GMock)
@@ -40,6 +32,7 @@ if(TBB_FOUND)
   target_sources(ElementsKernel PRIVATE src/Lib/Threading.cpp)
   target_link_libraries(ElementsKernel PUBLIC TBB::tbb)
 endif()
+
 
 add_library(Elements::Kernel ALIAS ElementsKernel)
 
