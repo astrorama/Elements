@@ -102,7 +102,7 @@ const string& moduleNameFull() {
   if (module.empty()) {
     if (processHandle() and moduleHandle()) {
       std::array<char, PATH_MAX> name{"Unknown.module"};
-      name[0]          = 0;
+      name[0] = 0;
       if (const char* path = static_cast<Dl_info*>(moduleHandle())->dli_fname; realpath(path, name.data())) {
         module = string(name.data());
       }

@@ -2579,7 +2579,7 @@ endmacro()
 #                             [LINKER_LANGUAGE C|CXX])
 #
 # Extension of standard CMake 'add_library' command.
-# Create an object library from the specified sources (glob patterns are allowed), adding the 
+# Create an object library from the specified sources (glob patterns are allowed), adding the
 # include directories to the search path.
 #---------------------------------------------------------------------------------------------------
 function(elements_add_object_library library)
