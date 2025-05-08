@@ -130,8 +130,8 @@ BOOST_AUTO_TEST_CASE(typenameInfo_test) {
   BOOST_CHECK_EQUAL(System::typeinfoName(typeid(long double).name()), "long double");
   BOOST_CHECK_EQUAL(System::typeinfoName(typeid(long double)), "long double");
 
-  BOOST_CHECK_EQUAL(System::typeinfoName(typeid(__float128).name()), "__float128");
-  BOOST_CHECK_EQUAL(System::typeinfoName(typeid(__float128)), "__float128");
+  BOOST_CHECK_EQUAL(System::typeinfoName(typeid(Float128).name()), Float128_str);
+  BOOST_CHECK_EQUAL(System::typeinfoName(typeid(Float128)), Float128_str);
 
   BOOST_CHECK_EQUAL(System::typeinfoName(typeid(X<int>).name()), "Elements::X<int>");
   BOOST_CHECK_EQUAL(System::typeinfoName(typeid(X<int>)), "Elements::X<int>");

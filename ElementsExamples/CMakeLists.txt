@@ -48,18 +48,23 @@ add_library(Elements::Other ALIAS ElementsOther)
 # Instruction for creating a C++ executable
 #    CppProgramExample is the executable name
 #    src/Program/ProgramExample.cpp is the source file
-elements_add_executable(CppProgramExample src/program/Program.cpp
-                        INCLUDE_DIRS ElementsExamples ElementsOther
-                        LINK_LIBRARIES ElementsExamples ElementsOther)
 
-elements_add_executable(CppProgramExampleNoConfigFile src/program/Program.cpp
+elements_add_object_library(ProgramObj src/program/Program.cpp
+                            INCLUDE_DIRS ElementsExamples
+                            LINK_LIBRARIES ElementsExamples)
+
+elements_add_executable(CppProgramExample
                         INCLUDE_DIRS ElementsExamples ElementsOther
-                        LINK_LIBRARIES ElementsExamples ElementsOther
+                        LINK_LIBRARIES ProgramObj ElementsExamples ElementsOther)
+
+elements_add_executable(CppProgramExampleNoConfigFile
+                        INCLUDE_DIRS ElementsExamples ElementsOther
+                        LINK_LIBRARIES ProgramObj ElementsExamples ElementsOther
                         NO_CONFIG_FILE)
 
-elements_add_executable(CppProgramExampleNoDefaultConf src/program/Program.cpp
+elements_add_executable(CppProgramExampleNoDefaultConf
                         INCLUDE_DIRS ElementsExamples ElementsOther
-                        LINK_LIBRARIES ElementsExamples ElementsOther
+                        LINK_LIBRARIES ProgramObj ElementsExamples ElementsOther
                         NO_DEFAULT_CONF)
 
 elements_add_executable(CppExtProgramExample src/program/ExtProgram.cpp
@@ -313,8 +318,8 @@ elements_add_test(OpenMPWorks COMMAND OpenMPExample LABELS OpenMP Build)
 find_package(TBB QUIET)
 if(TBB_FOUND)
 elements_add_executable(TbbExample src/program/Tbb.cpp
-                        LINK_LIBRARIES ElementsExamples
-                        INCLUDE_DIRS ElementsExamples)
+                        LINK_LIBRARIES ElementsExamples ElementsThreading
+                        INCLUDE_DIRS ElementsExamples ElementsThreading)
 elements_add_test(TbbWorks COMMAND TbbExample LABELS Tbb Build)
 endif()
 

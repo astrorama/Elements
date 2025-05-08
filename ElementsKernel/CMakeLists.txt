@@ -15,33 +15,49 @@ find_package(Log4CPP REQUIRED)
 
 
 #---Libraries---------------------------------------------------------------
-elements_add_library(ElementsKernel src/Lib/Auxiliary.cpp src/Lib/Configuration.cpp
+elements_add_library(ElementsKernel src/Lib/Auxiliary.cpp
+                                    src/Lib/Configuration.cpp
                                     src/Lib/Environment.cpp
-                                    src/Lib/Exception.cpp src/Lib/Logging.cpp
-                                    src/Lib/ModuleInfo.cpp src/Lib/Path.cpp
-                                    src/Lib/PathSearch.cpp src/Lib/Program.cpp
-                                    src/Lib/ProgramManager.cpp src/Lib/Real.cpp
-                                    src/Lib/SimpleProgram.cpp src/Lib/Sleep.cpp
-                                    src/Lib/Storage.cpp src/Lib/System.cpp
-                                    src/Lib/Temporary.cpp src/Lib/ThisModule.cpp
+                                    src/Lib/Exception.cpp
+                                    src/Lib/Logging.cpp
+                                    src/Lib/ModuleInfo.cpp
+                                    src/Lib/Path.cpp
+                                    src/Lib/PathSearch.cpp
+                                    src/Lib/Program.cpp
+                                    src/Lib/ProgramManager.cpp
+                                    src/Lib/Real.cpp
+                                    src/Lib/SimpleProgram.cpp
+                                    src/Lib/Sleep.cpp
+                                    src/Lib/Storage.cpp
+                                    src/Lib/System.cpp
+                                    src/Lib/Temporary.cpp
+                                    src/Lib/ThisModule.cpp
                                     src/Lib/Version.cpp
                     LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP
-                    INCLUDE_DIRS Boost Log4CPP TBB::tbb
+                    INCLUDE_DIRS Boost Log4CPP
                     PUBLIC_HEADERS ElementsKernel)
+
+add_library(Elements::Kernel ALIAS ElementsKernel)
 
 find_package(GMock)
 if(GMOCK_FOUND)
-  target_sources(ElementsKernel PRIVATE src/Lib/EnableGMock.cpp)
-  target_link_libraries(ElementsKernel PUBLIC GMock::gmock)
+  elements_add_library(ElementsMock src/Lib/EnableGMock.cpp
+                      LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP GMock ElementsKernel
+                      INCLUDE_DIRS Boost Log4CPP GMock
+                      PUBLIC_HEADERS ElementsKernel)
+  add_library(Elements::Mock ALIAS ElementsMock)
 endif()
 
 find_package(TBB QUIET)
 if(TBB_FOUND)
-  target_sources(ElementsKernel PRIVATE src/Lib/Threading.cpp)
-  target_link_libraries(ElementsKernel PUBLIC TBB::tbb)
+  elements_add_library(ElementsThreading src/Lib/Threading.cpp
+                      LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP TBB::tbb ElementsKernel
+                      INCLUDE_DIRS Boost Log4CPP TBB::tbb
+                      PUBLIC_HEADERS ElementsKernel)
+  add_library(Elements::Threading ALIAS ElementsThreading)
 endif()
 
-add_library(Elements::Kernel ALIAS ElementsKernel)
+
 
 #---Tests-------------------------------------------------------------------
 elements_add_unit_test(Real tests/src/Real_test.cpp

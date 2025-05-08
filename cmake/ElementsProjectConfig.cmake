@@ -2572,6 +2572,49 @@ macro(_elements_detach_debinfo target)
 endmacro()
 
 #---------------------------------------------------------------------------------------------------
+# elements_add_object_library(<name>
+#                             source1 source2 ...
+#                             LINK_LIBRARIES library1 library2 ...
+#                             INCLUDE_DIRS dir1 package2 ...
+#                             [LINKER_LANGUAGE C|CXX])
+#
+# Extension of standard CMake 'add_library' command.
+# Create an object library from the specified sources (glob patterns are allowed), adding the
+# include directories to the search path.
+#---------------------------------------------------------------------------------------------------
+function(elements_add_object_library library)
+  # this function uses an extra option: 'PUBLIC_HEADERS'
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_EXIST_CHECK" "LINKER_LANGUAGE" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
+
+  elements_get_package_name(package)
+
+  elements_common_add_build(${ARG_UNPARSED_ARGUMENTS} LIBRARIES ${ARG_LIBRARIES} LINK_LIBRARIES ${ARG_LINK_LIBRARIES} INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
+
+  # find the header files
+  elements_expand_source_dirs(h_srcs ${ARG_PUBLIC_HEADERS})
+
+  add_library(${library} OBJECT ${srcs} ${h_srcs})
+
+  if(IWYU_FOUND)
+    set_target_properties(${library} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_COMMAND}")
+  endif()
+
+  if(ARG_LINKER_LANGUAGE)
+    set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
+  endif()
+
+  set_target_properties(${library} PROPERTIES COMPILE_DEFINITIONS ELEMENTS_LINKER_LIBRARY)
+
+  # Declare that the used headers are needed by the libraries linked against this one
+  set_target_properties(${library} PROPERTIES
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+    REQUIRED_INCLUDE_DIRS "${ARG_INCLUDE_DIRS}"
+    REQUIRED_LIBRARIES "${ARG_LINK_LIBRARIES}")
+
+endfunction()
+
+
+#---------------------------------------------------------------------------------------------------
 # elements_add_library(<name>
 #                      source1 source2 ...
 #                      LINK_LIBRARIES library1 library2 ...

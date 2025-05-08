@@ -192,7 +192,7 @@ string typeinfoName(const char* class_name) {
                                                 {'x', "long long"},   {'y', "unsigned long long"},
                                                 {'n', "__int128"},    {'o', "unsigned __int128"},
                                                 {'f', "float"},       {'d', "double"},
-                                                {'e', "long double"}, {'g', "__float128"},
+                                                {'e', "long double"}, {'g', Float128_str},
                                                 {'z', "ellipsis"}};
   if (strnlen(class_name, 1024) == 1) {
     // See http://www.realitydiluted.com/mirrors/reality.sgi.com/dehnert_engr/cxx/abi.pdf
