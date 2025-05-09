@@ -921,7 +921,8 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
     add_custom_target(HTMLSummary)
     if(TEST_HTML_REPORT)
       add_custom_command(TARGET HTMLSummary
-                         COMMAND echo "The HTMLSummary target is obsolete")
+                         COMMAND echo "The HTMLSummary target is obsolete"
+                        POST_BUILD)
     endif()
 
     add_custom_target(JUnitSummary)
@@ -935,7 +936,8 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
                   NO_DEFAULT_PATH)
         add_custom_command(TARGET JUnitSummary
                            COMMAND ${env_cmd} --xml ${env_xml}
-                                   ${ctest2junit_cmd} ${PROJECT_BINARY_DIR} ${ctest2junit_xsl_file})
+                                   ${ctest2junit_cmd} ${PROJECT_BINARY_DIR} ${ctest2junit_xsl_file}
+                           POST_BUILD)
       else()
         add_custom_command(TARGET JUnitSummary
                            COMMAND echo "The JUnit reports cannot be produced because of a missing lxml python module.")
