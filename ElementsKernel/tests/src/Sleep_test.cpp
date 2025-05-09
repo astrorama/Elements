@@ -1,5 +1,5 @@
 /**
- * @file Slepp_test.cpp
+ * @file Sleep_test.cpp
  *
  * @date May 22, 2013
  * @author Hubert Degaudenzi

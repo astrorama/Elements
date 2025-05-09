@@ -53,7 +53,7 @@ bool almostEqual2sComplement(const float& left, const float& right, const int& m
   if (b_int < 0) {
     b_int = static_cast<int32_t>(0x80000000 - static_cast<uint32_t>(b_int));
   }
-  if (int32_t int_diff = abs(a_int - b_int); int_diff <= max_ulps && -max_ulps <= int_diff) {
+  if (const int32_t int_diff = abs(a_int - b_int); int_diff <= max_ulps && -max_ulps <= int_diff) {
     return true;
   }
   return false;
@@ -76,7 +76,7 @@ bool almostEqual2sComplement(const double& left, const double& right, const int&
   if (b_int < 0) {
     b_int = static_cast<int64_t>(0x8000000000000000LL - static_cast<uint64_t>(b_int));
   }
-  if (int64_t int_diff = abs(a_int - b_int); int_diff <= max_ulps && -max_ulps <= int_diff) {
+  if (const int64_t int_diff = abs(a_int - b_int); int_diff <= max_ulps && -max_ulps <= int_diff) {
     return true;
   }
   return false;

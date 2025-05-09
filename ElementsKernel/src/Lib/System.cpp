@@ -67,10 +67,10 @@ unsigned long loadWithoutEnvironment(const string& name, ImageHandle* handle) {
 
   string       dll_name = name;
   const size_t dll_len  = dll_name.size();
-  const size_t suf_len  = SHLIB_SUFFIX.size();
 
   // Add the suffix at the end of the library name only if necessary
-  if (dll_len >= suf_len && dll_name.compare(dll_len - suf_len, suf_len, SHLIB_SUFFIX) != 0) {
+  if (const size_t suf_len = SHLIB_SUFFIX.size();
+      dll_len >= suf_len && dll_name.compare(dll_len - suf_len, suf_len, SHLIB_SUFFIX) != 0) {
     dll_name += SHLIB_SUFFIX;
   }
 
@@ -90,8 +90,7 @@ unsigned long loadDynamicLib(const string& name, ImageHandle* handle) {
   } else {
     // If the name is a logical name (environment variable), the try
     // to load the corresponding library from there.
-    string imgName;
-    if (getEnv(name, imgName)) {
+    if (string imgName; getEnv(name, imgName)) {
       res = loadWithoutEnvironment(imgName, handle);
     } else {
       // build the dll name
