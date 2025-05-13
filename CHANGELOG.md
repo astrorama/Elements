@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [6.3.4] - 2025-05-13
+
+### Changed
+- Update setup-dependencies action to 3.7 (Marc Schefer)
+
 ## [6.3.3] - 2025-02-27 
 This release essentially fixes problem met on github deployment 
 
