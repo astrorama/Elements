@@ -133,7 +133,7 @@ elif os.name == 'posix':
 
 import logging
 # Lock a file.
-#  The file for the lock is created if it doesn't exists and it the "temporary"
+#  The file for the lock is created if it doesn't exist and it the "temporary"
 #  argument is set to True it will also be deleted when the lock is not needed.
 #  The unlocking is done in the destructor (RAII pattern).
 

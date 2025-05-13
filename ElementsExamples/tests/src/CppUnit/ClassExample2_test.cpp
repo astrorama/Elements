@@ -19,7 +19,6 @@
  *
  */
 
-#include <iostream>
 #include <string>  // for string
 
 #include "ElementsExamples/ClassExample2.h"
