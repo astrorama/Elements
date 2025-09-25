@@ -86,8 +86,7 @@ Logging Logging::getLogger(const string& name) {
 
 void Logging::setLevel(string level) {
   boost::to_upper(level);
-  auto it = LOG_LEVEL.find(level);
-  if (it != LOG_LEVEL.end()) {
+  if (const auto it = LOG_LEVEL.find(level); it != LOG_LEVEL.end()) {
     Category::setRootPriority(it->second);
   } else {
     std::stringstream error_buffer;

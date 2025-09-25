@@ -209,7 +209,7 @@ def getCommonPath(dirname, filename):
 
 
 def getRelativePath(dirname, filename):
-    """ calculate the relative path of filename with regards to dirname """
+    """ calculate the relative path of filename with regard to dirname """
     # Translate the filename to the realpath of the parent directory + basename
     filepath, basename = os.path.split(filename)
     filename = os.path.join(os.path.realpath(filepath), basename)

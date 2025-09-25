@@ -54,7 +54,8 @@ T storageConvert(const T& size, const StorageType source_unit, const StorageType
   if (source_unit != target_unit) {
     T             size_in_bytes = size * T(StorageFactor[source_unit]);
     const int64_t target_factor = StorageFactor[target_unit];
-    const double  value = roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor), max_digits);
+    const double  value =
+        roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor), max_digits);
     converted_value = Elements::numberCast<T>(value);
   }
 
@@ -72,8 +73,8 @@ T storageConvert(const T& size, const StorageType source_unit, const StorageType
     T             size_in_bytes = size * T(StorageFactor[source_unit]);
     const int64_t target_factor = StorageFactor[target_unit];
     const double  value         = roundToDigits(static_cast<double>(size_in_bytes) / static_cast<double>(target_factor),
-                                          static_cast<size_t>(log10(static_cast<double>(target_factor))));
-    converted_value       = Elements::numberCast<T>(value);
+                                                static_cast<size_t>(log10(static_cast<double>(target_factor))));
+    converted_value             = Elements::numberCast<T>(value);
   }
 
   return converted_value;

@@ -1,4 +1,4 @@
-""" Script that generates the project python module containing its version informations"""
+""" Script that generates the project python module containing its version information"""
 
 import os
 import re
