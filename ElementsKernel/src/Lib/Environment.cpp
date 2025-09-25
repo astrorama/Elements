@@ -203,20 +203,20 @@ Environment& Environment::set(const string& key, const string& value) {
   return *this;
 }
 
-Environment& Environment::unSet(const string& index) {
+Environment& Environment::unSet(const string& key) {
 
-  checkOutOfRange(index);
+  checkOutOfRange(key);
 
-  if (m_old_values.find(index) == m_old_values.end()) {
-    if (const auto found_index = std::find(m_added_variables.begin(), m_added_variables.end(), index);
+  if (m_old_values.find(key) == m_old_values.end()) {
+    if (const auto found_index = std::find(m_added_variables.begin(), m_added_variables.end(), key);
         found_index != m_added_variables.end()) {
       m_added_variables.erase(found_index);
     } else {
-      m_old_values[index] = getEnv(index);
+      m_old_values[key] = getEnv(key);
     }
   }
 
-  unSetEnv(index);
+  unSetEnv(key);
 
   return *this;
 }
