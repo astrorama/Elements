@@ -98,7 +98,7 @@ BOOST_FIXTURE_TEST_CASE(AutoDestruct_test, Temporary_Fixture) {
     test2_path      = three.path();
     test2_file_path = test2_path / "toto.txt";
     BOOST_CHECK(!exists(test2_file_path));
-    boost::filesystem::ofstream ofs(test2_file_path);
+    std::ofstream ofs(test2_file_path);
     ofs << "test text" << endl;
     ofs.close();
     BOOST_CHECK(exists(test2_file_path));

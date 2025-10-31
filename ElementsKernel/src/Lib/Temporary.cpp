@@ -21,19 +21,18 @@
 
 #include "ElementsKernel/Temporary.h"
 
-#include <string>  // for string
+#include <filesystem>  // for operator/, ofstream, path>
+#include <fstream>     // for ofstream>
+#include <string>      // for string
 
-#include <boost/filesystem/fstream.hpp>     // for fstream
-#include <boost/filesystem/operations.hpp>  // for create_directory, remove_all, temp_directory_path, unique_path
-#include <boost/filesystem/path.hpp>        // for operator<<
 #include <utility>
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging
 #include "ElementsKernel/Path.h"         // for Item
 
-using boost::filesystem::temp_directory_path;
 using std::string;
+using std::filesystem::temp_directory_path;
 
 namespace Elements {
 
@@ -43,8 +42,6 @@ auto log = Logging::getLogger();
 
 TempPath::TempPath(string motif, string keep_var)
     : m_motif(std::move(motif)), m_path(temp_directory_path()), m_keep_var(std::move(keep_var)) {
-
-  using boost::filesystem::unique_path;
 
   if (m_motif.find('%') == string::npos) {
     log.error() << "The '" << m_motif << "' motif is not random";
@@ -57,7 +54,7 @@ TempPath::TempPath(string motif, string keep_var)
     pattern = DEFAULT_TMP_MOTIF;
   }
 
-  m_path /= unique_path(pattern);
+  m_path /= std::tmpnam(pattern.data());
 }
 
 TempPath::~TempPath() {
@@ -92,7 +89,7 @@ TempFile::TempFile(const string& motif, const string& keep_var) : TempPath(motif
 
   log.debug() << "Creation of the " << path() << " temporary file";
 
-  boost::filesystem::ofstream ofs(path());
+  std::ofstream ofs(path());
   ofs.close();
 }
 

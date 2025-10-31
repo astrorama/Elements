@@ -21,8 +21,6 @@
 
 #include <iostream>  // for char_traits, basic_ostream, operator<<, endl, cout
 
-#include <boost/filesystem/path.hpp>  // for operator<<
-
 #include "ElementsKernel/Exception.h"      // for Exception
 #include "ElementsKernel/SimpleProgram.h"  // for MAIN, SimpleProgram
 

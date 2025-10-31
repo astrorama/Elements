@@ -21,12 +21,11 @@
 
 #include "ElementsKernel/PathSearch.h"
 
-#include <string>  // for allocator, operator+, char_traits, string, basic_string, operator==
-#include <vector>  // for vector
+#include <filesystem>  // for path
+#include <string>      // for allocator, operator+, char_traits, string, basic_string, operator==
+#include <vector>      // for vector
 
-#include <boost/filesystem/operations.hpp>  // for create_directories
-#include <boost/filesystem/path.hpp>        // for path, operator/, operator==, operator!=
-#include <boost/test/unit_test.hpp>         // for operator<<, BOOST_PP_IIF_1, BOOST_CHECK, ...
+#include <boost/test/unit_test.hpp>  // for operator<<, BOOST_PP_IIF_1, BOOST_CHECK, ...
 
 #include "ElementsKernel/Auxiliary.h"    // for getPath
 #include "ElementsKernel/Environment.h"  // for Environment
@@ -36,7 +35,7 @@
 using std::string;
 using std::vector;
 
-using boost::filesystem::path;
+using std::filesystem::path;
 
 namespace Elements {
 
