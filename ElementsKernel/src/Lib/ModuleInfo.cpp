@@ -240,7 +240,7 @@ Path::Item getExecutablePath() {
   path self_exe = path(string(pathbuf));
 #else
 
-  Path::Item self_exe = getSelfProc() / "exe";
+  const Path::Item self_exe = getSelfProc() / "exe";
 
 #endif
 
