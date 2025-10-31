@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(mean_test) {
 
   for (size_t test_id = 0; test_id < 5; ++test_id) {
     constexpr double local_tolerance{1e-10};
-    UnitTestExample tested_object{};
+    UnitTestExample  tested_object{};
     BOOST_CHECK_CLOSE(expected_result[test_id], tested_object.average(input_vec[test_id]), local_tolerance);
   }
 }
