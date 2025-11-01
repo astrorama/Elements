@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(runCommand_out_test) {
 }
 
 BOOST_FIXTURE_TEST_CASE(localWorkspacePrefix_test, WorkspaceFixture) {
-  if (const string localEv = DataSync::environmentVariable("NOPREFIX");localEv.empty()) {
+  if (const string localEv = DataSync::environmentVariable("NOPREFIX"); localEv.empty()) {
     BOOST_CHECK_NE(DataSync::localWorkspacePrefix(), "");
   } else {
     BOOST_CHECK_EQUAL(DataSync::localWorkspacePrefix(), "");
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(getWorkdirVariable_test) {
   using Elements::Environment;
   using Elements::TempPath;
 
-  if (Environment current ;current[DataSync::WORKDIR_VAR_VAR].empty()) {
+  if (Environment current; current[DataSync::WORKDIR_VAR_VAR].empty()) {
 
     BOOST_CHECK_EQUAL(DataSync::getWorkdirVariable(), DataSync::DEFAULT_WORKDIR_VAR);
     if (not current[DataSync::DEFAULT_WORKDIR_VAR].empty()) {
