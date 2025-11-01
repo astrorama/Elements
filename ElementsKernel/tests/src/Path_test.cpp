@@ -27,7 +27,7 @@
 #include <vector>     // for vector, operator==
 
 #include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>  // for exists, create_directory, is_regular_file, is_regular
+#include <boost/filesystem/operations.hpp>  // for exists, create_directory, is_regular_file
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Temporary.h"  // for TempDir, TempEnv
@@ -36,7 +36,7 @@ using std::string;
 using std::vector;
 
 using boost::filesystem::exists;
-using boost::filesystem::is_regular;
+using boost::filesystem::is_regular_file;
 
 namespace Elements {
 
