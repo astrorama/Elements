@@ -139,6 +139,11 @@ template vector<Item> multiPathAppend(const vector<string>& initial_locations, c
 template vector<Item> removeDuplicates(const vector<Item>& path_list);
 template vector<Item> removeDuplicates(const vector<string>& path_list);
 
+Item uniquePath(Item const& p) {
+  using boost::filesystem::unique_path;
+  return Item{unique_path(p.string()).string()};
+}
+
 }  // namespace Path
 }  // namespace Kernel
 }  // namespace Elements

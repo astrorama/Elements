@@ -58,7 +58,7 @@ TempPath::TempPath(string motif, string keep_var)
     pattern = DEFAULT_TMP_MOTIF;
   }
 
-  m_path /= unique_path(pattern).string();
+  m_path /= Path::uniquePath(pattern);
 }
 
 TempPath::~TempPath() {
