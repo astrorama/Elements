@@ -21,13 +21,13 @@
 
 #include "ElementsKernel/Path.h"
 
-#include <algorithm>  // for for_each, transform
-#include <ostream>    // for basic_ostream, operator<<, endl
-#include <string>     // for allocator, basic_string, operator==, string, char_traits
-#include <vector>     // for vector, operator==
+#include <algorithm>   // for for_each, transform
+#include <filesystem>  // for create_directory, is_regular_file, exists, operat...
+#include <fstream>     // for ofstream
+#include <ostream>     // for basic_ostream, operator<<, endl
+#include <string>      // for allocator, basic_string, operator==, string, char_traits
+#include <vector>      // for vector, operator==
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>  // for exists, create_directory, is_regular_file
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Temporary.h"  // for TempDir, TempEnv
@@ -35,8 +35,8 @@
 using std::string;
 using std::vector;
 
-using boost::filesystem::exists;
-using boost::filesystem::is_regular_file;
+using std::filesystem::exists;
+using std::filesystem::is_regular_file;
 
 namespace Elements {
 
@@ -57,15 +57,15 @@ struct Path_Fixture {
 
   static void create_test_file(const Path::Item& p) {
 
-    boost::filesystem::ofstream f{p.string()};
+    std::ofstream f{p.string()};
     f << "test text" << std::endl;
     f.close();
   }
 
   Path_Fixture() : m_top_dir{"Path_test-%%%%%%%"} {
 
-    using boost::filesystem::create_directory;
     using std::for_each;
+    using std::filesystem::create_directory;
 
     m_item_list.emplace_back(m_top_dir.path() / "test1");
     m_item_list.emplace_back(m_top_dir.path() / "test1" / "foo");

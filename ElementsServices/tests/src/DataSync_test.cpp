@@ -16,9 +16,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <exception>  // for exception
+#include <exception>   // for exception
+#include <filesystem>  // for is_regular_file
 
-#include <boost/filesystem/operations.hpp>  // for is_regular_file, remove
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_suite.hpp>
 
@@ -44,8 +44,8 @@ void checkDownload(const path& connection_config) {
   sync.download();
   for (const auto& file : theLocalFiles()) {
     const path abs_path = sync.absolutePath(file);
-    BOOST_CHECK(boost::filesystem::is_regular_file(abs_path));
-    boost::filesystem::remove(abs_path);
+    BOOST_CHECK(std::filesystem::is_regular_file(abs_path));
+    std::filesystem::remove(abs_path);
   }
 }
 
@@ -55,8 +55,8 @@ void checkFallback(const path& fallback_config) {
   sync.downloadWithFallback(fallback_config);
   for (const auto& file : theLocalFiles()) {
     const path abs_path = sync.absolutePath(file);
-    BOOST_CHECK(boost::filesystem::is_regular_file(abs_path));
-    boost::filesystem::remove(abs_path);
+    BOOST_CHECK(std::filesystem::is_regular_file(abs_path));
+    std::filesystem::remove(abs_path);
   }
 }
 

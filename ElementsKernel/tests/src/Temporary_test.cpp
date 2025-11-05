@@ -21,12 +21,11 @@
 
 #include "ElementsKernel/Temporary.h"
 
-#include <iostream>  // for basic_ostream, operator<<, endl, cout
-#include <string>    // for operator==, char_traits, allocator, string, basic_string
+#include <filesystem>  // for operator/, temp_directory_path, path
+#include <fstream>     // for ofstream
+#include <iostream>    // for basic_ostream, operator<<, endl, cout
+#include <string>      // for operator==, char_traits, allocator, string, basic_string
 
-#include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>  // for exists, temp_directory_path, unique_path, create_directory, remove_all
-#include <boost/filesystem/path.hpp>        // for operator/, path, operator<<, operator==
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Environment.h"  // for Environment
@@ -35,8 +34,8 @@
 
 using std::string;
 
-using boost::filesystem::create_directory;
-using boost::filesystem::exists;
+using std::filesystem::create_directory;
+using std::filesystem::exists;
 
 namespace Elements {
 
@@ -98,7 +97,7 @@ BOOST_FIXTURE_TEST_CASE(AutoDestruct_test, Temporary_Fixture) {
     test2_path      = three.path();
     test2_file_path = test2_path / "toto.txt";
     BOOST_CHECK(!exists(test2_file_path));
-    boost::filesystem::ofstream ofs(test2_file_path);
+    std::ofstream ofs(test2_file_path);
     ofs << "test text" << endl;
     ofs.close();
     BOOST_CHECK(exists(test2_file_path));
@@ -175,7 +174,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
 
 BOOST_AUTO_TEST_CASE(KeepTmpDir_test) {
 
-  using boost::filesystem::remove_all;
+  using std::filesystem::remove_all;
 
   Environment current;
   current["KEEPTEMPDIR"] = "1";
@@ -193,15 +192,15 @@ BOOST_AUTO_TEST_CASE(KeepTmpDir_test) {
 }
 
 BOOST_AUTO_TEST_CASE(Fake_test) {
-  using boost::filesystem::temp_directory_path;
-  using boost::filesystem::unique_path;
+
+  using std::filesystem::temp_directory_path;
 
   const string motif1;
   const string motif2 = "toto-%%%";
 
-  const auto path1  = temp_directory_path() / unique_path(motif1);
-  const auto path1p = temp_directory_path() / unique_path();
-  const auto path2  = temp_directory_path() / unique_path(motif2);
+  const auto path1  = temp_directory_path() / uniquePath(motif1);
+  const auto path1p = temp_directory_path() / uniquePath();
+  const auto path2  = temp_directory_path() / uniquePath(motif2);
 
   using std::cout;
   using std::endl;

@@ -20,8 +20,6 @@
 
 #include <exception>  // for exception
 
-#include <boost/filesystem/path.hpp>  // for operator/, path
-
 #include "ElementsServices/DataSync/DataSynchronizer.h"       // for DataSynchronizer
 #include "ElementsServices/DataSync/DataSynchronizerMaker.h"  // for createSynchronizer
 

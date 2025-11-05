@@ -12,8 +12,6 @@
 
 #include <vector>  // for vector
 
-#include <boost/filesystem/path.hpp>  // for operator/, path
-
 #include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, localWorkspacePrefix, DEFAULT_WORKDIR_VAR
 
 using ElementsServices::DataSync::DEFAULT_WORKDIR_VAR;

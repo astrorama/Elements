@@ -38,6 +38,17 @@ namespace Elements {
 const std::string DEFAULT_TMP_KEEP_VAR{"KEEPTEMPDIR"};
 /// The default random creation motif
 const std::string DEFAULT_TMP_MOTIF{"%%%%-%%%%-%%%%-%%%%"};
+/// Defualt max number of attempt to find a random path
+const int DEFAULT_TMP_MAX_ATTEMPTS{100};
+
+/**
+ * @brief Geenrate a unique random path according to to a pattern
+ * @ingroup ElementsKernel
+ * @param p
+ *  initial pattern
+ * @return the path random path stem
+ */
+ELEMENTS_API Path::Item uniquePath(Path::Item const& p = DEFAULT_TMP_MOTIF);
 
 class ELEMENTS_API TempPath {
 public:
