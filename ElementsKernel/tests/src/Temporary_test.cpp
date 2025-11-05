@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE(KeepTmpDir_test) {
 }
 
 BOOST_AUTO_TEST_CASE(Fake_test) {
-  using Path::uniquePath;
+
   using std::filesystem::temp_directory_path;
 
   const string motif1;

@@ -279,15 +279,6 @@ extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vecto
 /// Template instantiation for the most common types
 extern template ELEMENTS_API std::vector<Item> removeDuplicates(const std::vector<std::string>& path_list);
 
-/**
- * @brief Geenrate a unique random path according to to a pattern
- * @ingroup ElementsKernel
- * @param p
- *  initial pattern
- * @return the path random path stem
- */
-ELEMENTS_API Item uniquePath(Item const& p = "%%%%-%%%%-%%%%-%%%%");
-
 }  // namespace Path
 }  // namespace Kernel
 }  // namespace Elements

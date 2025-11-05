@@ -23,6 +23,7 @@
 
 #include <filesystem>  // for operator/, ofstream, path>
 #include <fstream>     // for ofstream>
+#include <random>      // for random_device, mt19937, uniform_int_distribution
 #include <string>      // for string
 
 #include <utility>
@@ -34,10 +35,51 @@
 using std::string;
 using std::filesystem::temp_directory_path;
 
+namespace fs = std::filesystem;
+
 namespace Elements {
 
 namespace {
 auto log = Logging::getLogger();
+}
+
+inline std::string randomHexString(const std::size_t length) {
+  static std::random_device              rd;
+  static std::mt19937                    gen(rd());
+  static std::uniform_int_distribution<> dist(0, 15);
+
+  static const char* hex_chars = "0123456789abcdef";
+
+  std::string result;
+  result.reserve(length);
+  for (std::size_t i = 0; i < length; ++i)
+    result += hex_chars[dist(gen)];
+  return result;
+}
+
+Path::Item uniquePath(Path::Item const& model) {
+
+  auto model_string = model.string();
+
+  if (model_string.empty())
+    model_string = DEFAULT_TMP_MOTIF;
+
+  string path_str;
+
+  for (int tries = 0; tries < DEFAULT_TMP_MAX_ATTEMPTS; ++tries) {  // avoid infinite loops
+    path_str.clear();
+    for (char c : model_string) {
+      if (c == '%')
+        path_str += randomHexString(1);
+      else
+        path_str += c;
+    }
+    fs::path candidate = fs::temp_directory_path() / path_str;
+    if (!fs::exists(candidate))
+      return path_str;
+  }
+
+  throw std::runtime_error("unique_path: could not find unique path");
 }
 
 TempPath::TempPath(string motif, string keep_var)
@@ -54,7 +96,7 @@ TempPath::TempPath(string motif, string keep_var)
     pattern = DEFAULT_TMP_MOTIF;
   }
 
-  m_path /= Path::uniquePath(pattern);
+  m_path /= uniquePath(pattern);
 }
 
 TempPath::~TempPath() {
