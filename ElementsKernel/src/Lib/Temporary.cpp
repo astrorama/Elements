@@ -27,8 +27,6 @@
 
 #include <utility>
 
-#include <boost/filesystem/operations.hpp>  // for remove_all, create_directory
-
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging
 #include "ElementsKernel/Path.h"         // for Item
@@ -44,8 +42,6 @@ auto log = Logging::getLogger();
 
 TempPath::TempPath(string motif, string keep_var)
     : m_motif(std::move(motif)), m_path(temp_directory_path()), m_keep_var(std::move(keep_var)) {
-
-  using boost::filesystem::unique_path;
 
   if (m_motif.find('%') == string::npos) {
     log.error() << "The '" << m_motif << "' motif is not random";

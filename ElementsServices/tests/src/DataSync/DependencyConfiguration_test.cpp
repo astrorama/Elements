@@ -22,7 +22,6 @@
 #include <string>     // for allocator, operator+, char_traits, string
 #include <vector>     // for vector
 
-#include <boost/filesystem/path.hpp>  // for operator/, operator==
 #include <boost/test/unit_test.hpp>
 #include <boost/test/unit_test_suite.hpp>
 

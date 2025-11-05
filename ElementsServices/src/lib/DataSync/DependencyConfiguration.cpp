@@ -25,8 +25,6 @@
 #include <utility>  // for pair
 #include <vector>   // for vector
 
-#include <boost/filesystem/path.hpp>  // for operator/, path, operator<
-
 #include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, confFilePath
 
 namespace Elements {

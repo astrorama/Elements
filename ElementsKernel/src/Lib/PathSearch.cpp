@@ -31,13 +31,6 @@
 #include "ElementsKernel/Logging.h"      // for Logging
 #include "ElementsKernel/Path.h"         // for Item
 
-// namespace std::filesystem {
-// class directory_iterator;
-//}
-// namespace std::filesystem {
-// class recursive_directory_iterator;
-//}
-
 using std::string;
 using std::vector;
 
