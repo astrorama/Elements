@@ -35,7 +35,7 @@ def main():
 // ---------------------------------- Symbol visibility macros (begin)
 #if defined(%(proj)s_HIDE_SYMBOLS)
 /// These macros will allow selection on exported symbols
-/// taken from http://gcc.gnu.org/wiki/Visibility
+/// taken from https://gcc.gnu.org/wiki/Visibility
 #if defined(__GNUC__) && not defined(__CINT__)
 #  define %(proj)s_HASCLASSVISIBILITY
 #endif

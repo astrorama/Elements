@@ -574,8 +574,8 @@ class Test(unittest.TestCase):
         s.set("/some//strange/../nice/./location")
         assert s.value(as_string=True) == "/some/nice/location"
 
-        s.set("http://cern.ch")
-        assert s.value(as_string=True) == "http://cern.ch"
+        s.set("https://cern.ch")
+        assert s.value(as_string=True) == "https://cern.ch"
 
 if __name__ == "__main__":
     unittest.main()
