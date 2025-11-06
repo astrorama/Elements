@@ -198,9 +198,9 @@ BOOST_AUTO_TEST_CASE(Fake_test) {
   const string motif1;
   const string motif2 = "toto-%%%";
 
-  const auto path1  = temp_directory_path() / uniquePath(motif1);
-  const auto path1p = temp_directory_path() / uniquePath();
-  const auto path2  = temp_directory_path() / uniquePath(motif2);
+  const auto path1  = temp_directory_path() / Elements::uniquePath(motif1);
+  const auto path1p = temp_directory_path() / Elements::uniquePath();
+  const auto path2  = temp_directory_path() / Elements::uniquePath(motif2);
 
   using std::cout;
   using std::endl;

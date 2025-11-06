@@ -57,7 +57,7 @@ inline std::string randomHexString(const std::size_t length) {
   return result;
 }
 
-Path::Item uniquePath(Path::Item const& model) {
+Path::Item uniquePath(Path::Item const& model, const int max_tries) {
 
   auto model_string = model.string();
 
@@ -66,7 +66,7 @@ Path::Item uniquePath(Path::Item const& model) {
 
   string path_str;
 
-  for (int tries = 0; tries < DEFAULT_TMP_MAX_ATTEMPTS; ++tries) {  // avoid infinite loops
+  for (int tries = 0; tries < max_tries; ++tries) {  // avoid infinite loops
     path_str.clear();
     for (char c : model_string) {
       if (c == '%')
@@ -96,7 +96,7 @@ TempPath::TempPath(string motif, string keep_var)
     pattern = DEFAULT_TMP_MOTIF;
   }
 
-  m_path /= uniquePath(pattern);
+  m_path /= Elements::uniquePath(Path::Item(pattern));
 }
 
 TempPath::~TempPath() {
