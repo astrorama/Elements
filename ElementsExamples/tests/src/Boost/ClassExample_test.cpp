@@ -21,7 +21,6 @@
 
 #include "ElementsExamples/ClassExample.h"  // for ClassExample
 
-#include <cstdint>  // for int64_t
 #include <string>   // for allocator, string
 
 #include <boost/test/unit_test.hpp>

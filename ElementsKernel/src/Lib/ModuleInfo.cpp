@@ -21,7 +21,6 @@
 
 #include "ElementsKernel/ModuleInfo.h"
 
-#include <climits>   // for PATH_MAX
 #include <dlfcn.h>   // for dladdr, Dl_info, (anonymous), dlopen, dlsym, RTLD_LAZY
 #include <libgen.h>  // for __xpg_basename, basename
 #include <unistd.h>  // for getpid
@@ -199,14 +198,13 @@ vector<Path::Item> linkedModulePaths() {
 
   string line;
   while (std::getline(maps_str, line)) {
-    string             address;
     string             perms;
     string             offset;
     string             dev;
     string             pathname;
     unsigned           inode;
     std::istringstream iss(line);
-    if (not(iss >> address >> perms >> offset >> dev >> inode >> pathname)) {
+    if (string address ;not(iss >> address >> perms >> offset >> dev >> inode >> pathname)) {
       continue;
     }
     if (perms == "r-xp" and boost::filesystem::exists(pathname)) {
