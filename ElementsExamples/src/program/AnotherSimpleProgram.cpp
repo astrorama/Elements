@@ -57,6 +57,7 @@ public:
 
     throw Exception("This is an example exception.");
 
+    // ReSharper disable once CppDFAUnreachableCode
     return ExitCode::OK;
   }
 };

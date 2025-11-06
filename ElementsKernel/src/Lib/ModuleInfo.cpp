@@ -202,7 +202,7 @@ vector<Path::Item> linkedModulePaths() {
     string             pathname;
     unsigned           inode;
     std::istringstream iss(line);
-    if (string address ;not(iss >> address >> perms >> offset >> dev >> inode >> pathname)) {
+    if (string address; not(iss >> address >> perms >> offset >> dev >> inode >> pathname)) {
       continue;
     }
     if (perms == "r-xp" and std::filesystem::exists(pathname)) {

@@ -21,7 +21,7 @@
 
 #include "ElementsExamples/ClassExample.h"  // for ClassExample
 
-#include <string>   // for allocator, string
+#include <string>  // for allocator, string
 
 #include <boost/test/unit_test.hpp>
 
