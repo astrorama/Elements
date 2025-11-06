@@ -47,10 +47,10 @@ class Script(object):
                   "command 'env', see \"man env\")")
 
     def __init__(self, args=None):
-        '''
+        """
         Initializes the script instance parsing the command line arguments (or
         the explicit arguments provided).
-        '''
+        """
         self.parser = None
         self.opts = None
         self.cmd = None
@@ -68,10 +68,10 @@ class Script(object):
         return self.env
 
     def _prepare_parser(self):
-        '''
+        """
         Prepare an OptionParser instance used to analyze the command line
         options and arguments.
-        '''
+        """
         from optparse import OptionParser, OptionValueError
         parser = OptionParser(prog=os.path.basename(sys.argv[0]),
                               usage=self.__usage__,
