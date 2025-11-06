@@ -74,7 +74,7 @@ public:
     cout << "This Works too!" << endl;
 
     if (args.count("input-files") > 0) {
-      auto files = args["input-files"].as<vector<string>>();
+      const auto files = args["input-files"].as<vector<string>>();
       for (const string& file : files) {
         cout << "Input file " << file << endl;
       }

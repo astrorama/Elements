@@ -925,7 +925,6 @@ if( ("${SGS_COMP}" STREQUAL "clang") OR ("${SGS_COMP}" STREQUAL "llvm") )
 endif()
 
 #--- Special flags -------------------------------------------------------------
-add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
 
 if(("${SGS_COMP}" STREQUAL "gcc") OR ELEMENTS_CPP11)
   set(GCCXML_CXX_FLAGS "${GCCXML_CXX_FLAGS} -D__STRICT_ANSI__")

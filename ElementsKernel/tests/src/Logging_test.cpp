@@ -20,18 +20,18 @@
 
 #include "ElementsKernel/Logging.h"
 
-#include <ctime>     // for time
-#include <fstream>   // IWYU pragma: keep
-#include <iomanip>   // for operator<<, setprecision, _Setprecision
-#include <iostream>  // for cerr, cout
-#include <random>    // for minstd_rand
+#include <ctime>       // for time
+#include <filesystem>  // for exists
+#include <fstream>     // IWYU pragma: keep
+#include <iomanip>     // for operator<<, setprecision, _Setprecision
+#include <iostream>    // for cerr, cout
+#include <random>      // for minstd_rand
 #include <sstream>  // for basic_istream, basic_ostream, operator<<, basic_ostream::operator<<, stringstream, basic_ios::rdbuf, ifstream, endl, ostream, basic_ios::clear, streambuf
 #include <string>   // for basic_string, char_traits, string, allocator, getline, operator+, operator<<
 #include <tuple>    // for tuple, tie, ignore, make_tuple
 #include <vector>   // for vector
 
-#include <boost/algorithm/string.hpp>       // for ends_with, trim, trim_left
-#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/algorithm/string.hpp>  // for ends_with, trim, trim_left
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/MathConstants.h"  // for pi
@@ -46,7 +46,7 @@ using std::tie;
 using std::tuple;
 using std::vector;
 
-using boost::filesystem::exists;
+using std::filesystem::exists;
 
 // A class which takes over the given stream and keeps track of the log messages
 // sent to it. It recovers the given stream in its previous state during destruction.

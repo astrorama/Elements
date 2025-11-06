@@ -29,8 +29,6 @@
 #include <utility>    // for make_pair, pair
 #include <vector>     // for vector
 
-#include <boost/filesystem/operations.hpp>  // for create_directories, is_directory
-
 #include "ElementsKernel/Configuration.h"  // for getPath
 #include "ElementsKernel/Environment.h"    // for Environment
 

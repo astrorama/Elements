@@ -21,13 +21,12 @@
 
 #include "ElementsKernel/Configuration.h"  // header to test
 
-#include <boost/filesystem/operations.hpp>  // for exists, create_directory
-#include <boost/filesystem/path.hpp>        // for operator/, path
 #include <boost/test/unit_test.hpp>
 
-#include <algorithm>  // for copy_if, for_each
-#include <string>     // for allocator, string
-#include <vector>     // for vector
+#include <algorithm>   // for copy_if, for_each
+#include <filesystem>  // for create_directory, operator/, exists
+#include <string>      // for allocator, string
+#include <vector>      // for vector
 
 #include "ElementsKernel/Exception.h"  // for Exception
 #include "ElementsKernel/Path.h"       // for Item, join
@@ -37,7 +36,7 @@
 using std::string;
 using std::vector;
 
-using boost::filesystem::exists;
+using std::filesystem::exists;
 
 namespace Elements {
 
