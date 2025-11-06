@@ -21,22 +21,21 @@
 
 #include "ElementsKernel/ProgramManager.h"
 
-#include <algorithm>  // for transform
-#include <cstdint>    // for int64_t
-#include <cstdlib>    // for exit, _Exit, abort
-#include <exception>  // for exception, current_exception, rethrow_exception, exception_ptr
-#include <fstream>    // IWYU pragma: keep
-#include <iostream>   // for basic_ostream, operator<<, endl, basic_ostream::operator<<, cerr, cout, ifstream
-#include <map>        // for operator!=, map, _Rb_tree_const_iterator
-#include <sstream>    // for stringstream
-#include <string>     // for basic_string, char_traits, operator<<, operator+, string, operator==
-#include <utility>    // for pair, move
-#include <vector>     // for vector
+#include <algorithm>   // for transform
+#include <cstdint>     // for int64_t
+#include <cstdlib>     // for exit, _Exit, abort
+#include <exception>   // for exception, current_exception, rethrow_exception, exception_ptr
+#include <filesystem>  // for path>
+#include <fstream>     // IWYU pragma: keep
+#include <iostream>    // for basic_ostream, operator<<, endl, basic_ostream::operator<<, cerr, cout, ifstream
+#include <map>         // for operator!=, map, _Rb_tree_const_iterator
+#include <sstream>     // for stringstream
+#include <string>      // for basic_string, char_traits, operator<<, operator+, string, operator==
+#include <utility>     // for pair, move
+#include <vector>      // for vector
 
-#include <boost/algorithm/string.hpp>       // for starts_with
-#include <boost/any.hpp>                    // for any
-#include <boost/filesystem/operations.hpp>  // for canonical, complete, exists
-#include <boost/filesystem/path.hpp>        // for path, operator<<, operator>>, operator!=, operator/
+#include <boost/algorithm/string.hpp>  // for starts_with
+#include <boost/any.hpp>               // for any
 #include <boost/program_options.hpp>  // for variable_value, store, value, options_description_easy_init, typed_value, basic_command_line_parser, collect_unrecognized, notify, operator<<, options_description, parse_config_file, command_line_parser, variables_map, basic_parsed_options, collect_unrecognized_mode, include_positional
 #include <boost/smart_ptr.hpp>        // for shared_ptr
 
@@ -382,7 +381,7 @@ void ProgramManager::bootstrapEnvironment(char* arg0) {
   vector<Path::Item> local_search_paths(m_search_dirs.size());
 
   std::transform(m_search_dirs.cbegin(), m_search_dirs.cend(), local_search_paths.begin(), [](const string& s) {
-    return boost::filesystem::absolute(s);
+    return std::filesystem::absolute(s);
   });
 
   // insert local parent dir if it is not already

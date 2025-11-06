@@ -25,16 +25,14 @@
 #include <libgen.h>  // for __xpg_basename, basename
 #include <unistd.h>  // for getpid
 
-#include <array>    // for array
-#include <cstdint>  // for int64_t
-#include <fstream>  // IWYU pragma: keep
+#include <array>       // for array
+#include <cstdint>     // for int64_t
+#include <filesystem>  // for canonical, exists, path
+#include <fstream>     // IWYU pragma: keep
 #include <memory>
 #include <sstream>  // for basic_istream, basic_ostream, basic_ostream::operator<<, operator<<, basic_ios, ifstream, istringstream, stringstream
 #include <string>   // for char_traits, basic_string, string, operator>>, getline, operator==
 #include <vector>   // for vector
-
-#include <boost/filesystem/operations.hpp>  // for exists, canonical
-#include <boost/filesystem/path.hpp>        // for operator/, path
 
 #include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
 #include "ElementsKernel/Path.h"         // for Item
@@ -207,7 +205,7 @@ vector<Path::Item> linkedModulePaths() {
     if (string address ;not(iss >> address >> perms >> offset >> dev >> inode >> pathname)) {
       continue;
     }
-    if (perms == "r-xp" and boost::filesystem::exists(pathname)) {
+    if (perms == "r-xp" and std::filesystem::exists(pathname)) {
       linked_modules.emplace_back(pathname);
     }
   }

@@ -21,12 +21,11 @@
 
 #include "ElementsKernel/Auxiliary.h"
 
-#include <algorithm>  // for copy_if, for_each
-#include <string>     // for allocator, string
-#include <vector>     // for vector
+#include <algorithm>   // for copy_if, for_each
+#include <filesystem>  // for path, create_directory
+#include <string>      // for allocator, string
+#include <vector>      // for vector
 
-#include <boost/filesystem/operations.hpp>  // for exists, create_directory
-#include <boost/filesystem/path.hpp>        // for operator/, path
 #include <boost/test/unit_test.hpp>  // for BOOST_PP_IIF_1, BOOST_PP_IIF_0, BOOST_PP_EXPR_IIF_1, BOOST_PP_BOOL_1, BOOST_PP_BOOL_0, BOOST_PP_FOR_CHECK_BOOST_PP_NIL, BOOST_PP_TUPLE_ELEM_O_3, BOOST_PP_VARIADIC_ELEM_3, operator<<, BOOST_PP_SEQ_ELEM_0, BOOST_PP_DEC_1, BOOST_PP_BOOL_2, BOOST_PP_DEC_2, BOOST_PP_FOR_0, BOOST_PP_COMPL_0, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_4, BOOST_PP_DEC_4, BOOST_PP_BOOL_3, BOOST_PP_BOOL_4, BOOST_PP_NOT_EQUAL_1, BOOST_PP_NOT_EQUAL_CHECK_BOOST_PP_NOT_EQUAL_1, BOOST_AUTO_TEST_CASE, BOOST_PP_DEC_128, BOOST_PP_DEC_16, BOOST_PP_DEC_3, BOOST_PP_DEC_32, BOOST_PP_DEC_64, BOOST_PP_DEC_8, BOOST_PP_FOR_1, BOOST_PP_FOR_127, BOOST_PP_FOR_15, BOOST_PP_FOR_3, BOOST_PP_FOR_31, BOOST_PP_FOR_63, BOOST_PP_FOR_7, BOOST_PP_NODE_ENTRY_256, BOOST_CHECK_EQUAL_COLLECTIONS, BOOST_FIXTURE_TEST_CASE, BOOST_PP_DEC_5, BOOST_PP_NOT_EQUAL_2, BOOST_PP_NOT_EQUAL_CHECK_BOOST_PP_NOT_EQUAL_2, BOOST_PP_SEQ_ENUM_4, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_5, BOOST_TEST_TOOL_PASS_ARGS1, BOOST_TEST_TOOL_PASS_PRED1, BOOST_CHECK_EQUAL, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_2, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_3, BOOST_TEST_TOOL_PASS_ARGS0, BOOST_TEST_TOOL_PASS_ARGS2, BOOST_TEST_TOOL_PASS_PRED0, BOOST_TEST_TOOL_PASS_PRED2, BOOST_AUTO_TEST_SUITE, BOOST_AUTO_TEST_SUITE_END, BOOST_CHECK_THROW
 
 #include "ElementsKernel/Exception.h"  // for Exception
@@ -37,7 +36,7 @@
 using std::string;
 using std::vector;
 
-using boost::filesystem::exists;
+using std::filesystem::exists;
 
 namespace Elements {
 
