@@ -27,8 +27,7 @@
 #include <string>     // for string
 #include <vector>     // for vector
 
-#include <boost/algorithm/string.hpp>       // for boost::split
-#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/algorithm/string.hpp>  // for boost::split
 
 #include "ElementsKernel/Environment.h"  // for the Environment class
 #include "ElementsKernel/System.h"       // for getEnv, SHLIB_VAR_NAME
