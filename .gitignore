@@ -86,3 +86,4 @@ gmon.out
 /.pylintrc
 /.justfile
 /.eclipse-pmd
+/.zed

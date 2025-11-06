@@ -21,7 +21,6 @@
 
 #include "ElementsExamples/ClassExample2.h"  // for ClassExample2
 
-#include <cstdint>  // for int64_t
 #include <memory>   // for allocator, unique_ptr
 #include <string>   // for string
 #include <utility>  // for move
