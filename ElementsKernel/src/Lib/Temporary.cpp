@@ -44,11 +44,11 @@ auto log = Logging::getLogger();
 }
 
 inline std::string randomHexString(const std::size_t length) {
-  static std::random_device              rd;
-  static std::mt19937                    gen(rd());
-  static std::uniform_int_distribution<> dist(0, 15);
+  static std::random_device            rd;
+  static std::mt19937                  gen(rd());
+  static std::uniform_int_distribution dist(0, 15);
 
-  static const char* hex_chars = "0123456789abcdef";
+  static auto hex_chars = "0123456789abcdef";
 
   std::string result;
   result.reserve(length);
@@ -74,8 +74,7 @@ Path::Item uniquePath(Path::Item const& model, const int max_tries) {
       else
         path_str += c;
     }
-    fs::path candidate = fs::temp_directory_path() / path_str;
-    if (!fs::exists(candidate))
+    if (fs::path candidate = temp_directory_path() / path_str; !fs::exists(candidate))
       return path_str;
   }
 
@@ -96,7 +95,7 @@ TempPath::TempPath(string motif, string keep_var)
     pattern = DEFAULT_TMP_MOTIF;
   }
 
-  m_path /= Elements::uniquePath(Path::Item(pattern));
+  m_path /= uniquePath(Path::Item(pattern));
 }
 
 TempPath::~TempPath() {

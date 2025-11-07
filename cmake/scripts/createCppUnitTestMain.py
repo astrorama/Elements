@@ -39,7 +39,7 @@ ELEMENTS_API int main(ELEMENTS_UNUSED int argc, ELEMENTS_UNUSED char **argv)
   CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
   runner.addTest(registry.makeTest());
   const bool wasSuccessful = runner.run("", false);
-  return (wasSuccessful? 0 : 1);
+  return wasSuccessful? 0 : 1;
 }
 
 """
