@@ -21,11 +21,11 @@
 
 #include "ElementsKernel/Temporary.h"
 
-#include <filesystem>  // for operator/, temp_directory_path, path
-#include <fstream>     // for ofstream
-#include <iostream>    // for basic_ostream, operator<<, endl, cout
-#include <string>      // for operator==, char_traits, allocator, string, basic_string
+#include <fstream>   // for ofstream
+#include <iostream>  // for basic_ostream, operator<<, endl, cout
+#include <string>    // for operator==, char_traits, allocator, string, basic_string
 
+#include <boost/filesystem.hpp>  // for create_directory, exists>
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Environment.h"  // for Environment
@@ -34,8 +34,8 @@
 
 using std::string;
 
-using std::filesystem::create_directory;
-using std::filesystem::exists;
+using boost::filesystem::create_directory;
+using boost::filesystem::exists;
 
 namespace Elements {
 
@@ -174,7 +174,7 @@ BOOST_FIXTURE_TEST_CASE(TempEnv2_test, Temporary_Fixture) {
 
 BOOST_AUTO_TEST_CASE(KeepTmpDir_test) {
 
-  using std::filesystem::remove_all;
+  using boost::filesystem::remove_all;
 
   Environment current;
   current["KEEPTEMPDIR"] = "1";
@@ -193,7 +193,7 @@ BOOST_AUTO_TEST_CASE(KeepTmpDir_test) {
 
 BOOST_AUTO_TEST_CASE(Fake_test) {
 
-  using std::filesystem::temp_directory_path;
+  using boost::filesystem::temp_directory_path;
 
   const string motif1;
   const string motif2 = "toto-%%%";

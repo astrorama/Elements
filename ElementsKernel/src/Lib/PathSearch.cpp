@@ -21,11 +21,11 @@
 
 #include "ElementsKernel/PathSearch.h"
 
-#include <filesystem>  // for directory_iterator, recursive_directory_iterator
-#include <string>      // for allocator, string, basic_string
-#include <vector>      // for vector
+#include <string>  // for allocator, string, basic_string
+#include <vector>  // for vector
 
 #include <boost/algorithm/string.hpp>  // for is_any_ofF, is_any_of, split
+#include <boost/filesystem.hpp>        // for is_directory>
 
 #include "ElementsKernel/Environment.h"  // for Environment
 #include "ElementsKernel/Logging.h"      // for Logging
@@ -34,8 +34,8 @@
 using std::string;
 using std::vector;
 
-using std::filesystem::directory_iterator;
-using std::filesystem::recursive_directory_iterator;
+using boost::filesystem::directory_iterator;
+using boost::filesystem::recursive_directory_iterator;
 
 namespace Elements {
 inline namespace Kernel {
@@ -85,7 +85,7 @@ vector<Path::Item> pathSearchInEnvVariable(const string& file_name, const string
   // Loop over all path elements
   for (const string& path_element : path_elements) {
     // Check if directory exists
-    if (std::filesystem::exists(path_element) && std::filesystem::is_directory(path_element)) {
+    if (boost::filesystem::exists(path_element) && boost::filesystem::is_directory(path_element)) {
       // loop recursively inside directory
       auto single_path_results = pathSearch(file_name, Path::Item{path_element}, search_type);
       search_results.insert(search_results.end(), single_path_results.cbegin(), single_path_results.cend());

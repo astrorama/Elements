@@ -26,9 +26,10 @@
 #error "This file should not be included directly! Use ElementsKernel/PathSearch.h instead"
 #else
 
-#include <filesystem>  // for directory_iterator, recursive_directory_iterator>
-#include <string>      // for string
-#include <vector>      // for vector
+#include <string>  // for string
+#include <vector>  // for vector
+
+#include <boost/filesystem.hpp>  // for is_directory
 
 #include "ElementsKernel/Path.h"  // for Item
 
@@ -45,7 +46,7 @@ std::vector<T> pathSearch(const std::string& searched_name, T directory) {
   Path::Item l_directory{directory};
   // the default constructor of ITER return a pointer to one-past last element
   ITER end_iter;
-  if (std::filesystem::is_directory(l_directory)) {
+  if (boost::filesystem::is_directory(l_directory)) {
     // ITER constructor return a pointer to the first element of l_directory
     for (ITER dir_iter(l_directory); dir_iter != end_iter; ++dir_iter) {
       if (dir_iter->path().filename() == searched_name) {
@@ -66,10 +67,10 @@ std::vector<T> searchOption(std::string searched_name, T directory, SearchType s
   std::vector<T> searchResults{};
   switch (search_type) {
   case SearchType::Local:
-    searchResults = pathSearch<T, std::filesystem::directory_iterator>(searched_name, directory);
+    searchResults = pathSearch<T, boost::filesystem::directory_iterator>(searched_name, directory);
     break;
   case SearchType::Recursive:
-    searchResults = pathSearch<T, std::filesystem::recursive_directory_iterator>(searched_name, directory);
+    searchResults = pathSearch<T, boost::filesystem::recursive_directory_iterator>(searched_name, directory);
     break;
   }
   return searchResults;

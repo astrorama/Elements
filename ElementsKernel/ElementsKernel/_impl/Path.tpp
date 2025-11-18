@@ -26,14 +26,15 @@
 #else
 
 #include <algorithm>      // IWYU pragma: keep
-#include <filesystem>     // for exists
 #include <iosfwd>         // for ptrdiff_t
 #include <string>         // for string
 #include <unordered_set>  // for unordered_set
 #include <utility>        // for forward, pair
 #include <vector>         // for vector
 
-#include <boost/algorithm/string.hpp>  // for join
+#include <boost/algorithm/string.hpp>       // for join
+#include <boost/filesystem/operations.hpp>  // for exists
+#include <boost/filesystem/path.hpp>        // for operator/, path
 
 namespace Elements {
 inline namespace Kernel {
@@ -67,7 +68,7 @@ std::vector<Item> getAllPathFromLocations(const T& file_name, const std::vector<
   });
 
   auto found_pos = std::remove_if(file_list.begin(), file_list.end(), [](const Item& p) {
-    return not std::filesystem::exists(p);
+    return not boost::filesystem::exists(p);
   });
 
   file_list.erase(found_pos, file_list.end());
