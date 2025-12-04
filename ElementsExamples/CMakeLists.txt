@@ -324,6 +324,14 @@ elements_add_test(TbbWorks COMMAND TbbExample LABELS Tbb Build)
 endif()
 
 
+find_package(OpenCV QUIET)
+if(OpenCV_FOUND)
+elements_add_executable(OpenCVExample src/program/OpenCV.cpp
+                        LINK_LIBRARIES ElementsExamples OpenCV
+                        INCLUDE_DIRS ElementsExamples OpenCV)
+endif()
+
+
 
 find_package(SWIG QUIET)
 if(SWIG_FOUND AND Python_Development_FOUND)
