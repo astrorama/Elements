@@ -3388,7 +3388,7 @@ function(elements_add_executable executable)
     set_target_properties(${executable} PROPERTIES SUFFIX .exe)
     set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
   else()
-    set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
+    set_target_properties(${executable} PROPERTIES BASENAME ${executable})
   endif()
 
   set_target_properties(${executable} PROPERTIES  ENABLE_EXPORTS 1)
@@ -4754,7 +4754,7 @@ link_directories(AFTER \${_IMPORT_PREFIX}/${lib_install_suff})
         endif()
         file(APPEND ${pkg_exp_file} "  IMPORTED_LOCATION \"\${_IMPORT_PREFIX}/bin/${prop}\"\n")
 
-        file(APPEND ${pkg_exp_file} "  )\n")
+        file(APPEND ${pkg_exp_file} ")\n")
       endforeach()
 
       foreach(module ${exported_mods})
