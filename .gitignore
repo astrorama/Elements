@@ -24,6 +24,7 @@
 # Apple
 *.DS_Store
 
+*~
 #####=== Editors ===#####
 
 ## Eclipse
@@ -44,6 +45,9 @@
 
 # CDT-specific (C/C++ Development Tooling)
 /.cproject
+
+# generated lauch configurations
+/.launchers
 
 # PyCharm
 /.idea

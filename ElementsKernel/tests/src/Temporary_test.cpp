@@ -84,8 +84,13 @@ BOOST_FIXTURE_TEST_CASE(AutoDestruct_test, Temporary_Fixture) {
 
   // the items must have been destroyed after the
   // closing of the block
-  BOOST_CHECK(!exists(test_path));
-  BOOST_CHECK(!exists(test_file_path));
+  if (m_env.get("KEEPTEMPDIR", "0") == "0") {
+    BOOST_CHECK(!exists(test_path));
+    BOOST_CHECK(!exists(test_file_path));
+  } else {
+    BOOST_CHECK(exists(test_path));
+    BOOST_CHECK(exists(test_file_path));
+  }
 
   Path::Item test2_path;
   Path::Item test2_file_path;
@@ -104,8 +109,13 @@ BOOST_FIXTURE_TEST_CASE(AutoDestruct_test, Temporary_Fixture) {
     BOOST_CHECK(exists(test2_path));
   }
 
-  BOOST_CHECK(!exists(test2_path));
-  BOOST_CHECK(!exists(test2_file_path));
+  if (m_env.get("KEEPTEMPDIR", "0") == "0") {
+    BOOST_CHECK(!exists(test2_path));
+    BOOST_CHECK(!exists(test2_file_path));
+  } else {
+    BOOST_CHECK(exists(test2_path));
+    BOOST_CHECK(exists(test2_file_path));
+  }
 }
 
 BOOST_FIXTURE_TEST_CASE(TempEnv_test, Temporary_Fixture) {

@@ -83,6 +83,23 @@ This release essentially fixes problems met on the MacOS platform
     - use CMake to test the compilation
 - Fix lcov execution for lcov 2.0
 
+## [6.2.5] - 2025-12-10
+
+### Fixed
+- Fix the custom properties passed to the interface targets.
+  Below CMake 3.19, it only accepts custom properties with the
+  INTERFACE_ prefix
+- Fix to the way that the string are converted to upper case in
+  some shell script tests
+    - the ^^ way was only supported by bash
+    - the plain sh needs to use a tr conversion
+- Fix the temp tests when the KEEPTEMPDIR env variable is present
+- Replace empty custom commands with `${CMAKE_COMMAND} -E true` in
+  coverage CMake
+    - Prevents CMake errors from empty COMMAND fields in custom commands
+    - Ensures post-build steps are always valid, even if no real command is
+      needed
+
 
 ## [6.2.4] - 2024-02-12
 
