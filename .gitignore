@@ -83,3 +83,7 @@ gmon.out
 /sonar-project.properties
 /.checkstyle
 /.pylintrc
+/.eclipse-pmd
+/.justfile
+/.vscode
+
