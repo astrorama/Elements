@@ -195,7 +195,7 @@ file_h="${MODULE_NAME}/${class_name_vis}.h"
 AddCppClass ${class_name_vis} -V native
 
 # Check the EXPORT pattern
-exp_str="class ${MODULE_NAME^^}_EXPORT"
+exp_str="class ${MODULE_NAME_UPPER}_EXPORT"
 result=$( grep "${exp_str}" "${file_h}" )
 if [ $? -ne 0 ]  ;then
    echo "The ${file_h} does not contains the following pattern : < ${exp_str} >" 1>&2
@@ -214,6 +214,7 @@ fi
 # Test the template option
 #
 class_name_temp="ClassTemplateTest"
+class_name_temp_upper="$(echo $class_name_temp | tr 'a-z' 'A-Z')"
 file_h="${MODULE_NAME}/${class_name_temp}.h"
 file_tpp="${MODULE_NAME}/_impl/${class_name_temp}.tpp"
 file_cpp="src/lib/${class_name_temp}.cpp"
@@ -253,13 +254,13 @@ if [ $? -ne 0 ]  ;then
    echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
    clean_and_exit 1
 fi
-pattern_str="#define _${MODULE_NAME^^}_${MODULE_NAME^^}_${class_name_temp^^}_IMPL"
+pattern_str="#define _${MODULE_NAME_UPPER}_${MODULE_NAME_UPPER}_${class_name_temp_upper}_IMPL"
 result=$( grep "${pattern_str}" "${file_h}" )
 if [ $? -ne 0 ]  ;then
    echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
    clean_and_exit 1
 fi
-pattern_str="#undef _${MODULE_NAME^^}_${MODULE_NAME^^}_${class_name_temp^^}_IMPL"
+pattern_str="#undef _${MODULE_NAME_UPPER}_${MODULE_NAME_UPPER}_${class_name_temp_upper}_IMPL"
 result=$( grep "${pattern_str}" "${file_h}" )
 if [ $? -ne 0 ]  ;then
    echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
@@ -272,7 +273,7 @@ if [ ! -e "${file_tpp}" ]; then
 fi
 
 # Check several patterns in the *.tpp file
-pattern_str="#ifndef _${MODULE_NAME^^}_${MODULE_NAME^^}_${class_name_temp^^}_IMPL"
+pattern_str="#ifndef _${MODULE_NAME_UPPER}_${MODULE_NAME_UPPER}_${class_name_temp_upper}_IMPL"
 result=$( grep "${pattern_str}" "${file_tpp}" )
 if [ $? -ne 0 ]  ;then
    echo "The ${file_tpp} does not contains the following pattern : < ${pattern_str} >" 1>&2

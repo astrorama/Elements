@@ -57,3 +57,4 @@ fi
 export TEMPORARY_LOCATION=${User_area}
 export MODULE_NAME_PATH=${User_area}/${project_name}/${version}/${module_name}
 export MODULE_NAME=${module_name}
+export MODULE_NAME_UPPER=$(echo $MODULE_NAME | tr 'a-z' 'A-Z')
