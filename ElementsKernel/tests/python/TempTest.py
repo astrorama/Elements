@@ -64,13 +64,20 @@ class TestCase(unittest.TestCase):
         self.assertTrue(os.path.isdir(mydirname))
         del mydir
         # the temporary directory should have been removed
-        self.assertFalse(os.path.exists(mydirname))
+        if self.m_env.get("KEEPTEMPDIR", None):
+            self.assertTrue(os.path.exists(mydirname))
+        else:
+            self.assertFalse(os.path.exists(mydirname))
 
     def testContext(self):
         with TempDir() as td:
             td_path = td.getName()
             self.assertTrue(os.path.exists(td_path))
-        self.assertFalse(os.path.exists(td_path))
+
+        if self.m_env.get("KEEPTEMPDIR", None):
+            self.assertTrue(os.path.exists(td_path))
+        else:
+            self.assertFalse(os.path.exists(td_path))
 
     def testFileDestruction(self):
         myfile = TempFile()
@@ -80,13 +87,21 @@ class TestCase(unittest.TestCase):
         self.assertTrue(os.path.isfile(myfilename))
         del myfile
         # the temporary directory should have been removed
-        self.assertFalse(os.path.exists(myfilename))
+        if self.m_env.get("KEEPTEMPDIR", None):
+            self.assertTrue(os.path.exists(myfilename))
+        else:
+            self.assertFalse(os.path.exists(myfilename))
+
 
     def testFileContext(self):
         with TempFile() as tf:
             tf_path = tf.getName()
             self.assertTrue(os.path.exists(tf_path))
-        self.assertFalse(os.path.exists(tf_path))
+        if self.m_env.get("KEEPTEMPDIR", None):
+            self.assertTrue(os.path.exists(tf_path))
+        else:
+            self.assertFalse(os.path.exists(tf_path))
+
 
     def testPath(self):
 
