@@ -1811,7 +1811,7 @@ macro(_get_include_dir_from_package inc_dir pck)
 
   set(${inc_dir})
   if(TARGET ${pck})
-    get_target_property(${inc_dir} ${pck} SOURCE_DIR)
+    get_target_property(${inc_dir} ${pck} INTERFACE_SOURCE_DIR)
   elseif(IS_ABSOLUTE ${pck} AND IS_DIRECTORY ${pck})
     set(${inc_dir} ${pck})
   elseif(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${pck})
@@ -1896,7 +1896,7 @@ function(print_package_directories)
   foreach(package ${ARGN})
     # we need to ensure that the user can call this function also for directories
     if(TARGET ${package})
-      get_target_property(to_incl ${package} SOURCE_DIR)
+      get_target_property(to_incl ${package} INTERFACE_SOURCE_DIR)
       if(to_incl)
         message(STATUS "print_package_directories1 include_directories(${to_incl})")
       endif()
@@ -2186,7 +2186,7 @@ endfunction()
 #       elements_add_library
 #-------------------------------------------------------------------------------
 function(elements_resolve_link_libraries variable)
-  #message(STATUS "elements_resolve_link_libraries input: ${ARGN}")
+  # message(STATUS "elements_resolve_link_libraries input: ${ARGN}")
   set(collected)
   set(to_be_resolved)
   foreach(package ${ARGN})
@@ -2194,7 +2194,7 @@ function(elements_resolve_link_libraries variable)
     if(TARGET ${package})
       #message(STATUS "${package} is a TARGET")
       set(collected ${collected} ${package})
-      get_target_property(libs ${package} REQUIRED_LIBRARIES)
+      get_target_property(libs ${package} INTERFACE_REQUIRED_LIBRARIES)
       if(libs)
         set(to_be_resolved ${to_be_resolved} ${libs})
       endif()
@@ -2315,7 +2315,7 @@ function(elements_get_required_include_dirs output)
     set(req)
     if(TARGET ${lib})
       list(APPEND collected ${lib})
-      get_property(req TARGET ${lib} PROPERTY REQUIRED_INCLUDE_DIRS)
+      get_property(req TARGET ${lib} PROPERTY INTERFACE_REQUIRED_INCLUDE_DIRS)
       if(req)
         list(APPEND collected ${req})
       endif()
@@ -2563,9 +2563,9 @@ Provide source files and the NO_PUBLIC_HEADERS option for a plugin/module librar
 
   # Declare that the used headers are needed by the libraries linked against this one
   set_target_properties(${library} PROPERTIES
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
-    REQUIRED_INCLUDE_DIRS "${ARG_INCLUDE_DIRS}"
-    REQUIRED_LIBRARIES "${ARG_LINK_LIBRARIES}")
+    INTERFACE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+    INTERFACE_REQUIRED_INCLUDE_DIRS "${ARG_INCLUDE_DIRS}"
+    INTERFACE_REQUIRED_LIBRARIES "${ARG_LINK_LIBRARIES}")
   set_property(GLOBAL APPEND PROPERTY LINKER_LIBRARIES ${library})
 
   if(USE_VERSIONED_LIBRARIES)
@@ -4514,7 +4514,7 @@ link_directories(AFTER \${_IMPORT_PREFIX}/${lib_install_suff})
         file(APPEND ${pkg_exp_file} "add_library(${library} SHARED IMPORTED)\n")
         file(APPEND ${pkg_exp_file} "set_target_properties(${library} PROPERTIES\n")
 
-        foreach(pn REQUIRED_INCLUDE_DIRS REQUIRED_LIBRARIES)
+        foreach(pn INTERFACE_REQUIRED_INCLUDE_DIRS INTERFACE_REQUIRED_LIBRARIES)
           get_property(prop TARGET ${library} PROPERTY ${pn})
           if (prop)
             file(APPEND ${pkg_exp_file} "  ${pn} \"${prop}\"\n")
