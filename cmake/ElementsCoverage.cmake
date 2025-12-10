@@ -106,7 +106,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
       add_dependencies(gcovr gcovr_dir)
 
       add_custom_command(TARGET gcovr POST_BUILD
-                        COMMAND ;
+                        COMMAND ${CMAKE_COMMAND} -E true
                         COMMENT "===================================================================================================\nThe ./${BUILD_SUBDIR}/cov/gcovr/${PROJECT_NAME}.xml file contains the Cobertura XML report.\n===================================================================================================\n"
                         )
 
@@ -122,7 +122,7 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
 else()
 
   add_custom_command(TARGET cov POST_BUILD
-                     COMMAND ;
+                     COMMAND ${CMAKE_COMMAND} -E true
                      COMMENT "=======================================================================\nPlease build in coverage mode in order to instrument the binaries.\n=======================================================================\n"
                     )
 
