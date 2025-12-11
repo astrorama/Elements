@@ -95,7 +95,6 @@ BOOST_FIXTURE_TEST_CASE(AutoDestruct_test, Temporary_Fixture) {
     BOOST_CHECK(exists(test_file_path));
   }
 
-
   Path::Item test2_path;
   Path::Item test2_file_path;
 
