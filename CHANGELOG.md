@@ -9,6 +9,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [6.3.5] - 2025-12-11
+
+### Fixed
+- Fix the custom properties passed to the interface targets. Below
+  CMake 3.19, it only accepts custom properties with the INTERFACE_ prefix
+- Fix to the way that the string are converted to upper case
+    - the ^^ way was only supported by bash
+    - the plain sh needs to use a tr conversion
+- Fix the temp tests when the KEEPTEMPDIR env variable is present
+- Replace empty custom commands with `${CMAKE_COMMAND} -E true` in coverage CMake
+    - Prevents CMake errors from empty COMMAND fields in custom commands
+    - Ensures post-build steps are always valid, even if no real command is
+      needed
+    - Improves compatibility across different CMake versions and platforms
+    - Keeps informative COMMENT messages for users in coverage builds
+    - No functional change to coverage generation or reporting
+    - Affects only `ElementsCoverage.cmake` build script
+- Require minimum CMake versions for C++17, C17, and C++20 standard flags
+    - Add CMake 3.8+ check for C++17 flag usage
+    - Require CMake 3.21+ for enabling C17 standard
+    - Add CMake 3.12+ check for C++20 flag usage
+    - Prevents setting unsupported standard flags on older CMake versions
+- Add fallback to C11 standard if C17 is not supported in build flags
+    - Warn if C17 is unavailable and attempt to use C11 instead
+    - Check compiler support for -std=c11 before setting the flag
+
+
+## [6.3.4] - 2025-05-13
+
+### Changed
+- Update setup-dependencies action to 3.7 (Marc Schefer)
+
 ## [6.3.3] - 2025-02-27
 This release essentially fixes problem met on github deployment
 
