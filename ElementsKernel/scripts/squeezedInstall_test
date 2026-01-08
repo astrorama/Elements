@@ -71,7 +71,7 @@ fi
 ${build_cmd} --target install
 # shellcheck disable=SC2181
 if [ $? -ne 0 ]; then
-  echo "Error: <make install> command failed!" 1>&2
+  echo "Error: <${build_cmd} --target install> command failed!" 1>&2
   local_clean_exit 1
 fi
 
@@ -120,7 +120,7 @@ cd "${User_area}" || exit
 
 CreateElementsProject -n --yes ${projectB_name} ${projectB_version}
 if [ $? -ne 0 ]; then
-   echo "Error: <CreateElementsProject $projectB_name $projectB_version> command failed!" 1>&2
+   echo "Error: <CreateElementsProject -n --yes ${projectB_name} ${projectB_version}> command failed!" 1>&2
    local_clean_exit 1
 fi
 
@@ -145,14 +145,14 @@ fi
 # Build ProjectB
 ${build_cmd}
 if [ $? -ne 0 ]; then
-  echo "Error: <make> command failed!" 1>&2
+  echo "Error: <${build_cmd}> command failed!" 1>&2
   local_clean_exit 1
 fi
 
 # Install ProjectB
 ${build_cmd} --target install
 if [ $? -ne 0 ]; then
-  echo "Error: <make install> command failed!" 1>&2
+  echo "Error: <${build_cmd} --target install> command failed!" 1>&2
   local_clean_exit 1
 fi
 
