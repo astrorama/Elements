@@ -1,10 +1,11 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 # - ElementsProject
 # Define the macros used by Elements-based projects.
 #
 # Authors: Hubert Degaudenzi
 #
 #
-cmake_minimum_required(VERSION 3.25)
 
 
 # FIXME: use of LOCATION property is deprecated and should be replaced with the

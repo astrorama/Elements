@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
-
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
 
 # Declare ElementsExamples as an Elements module
 elements_subdir(ElementsExamples)

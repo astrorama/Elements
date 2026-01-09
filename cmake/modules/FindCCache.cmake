@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT CCACHE_FOUND)
 
     find_program(CCACHE_EXECUTABLE NAMES ccache ccache-swig

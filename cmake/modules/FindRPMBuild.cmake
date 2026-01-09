@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 # -*- cmake -*-
 #
 # - Find tools needed for building RPM Packages

@@ -1,3 +1,4 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
 # Internal settings for ROOT 6
 
 # This is the list of some known component libraries

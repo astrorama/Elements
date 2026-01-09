@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 # - Try to find FFTW.
 # Usage: find_package(FFTW [COMPONENTS [single double (long-double|long) threads (omp|openmp)]])
 #

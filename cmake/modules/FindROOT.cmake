@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 # - Find the ROOT libraries, headers and tools.
 # Components:
 #   Core RIO Hist Tree TreePlayer Cintex Matrix GenVector MathCore MathMore XMLIO

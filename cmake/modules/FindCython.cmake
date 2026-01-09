@@ -1,3 +1,4 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
 if (NOT CYTHON_FOUND)
 
     find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter Development)
