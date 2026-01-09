@@ -55,6 +55,8 @@ endmacro()
 
 ## Initialize common variables.
 macro(init)
+  cmake_language(GET_MESSAGE_LOG_LEVEL current_message_log_level)
+  message(STATUS "Current log level: ${current_message_log_level}")
   preload_toolchain_module_path()
   if(NOT BINARY_TAG)
     include(SGSPlatform)
