@@ -26,11 +26,12 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 
-#include "ElementsKernel/ModuleInfo.h"
-#include "ElementsKernel/FuncPtrCast.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
+
+class ModuleInfo;
+
 /**
  * @brief function to retrieve the current module
  * @ingroup ElementsKernel
@@ -38,24 +39,27 @@ namespace System {
  * It has to be included in the target source and compiled
  * within the module to be identified.
  */
-static inline const ModuleInfo& getThisModuleInfo() {
-  static ModuleInfo this_module;
-  if (this_module.isEmpty()) {
-    this_module = ModuleInfo(FuncPtrCast<void*>(getThisModuleInfo));
-  }
+static const ModuleInfo& getThisModuleInfo();
 
-  return this_module;
-}
-
-/** @example ElementsExamples/src/lib/ModuleInfo.cpp
- * This is an example of how to use the getThisModuleInfo function.
- * The call has to be compiled in the module (library)
+/**
+ * @brief Function to retrieve the information of the current executable.
+ * @ingroup ElementsKernel
+ *
+ * This function provides runtime metadata about the module associated with
+ * the current executable. It dynamically loads the main function symbol to
+ * construct the module information if it has not been initialized yet.
+ * The function is thread-safe due to the use of a static variable.
+ *
+ * @return A reference to the ModuleInfo instance containing the information
+ * about the current executable.
  */
-
 ELEMENTS_API const ModuleInfo& getThisExecutableInfo();
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_
+#include "ElementsKernel/_impl/ThisModule.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_THIS_MODULE_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_THISMODULE_H_
 

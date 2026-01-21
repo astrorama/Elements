@@ -23,6 +23,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+namespace Elements {
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //
@@ -34,9 +36,7 @@ BOOST_AUTO_TEST_SUITE(Real_test)
 
 BOOST_AUTO_TEST_CASE(FloatCompare_test) {
 
-  using Elements::almostEqual2sComplement;
-
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -55,9 +55,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare_test) {
 
-  using Elements::almostEqual2sComplement;
-
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -86,10 +84,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare2_test) {
 
-  using Elements::isEqual;
-  using Elements::FLT_DEFAULT_TEST_TOLERANCE;
-
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -110,10 +105,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare2_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare2_test) {
 
-  using Elements::isEqual;
-  using Elements::DBL_DEFAULT_TEST_TOLERANCE;
-
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -140,14 +132,11 @@ BOOST_AUTO_TEST_CASE(DoubleCompare2_test) {
 
   BOOST_CHECK_CLOSE(f, 0.5, DBL_DEFAULT_TEST_TOLERANCE);
 
-
 }  // Eof DoubleCompare2_test
 
 BOOST_AUTO_TEST_CASE(FloatCompare3_test) {
 
-  using Elements::isEqual;
-
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -171,9 +160,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare3_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare3_test) {
 
-  using Elements::isEqual;
-
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -202,9 +189,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare3_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare4_test) {
 
-  using Elements::isEqual;
-
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -228,9 +213,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare4_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare4_test) {
 
-  using Elements::isEqual;
-
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -259,9 +242,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare4_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare5_test) {
 
-  using Elements::isNotEqual;
-
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -280,9 +261,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare5_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare5_test) {
 
-  using Elements::isNotEqual;
-
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -311,9 +290,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare5_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare6_test) {
 
-  using Elements::isNotEqual;
-
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -337,9 +314,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare6_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare6_test) {
 
-  using Elements::isNotEqual;
-
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -368,9 +343,7 @@ BOOST_AUTO_TEST_CASE(DoubleCompare6_test) {
 
 BOOST_AUTO_TEST_CASE(FloatCompare7_test) {
 
-  using Elements::isNotEqual;
-
-  float f = 1.0F / 2.0F;
+  constexpr float f = 1.0F / 2.0F;
 
   BOOST_CHECK_EQUAL(f, 0.5F);
 
@@ -394,9 +367,7 @@ BOOST_AUTO_TEST_CASE(FloatCompare7_test) {
 
 BOOST_AUTO_TEST_CASE(DoubleCompare7_test) {
 
-  using Elements::isNotEqual;
-
-  double f = 1.0 / 2.0;
+  constexpr double f = 1.0 / 2.0;
 
   BOOST_CHECK_EQUAL(f, 0.5);
 
@@ -426,3 +397,5 @@ BOOST_AUTO_TEST_CASE(DoubleCompare7_test) {
 //-----------------------------------------------------------------------------
 // End of the Boost tests
 BOOST_AUTO_TEST_SUITE_END()
+
+}  // namespace Elements

@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -24,54 +24,77 @@
 #ifndef ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCUTILS_H_
 #define ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCUTILS_H_
 
-#include <string>
-#include <utility>
-#include <vector>
+#include <string>   // for string
+#include <utility>  // for pair
+#include <vector>   // for vector
 
-#include <boost/filesystem.hpp>
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
+#include "ElementsKernel/Path.h"    // for Item
 
-#include "ElementsKernel/Export.h"
-
-namespace ElementsServices {
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
-using path = boost::filesystem::path;
+/// importing the path item from ElementsKernel
+using path = Path::Item;
 
-ELEMENTS_API path confFilePath(path filename);
+/**
+ * @brief Name of the default variable that contains the path
+ * to the work dir.
+ * @ingroup ElementsServices
+ */
+ELEMENTS_API extern const std::string DEFAULT_WORKDIR_VAR;
 
-ELEMENTS_API bool checkCall(std::string command);
+/**
+ * @brief Name of the variable containing the name of the workspace.
+ * It that variable is not set or empty, the content of #DEFAULT_WORKDIR_VAR
+ * is used as the work dir path.
+ * @ingroup ElementsServices
+ */
+ELEMENTS_API extern const std::string WORKDIR_VAR_VAR;
 
-ELEMENTS_API std::pair<std::string, std::string> runCommandAndCaptureOutErr(
-    std::string command);
+ELEMENTS_API path confFilePath(const path& filename);
 
-ELEMENTS_API bool localDirExists(path localDir);
+ELEMENTS_API bool checkCall(const std::string& command);
 
-ELEMENTS_API void createLocalDirOf(path localFile);
+ELEMENTS_API std::pair<std::string, std::string> runCommandAndCaptureOutErr(const std::string& command);
+
+ELEMENTS_API bool localDirExists(const path& local_dir);
+
+ELEMENTS_API void createLocalDirOf(const path& local_file);
 
 /**
  * @brief Get the value of an environment variable.
  * @ingroup ElementsServices
  * @return The value if the variable exists; "" otherwise.
  */
-ELEMENTS_API std::string environmentVariable(std::string name);
+ELEMENTS_API std::string environmentVariable(const std::string& name);
+
+/**
+ * @brief Get the datasync workdir variable
+ * @ingroup ElementsServices
+ * @return the name of the variable containing the workdir path
+ */
+ELEMENTS_API std::string getWorkdirVariable();
 
 ELEMENTS_API path localWorkspacePrefix();
 
 ELEMENTS_API std::string lower(std::string text);
 
-template<typename T>
+template <typename T>
 ELEMENTS_API bool valueIsListed(const T& value, const std::vector<T>& list) {
   const auto& begin = list.begin();
-  const auto& end = list.end();
+  const auto& end   = list.end();
   return std::find(begin, end, value) != end;
 }
 
-ELEMENTS_API bool containsInThisOrder(
-    std::string input,
-    std::vector<std::string> substrings);
+ELEMENTS_API bool containsInThisOrder(const std::string& input, const std::vector<std::string>& substrings);
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements
+
+namespace ElementsServices = Elements::Services;
 
 #endif  // ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCUTILS_H_
 

@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT GCOV_FOUND)
 
 	find_program(GCOV_EXECUTABLE NAMES gcov
@@ -14,4 +16,3 @@ if (NOT GCOV_FOUND)
 
 
 endif (NOT GCOV_FOUND)
-

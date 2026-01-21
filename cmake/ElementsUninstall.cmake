@@ -1,6 +1,8 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 include(ElementsUtils)
 
-include_guard()
+include_guard(GLOBAL)
 
 find_file_to_configure(cmake_uninstall.cmake.in
                        FILETYPE "CMake"
@@ -8,7 +10,7 @@ find_file_to_configure(cmake_uninstall.cmake.in
                        OUTPUTDIR "${CMAKE_CURRENT_BINARY_DIR}"
                        OUTPUTNAME cmake_uninstall.cmake
                        PATHS ${CMAKE_MODULE_PATH})
-                       
-                       
+
+
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

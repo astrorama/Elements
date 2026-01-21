@@ -10,8 +10,8 @@ external_dep_name="Boost"
 # Create a unique directory
 tmploc=${TEMPORARY_LOCATION}
 
-cd ${tmploc}
-cd ${MODULE_NAME_PATH}
+cd "${tmploc}" || exit
+cd "${MODULE_NAME_PATH}" || exit
 
 # Create a class
 AddCppClass $class_name -ed $elt_dep_name -extd $external_dep_name
@@ -28,11 +28,24 @@ if [ ! -e "${MODULE_NAME}/${class_name}.h" ]; then
    clean_and_exit 1
 fi
 if [ ! -e "src/lib/${class_name}.cpp" ]; then
+   echo "Error: <src/lib/${class_name}.cpp> file not found!" 1>&2
+   clean_and_exit 1
+fi
+if [ ! -e "tests/src/${class_name}_test.cpp" ]; then
+   echo "Error: <tests/src/${class_name}_test.cpp> file not found!" 1>&2
    clean_and_exit 1
 fi
 
+# test if the include statement contains a double slash
+result=$(grep -e "^\s*#\s*include\s*\(<[^>/]*/\{2,\}.*>\|\"[^\"/]*/\{2,\}.*\"\)\s*" tests/src/${class_name}_test.cpp)
+if [ $? -eq 0 ]  ;then
+  echo "The tests/src/${class_name}_test.cpp contains an include statement with double //" 1>&2
+  clean_and_exit 1
+fi
+
+
 # Make sure the elements_depends_on_subdirs macro is there and ElementsKernel
-result=$( grep "elements_depends_on_subdirs" ${MODULE_NAME_PATH}/CMakeLists.txt |
+result=$( grep "elements_depends_on_subdirs" "${MODULE_NAME_PATH}"/CMakeLists.txt |
           grep -v "#" | grep "ElementsKernel" )
 if [ $? -ne 0 ]  ;then
    echo "Error: <elements_depends_on_subdirs> macro with <ElementsKernel> module not found!" 1>&2
@@ -40,7 +53,7 @@ if [ $? -ne 0 ]  ;then
 fi
 
 # Make sure the elements_depends_on_subdirs macro is there and dependency
-result=$( grep "elements_depends_on_subdirs" ${MODULE_NAME_PATH}/CMakeLists.txt |
+result=$( grep "elements_depends_on_subdirs" "${MODULE_NAME_PATH}"/CMakeLists.txt |
           grep -v "#" | grep $elt_dep_name )
 if [ $? -ne 0 ]  ;then
    echo "Error: <elements_depends_on_subdirs> macro with <$elt_dep_name> dependency not found!" 1>&2
@@ -48,7 +61,7 @@ if [ $? -ne 0 ]  ;then
 fi
 
 # Make sure the find_package macro is there
-result=$( grep "find_package" ${MODULE_NAME_PATH}/CMakeLists.txt |
+result=$( grep "find_package" "${MODULE_NAME_PATH}"/CMakeLists.txt |
           grep -v "#" | grep $external_dep_name )
 if [ $? -ne 0 ]  ;then
    echo "Error: find_package macro not found!" 1>&2
@@ -56,28 +69,46 @@ if [ $? -ne 0 ]  ;then
 fi
 
 # Make sure the elements_add_library macro is there
-result=$( grep "elements_add_library" ${MODULE_NAME_PATH}/CMakeLists.txt |  grep -v "#" |
-          grep $module_name )
+result=$( grep "elements_add_library" "${MODULE_NAME_PATH}"/CMakeLists.txt |  grep -v "#" |
+          grep "$module_name" )
 if [ $? -ne 0 ]  ;then
    echo "Error: <elements_add_library> macro with <$module_name> module not found!" 1>&2
    clean_and_exit 1
 fi
 
-# Make sure the LINK_LIBRARIES is there and Element dependency
-result=$( grep "LINK_LIBRARIES" ${MODULE_NAME_PATH}/CMakeLists.txt |  grep -v "#" |
+# Make sure the LINK_LIBRARIES is there and Elements dependency
+result=$( grep "LINK_LIBRARIES" "${MODULE_NAME_PATH}"/CMakeLists.txt |  grep -v "#" |
           grep $elt_dep_name)
 if [ $? -ne 0 ]  ;then
-   echo "Error: LINK_LIBRARIES macro with <$elt_dep_name> Element dependency not found!" 1>&2
+   echo "Error: LINK_LIBRARIES macro with <$elt_dep_name> Elements dependency not found!" 1>&2
    clean_and_exit 1
 fi
 
 # Make sure the LINK_LIBRARIES is there and external dependency
-result=$( grep "LINK_LIBRARIES" ${MODULE_NAME_PATH}/CMakeLists.txt |  grep -v "#" |
+result=$( grep "LINK_LIBRARIES" "${MODULE_NAME_PATH}"/CMakeLists.txt |  grep -v "#" |
           grep $external_dep_name)
 if [ $? -ne 0 ]  ;then
    echo "Error: LINK_LIBRARIES macro with <$external_dep_name> external dependency not found!" 1>&2
    clean_and_exit 1
 fi
+
+# Make sure the INCLUDE_DIRS is there and Elements dependency
+result=$( grep "INCLUDE_DIRS" "${MODULE_NAME_PATH}"/CMakeLists.txt |  grep -v "#" |
+          grep $elt_dep_name)
+if [ $? -ne 0 ]  ;then
+   echo "Error: INCLUDE_DIRS macro with <$elt_dep_name> Elements dependency not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Make sure the INCLUDE_DIRS is there and external dependency
+result=$( grep "INCLUDE_DIRS" "${MODULE_NAME_PATH}"/CMakeLists.txt |  grep -v "#" |
+          grep $external_dep_name)
+if [ $? -ne 0 ]  ;then
+   echo "Error: INCLUDE_DIRS macro with <$external_dep_name> external dependency not found!" 1>&2
+   clean_and_exit 1
+fi
+
+
 
 # Create a class into a subdir and make sure the elements_add_unit_test macro
 # is correct and files are at the right place
@@ -86,7 +117,7 @@ fi
 subdir="subdir"
 AddCppClass $subdir/$class_name
 
-result=$( grep "elements_add_unit_test" ${MODULE_NAME_PATH}/CMakeLists.txt |  grep -v "#" |
+result=$( grep "elements_add_unit_test" "${MODULE_NAME_PATH}"/CMakeLists.txt |  grep -v "#" |
           grep $class_name | grep $subdir)
 if [ $? -ne 0 ]  ;then
    echo "Error: in elements_add_unit_test macro, no <$subdir> not found!" 1>&2
@@ -99,7 +130,224 @@ if [ ! -e "${MODULE_NAME}/${subdir}/${class_name}.h" ]; then
    clean_and_exit 1
 fi
 if [ ! -e "src/lib/${subdir}/${class_name}.cpp" ]; then
+   echo "Error: <src/lib/${subdir}/${class_name}.cpp> file not found!" 1>&2
    clean_and_exit 1
 fi
+
+if [ ! -e "tests/src/${subdir}/${class_name}_test.cpp" ]; then
+   echo "Error: <tests/src/${subdir}/${class_name}_test.cpp> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# test if the include statement contains a double slash
+result=$(grep -e "^\s*#\s*include\s*\(<[^>/]*/\{2,\}.*>\|\"[^\"/]*/\{2,\}.*\"\)\s*" tests/src/${subdir}/${class_name}_test.cpp)
+if [ $? -eq 0 ]; then
+   echo "The tests/src/${subdir}/${class_name}_test.cpp contains an include statement with double //" 1>&2
+   clean_and_exit 1
+fi
+
+# Test if the include in class.cpp is correct
+result=$( grep "#include" src/lib/${subdir}/${class_name}.cpp | grep "${MODULE_NAME}/${subdir}/${class_name}.h" )
+if [ $? -ne 0 ]; then
+   echo "The ${MODULE_NAME}/${subdir}/${class_name}.h contains an wrong include statement" 1>&2
+   clean_and_exit 1
+fi
+
+# Test if the include is correct in the class_name_test.cpp
+result=$( grep "#include"  tests/src/${subdir}/${class_name}_test.cpp | grep -v boost| grep "${MODULE_NAME}/${subdir}/${class_name}.h" )
+if [ $? -ne 0 ]  ;then
+   echo "The tests/src/${subdir}/${class_name}_test.cpp contains a wrong include statement" 1>&2
+   clean_and_exit 1
+fi
+
+
+#
+# Test the visibility option : simple
+#
+
+class_name_vis="ClassVisibilityTestSimple"
+file_h="${MODULE_NAME}/${class_name_vis}.h"
+
+AddCppClass ${class_name_vis} -V simple
+
+
+# Check the ELEMENTS_API pattern
+result=$( grep ELEMENTS_API "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains pattern : < ELEMENTS_API >" 1>&2
+   clean_and_exit 1
+fi
+
+# Check the include
+result=$( grep "#include \"ElementsKernel/Export.h\"" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the include : < \"ElementsKernel/Export.h\" >" 1>&2
+   clean_and_exit 1
+fi
+
+#
+# Test the visibility option : native
+#
+
+class_name_vis="ClassVisibilityTestNative"
+file_h="${MODULE_NAME}/${class_name_vis}.h"
+
+AddCppClass ${class_name_vis} -V native
+
+# Check the EXPORT pattern
+exp_str="class ${MODULE_NAME_UPPER}_EXPORT"
+result=$( grep "${exp_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${exp_str} >" 1>&2
+   clean_and_exit 1
+fi
+
+# Check the include
+pattern_str="#include \"${MODULE_NAME}_export.h\""
+result=$( grep "${pattern_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+
+#
+# Test the template option
+#
+class_name_temp="ClassTemplateTest"
+class_name_temp_upper="$(echo $class_name_temp | tr 'a-z' 'A-Z')"
+file_h="${MODULE_NAME}/${class_name_temp}.h"
+file_tpp="${MODULE_NAME}/_impl/${class_name_temp}.tpp"
+file_cpp="src/lib/${class_name_temp}.cpp"
+
+AddCppClass ${class_name_temp} -t
+
+# Make sure the .tpp files is created
+if [ ! -e "${file_tpp}" ]; then
+   echo "Error: <${file_tpp}> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Make sure the .cpp files is created
+if [ ! -e "${file_cpp}" ]; then
+   echo "Error: <${file_cpp}> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Make sure the .h files is created
+if [ ! -e "${file_h}" ]; then
+   echo "Error: <${file_h}> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Check the template statement
+pattern_str="template<typename T>"
+result=$( grep "${pattern_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+
+# Check several patterns in the *.h file
+pattern_str="#include \"${MODULE_NAME}/_impl/${class_name_temp}.tpp\""
+result=$( grep "${pattern_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+pattern_str="#define _${MODULE_NAME_UPPER}_${MODULE_NAME_UPPER}_${class_name_temp_upper}_IMPL"
+result=$( grep "${pattern_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+pattern_str="#undef _${MODULE_NAME_UPPER}_${MODULE_NAME_UPPER}_${class_name_temp_upper}_IMPL"
+result=$( grep "${pattern_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+# Make sure the tpp files is created
+if [ ! -e "${file_tpp}" ]; then
+   echo "Error: <${file_tpp}> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Check several patterns in the *.tpp file
+pattern_str="#ifndef _${MODULE_NAME_UPPER}_${MODULE_NAME_UPPER}_${class_name_temp_upper}_IMPL"
+result=$( grep "${pattern_str}" "${file_tpp}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_tpp} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+pattern_str="// template<typename T>"
+result=$( grep "${pattern_str}" "${file_tpp}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_tpp} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+
+# Check pattern in the .cpp file
+pattern_str="// template ${class_name_temp}<double>;"
+result=$( grep "${pattern_str}" "${file_cpp}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_cpp} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+
+#
+# Test the template option with a sub-directory
+#
+
+class_name_temp_subdir="ClassTemplateSubdirTest"
+subdir="subdir"
+file_h="${MODULE_NAME}/${subdir}/${class_name_temp_subdir}.h"
+file_tpp="${MODULE_NAME}/${subdir}/_impl/${class_name_temp_subdir}.tpp"
+file_cpp="src/lib/${subdir}/${class_name_temp_subdir}.cpp"
+
+AddCppClass ${subdir}/${class_name_temp_subdir} -t
+
+# Make sure the .tpp file is created
+if [ ! -e "${file_tpp}" ]; then
+   echo "Error: <${file_tpp}> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Make sure the .cpp file is created
+if [ ! -e "${file_cpp}" ]; then
+   echo "Error: <${file_cpp}> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Make sure the .h file is created
+if [ ! -e "${file_h}" ]; then
+   echo "Error: <${file_h}> file not found!" 1>&2
+   clean_and_exit 1
+fi
+
+# Check include pattern in tpp file
+pattern_str="#include \"${file_tpp}\""
+result=$( grep "${pattern_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+
+# Check filename in header of .h file
+pattern_str=" * @file ${file_h}"
+result=$( grep "${pattern_str}" "${file_h}" )
+if [ $? -ne 0 ]  ;then
+   echo "The ${file_h} does not contains the following pattern : < ${pattern_str} >" 1>&2
+   clean_and_exit 1
+fi
+
+#
+# Test the template option and -V option
+#
+
+class_name_temp_v="ClassTemplateVTest"
+file_h="${MODULE_NAME}/${class_name_temp_v}.h"
+file_tpp="${MODULE_NAME}/_impl/${class_name_temp_v}.tpp"
+file_cpp="src/lib/${class_name_temp_v}.cpp"
+
 
 clean_and_exit 0

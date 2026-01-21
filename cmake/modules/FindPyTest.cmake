@@ -1,17 +1,20 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT PYTEST_FOUND)
 
-    find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
-    
+    find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
+
+
     set(explicit_pytest)
-    set(implicit_pytest py.test)
+    set(implicit_pytest pytest)
 
     if(PYTHON_EXPLICIT_VERSION)
       set(explicit_pytest ${implicit_pytest}-${PYTHON_EXPLICIT_VERSION})
     endif()
-    
-    
-    if(PYTHONINTERP_FOUND)
-        get_filename_component(_python_path ${PYTHON_EXECUTABLE} PATH)
+
+
+    if(Python_Interpreter_FOUND)
+        get_filename_component(_python_path ${Python_EXECUTABLE} PATH)
         find_program(PYTEST_EXECUTABLE
                      NAMES ${explicit_pytest} ${implicit_pytest}
                      HINTS ${_python_path})
@@ -32,4 +35,3 @@ if (NOT PYTEST_FOUND)
 
 
 endif (NOT PYTEST_FOUND)
-

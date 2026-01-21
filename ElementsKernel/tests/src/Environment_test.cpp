@@ -19,19 +19,19 @@
  *
  */
 
-#include "ElementsKernel/Environment.h"        // for Environment
+#include "ElementsKernel/Environment.h"
 
-#include <iostream>                            // for interactive testing
-#include <string>
-#include <stdexcept>                           // for out_of_range
+#include <stdexcept>  // for invalid_argument, out_of_range
+#include <string>     // for operator==, allocator, string, operator+, char_traits
 
+#include <boost/regex.hpp>  // for regex_traits, regex_match, regex
 #include <boost/test/unit_test.hpp>
-#include <boost/regex.hpp>                     // for regex, regex_match
 
-#include "ElementsKernel/System.h"             // for isEnvSet
+#include "ElementsKernel/System.h"  // for isEnvSet, getEnv, setEnv, unSetEnv
 
 using std::string;
-using Elements::Environment;
+
+namespace Elements {
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -44,61 +44,56 @@ struct Environment_fixture {
 
   const Environment base;
 
-  Environment_fixture() {
-    // setup
-  }
-  ~Environment_fixture() {
-    // teardown
-  }
+  Environment_fixture()  = default;
+  ~Environment_fixture() = default;
 };
-
 
 class ThatClass {
 public:
-  ThatClass(): m_env{}, m_internal_var_name{"duhfbs"}, m_internal_var_value{"titi"} {
+  ThatClass() : m_internal_var_name{"duhfbs"}, m_internal_var_value{"titi"} {
     m_env[m_internal_var_name] = m_internal_var_value;
   }
   void setEnv(const string& var_name, const string& var_value) {
     m_env[var_name] = var_value;
   }
-  string getEnv(const string& var_name) const {
+  [[nodiscard]] string getEnv(const string& var_name) const {
     return m_env[var_name];
   }
 
-  bool checkInternalEnv() const {
-    using Elements::System::getEnv;
-    return (getEnv(m_internal_var_name) == m_internal_var_value);
+  [[nodiscard]] bool checkInternalEnv() const {
+    using System::getEnv;
+    return getEnv(m_internal_var_name) == m_internal_var_value;
   }
+
 private:
   Environment m_env;
-  string m_internal_var_name;
-  string m_internal_var_value;
+  string      m_internal_var_name;
+  string      m_internal_var_value;
 };
 
 BOOST_AUTO_TEST_SUITE(Environment_test)
 
-using Elements::System::isEnvSet;
-using Elements::System::getEnv;
-using Elements::System::setEnv;
-using Elements::System::unSetEnv;
+using System::getEnv;
+using System::isEnvSet;
+using System::setEnv;
+using System::unSetEnv;
 
 //-----------------------------------------------------------------------------
 
 BOOST_FIXTURE_TEST_CASE(Base_test, Environment_fixture) {
 
-   BOOST_CHECK(not base["PATH"].empty());
-   BOOST_CHECK(base["hkedis_4"].empty());
+  BOOST_CHECK(not base["PATH"].empty());
+  BOOST_CHECK(base["hkedis_4"].empty());
 
-   BOOST_CHECK(base["PATH"].exists());
-   BOOST_CHECK(not base["hkedis_4"].exists());
-
+  BOOST_CHECK(base["PATH"].exists());
+  BOOST_CHECK(not base["hkedis_4"].exists());
 }
 
 BOOST_AUTO_TEST_CASE(SetVariable_test) {
 
   Environment first;
 
-  const string var_name {"LKkhdfk4lad"};
+  const string var_name{"LKkhdfk4lad"};
 
   BOOST_CHECK(not isEnvSet(var_name));
 
@@ -109,24 +104,23 @@ BOOST_AUTO_TEST_CASE(SetVariable_test) {
 
   unSetEnv(var_name);
 
-  const string var_name_2 {"LKehdfw4lad"};
+  const string var_name_2{"LKehdfw4lad"};
 
   BOOST_CHECK(not isEnvSet(var_name_2));
 
   first[var_name_2] = "";
 
   BOOST_CHECK(isEnvSet(var_name_2));
-  BOOST_CHECK("" == string(first[var_name_2]));
+  BOOST_CHECK(string(first[var_name_2]).empty());
 
   unSetEnv(var_name_2);
-
 }
 
 BOOST_AUTO_TEST_CASE(UnSetVariable_test) {
 
   Environment first;
 
-  const string var_name {"LKkhdfk4lad"};
+  const string var_name{"LKkhdfk4lad"};
 
   BOOST_CHECK(not isEnvSet(var_name));
 
@@ -140,12 +134,11 @@ BOOST_AUTO_TEST_CASE(UnSetVariable_test) {
   BOOST_CHECK(not isEnvSet(var_name));
 
   BOOST_CHECK_THROW(first["jdldaoociej"].unSet(), std::out_of_range);
-
 }
 
 BOOST_AUTO_TEST_CASE(SubEnv_test) {
 
-  const string var_name {"dikeZdhjdSHD"};
+  const string var_name{"dikeZdhjdSHD"};
 
   Environment first;
 
@@ -180,30 +173,26 @@ BOOST_AUTO_TEST_CASE(SubEnv_test) {
     BOOST_CHECK(second[var_name].exists());
     BOOST_CHECK(isEnvSet(var_name));
     BOOST_CHECK(getEnv(var_name) == "toto");
-
-
   }
 
   BOOST_CHECK(not first[var_name].exists());
   BOOST_CHECK(not isEnvSet(var_name));
-
 }
 
 BOOST_AUTO_TEST_CASE(NestedSet_test) {
 
-  const string var_name {"ddTdh_lds"};
+  const string var_name{"ddTdh_lds"};
 
-  const string var_name_2 {"ddTdh_sad4ds"};
-  const string var_value_2 {"bla"};
+  const string var_name_2{"ddTdh_sad4ds"};
+  const string var_value_2{"bla"};
   setEnv(var_name_2, var_value_2);
   BOOST_CHECK(isEnvSet(var_name_2));
   BOOST_CHECK(getEnv(var_name_2) == var_value_2);
 
-  const string var_name_3 {"ddSUETdh_sad4ds"};
+  const string var_name_3{"ddSUETdh_sad4ds"};
   setEnv(var_name_3, "alpha");
   BOOST_CHECK(isEnvSet(var_name_3));
   BOOST_CHECK(getEnv(var_name_3) == "alpha");
-
 
   {
     BOOST_CHECK(not isEnvSet(var_name));
@@ -215,7 +204,7 @@ BOOST_AUTO_TEST_CASE(NestedSet_test) {
     local[var_name] = "toto";
     BOOST_CHECK(isEnvSet(var_name));
 
-    const string var_value_3 {"blu"};
+    const string var_value_3{"blu"};
     local[var_name_2] = var_value_3;
 
     BOOST_CHECK(isEnvSet(var_name_2));
@@ -223,7 +212,6 @@ BOOST_AUTO_TEST_CASE(NestedSet_test) {
 
     local.unSet(var_name_3);
     BOOST_CHECK(not isEnvSet(var_name_3));
-
   }
 
   BOOST_CHECK(not isEnvSet(var_name));
@@ -233,7 +221,6 @@ BOOST_AUTO_TEST_CASE(NestedSet_test) {
 
   BOOST_CHECK(isEnvSet(var_name_3));
   BOOST_CHECK(getEnv(var_name_3) == "alpha");
-
 }
 
 BOOST_AUTO_TEST_CASE(GenScript_test) {
@@ -246,19 +233,17 @@ BOOST_AUTO_TEST_CASE(GenScript_test) {
   first["blad3"] = "djjsd/d:";
 
   const string sh_script_text = first.generateScript(Environment::ShellType::sh);
-  regex sh_set_rule {"\\s*export\\s+blad3=djjsd/d:\\s*$"};
+  const regex  sh_set_rule{R"(\s*export\s+blad3=djjsd/d:\s*$)"};
   BOOST_CHECK(regex_match(sh_script_text, sh_set_rule));
 
   const string csh_script_text = first.generateScript(Environment::ShellType::csh);
-  regex csh_set_rule {"\\s*setenv\\s+blad3\\s+djjsd/d:\\s*$"};
+  const regex  csh_set_rule{R"(\s*setenv\s+blad3\s+djjsd/d:\s*$)"};
   BOOST_CHECK(regex_match(csh_script_text, csh_set_rule));
-
-
 }
 
 BOOST_AUTO_TEST_CASE(Commit_test) {
 
-  const string var_name {"ddTdh_lds"};
+  const string var_name{"ddTdh_lds"};
 
   BOOST_CHECK(not isEnvSet(var_name));
 
@@ -274,7 +259,7 @@ BOOST_AUTO_TEST_CASE(Commit_test) {
 
 BOOST_AUTO_TEST_CASE(Class_test) {
 
-  const string var_name = "ddTdh_lds";
+  const string var_name  = "ddTdh_lds";
   const string var_value = "toto";
 
   ThatClass that;
@@ -285,7 +270,6 @@ BOOST_AUTO_TEST_CASE(Class_test) {
   BOOST_CHECK(getEnv(var_name) == var_value);
 
   BOOST_CHECK(that.checkInternalEnv());
-
 }
 
 BOOST_AUTO_TEST_CASE(Append_test) {
@@ -299,8 +283,6 @@ BOOST_AUTO_TEST_CASE(Append_test) {
   local.append("PATH", added_value);
 
   BOOST_CHECK(local["PATH"].value() == original_path + added_value);
-
-
 }
 
 BOOST_AUTO_TEST_CASE(Prepend_test) {
@@ -314,10 +296,7 @@ BOOST_AUTO_TEST_CASE(Prepend_test) {
   local.prepend("PATH", added_value);
 
   BOOST_CHECK(local["PATH"].value() == added_value + original_path);
-
-
 }
-
 
 BOOST_AUTO_TEST_CASE(OperatorPlusEqual_test) {
 
@@ -330,8 +309,6 @@ BOOST_AUTO_TEST_CASE(OperatorPlusEqual_test) {
   local["PATH"] += added_value;
 
   BOOST_CHECK(local["PATH"].value() == original_path + added_value);
-
-
 }
 
 BOOST_AUTO_TEST_CASE(OperatorPlus_test) {
@@ -345,7 +322,6 @@ BOOST_AUTO_TEST_CASE(OperatorPlus_test) {
   local["PATH"] = local["PATH"] + added_value;
 
   BOOST_CHECK(local["PATH"].value() == original_path + added_value);
-
 }
 
 BOOST_AUTO_TEST_CASE(OperatorPlusOther_test) {
@@ -359,18 +335,16 @@ BOOST_AUTO_TEST_CASE(OperatorPlusOther_test) {
   local["PATH"] = added_value + local["PATH"];
 
   BOOST_CHECK(local["PATH"].value() == added_value + original_path);
-
 }
 
 BOOST_AUTO_TEST_CASE(CheckCompatibility_test) {
 
   Environment local;
 
-  local["dkdd"] = "toto";
+  local["dkdd"]  = "toto";
   local["edkkd"] = "tata";
 
   BOOST_CHECK_THROW(local["dkdd"] = local["edkkd"], std::invalid_argument);
-
 }
 
 BOOST_AUTO_TEST_CASE(CheckCommit_test) {
@@ -385,11 +359,9 @@ BOOST_AUTO_TEST_CASE(CheckCommit_test) {
     BOOST_CHECK(getEnv("dkdd") == "beta");
     local.commit();
     BOOST_CHECK(getEnv("dkdd") == "beta");
-
   }
 
   BOOST_CHECK(getEnv("dkdd") == "beta");
-
 }
 
 BOOST_AUTO_TEST_SUITE_END()
@@ -399,3 +371,5 @@ BOOST_AUTO_TEST_SUITE_END()
 // End of the Boost tests
 //
 //-----------------------------------------------------------------------------
+
+}  // namespace Elements

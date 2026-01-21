@@ -1,0 +1,16 @@
+$NUMPY
+$PYTHON-devel
+$PYTHON-setuptools
+$PYTHON-numpy
+$PYTHON-pytest
+$PYTHON-sphinx
+$PYTHON-lxml
+$PYTHON-dnf
+CCfits-devel
+$BOOST-$PYTHON-devel
+$BOOST-devel
+doxygen
+graphviz
+log4cpp-devel
+which
+git-core

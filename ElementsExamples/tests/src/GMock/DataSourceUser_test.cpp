@@ -1,4 +1,4 @@
-/*
+/**
  * DataSourceUser_test.cpp
  *
  *  Created on: Sep 23, 2015
@@ -19,16 +19,13 @@
  *
  */
 
-#include "ElementsExamples/DataSourceUser.h"  // Access the objects you want to test
+#include "ElementsExamples/DataSourceUser.h"
 
-#include <cstddef>
-#include <gmock/gmock.h>
+#include "ElementsKernel/EnableGMock.h"  // for Return, ReturnAction, TypedExpectation, EXPECT_CALL, MockSpec, Matcher
+#include "ElementsKernel/Real.h"         // for isEqual
 #include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Real.h"
-#include "ElementsKernel/EnableGMock.h"       // initialize the gmock framework
-
-#include "DataSourceInterfaceMock.h"
+#include "DataSourceInterfaceMock.h"  // for DataSourceInterfaceMock
 
 using std::size_t;
 using testing::Return;
@@ -38,21 +35,19 @@ BOOST_AUTO_TEST_SUITE(DataSourceUser_test_suite)
 BOOST_AUTO_TEST_CASE(sumRecords_test) {
 
   // Setup mock
-  Elements::Examples::DataSourceInterfaceMock data_source_mock;
+  const Elements::Examples::DataSourceInterfaceMock data_source_mock;
 
   EXPECT_CALL(data_source_mock, countRecords()).Times(1).WillOnce(Return(5));
 
   for (size_t index = 0; index < 5; ++index) {
-    EXPECT_CALL(data_source_mock, getRecordValue(index)).Times(1).WillOnce(Return(static_cast<double>(index)+1.));
+    EXPECT_CALL(data_source_mock, getRecordValue(index)).Times(1).WillOnce(Return(static_cast<double>(index) + 1.));
   }
 
   // object to test
-  Elements::Examples::DataSourceUser user{};
-  double result = user.sumRecords(data_source_mock);
+  const double result = Elements::Examples::DataSourceUser::sumRecords(data_source_mock);
 
-  BOOST_CHECK_MESSAGE(Elements::isEqual(result, 15.), "Expected value :"<< 15. <<" Actual value :" << result);
+  BOOST_CHECK_MESSAGE(Elements::isEqual(result, 15.), "Expected value :" << 15. << " Actual value :" << result);
 }
 
 // Ends the test suite
 BOOST_AUTO_TEST_SUITE_END()
-

@@ -17,23 +17,19 @@
 #
 
 """
-File: %(FILETEST)s
+:file: %(FILETEST)s
 
-Created on: %(DATE)s
-Author: %(AUTHOR)s
+:date: %(DATE)s
+:author: %(AUTHOR)s
 """
 
-from __future__ import division, print_function
-import sys
-if sys.version_info[0] < 3:
-    from future_builtins import *
-
-import py.test
+import pytest
 import %(MODULENAME)s.%(PYTHONMODULE)s
 
 class Test%(PYTHONMODULE)s(object):
     """
     @class Test%(PYTHONMODULE)s
+
     @brief Unit Test class
     !!! Test class example for python             !!!
     !!! Please remove it and add your tests there !!!

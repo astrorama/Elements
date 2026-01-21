@@ -26,32 +26,56 @@
 
 #include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
-class ELEMENTS_API SwigClassExample {
+/**
+ * @class SwigClassExample
+ *
+ * @brief A class representing a simplified example for RA and DEC coordinates.
+ *
+ * This class provides access to RA (Right Ascension) and DEC (Declination) properties,
+ * initialized through the constructor and accessible through getter methods.
+ */
+class ELEMENTS_API SwigClassExample final {
 
 public:
+  /**
+   * @brief Constructs a SwigClassExample object with specified RA and DEC coordinates.
+   *
+   * This constructor initializes the RA (Right Ascension) and DEC (Declination) properties
+   * with the provided values. If no values are provided, the default is 0.0 for both RA and DEC.
+   *
+   * @param ra The Right Ascension coordinate to initialize (default is 0.0).
+   * @param dec The Declination coordinate to initialize (default is 0.0).
+   */
+  explicit SwigClassExample(const double ra = 0.0, const double dec = 0.0) : m_ra(ra), m_dec(dec) {}
 
-  explicit SwigClassExample(const double ra = 0.0, const double dec = 0.0) :
-      m_ra(ra), m_dec(dec) {
-  }
+  ~SwigClassExample() = default;
 
-  virtual ~SwigClassExample() = default;
-
+  /**
+   * @brief Retrieves the Right Ascension (RA) value.
+   *
+   * This method returns the RA value stored in the instance of SwigClassExample.
+   *
+   * @return The RA (Right Ascension) value as a double.
+   */
   double getRa() const;
 
+  /**
+   * @brief Retrieves the Declination (DEC) value of the object.
+   *
+   * This method provides access to the DEC property of the SwigClassExample instance.
+   *
+   * @return The DEC value as a double.
+   */
   double getDec() const;
 
 private:
-
   double m_ra;
   double m_dec;
-
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_SWIGCLASSEXAMPLE_H_
 

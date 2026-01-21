@@ -1,42 +1,43 @@
-'''
-Created on Apr 29, 2016
-
-@author: hubert
-
-
-@copyright: 2012-2020 Euclid Science Ground Segment
-
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free
-Software Foundation; either version 3.0 of the License, or (at your option)
-any later version.
-
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
+# Copyright (C) 2012-2020 Euclid Science Ground Segment
+#
+# This library is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation; either version 3.0 of the License, or (at your option)
+# any later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this library; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
 
 '''
+:date: Created on Apr 29, 2016
 
-from ElementsKernel.System import SHLIB_VAR_NAME, DEFAULT_INSTALL_PREFIX
+:author: Hubert Degaudenzi
+
+'''
+
 import os
 import sys
+import sysconfig
 import re
-from distutils.sysconfig import get_python_lib
 from collections import OrderedDict
 
-Type = ["executable", "library", "python", "configuration", "auxiliary"]
+from ElementsKernel.System import SHLIB_VAR_NAME, DEFAULT_INSTALL_PREFIX
 
+Type = ["executable", "library", "python", "configuration", "auxiliary"]
 
 PATHSEP = os.pathsep
 
 VARIABLE = {"executable": "PATH",
             "library": SHLIB_VAR_NAME,
-            "python":  "PYTHONPATH",
+            "python": "PYTHONPATH",
             "configuration": "ELEMENTS_CONF_PATH",
             "auxiliary": "ELEMENTS_AUX_PATH"}
 
@@ -46,20 +47,24 @@ SUFFIXES = {"executable": ["scripts", "bin"],
             "configuration": ["conf", "share/conf"],
             "auxiliary": ["auxdir", "aux", "share/auxdir", "share/aux"]}
 
-DEFAULT_INSTALL_LOCATIONS = { "executable": [ os.path.join(DEFAULT_INSTALL_PREFIX, "bin")],
-                                 "library": [ os.path.join(DEFAULT_INSTALL_PREFIX, "lib64"),
-                                              os.path.join(DEFAULT_INSTALL_PREFIX, "lib"),
-                                              os.path.join(DEFAULT_INSTALL_PREFIX, "lib32")],
-                                  "python": [ get_python_lib(prefix=DEFAULT_INSTALL_PREFIX)],
-                           "configuration": [ os.path.join(DEFAULT_INSTALL_PREFIX, "share", "conf") ],
-                               "auxiliary": [ os.path.join(DEFAULT_INSTALL_PREFIX, "share", "auxdir"),
-                                             os.path.join(DEFAULT_INSTALL_PREFIX, "share", "aux")]}
+DEFAULT_INSTALL_LOCATIONS = {
+    "executable": [ os.path.join(DEFAULT_INSTALL_PREFIX, "bin")],
+       "library": [ os.path.join(DEFAULT_INSTALL_PREFIX, "lib64"),
+                    os.path.join(DEFAULT_INSTALL_PREFIX, "lib"),
+                    os.path.join(DEFAULT_INSTALL_PREFIX, "lib32")],
+        "python": [ sysconfig.get_path("purelib").replace(sys.prefix, DEFAULT_INSTALL_PREFIX)],
+ "configuration": [ os.path.join(DEFAULT_INSTALL_PREFIX, "share", "conf") ],
+     "auxiliary": [ os.path.join(DEFAULT_INSTALL_PREFIX, "share", "auxdir"),
+                    os.path.join(DEFAULT_INSTALL_PREFIX, "share", "aux")]
+     }
 
-HAS_SUBLEVELS = { "executable": False,
-                     "library": False,
-                      "python": True,
-               "configuration": True,
-                   "auxiliary": True}
+HAS_SUBLEVELS = {
+    "executable": False,
+       "library": False,
+        "python": True,
+ "configuration": True,
+     "auxiliary": True
+     }
 
 
 def getLocations(file_type="executable", exist_only=False, with_defaults=True):
@@ -77,6 +82,7 @@ def getLocations(file_type="executable", exist_only=False, with_defaults=True):
 
     return location_list
 
+
 def getPath(file_name, file_type="executable", raise_exception=True):
     """
     Get full path to the file name searched in the file-type path
@@ -87,7 +93,7 @@ def getPath(file_name, file_type="executable", raise_exception=True):
     result = getPathFromLocations(file_name, location_list)
 
     if not result and raise_exception:
-        raise Exception("The %s file \"%s\" cannot be found!" % (file_type, file_name))
+        raise OSError(f"The {file_type} file \"{file_name}\" cannot be found!")
 
     return result
 
@@ -109,6 +115,7 @@ def getLocationsFromEnv(path_variable, exist_only=False):
 
     return found_list
 
+
 def getPathFromLocations(file_name, locations):
     """
     Get the path to the searched  file name from the
@@ -121,6 +128,7 @@ def getPathFromLocations(file_name, locations):
             return file_path
 
     return None
+
 
 def getAllPathFromLocations(file_name, locations):
     """
@@ -145,10 +153,10 @@ def getPathFromEnvVariable(file_name, path_variable):
     filename with the path or an empty string if not found. We assume that the
     file_name also contains any sub directory under the <path_variable>
     environment variable entry.
-    @param file_name: file name to look for can be "Some.txt" or "/" path
+    :param file_name: file name to look for can be "Some.txt" or "/" path
     component like "SomeFolder/Some.txt"
-    @param path_variable: name of the environment variable to look into
-    @return: full path to the first match entry.
+    :param path_variable: name of the environment variable to look into
+    :return: full path to the first match entry.
     """
 
     location_list = getLocationsFromEnv(path_variable)
@@ -160,14 +168,16 @@ def joinPath(path_list):
     """ stupid wrapper to look like the C++ call """
     return os.pathsep.join(path_list)
 
+
 join = joinPath
+
 
 def multiPathAppend(initial_locations, suffixes):
     """ Function to append all the suffixes to
     all the initial location
-    @param initial_locations: as quoted the initial paths to be
+    :param initial_locations: as quoted the initial paths to be
     appended to
-    @param suffixes: the extensions to be appended.
+    :param suffixes: the extensions to be appended.
     """
     result = []
 
@@ -176,10 +186,12 @@ def multiPathAppend(initial_locations, suffixes):
 
     return result
 
+
 def which(program):
     """ Command to assert the existance of an executable
-        @param program: program path, absolute or relative
+        :param program: program path, absolute or relative
     """
+
     def is_exe(fpath):
         """ small function to check if the item is an executable """
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
@@ -201,8 +213,8 @@ def which(program):
 def pyVersionWhich(program, program3_prefix=None):
     """ Version of which that returns the right executable
         depending on the calling python version.
-        @param program: program path, absolute or relative
-        @param program3: program3 prefix,
+        :param program: program path, absolute or relative
+        :param program3: program3 prefix,
     """
     executable_name = None
     python_version = ""
@@ -221,15 +233,15 @@ def pyVersionWhich(program, program3_prefix=None):
 
     return which(executable_name)
 
+
 def getTargetPath(file_name, target_dir, target_name=None, use_stem=False):
     """ Compute the target path for a copy/configuration of a file
-        @param file_name: the original file name with or without a stem
-        @param target_dir: the target directory
-        @param target_name: the target name if any
-        @param use_stem: choose if the stem (dirname) of the file_name will 
-                         be used or only
-                         the last component (basename) of the file_name path.
-        @return: the final target path for the copy/configuration.
+        :param file_name: the original file name with or without a stem
+        :param target_dir: the target directory
+        :param target_name: the target name if any
+        :param use_stem: choose if the stem (dirname) of the file_name will be used or only
+        the last component (basename) of the file_name path.
+        :return: the final target path for the copy/configuration.
     """
     if target_name:
         target_path = os.path.join(target_dir, target_name)
@@ -238,6 +250,7 @@ def getTargetPath(file_name, target_dir, target_name=None, use_stem=False):
     else:
         target_path = os.path.join(target_dir, os.path.basename(file_name))
     return target_path
+
 
 def removeDuplicates(file_list):
     """ stupid wrapper to look like the C++ call """

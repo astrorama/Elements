@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -24,13 +24,17 @@
 #ifndef ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_IRODSSYNCHRONIZER_H_
 #define ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_IRODSSYNCHRONIZER_H_
 
-#include <string>
+#include <string>  // for string
 
-#include "ElementsKernel/Export.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-#include "ElementsServices/DataSync/DataSynchronizer.h"
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for path, Services
+#include "ElementsServices/DataSync/DataSynchronizer.h"         // for DataSynchronizer
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
 
-namespace ElementsServices {
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
 /**
@@ -44,24 +48,21 @@ ELEMENTS_API bool irodsIsInstalled();
  * @ingroup ElementsServices
  * @brief A data synchronizer for iRODS hosts.
  */
-class ELEMENTS_API IrodsSynchronizer: public DataSynchronizer {
+class ELEMENTS_API IrodsSynchronizer final : public DataSynchronizer {
 
 public:
+  ~IrodsSynchronizer() override = default;
 
-  virtual ~IrodsSynchronizer() = default;
+  IrodsSynchronizer(const ConnectionConfiguration& connection, const DependencyConfiguration& dependency);
 
-  IrodsSynchronizer(
-      const ConnectionConfiguration& connection,
-      const DependencyConfiguration& dependency);
-
-  std::string createDownloadCommand(
-      path distantFile,
-      path localFile) const override;
-
+  std::string createDownloadCommand(path distant_file, path local_file) const override;
 };
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements
+
+namespace ElementsServices = Elements::Services;
 
 #endif  // ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_IRODSSYNCHRONIZER_H_
 

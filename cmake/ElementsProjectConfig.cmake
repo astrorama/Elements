@@ -1,11 +1,12 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 # - ElementsProject
 # Define the macros used by Elements-based projects.
 #
 # Authors: Hubert Degaudenzi
 #
-# Commit Id: $Format:%H$
+#
 
-cmake_minimum_required(VERSION 2.8.5)
 
 # FIXME: use of LOCATION property is deprecated and should be replaced with the
 #        generator expression $<TARGET_FILE>, but the way we use it requires
@@ -14,10 +15,10 @@ cmake_minimum_required(VERSION 2.8.5)
 if(NOT CMAKE_VERSION VERSION_LESS 3.0) # i.e CMAKE_VERSION >= 3.0
   if(NOT CMAKE_VERSION VERSION_LESS 3.9.0)
     cmake_policy(SET CMP0026 NEW)
-  else()  
+  else()
     cmake_policy(SET CMP0026 OLD)
   endif()
-  if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
     cmake_policy(SET CMP0042 OLD)
   endif()
 endif()
@@ -40,11 +41,52 @@ if(POLICY CMP0048)
   endif()
 endif()
 
+if(POLICY CMP0054)
+  # this policy is related to the string comparison
+  # please run "cmake --help-policy CMP0054" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.1) # i.e CMAKE_VERSION >= 3.3
+    cmake_policy(SET CMP0054 NEW)
+  else()
+    cmake_policy(SET CMP0054 OLD)
+  endif()
+endif()
+
+if(POLICY CMP0094)
+  cmake_policy(SET CMP0094 NEW)
+endif()
+
+
+if(POLICY CMP0148)
+  # this policy is related to the python find_package
+  # please run "cmake --help-policy CMP0148" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.27) # i.e CMAKE_VERSION >= 3.27
+    cmake_policy(SET CMP0148 OLD)
+  endif()
+endif()
+
+if(POLICY CMP0160)
+  # this policy is related to the read-only target properties
+  # please run "cmake --help-policy CMP0160" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.29) # i.e CMAKE_VERSION >= 3.29
+    cmake_policy(SET CMP0160 OLD)
+  endif()
+endif()
+
+
+if(POLICY CMP0167)
+  # this policy is related to the Boost find_package
+  # please run "cmake --help-policy CMP0167" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.30) # i.e CMAKE_VERSION >= 3.30
+    cmake_policy(SET CMP0167 OLD)
+  endif()
+endif()
+
+
 if (NOT HAS_ELEMENTS_TOOLCHAIN)
   # this is the call to the preload_local_module_path is the toolchain has not been called
   # Preset the CMAKE_MODULE_PATH from the environment, if not already defined.
   if(NOT CMAKE_MODULE_PATH)
-    # Note: this works even if the envirnoment variable is not set.
+    # Note: this works even if the environment variable is not set.
     file(TO_CMAKE_PATH "$ENV{CMAKE_MODULE_PATH}" CMAKE_MODULE_PATH)
   endif()
 
@@ -70,6 +112,9 @@ debug_message("    <---- Elements Main config: ${CMAKE_CURRENT_LIST_FILE} ----> 
 #-------------------------------------------------------------------------------
 # Basic configuration
 #-------------------------------------------------------------------------------
+find_program(CMAKE_CMAKE_PROGRAM NAMES cmake PATH $ENV{PATH})
+message(STATUS "CMake program: ${CMAKE_CMAKE_PROGRAM}")
+
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Ensure that the include directories added are always taken first.
@@ -81,9 +126,10 @@ set(CMAKE_INCLUDE_DIRECTORIES_BEFORE ON)
 #---------------------------------------------------------------------------------------------------
 include(CMakeParseArguments)
 
-find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION} QUIET)
+find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter QUIET)
 
-if(PYTHON_EXECUTABLE MATCHES "^(/usr)?/bin/python")
+
+if(Python_EXECUTABLE MATCHES "^(/usr)?/bin/python")
   set(PYTHON_HAS_STD_LOCATION TRUE)
 else()
   set(PYTHON_HAS_STD_LOCATION FALSE)
@@ -110,11 +156,19 @@ macro(elements_project project version)
   if(POLICY CMP0048)
     cmake_policy(GET CMP0048 project_vers_format)
   endif()
-  
-  if(${project_vers_format} STREQUAL NEW AND (NOT ${version} MATCHES "^HEAD.*"))
+
+  set(python_policy)
+  if(POLICY CMP0148)
+    cmake_policy(GET CMP0148 python_policy)
+  endif()
+
+  message(STATUS "Python policy: ${python_policy}")
+
+
+  if("${project_vers_format}" STREQUAL "NEW" AND (NOT ${version} MATCHES "^HEAD.*"))
     project(${project} VERSION ${version})
   else()
-    project(${project})  
+    project(${project})
   endif()
   #----For some reason this is not set by calling 'project()'
   set(CMAKE_PROJECT_NAME ${project})
@@ -135,8 +189,13 @@ macro(elements_project project version)
     message(FATAL_ERROR "Wrong arguments.")
   endif()
 
+  message(STATUS "=======================================================================")
+  message(STATUS "                  --- Building ${project} ${version} ---               ")
+  message(STATUS "=======================================================================")
+
+
   if(NOT CMAKE_PROJECT_VERSION MATCHES "^HEAD.*")
-    string(REGEX MATCH "v?([0-9]+)[r.]([0-9]+)([p.]([0-9]+))?" _version ${CMAKE_PROJECT_VERSION})
+    string(REGEX MATCH ${version_regex} _version ${CMAKE_PROJECT_VERSION})
     set(CMAKE_PROJECT_VERSION_MAJOR ${CMAKE_MATCH_1} CACHE INTERNAL "Major version of project")
     set(CMAKE_PROJECT_VERSION_MINOR ${CMAKE_MATCH_2} CACHE INTERNAL "Minor version of project")
     set(CMAKE_PROJECT_VERSION_PATCH ${CMAKE_MATCH_4} CACHE INTERNAL "Patch version of project")
@@ -156,7 +215,7 @@ macro(elements_project project version)
   set_property(GLOBAL APPEND PROPERTY CMAKE_EXTRA_FLAGS "-DINSTALL_TESTS:BOOL=${INSTALL_TESTS}")
   set_property(GLOBAL APPEND PROPERTY CMAKE_EXTRA_FLAGS "-DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}")
   set_property(GLOBAL APPEND PROPERTY CMAKE_EXTRA_FLAGS "--no-warn-unused-cli")
-  
+
 
   set(env_xml ${CMAKE_BINARY_DIR}/${project}BuildEnvironment.xml
      CACHE STRING "path to the XML file for the environment to be used in building and testing")
@@ -166,7 +225,7 @@ macro(elements_project project version)
        CACHE STRING "path to the XML file for the environment to be used for installation")
   else()
     set(installed_env_xml \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${project}BuildEnvironment.xml
-       CACHE STRING "path to the XML file for the environment to be used for installation")  
+       CACHE STRING "path to the XML file for the environment to be used for installation")
   endif()
 
 
@@ -178,7 +237,7 @@ macro(elements_project project version)
        CACHE STRING "path to the XML file for the environment to be used once the project is installed")
   else()
     set(installed_env_release_xml \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${project}Environment.xml
-       CACHE STRING "path to the XML file for the environment to be used once the project is installed")  
+       CACHE STRING "path to the XML file for the environment to be used once the project is installed")
   endif()
 
 
@@ -215,6 +274,7 @@ macro(elements_project project version)
   foreach(modp ${CMAKE_MODULE_PATH})
     if(EXISTS ${modp}/scripts)
       set(binary_paths ${binary_paths} ${modp}/scripts)
+      message(STATUS "Adding ${modp}/scripts to the build binary paths")
     endif()
   endforeach()
 
@@ -274,116 +334,119 @@ macro(elements_project project version)
   set(binary_paths ${CMAKE_SOURCE_DIR}/cmake/scripts ${binary_paths})
 
   find_program(env_cmd env.py HINTS ${binary_paths})
-  set(env_cmd ${PYTHON_EXECUTABLE} ${env_cmd})
+  set(env_cmd ${Python_EXECUTABLE} ${env_cmd})
 
   find_program(merge_cmd merge_files.py HINTS ${binary_paths})
-  set(merge_cmd ${PYTHON_EXECUTABLE} ${merge_cmd} --no-stamp)
+  set(merge_cmd ${Python_EXECUTABLE} ${merge_cmd} --no-stamp)
 
   find_program(versheader_cmd createProjVersHeader.py HINTS ${binary_paths})
   if(versheader_cmd)
-    set(versheader_cmd ${PYTHON_EXECUTABLE} ${versheader_cmd})
+    set(versheader_cmd ${Python_EXECUTABLE} ${versheader_cmd})
   endif()
 
   find_program(instheader_cmd createProjInstHeader.py HINTS ${binary_paths})
   if(instheader_cmd)
-    set(instheader_cmd ${PYTHON_EXECUTABLE} ${instheader_cmd})
+    set(instheader_cmd ${Python_EXECUTABLE} ${instheader_cmd})
+  endif()
+
+  find_program(expheader_cmd createProjExpHeader.py HINTS ${binary_paths})
+  if(expheader_cmd)
+    set(expheader_cmd ${Python_EXECUTABLE} ${expheader_cmd})
   endif()
 
 
   find_program(versmodule_cmd createProjVersModule.py HINTS ${binary_paths})
   if(versmodule_cmd)
-    set(versmodule_cmd ${PYTHON_EXECUTABLE} ${versmodule_cmd})
+    set(versmodule_cmd ${Python_EXECUTABLE} ${versmodule_cmd})
   endif()
 
   find_program(instmodule_cmd createProjInstModule.py HINTS ${binary_paths})
   if(instmodule_cmd)
-    set(instmodule_cmd ${PYTHON_EXECUTABLE} ${instmodule_cmd})
+    set(instmodule_cmd ${Python_EXECUTABLE} ${instmodule_cmd})
   endif()
 
 
   find_program(thisheader_cmd createThisProjHeader.py HINTS ${binary_paths})
   if(thisheader_cmd)
-    set(thisheader_cmd ${PYTHON_EXECUTABLE} ${thisheader_cmd})
+    set(thisheader_cmd ${Python_EXECUTABLE} ${thisheader_cmd})
   endif()
 
   find_program(thismodule_cmd createThisProjModule.py HINTS ${binary_paths})
   if(thismodule_cmd)
-    set(thismodule_cmd ${PYTHON_EXECUTABLE} ${thismodule_cmd})
+    set(thismodule_cmd ${Python_EXECUTABLE} ${thismodule_cmd})
   endif()
 
 
   find_program(thismodheader_cmd createThisModHeader.py HINTS ${binary_paths})
   if(thismodheader_cmd)
-    set(thismodheader_cmd ${PYTHON_EXECUTABLE} ${thismodheader_cmd})
+    set(thismodheader_cmd ${Python_EXECUTABLE} ${thismodheader_cmd})
   endif()
 
-  find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths})
+  find_program(Boost_testmain_cmd createBoostTestMain.py HINTS ${binary_paths} REQUIRED)
   if(Boost_testmain_cmd)
-    set(Boost_testmain_cmd ${PYTHON_EXECUTABLE} ${Boost_testmain_cmd})
+    set(Boost_testmain_cmd ${Python_EXECUTABLE} ${Boost_testmain_cmd})
   endif()
 
   find_program(CppUnit_testmain_cmd createCppUnitTestMain.py HINTS ${binary_paths})
   if(CppUnit_testmain_cmd)
-    set(CppUnit_testmain_cmd ${PYTHON_EXECUTABLE} ${CppUnit_testmain_cmd})
-  endif()
-
-  find_program(zippythondir_cmd ZipPythonDir.py HINTS ${binary_paths})
-  if(zippythondir_cmd)
-    set(zippythondir_cmd ${PYTHON_EXECUTABLE} ${zippythondir_cmd})
+    set(CppUnit_testmain_cmd ${Python_EXECUTABLE} ${CppUnit_testmain_cmd})
   endif()
 
   find_program(elementsrun_cmd elementsrun.py HINTS ${binary_paths})
   if(elementsrun_cmd)
-    set(elementsrun_cmd ${PYTHON_EXECUTABLE} ${elementsrun_cmd})
+    set(elementsrun_cmd ${Python_EXECUTABLE} ${elementsrun_cmd})
   endif()
 
   find_package(RPMBuild)
   if(RPMBUILD_FOUND)
     find_program(rpmbuild_wrap_cmd rpmbuild_wrap.py HINTS ${binary_paths})
-    set(rpmbuild_wrap_cmd ${PYTHON_EXECUTABLE} ${rpmbuild_wrap_cmd})
+    set(rpmbuild_wrap_cmd ${Python_EXECUTABLE} ${rpmbuild_wrap_cmd})
 	  mark_as_advanced(rpmbuild_wrap_cmd)
 	  if (NOT RPMBUILD_VERSION VERSION_LESS 4.14)
-      set(ELEMENTS_DETACHED_DEBINFO OFF)
+	    set_property(GLOBAL APPEND PROPERTY CMAKE_EXTRA_FLAGS "-DELEMENTS_DETACHED_DEBINFO=OFF")
     endif()
   endif()
 
   find_program(pythonprogramscript_cmd createPythonProgramScript.py HINTS ${binary_paths})
   if(pythonprogramscript_cmd)
-    set(pythonprogramscript_cmd ${PYTHON_EXECUTABLE} ${pythonprogramscript_cmd})
+    set(pythonprogramscript_cmd ${Python_EXECUTABLE} ${pythonprogramscript_cmd})
   endif()
 
   find_program(ctest2junit_cmd ctest2JUnit.py HINTS ${binary_paths})
   if(ctest2junit_cmd)
-    set(ctest2junit_cmd ${PYTHON_EXECUTABLE} ${ctest2junit_cmd})
+    set(ctest2junit_cmd ${Python_EXECUTABLE} ${ctest2junit_cmd})
   endif()
 
   find_program(ctestxml2html_cmd CTestXML2HTML.py HINTS ${binary_paths})
   if(ctestxml2html_cmd)
-    set(ctestxml2html_cmd ${PYTHON_EXECUTABLE} ${ctestxml2html_cmd})
+    set(ctestxml2html_cmd ${Python_EXECUTABLE} ${ctestxml2html_cmd})
   endif()
 
-  mark_as_advanced(env_cmd merge_cmd versheader_cmd instheader_cmd versmodule_cmd instmodule_cmd
+  mark_as_advanced(env_cmd merge_cmd versheader_cmd instheader_cmd expheader_cmd
+                   versmodule_cmd instmodule_cmd
                    thisheader_cmd thismodule_cmd
                    thismodheader_cmd
-                   Boost_testmain_cmd CppUnit_testmain_cmd
-                   zippythondir_cmd elementsrun_cmd
+                   Boost_testmain_cmd CppUnit_testmain_cmd elementsrun_cmd
                    pythonprogramscript_cmd ctest2junit_cmd ctestxml2html_cmd)
 
 
   #--- Project Installations------------------------------------------------------------------------
-  if(NOT SQUEEZED_INSTALL OR (${CMAKE_PROJECT_NAME} STREQUAL "Elements"))
+  if(NOT SQUEEZED_INSTALL OR ("${CMAKE_PROJECT_NAME}" STREQUAL "Elements"))
 
-  install(DIRECTORY cmake/ DESTINATION ${CMAKE_INSTALL_SUFFIX}
-                           FILES_MATCHING
-                             PATTERN "*.cmake"
-                             PATTERN "*.in"
-                             PATTERN "*.dox"
-                             PATTERN "*.py"
-                             PATTERN "*.sh"
-                             PATTERN "*.csh"
-                             PATTERN "*.bat"
-                             PATTERN ".svn" EXCLUDE
-                             PATTERN ".git" EXCLUDE)
+  install(DIRECTORY cmake/
+          DESTINATION ${CMAKE_INSTALL_SUFFIX}
+          USE_SOURCE_PERMISSIONS
+          FILES_MATCHING
+            PATTERN "*.cmake"
+            PATTERN "*.in"
+            PATTERN "*.dox"
+            PATTERN "*.py"
+            PATTERN "*.sh"
+            PATTERN "*.csh"
+            PATTERN "*.bat"
+            PATTERN ".svn" EXCLUDE
+            PATTERN ".git" EXCLUDE
+  )
 
   set_property(GLOBAL APPEND PROPERTY PROJ_HAS_CMAKE TRUE)
 
@@ -397,7 +460,7 @@ macro(elements_project project version)
     install(FILES ${MAKE_DIR_NAME}/${m} DESTINATION ${MAKE_INSTALL_SUFFIX})
     message(STATUS "Installing ${m} in ${MAKE_INSTALL_SUFFIX}")
     set_property(GLOBAL APPEND PROPERTY PROJ_HAS_MAKE TRUE)
-    set_property(GLOBAL APPEND PROPERTY REGULAR_MAKE_OBJECTS ${m}) 
+    set_property(GLOBAL APPEND PROPERTY REGULAR_MAKE_OBJECTS ${m})
   endforeach()
 
   endif()
@@ -406,7 +469,7 @@ macro(elements_project project version)
 
   # get the python test framework
 
-  if(PYTHONINTERP_FOUND)
+  if(Python_Interpreter_FOUND)
     set(PYFRMK_TEST)
     set(PYFRMK_NAME)
     if(USE_PYTHON_NOSE)
@@ -415,33 +478,37 @@ macro(elements_project project version)
         message(STATUS "Using the Nose python test framework")
         set(PYFRMK_TEST ${NOSE_EXECUTABLE})
         set(PYFRMK_NAME "PythonNose")
+        set(PYFRMK_EXTRA_OPTS ${NOSE_EXTRA_OPTIONS})
       else()
         message(WARNING "The Nose python test framework cannot be found")
         find_package(PyTest QUIET)
         if(PYTEST_FOUND)
-          message(WARNING "Using Py.Test instead")
+          message(WARNING "Using PyTest instead")
           set(PYFRMK_TEST ${PYTEST_EXECUTABLE})
+          set(PYFRMK_EXTRA_OPTS ${PYTEST_EXTRA_OPTIONS})
           set(PYFRMK_NAME "PyTest")
         endif()
       endif()
     else()
       find_package(PyTest QUIET)
       if(PYTEST_FOUND)
-        message(STATUS "Using the Py.Test python test framework")
+        message(STATUS "Using the PyTest python test framework")
         set(PYFRMK_TEST ${PYTEST_EXECUTABLE})
         set(PYFRMK_NAME "PyTest")
+        set(PYFRMK_EXTRA_OPTS ${PYTEST_EXTRA_OPTIONS})
       else()
-        message(WARNING "The Py.Test python test framework cannot be found")
+        message(WARNING "The PyTest python test framework cannot be found")
         find_package(Nose QUIET)
         if(NOSE_FOUND)
           message(WARNING "Using Nose instead")
           set(PYFRMK_TEST ${NOSE_EXECUTABLE})
           set(PYFRMK_NAME "PythonNose")
+          set(PYFRMK_EXTRA_OPTS ${NOSE_EXTRA_OPTIONS})
         endif()
       endif()
     endif()
     if(PYFRMK_TEST)
-      set(PYFRMK_TEST ${PYTHON_EXECUTABLE} ${PYFRMK_TEST})
+      set(PYFRMK_TEST ${Python_EXECUTABLE} ${PYFRMK_TEST})
     endif()
   endif()
 
@@ -495,7 +562,7 @@ macro(elements_project project version)
   if(instheader_cmd)
     set(so_version_option)
     if(USE_VERSIONED_LIBRARIES)
-      set(so_version_option "-V")     
+      set(so_version_option "-V")
     endif()
     JOIN("${used_elements_projects}" ":" joined_used_projects)
     execute_process(COMMAND
@@ -506,6 +573,19 @@ macro(elements_project project version)
 execute_process\(COMMAND ${instheader_cmd} --quiet ${so_version_option} ${project} \${CMAKE_INSTALL_PREFIX} ${joined_used_projects} \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${INCLUDE_INSTALL_SUFFIX}/${_proj}_INSTALL.h\)")
     set_property(GLOBAL APPEND PROPERTY PROJ_HAS_INCLUDE TRUE)
     set_property(GLOBAL APPEND PROPERTY REGULAR_INCLUDE_OBJECTS ${_proj}_INSTALL.h)
+  endif()
+
+
+  if(PROJECT_HIDE_SYMBOLS)
+    if(expheader_cmd)
+      execute_process(COMMAND
+                      ${expheader_cmd} --quiet
+                      ${project} ${CMAKE_BINARY_DIR}/${INCLUDE_INSTALL_SUFFIX}/${_proj}_EXPORT.h)
+      install(FILES ${CMAKE_BINARY_DIR}/include/${_proj}_EXPORT.h DESTINATION ${INCLUDE_INSTALL_SUFFIX})
+      add_definitions(-D${_proj}_HIDE_SYMBOLS)
+      set_property(GLOBAL APPEND PROPERTY PROJ_HAS_INCLUDE TRUE)
+      set_property(GLOBAL APPEND PROPERTY REGULAR_INCLUDE_OBJECTS ${_proj}_EXPORT.h)
+    endif()
   endif()
 
   if(thisheader_cmd)
@@ -526,12 +606,12 @@ execute_process\(COMMAND ${instheader_cmd} --quiet ${so_version_option} ${projec
     set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
     set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.py)
     if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-      if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(Python_VERSION_MAJOR VERSION_LESS 3)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyc)
       endif()
     else()
-      if(SQUEEZED_INSTALL AND (PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(SQUEEZED_INSTALL AND (Python_VERSION_MAJOR VERSION_LESS 3)
          AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_VERSION.pyc)
@@ -542,9 +622,9 @@ execute_process\(COMMAND ${instheader_cmd} --quiet ${so_version_option} ${projec
   if(instmodule_cmd)
     set(so_version_option)
     if(USE_VERSIONED_LIBRARIES)
-      set(so_version_option "-V")     
+      set(so_version_option "-V")
     endif()
-    
+
     JOIN("${used_elements_projects}" ":" joined_used_projects)
     execute_process(COMMAND
                     ${instmodule_cmd} --quiet ${so_version_option}
@@ -554,14 +634,14 @@ execute_process\(COMMAND ${instheader_cmd} --quiet ${so_version_option} ${projec
 execute_process\(COMMAND ${instmodule_cmd} --quiet ${so_version_option} ${project} \${CMAKE_INSTALL_PREFIX} ${joined_used_projects} \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_SUFFIX}/${_proj}_INSTALL.py\)")
     set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
     set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.py)
-    
+
     if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-      if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(Python_VERSION_MAJOR VERSION_LESS 3)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyc)
       endif()
     else()
-      if(SQUEEZED_INSTALL AND (PYTHON_VERSION_MAJOR VERSION_LESS 3)
+      if(SQUEEZED_INSTALL AND (Python_VERSION_MAJOR VERSION_LESS 3)
          AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyo)
         set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${_proj}_INSTALL.pyc)
@@ -614,16 +694,6 @@ execute_process\(COMMAND ${instmodule_cmd} --quiet ${so_version_option} ${projec
   endforeach()
   file(APPEND ${CMAKE_BINARY_DIR}/subdirs_deps.dot "}\n")
 
-  # FIXME: it is not possible to produce the file python.zip at installation time
-  # because the install scripts of the subdirectories are executed after those
-  # of the parent project and we cannot have a post-install target because of
-  # http://public.kitware.com/Bug/view.php?id=8438
-  # install(CODE "execute_process(COMMAND  ${zippythondir_cmd} ${CMAKE_INSTALL_PREFIX}/python)")
-  if(zippythondir_cmd)
-    add_custom_target(python.zip
-                      COMMAND ${zippythondir_cmd} ${CMAKE_INSTALL_PREFIX}/${PYTHON_INSTALL_SUFFIX}
-                      COMMENT "Zipping Python modules")
-  endif()
   #--- Prepare environment configuration
   message(STATUS "Preparing environment configuration:")
 
@@ -646,7 +716,7 @@ execute_process\(COMMAND ${instmodule_cmd} --quiet ${so_version_option} ${projec
         SEARCH_PATH ${${_pck}_DIR})
   endforeach()
 
-  foreach(_ds ${ELEMENTS_DEFAULT_SEARCH_PATH})  
+  foreach(_ds ${ELEMENTS_DEFAULT_SEARCH_PATH})
     if(EXISTS ${_ds})
       set(project_environment ${project_environment}
           SEARCH_PATH ${_ds})
@@ -848,23 +918,15 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
   endif() # ignore other systems
 
   if(ELEMENTS_BUILD_TESTS)
+
+    add_custom_target(HTMLSummary)
     if(TEST_HTML_REPORT)
-    #--- Special target to generate HTML reports from CTest XML reports.
-      find_file(ctestxml2html_skel
-                NAMES HTMLTestReportSkel
-                PATHS ${CMAKE_MODULE_PATH}
-                PATH_SUFFIXES auxdir/test auxdir
-                NO_DEFAULT_PATH)
-      add_custom_target(HTMLSummary)
       add_custom_command(TARGET HTMLSummary
-                         COMMAND ${env_cmd} --xml ${env_xml}
-                                 ${ctestxml2html_cmd} -q -s ${ctestxml2html_skel} -o Testing/html)
-    else()
-      add_custom_target(HTMLSummary)
-      add_custom_command(TARGET HTMLSummary
-                         COMMAND echo "The HTML reports for the tests are not enabled.")
+                         COMMAND echo "The HTMLSummary target is obsolete"
+                        POST_BUILD)
     endif()
 
+    add_custom_target(JUnitSummary)
     if(TEST_JUNIT_REPORT)
       find_python_module(lxml)
       if(PY_LXML)
@@ -873,17 +935,19 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
                   PATHS ${CMAKE_MODULE_PATH}
                   PATH_SUFFIXES auxdir/test auxdir
                   NO_DEFAULT_PATH)
-        add_custom_target(JUnitSummary)
         add_custom_command(TARGET JUnitSummary
-                           COMMAND ${env_cmd} --xml ${env_xml} 
-                                   ${ctest2junit_cmd} ${PROJECT_BINARY_DIR} ${ctest2junit_xsl_file})
-
+                           COMMAND ${env_cmd} --xml ${env_xml}
+                                   ${ctest2junit_cmd} ${PROJECT_BINARY_DIR} ${ctest2junit_xsl_file}
+                           POST_BUILD)
+      else()
+        add_custom_command(TARGET JUnitSummary
+                           COMMAND echo "The JUnit reports cannot be produced because of a missing lxml python module.")
       endif()
     else()
-      add_custom_target(JUnitSummary)
       add_custom_command(TARGET JUnitSummary
                          COMMAND echo "The JUnit reports for the tests are not enabled.")
     endif()
+
   endif()
 
 
@@ -920,7 +984,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
   set(CPACK_PACKAGE_VERSION ${CMAKE_PROJECT_VERSION})
 
   set(CPACK_PACKAGE_RELEASE 1 CACHE STRING "Release Number For the Packaging")
-  set(CPACK_PACKAGE_VENDOR "The Euclid Consortium")
+  set(CPACK_PACKAGE_VENDOR "Hubert Degaudenzi")
 
   set(CPACK_SOURCE_IGNORE_FILES "/InstallArea/;/${BUILD_PREFIX_NAME}\\\\..*/;/${BUILD_SUBDIR}/;/\\\\.svn/;/\\\\.settings/;\\\\..*project;\\\\.gitignore;/\\\\.git/")
 
@@ -956,17 +1020,17 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
 
 
   set(CPACK_VERBOSE_LINE)
-  set(CPACK_EXPORT_VERBOSE_LINE "unset VERBOSE")
+  set(CPACK_EXPORT_VERBOSE_LINE "unset VERBOSE; unset CMAKE_GENERATOR")
   if(DEFINED ENV{VERBOSE})
     if($ENV{VERBOSE})
       set(CPACK_VERBOSE $ENV{VERBOSE})
     else()
-      set(CPACK_VERBOSE 0)  
+      set(CPACK_VERBOSE 0)
     endif()
     set(CPACK_VERBOSE_LINE "VERBOSE=${CPACK_VERBOSE}")
-    set(CPACK_EXPORT_VERBOSE_LINE "export ${CPACK_VERBOSE_LINE}")
+    set(CPACK_EXPORT_VERBOSE_LINE "export ${CPACK_VERBOSE_LINE}; unset CMAKE_GENERATOR")
   endif()
-  
+
 #------------------------------------------------------------------------------
   get_property(regular_bin_objects GLOBAL PROPERTY REGULAR_BIN_OBJECTS)
 
@@ -989,7 +1053,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
       set(CPACK_EXTRA_CMAKEFLAGS "${CPACK_EXTRA_CMAKEFLAGS} ${_do}")
     endforeach()
   endif()
-  
+
   if(CCACHE_FOUND AND CPACK_USE_CCACHE)
     set(CPACK_EXTRA_CMAKEFLAGS "${CPACK_EXTRA_CMAKEFLAGS} -DCMAKE_USE_CCACHE=ON")
   endif()
@@ -1001,9 +1065,9 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
   option(RPM_FORWARD_PREFIX_PATH "Forward the CMAKE_PREFIX_PATH when using 'make rpm'" ON)
 
   if(NOT SQUEEZED_INSTALL)
-    set(CPACK_CMAKE_PREFIX_PATH_LINE "export CMAKE_PREFIX_PATH=\$PWD/cmake:/usr/share/EuclidEnv/cmake")
+    set(CPACK_CMAKE_PREFIX_PATH_LINE "export CMAKE_PREFIX_PATH=\$PWD/cmake:/usr/share/ElementsEnv/cmake:/usr/share/EuclidEnv/cmake")
   else()
-    set(CPACK_CMAKE_PREFIX_PATH_LINE "#")  
+    set(CPACK_CMAKE_PREFIX_PATH_LINE "#")
   endif()
 
   if(USE_RPM_CMAKE_MACRO)
@@ -1015,16 +1079,17 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
     endif()
   endif()
 
+  set(CPACK_EXTRA_CMAKEFLAGS "${CPACK_EXTRA_CMAKEFLAGS} -DMERGE_HTML_DOC_TREES=${MERGE_HTML_DOC_TREES}")
 
   if(RPM_FORWARD_PREFIX_PATH)
-  
+
       file(TO_CMAKE_PATH "$ENV{CMAKE_PREFIX_PATH}" env_prefix_path)
       set(CPACK_PREFIX_LIST)
-  
+
       if(NOT SQUEEZED_INSTALL)
           list(APPEND CPACK_PREFIX_LIST "\$PWD/cmake")
       endif()
-  
+
       foreach(prefix_comp ${env_prefix_path})
           list(FIND CPACK_PREFIX_LIST "${prefix_comp}" _index)
           if(${_index} EQUAL -1)
@@ -1033,20 +1098,24 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
       endforeach()
 
       if(NOT SQUEEZED_INSTALL)
+          list(FIND CPACK_PREFIX_LIST "/usr/share/ElementsEnv/cmake" _index)
+          if(${_index} EQUAL -1)
+              list(APPEND CPACK_PREFIX_LIST "/usr/share/ElementsEnv/cmake")
+          endif()
           list(FIND CPACK_PREFIX_LIST "/usr/share/EuclidEnv/cmake" _index)
           if(${_index} EQUAL -1)
               list(APPEND CPACK_PREFIX_LIST "/usr/share/EuclidEnv/cmake")
           endif()
       endif()
-  
+
       if(CPACK_PREFIX_LIST)
           JOIN("${CPACK_PREFIX_LIST}" ":" CPACK_PREFIX_PATH)
-    
+
           set(CPACK_CMAKE_PREFIX_PATH_LINE "export CMAKE_PREFIX_PATH=${CPACK_PREFIX_PATH}")
       endif()
-  
+
       message(STATUS "The CMAKE_PREFIX_PATH used in the spec file is: ${CPACK_PREFIX_PATH}")
-  
+
   endif()
 
 #------------------------------------------------------------------------------
@@ -1056,7 +1125,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
   if(USE_VERSIONED_LIBRARIES)
     set(VERSION_SUFFIX ".${CMAKE_PROJECT_VERSION}")
   endif()
-  
+
 
   if(regular_lib_objects)
 
@@ -1116,16 +1185,17 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
 
   if(proj_has_python)
 
-    if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-      if(NOT (PYTHON_VERSION_MAJOR VERSION_LESS 3))
-        if(NOT (SQUEEZED_INSTALL AND NOT PYTHON_HAS_STD_LOCATION))
+    if(SQUEEZED_INSTALL)
+      if(NOT (Python_VERSION_MAJOR VERSION_LESS 3))
+        if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
           set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)
         endif()
       endif()
     else()
-      if(SQUEEZED_INSTALL AND NOT (PYTHON_VERSION_MAJOR VERSION_LESS 3)
-         AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
-        set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)      
+      if(NOT (Python_VERSION_MAJOR VERSION_LESS 3))
+        if(RPMBUILD_VERSION VERSION_LESS 4.12)
+          set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS __pycache__)
+        endif()
       endif()
     endif()
 
@@ -1233,7 +1303,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
 %{makedir}/${_do}")
       endforeach()
     endif()
-    
+
     #message(STATUS "The devel objects: ${CPACK_RPM_DEVEL_FILES}")
 
   endif()
@@ -1250,7 +1320,7 @@ elements_generate_env_conf\(${installed_env_xml} ${installed_project_build_envir
 %{libdir}/${CMAKE_SHARED_LIBRARY_PREFIX}${_do}${CMAKE_SHARED_LIBRARY_SUFFIX}")
       endforeach()
     endif()
- 
+
   endif()
 
 #===============================================================================
@@ -1301,7 +1371,7 @@ ${_do}")
 
     add_custom_target(targz
                       COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_TARGZ_DIR}
-                      COMMAND ${TAR_EXECUTABLE} zcf ${PROJECT_TARGZ_DIR}/${CPACK_RPM_PACKAGE_NAME}-${CPACK_RPM_PACKAGE_VERSION}.tar.gz --exclude-vcs --exclude "${BUILD_PREFIX_NAME}.*" --exclude "./${BUILD_SUBDIR}" --exclude "./.*" --exclude "./InstallArea" --exclude "__pycache__" --exclude "*.py[co]" --transform "s/./${CPACK_RPM_PACKAGE_NAME}-${CPACK_RPM_PACKAGE_VERSION}/"  .
+                      COMMAND ${TAR_EXECUTABLE} zcf ${PROJECT_TARGZ_DIR}/${CPACK_RPM_PACKAGE_NAME}-${CPACK_RPM_PACKAGE_VERSION}.tar.gz --exclude-vcs --exclude-vcs-ignores --exclude "${BUILD_PREFIX_NAME}.*" --exclude "./${BUILD_SUBDIR}" --exclude "./.*" --exclude "./InstallArea" --exclude "__pycache__" --exclude "*.py[co]" --transform "s/./${CPACK_RPM_PACKAGE_NAME}-${CPACK_RPM_PACKAGE_VERSION}/"  .
                       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                       COMMENT "Generating The Source TarBall ${PROJECT_TARGZ_DIR}/${CPACK_RPM_PACKAGE_NAME}-${CPACK_RPM_PACKAGE_VERSION}.tar.gz" VERBATIM
     )
@@ -1321,7 +1391,7 @@ ${_do}")
         if(SQUEEZED_INSTALL)
           get_rpm_sys_dep_lines("python${PYTHON_EXPLICIT_VERSION}" "Requires" RPM_DEP_SYS_LINES)
         else()
-          get_rpm_sys_dep_lines("python${PYTHON_EXPLICIT_VERSION};EuclidEnv" "Requires" RPM_DEP_SYS_LINES)
+          get_rpm_sys_dep_lines("python${PYTHON_EXPLICIT_VERSION}" "Requires" RPM_DEP_SYS_LINES)
         endif()
         get_rpm_sys_dep_lines("cmake >= 2.8.5" "Requires" RPM_DEVEL_DEP_SYS_LINES)
       endif()
@@ -1329,13 +1399,13 @@ ${_do}")
       get_rpm_dep_list("${PROJECT_USE}" "debuginfo" "${SQUEEZED_INSTALL}" RPM_DEBUGINFO_DEP_LIST)
       get_rpm_dep_lines("${PROJECT_USE}" "debuginfo" "${SQUEEZED_INSTALL}" "Requires" RPM_DEBUGINFO_DEP_LINES)
       get_rpm_dep_lines("${PROJECT_USE}" "doc" "${SQUEEZED_INSTALL}" "Requires" RPM_DOC_DEP_LINES)
-      
-      
+
+
 
       get_rpm_dep_list("${PROJECT_USE}" "devel" "${SQUEEZED_INSTALL}" RPM_DEVEL_DEP_LIST)
       get_rpm_dep_lines("${PROJECT_USE}" "devel" "${SQUEEZED_INSTALL}" "BuildRequires" RPM_DEVEL_BUILDDEP_LINES)
       if(INSTALL_DOC)
-        get_rpm_dep_lines("${PROJECT_USE}" "doc" "${SQUEEZED_INSTALL}" "BuildRequires" RPM_DOC_BUILDDEP_LINES)      
+        get_rpm_dep_lines("${PROJECT_USE}" "doc" "${SQUEEZED_INSTALL}" "BuildRequires" RPM_DOC_BUILDDEP_LINES)
       endif()
       if( "${PROJECT_USE}" STREQUAL "")
         # if the project has no USE statement set a default build dependency
@@ -1345,10 +1415,10 @@ ${_do}")
              if(INSTALL_DOC)
                set(RPM_DOC_BUILDDEP_LINES "BuildRequires: Elements-doc")
              endif()
-           endif()         
+           endif()
         endif()
       endif()
-      
+
       get_rpm_dep_lines("${PROJECT_USE}" "devel" "${SQUEEZED_INSTALL}" "Requires" RPM_DEVEL_DEP_LINES)
 
       get_rpm_dep_list("${PROJECT_USE}" "" "${SQUEEZED_INSTALL}" RPM_DEP_LIST)
@@ -1371,7 +1441,7 @@ ${MAIN_PROJECT_CHANGELOG}
 
       set(RPM_DEBUG_PACKAGE_NIL "%define debug_package %{nil}")
       if(SQUEEZED_INSTALL)
-        if(CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo OR CMAKE_BUILD_TYPE STREQUAL Debug)
+        if("${CMAKE_BUILD_TYPE}" STREQUAL "RelWithDebInfo" OR "${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
           set(RPM_DEBUG_PACKAGE_NIL)
         endif()
       endif()
@@ -1396,34 +1466,38 @@ ${MAIN_PROJECT_CHANGELOG}
                                OUTPUTNAME "${project}.spec"
                                PATHS ${CMAKE_MODULE_PATH})
       endif()
-    
+
       file(MAKE_DIRECTORY ${PROJECT_RPM_TOPDIR}/BUILD)
       file(MAKE_DIRECTORY ${PROJECT_RPM_TOPDIR}/BUILDROOT)
       file(MAKE_DIRECTORY ${PROJECT_RPM_TOPDIR}/RPMS)
       file(MAKE_DIRECTORY ${PROJECT_RPM_TOPDIR}/SRPMS)
 
       set(RPMBUILD_ARGS "--define=\"_topdir ${PROJECT_RPM_TOPDIR}\"")
-      
-      if(RPM_NO_CHECK) 
+
+      if(RPM_NO_CHECK)
          set(RPMBUILD_ARGS "${RPMBUILD_ARGS} --nocheck")
       endif()
-            
+
       if(INSTALL_DOC)
          set(RPMBUILD_ARGS "${RPMBUILD_ARGS} --with doc")
       endif()
 
       if(debinfo_objects)
-         set(RPMBUILD_ARGS "${RPMBUILD_ARGS} --with debinfo")      
+         set(RPMBUILD_ARGS "${RPMBUILD_ARGS} --with debinfo")
       endif()
 
-      
-      message(STATUS "${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec")
+      if(RPMBUILD_EXTRA_ARGS)
+         set(RPMBUILD_ARGS "${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS}")
+      endif()
+
+
+      message(STATUS "${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec")
 
       add_custom_target(rpm
-                        COMMAND ${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${RPMBUILD_EXTRA_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec
+                        COMMAND ${rpmbuild_wrap_cmd} ${RPMBUILD_ARGS} ${PROJECT_RPM_TOPDIR}/SPECS/${project}.spec
                         COMMENT "Generating The RPM Files in ${PROJECT_RPM_TOPDIR}" VERBATIM
       )
-      
+
       add_dependencies(rpm targz)
 
     endif()
@@ -1491,11 +1565,11 @@ macro(_elements_use_other_projects)
     list(REMOVE_AT other_dependee_list 0 1)
 
     if(NOT other_project_version MATCHES "^HEAD.*")
-      string(REGEX MATCH "v?([0-9]+)[r.]([0-9]+)([p.]([0-9]+))?" _version ${other_project_version})
+      string(REGEX MATCH ${version_regex} _version ${other_project_version})
 
       set(other_project_cmake_version ${CMAKE_MATCH_1}.${CMAKE_MATCH_2})
       if(DEFINED CMAKE_MATCH_4)
-        if(NOT CMAKE_MATCH_4 STREQUAL "")
+        if(NOT "${CMAKE_MATCH_4}" STREQUAL "")
           set(other_project_cmake_version ${other_project_cmake_version}.${CMAKE_MATCH_4})
         endif()
       endif()
@@ -1553,7 +1627,7 @@ macro(_elements_use_other_projects)
 
       if(${other_project}_FOUND)
         message(STATUS "  found ${other_project} ${${other_project}_VERSION} ${${other_project}_DIR}")
-        if(NOT SGS_SYSTEM STREQUAL ${other_project}_astrotools_system)
+        if(NOT "${SGS_SYSTEM}" STREQUAL "${${other_project}_astrotools_system}")
           message(FATAL_ERROR "Incompatible values of SGS_SYSTEM:
   ${CMAKE_PROJECT_NAME} -> ${SGS_SYSTEM}
   ${other_project} ${${other_project}_VERSION} -> ${${other_project}_astrotools_system}
@@ -1611,7 +1685,7 @@ in the paths: ${projects_search_path}
     endif()
 
   endwhile()
-  
+
 endmacro()
 
 #-------------------------------------------------------------------------------
@@ -1705,14 +1779,14 @@ function(elements_find_data_package name)
     file(TO_CMAKE_PATH "$ENV{CMAKE_PREFIX_PATH}" env_prefix_path)
 
     set(version *) # default version value
-    if(ARGN AND NOT ARGV1 STREQUAL PATH_SUFFIXES)
+    if(ARGN AND NOT "${ARGV1}" STREQUAL "PATH_SUFFIXES")
       set(version ${ARGV1})
       list(REMOVE_AT ARGN 0)
     endif()
 
     if(ARGN)
       list(GET ARGN 0 arg)
-      if(arg STREQUAL PATH_SUFFIXES)
+      if("${arg}" STREQUAL "PATH_SUFFIXES")
         list(REMOVE_AT ARGN 0)
       endif()
     endif()
@@ -1739,7 +1813,7 @@ function(elements_find_data_package name)
           if(versions)
             # find the highest version encountered so far
             _elements_highest_version(high ${candidate_version} ${versions})
-            if(high AND NOT (high STREQUAL candidate_version))
+            if(high AND NOT ("${high}" STREQUAL "${candidate_version}"))
               set(candidate_version ${high})
               set(candidate_path ${prefix}/${suffix}/${name}/${candidate_version})
             endif()
@@ -1774,7 +1848,7 @@ macro(_elements_handle_data_packages)
     list(LENGTH ARGN_ len)
     if(len LESS 2)
       message(FATAL_ERROR "Wrong number of arguments to DATA option")
-    endif()  
+    endif()
     # extract data package name and (optional) version from the list
     list(GET ARGN_ 0 _data_package)
     list(GET ARGN_ 1 _data_pkg_vers)
@@ -1795,7 +1869,7 @@ macro(_get_include_dir_from_package inc_dir pck)
 
   set(${inc_dir})
   if(TARGET ${pck})
-    get_target_property(${inc_dir} ${pck} SOURCE_DIR)
+    get_target_property(${inc_dir} ${pck} INTERFACE_SOURCE_DIR)
   elseif(IS_ABSOLUTE ${pck} AND IS_DIRECTORY ${pck})
     set(${inc_dir} ${pck})
   elseif(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${pck})
@@ -1811,8 +1885,14 @@ macro(_get_include_dir_from_package inc_dir pck)
       # Handle some special cases first, then try for package uppercase (DIRS and DIR)
       # If the package is found, add INCLUDE_DIRS or (if not defined) INCLUDE_DIR.
       # If none of the two is defined, do not add anything.
-      if(${pck} STREQUAL PythonLibs)
-        set(to_incl_var PYTHON_INCLUDE_DIRS)
+      if("${pck}" STREQUAL "PythonLibs")
+        set(to_incl_var Python_INCLUDE_DIRS)
+      elseif("${pck}" STREQUAL "Python")
+        set(to_incl_var Python_INCLUDE_DIRS)
+      elseif("${pck}" STREQUAL "Python_Development")
+        set(to_incl_var Python_INCLUDE_DIRS)
+      elseif("${pck}" STREQUAL "NumPy")
+        set(to_incl_var Python_NumPy_INCLUDE_DIRS)
       elseif(${_pack_upper}_INCLUDE_DIRS)
         set(to_incl_var ${_pack_upper}_INCLUDE_DIRS)
       elseif(${_pack_upper}_INCLUDE_DIR)
@@ -1824,7 +1904,7 @@ macro(_get_include_dir_from_package inc_dir pck)
       set(${inc_dir} ${${to_incl_var}})
     endif()
   endif()
- 
+
 endmacro()
 
 
@@ -1833,7 +1913,7 @@ endmacro()
 #                             RECURSE_PATTERN pattern)
 #
 # Add the include directories of each package to the include directories. If the recurse
-# pattern is present the subdirectories are also individually search for and the ones 
+# pattern is present the subdirectories are also individually search for and the ones
 # containing files that respect the pattern are also included.
 #-------------------------------------------------------------------------------
 function(include_package_directories)
@@ -1861,11 +1941,11 @@ function(include_package_directories)
             endif()
           else()
             elements_include_directories(AFTER ${_i})
-          endif()    
+          endif()
         endif()
       endforeach()
     endif()
-    
+
   endforeach()
 endfunction()
 
@@ -1880,7 +1960,7 @@ function(print_package_directories)
   foreach(package ${ARGN})
     # we need to ensure that the user can call this function also for directories
     if(TARGET ${package})
-      get_target_property(to_incl ${package} SOURCE_DIR)
+      get_target_property(to_incl ${package} INTERFACE_SOURCE_DIR)
       if(to_incl)
         message(STATUS "print_package_directories1 include_directories(${to_incl})")
       endif()
@@ -1899,8 +1979,14 @@ function(print_package_directories)
         # Handle some special cases first, then try for package uppercase (DIRS and DIR)
         # If the package is found, add INCLUDE_DIRS or (if not defined) INCLUDE_DIR.
         # If none of the two is defined, do not add anything.
-        if(${package} STREQUAL PythonLibs)
-          set(to_incl PYTHON_INCLUDE_DIRS)
+        if("${package}" STREQUAL "PythonLibs")
+          set(to_incl Python_INCLUDE_DIRS)
+        elseif("${pck}" STREQUAL "Python")
+          set(to_incl Python_INCLUDE_DIRS)
+        elseif("${pck}" STREQUAL "Python_Development")
+          set(to_incl Python_INCLUDE_DIRS)
+        elseif("${pck}" STREQUAL "NumPy")
+          set(to_incl Python_NumPy_INCLUDE_DIRS)
         elseif(${_pack_upper}_INCLUDE_DIRS)
           set(to_incl ${_pack_upper}_INCLUDE_DIRS)
         elseif(${_pack_upper}_INCLUDE_DIR)
@@ -2051,7 +2137,7 @@ function(elements_get_packages var)
   file(GLOB_RECURSE cmakelist_files RELATIVE ${CMAKE_SOURCE_DIR} CMakeLists.txt)
   foreach(file ${cmakelist_files})
     # ignore the source directory itself and files in the build directory
-    if(NOT file STREQUAL CMakeLists.txt AND NOT (file MATCHES "^${rel_build_dir}" OR file MATCHES "^${BUILD_PREFIX_NAME}\\.|^build|/RPM/BUILD/"))
+    if(NOT "${file}" STREQUAL "CMakeLists.txt" AND NOT (file MATCHES "^${rel_build_dir}" OR file MATCHES "^${BUILD_PREFIX_NAME}\\.|^build|/RPM/BUILD/"))
       get_filename_component(package ${file} PATH)
       list(APPEND packages ${package})
     endif()
@@ -2070,7 +2156,7 @@ endfunction()
 macro(elements_subdir name)
 
   elements_get_package_name(_guessed_name)
-  if (NOT _guessed_name STREQUAL "${name}")
+  if (NOT "${_guessed_name}" STREQUAL "${name}")
     message(FATAL_ERROR "Declared subdir name (${name}) does not match the name of the directory (${_guessed_name})")
   endif()
 
@@ -2087,8 +2173,8 @@ macro(elements_subdir name)
   set(subdir_version ${version})
   set_directory_properties(PROPERTIES name ${name})
   set_directory_properties(PROPERTIES version ${version})
-  
-  set_property(GLOBAL APPEND PROPERTY PROJ_PACKAGE_LIST ${CMAKE_CURRENT_SOURCE_DIR})  
+
+  set_property(GLOBAL APPEND PROPERTY PROJ_PACKAGE_LIST ${CMAKE_CURRENT_SOURCE_DIR})
 
   # Generate the version header for the package.
   execute_process(COMMAND
@@ -2128,16 +2214,16 @@ function(_elements_strip_build_type_libs variable)
     # pop an element (library or qualifier)
     list(GET collected 0 entry)
     list(REMOVE_AT collected 0)
-    if(entry STREQUAL debug OR entry STREQUAL optimized OR entry STREQUAL general)
+    if("${entry}" STREQUAL "debug" OR "${entry}" STREQUAL "optimized" OR "${entry}" STREQUAL "general")
       # it's a qualifier: pop another one (the library name)
       list(GET collected 0 lib)
       list(REMOVE_AT collected 0)
       # The possible values of CMAKE_BUILD_TYPE are Debug, Release,
       # RelWithDebInfo and MinSizeRel, plus the SGS/Elements special ones
       # Coverage and Profile. (treat an empty CMAKE_BUILD_TYPE as Release)
-      if((entry STREQUAL general) OR
-         (CMAKE_BUILD_TYPE MATCHES "Debug|Coverage" AND entry STREQUAL debug) OR
-         ((NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Rel|Profile") AND entry STREQUAL optimized))
+      if(("${entry}" STREQUAL "general") OR
+         (CMAKE_BUILD_TYPE MATCHES "Debug|Coverage" AND "${entry}" STREQUAL "debug") OR
+         ((NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Rel|Profile") AND "${entry}" STREQUAL "optimized"))
         # we keep it only if corresponds to the build type
         set(_coll ${_coll} ${lib})
       endif()
@@ -2170,7 +2256,7 @@ endfunction()
 #       elements_add_library
 #-------------------------------------------------------------------------------
 function(elements_resolve_link_libraries variable)
-  #message(STATUS "elements_resolve_link_libraries input: ${ARGN}")
+  # message(STATUS "elements_resolve_link_libraries input: ${ARGN}")
   set(collected)
   set(to_be_resolved)
   foreach(package ${ARGN})
@@ -2178,7 +2264,7 @@ function(elements_resolve_link_libraries variable)
     if(TARGET ${package})
       #message(STATUS "${package} is a TARGET")
       set(collected ${collected} ${package})
-      get_target_property(libs ${package} REQUIRED_LIBRARIES)
+      get_target_property(libs ${package} INTERFACE_REQUIRED_LIBRARIES)
       if(libs)
         set(to_be_resolved ${to_be_resolved} ${libs})
       endif()
@@ -2192,8 +2278,12 @@ function(elements_resolve_link_libraries variable)
       if(${_pack_upper}_FOUND OR ${package}_FOUND)
         # Handle some special cases first, then try for PACKAGE_LIBRARIES
         # otherwise fall back on Package_LIBRARIES.
-        if(${package} STREQUAL PythonLibs)
-          set(collected ${collected} ${PYTHON_LIBRARIES})
+        if("${package}" STREQUAL "PythonLibs")
+          set(collected ${collected} ${Python_LIBRARIES})
+        elseif("${package}" STREQUAL "Python")
+          set(collected ${collected} ${Python_LIBRARIES})
+        elseif("${package}" STREQUAL "Python_Development")
+          set(collected ${collected} ${Python_LIBRARIES})
         elseif(${_pack_upper}_LIBRARIES)
           set(collected ${collected} ${${_pack_upper}_LIBRARIES})
         else()
@@ -2299,7 +2389,7 @@ function(elements_get_required_include_dirs output)
     set(req)
     if(TARGET ${lib})
       list(APPEND collected ${lib})
-      get_property(req TARGET ${lib} PROPERTY REQUIRED_INCLUDE_DIRS)
+      get_property(req TARGET ${lib} PROPERTY INTERFACE_REQUIRED_INCLUDE_DIRS)
       if(req)
         list(APPEND collected ${req})
       endif()
@@ -2370,7 +2460,7 @@ endfunction()
 # target (library, module, dictionary...)
 #-------------------------------------------------------------------------------
 macro(elements_common_add_build)
-  CMAKE_PARSE_ARGUMENTS(ARG "" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
   # obsolete option
   if(ARG_LIBRARIES)
     message(WARNING "Deprecated option 'LIBRARIES', use 'LINK_LIBRARIES' instead")
@@ -2424,11 +2514,12 @@ endmacro()
 # with the extension '.dbg', that is installed alongside the binary.
 #-------------------------------------------------------------------------------
 macro(_elements_detach_debinfo target)
+
   if(NOT SQUEEZED_INSTALL)
   if((CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo OR CMAKE_BUILD_TYPE STREQUAL Debug ) AND ELEMENTS_DETACHED_DEBINFO)
     # get the type of the target (MODULE_LIBRARY, SHARED_LIBRARY, EXECUTABLE)
     get_property(_type TARGET ${target} PROPERTY TYPE)
-    #message(STATUS "_elements_detach_debinfo(${target}): target type -> ${_type}")
+    # message(STATUS "_elements_detach_debinfo(${target}): target type -> ${_type}")
     if(NOT _type STREQUAL STATIC_LIBRARY) # we ignore static libraries
       # guess the target file name
       if(_type MATCHES "MODULE|LIBRARY")
@@ -2440,16 +2531,17 @@ macro(_elements_detach_debinfo target)
         set(_dest ${CMAKE_LIB_INSTALL_SUFFIX})
         set(spec_prefix "%{libdir}")
         get_property(_prefix TARGET ${target} PROPERTY PREFIX)
+        get_property(_suffix TARGET ${target} PROPERTY SUFFIX)
         # python module
         if(_prefix STREQUAL "_")
-          set(_tn _${target}.so)
+          set(_tn ${_prefix}${target}${_suffix})
           set(_builddir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
           set(_dest ${PYTHON_DYNLIB_INSTALL_SUFFIX})
           set(spec_prefix "%{pydyndir}")
         elseif(_prefix STREQUAL "")
-          set(_tn ${target}.so)
+          set(_tn ${_prefix}${target}${_suffix})
           set(_builddir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-          set(_dest ${PYTHON_DYNLIB_INSTALL_SUFFIX})        
+          set(_dest ${PYTHON_DYNLIB_INSTALL_SUFFIX})
           set(spec_prefix "%{pydyndir}")
         endif()
       else()
@@ -2462,7 +2554,7 @@ macro(_elements_detach_debinfo target)
         set(spec_prefix "%{_bindir}")
       endif()
     endif()
-    #message(STATUS "_elements_detach_debinfo(${target}): target name -> ${_tn}")
+    # message(STATUS "_elements_detach_debinfo(${target}): target name -> ${_tn}")
     # From 'man objcopy':
     #   objcopy --only-keep-debug foo foo.dbg
     #   objcopy --strip-debug foo
@@ -2483,12 +2575,55 @@ macro(_elements_detach_debinfo target)
 endmacro()
 
 #---------------------------------------------------------------------------------------------------
+# elements_add_object_library(<name>
+#                             source1 source2 ...
+#                             LINK_LIBRARIES library1 library2 ...
+#                             INCLUDE_DIRS dir1 package2 ...
+#                             [LINKER_LANGUAGE C|CXX])
+#
+# Extension of standard CMake 'add_library' command.
+# Create an object library from the specified sources (glob patterns are allowed), adding the
+# include directories to the search path.
+#---------------------------------------------------------------------------------------------------
+function(elements_add_object_library library)
+  # this function uses an extra option: 'PUBLIC_HEADERS'
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_EXIST_CHECK" "LINKER_LANGUAGE" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
+
+  elements_get_package_name(package)
+
+  elements_common_add_build(${ARG_UNPARSED_ARGUMENTS} LIBRARIES ${ARG_LIBRARIES} LINK_LIBRARIES ${ARG_LINK_LIBRARIES} INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
+
+  # find the header files
+  elements_expand_source_dirs(h_srcs ${ARG_PUBLIC_HEADERS})
+
+  add_library(${library} OBJECT ${srcs} ${h_srcs})
+
+  if(IWYU_FOUND)
+    set_target_properties(${library} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_COMMAND}")
+  endif()
+
+  if(ARG_LINKER_LANGUAGE)
+    set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
+  endif()
+
+  set_target_properties(${library} PROPERTIES COMPILE_DEFINITIONS ELEMENTS_LINKER_LIBRARY)
+
+  # Declare that the used headers are needed by the libraries linked against this one
+  set_target_properties(${library} PROPERTIES
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+    REQUIRED_INCLUDE_DIRS "${ARG_INCLUDE_DIRS}"
+    REQUIRED_LIBRARIES "${ARG_LINK_LIBRARIES}")
+
+endfunction()
+
+
+#---------------------------------------------------------------------------------------------------
 # elements_add_library(<name>
-#                   source1 source2 ...
-#                   LINK_LIBRARIES library1 library2 ...
-#                   INCLUDE_DIRS dir1 package2 ...
-#                   [LINKER_LANGUAGE C|CXX]
-#                   [NO_PUBLIC_HEADERS | PUBLIC_HEADERS dir1 dir2 ...])
+#                      source1 source2 ...
+#                      LINK_LIBRARIES library1 library2 ...
+#                      INCLUDE_DIRS dir1 package2 ...
+#                      [LINKER_LANGUAGE C|CXX]
+#                      [NO_PUBLIC_HEADERS | PUBLIC_HEADERS dir1 dir2 ...])
 #
 # Extension of standard CMake 'add_library' command.
 # Create a library from the specified sources (glob patterns are allowed), linking
@@ -2496,7 +2631,7 @@ endmacro()
 #---------------------------------------------------------------------------------------------------
 function(elements_add_library library)
   # this function uses an extra option: 'PUBLIC_HEADERS'
-  CMAKE_PARSE_ARGUMENTS(ARG "NO_PUBLIC_HEADERS;NO_INSTALL" "LINKER_LANGUAGE" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS;PUBLIC_HEADERS" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_PUBLIC_HEADERS;NO_INSTALL;NO_EXIST_CHECK" "LINKER_LANGUAGE" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS;PUBLIC_HEADERS" ${ARGN})
 
   elements_get_package_name(package)
   if(NOT ARG_NO_PUBLIC_HEADERS AND NOT ARG_PUBLIC_HEADERS)
@@ -2534,20 +2669,23 @@ Provide source files and the NO_PUBLIC_HEADERS option for a plugin/module librar
   endif()
 
   set_target_properties(${library} PROPERTIES BASENAME "${CMAKE_SHARED_LIBRARY_PREFIX}${library}${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  if(IWYU_FOUND)
+    set_target_properties(${library} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_COMMAND}")
+  endif()
 
   if(ARG_LINKER_LANGUAGE)
     set_target_properties(${library} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
   endif()
 
   set_target_properties(${library} PROPERTIES COMPILE_DEFINITIONS ELEMENTS_LINKER_LIBRARY)
-  target_link_libraries(${library} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${library} PRIVATE ${ARG_LINK_LIBRARIES})
   _elements_detach_debinfo(${library})
 
   # Declare that the used headers are needed by the libraries linked against this one
   set_target_properties(${library} PROPERTIES
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
-    REQUIRED_INCLUDE_DIRS "${ARG_INCLUDE_DIRS}"
-    REQUIRED_LIBRARIES "${ARG_LINK_LIBRARIES}")
+    INTERFACE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+    INTERFACE_REQUIRED_INCLUDE_DIRS "${ARG_INCLUDE_DIRS}"
+    INTERFACE_REQUIRED_LIBRARIES "${ARG_LINK_LIBRARIES}")
   set_property(GLOBAL APPEND PROPERTY LINKER_LIBRARIES ${library})
 
   if(USE_VERSIONED_LIBRARIES)
@@ -2558,10 +2696,14 @@ Provide source files and the NO_PUBLIC_HEADERS option for a plugin/module librar
   if(NOT ARG_NO_INSTALL)
     install(TARGETS ${library} EXPORT ${CMAKE_PROJECT_NAME}Exports DESTINATION ${CMAKE_LIB_INSTALL_SUFFIX} OPTIONAL)
     elements_export(LIBRARY ${library})
-    elements_install_headers(${ARG_PUBLIC_HEADERS})
+    if (ARG_NO_EXIST_CHECK)
+      elements_install_headers(${ARG_PUBLIC_HEADERS} NO_EXIST_CHECK)
+    else()
+      elements_install_headers(${ARG_PUBLIC_HEADERS})
+    endif()
     install(EXPORT ${CMAKE_PROJECT_NAME}Exports DESTINATION ${CMAKE_INSTALL_SUFFIX} OPTIONAL)
     if(USE_VERSIONED_LIBRARIES)
-      set_property(GLOBAL APPEND PROPERTY REGULAR_DEV_LIB_OBJECTS ${library})  
+      set_property(GLOBAL APPEND PROPERTY REGULAR_DEV_LIB_OBJECTS ${library})
     endif()
     set_property(GLOBAL APPEND PROPERTY REGULAR_LIB_OBJECTS ${library})
     set_property(GLOBAL APPEND PROPERTY PROJ_HAS_CMAKE TRUE)
@@ -2585,7 +2727,7 @@ function(elements_add_module library)
   elements_common_add_build(${ARGN})
 
   add_library(${library} MODULE ${srcs})
-  target_link_libraries(${library} ${ROOT_Reflex_LIBRARY} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${library} PRIVATE ${ROOT_Reflex_LIBRARY} ${ARG_LINK_LIBRARIES})
   _elements_detach_debinfo(${library})
 
   set_property(GLOBAL APPEND PROPERTY COMPONENT_LIBRARIES ${library})
@@ -2594,7 +2736,7 @@ function(elements_add_module library)
   install(TARGETS ${library} LIBRARY DESTINATION ${CMAKE_LIB_INSTALL_SUFFIX} OPTIONAL)
   elements_export(MODULE ${library})
   if(USE_VERSIONED_LIBRARIES)
-    set_property(GLOBAL APPEND PROPERTY REGULAR_DEV_LIB_OBJECTS ${library})  
+    set_property(GLOBAL APPEND PROPERTY REGULAR_DEV_LIB_OBJECTS ${library})
   endif()
   set_property(GLOBAL APPEND PROPERTY REGULAR_LIB_OBJECTS ${library})
 endfunction()
@@ -2693,11 +2835,12 @@ function(elements_add_python_module module)
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
 
   # require Python libraries
-  find_package(PythonLibs ${PYTHON_EXPLICIT_VERSION} QUIET REQUIRED)
 
-  elements_include_directories(AFTER ${PYTHON_INCLUDE_DIRS})
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development NumPy QUIET REQUIRED)
+
+  elements_include_directories(AFTER ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS} )
   add_library(${module} MODULE ${srcs})
-  
+
   if(ARG_LINKER_LANGUAGE)
     set_target_properties(${module} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
   endif()
@@ -2709,11 +2852,14 @@ function(elements_add_python_module module)
     set_target_properties(${module} PROPERTIES SUFFIX .so PREFIX "")
     set_target_properties(${module} PROPERTIES BASENAME "${module}.so")
   endif()
-  target_link_libraries(${module} ${PYTHON_LIBRARIES} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${module} PRIVATE ${Python_LIBRARIES} ${ARG_LINK_LIBRARIES})
   _elements_detach_debinfo(${module})
 
   #----Installation details-------------------------------------------------------
+
   install(TARGETS ${module} LIBRARY DESTINATION ${PYTHON_DYNLIB_INSTALL_SUFFIX} OPTIONAL)
+  set_target_properties(${module} PROPERTIES INSTALL_RPATH "$ORIGIN/../../${CMAKE_LIB_INSTALL_SUFFIX}")
+
   set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
   if(NOT ${ARG_PLAIN_MODULE})
     set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_DYNLIB_OBJECTS _${module}.so)
@@ -2737,7 +2883,7 @@ function(_generate_swig_files swig_module)
 
   find_package(SWIG QUIET REQUIRED)
   CMAKE_PARSE_ARGUMENTS(ARG "" "OUTFILE" "INCLUDE_DIRS;LINK_LIBRARIES" ${ARGN})
-  
+
   if("${ARG_OUTFILE}" STREQUAL "")
     message(FATAL_ERROR "_generate_swig_files: No OUTFILE defined")
   endif()
@@ -2757,13 +2903,13 @@ function(_generate_swig_files swig_module)
   foreach(dir ${dirs})
     set(SWIG_MOD_INCLUDE_DIRS -I${dir} ${SWIG_MOD_INCLUDE_DIRS})
   endforeach()
-  
+
   set(PY_MODULE_DIR ${CMAKE_BINARY_DIR}/python)
   set(PY_MODULE ${swig_module})
   set(PY_MODULE_SWIG_SRC ${ARG_OUTFILE})
 
   execute_process(
-    COMMAND ${SWIG_EXECUTABLE} -MM -python -module ${PY_MODULE} -Wextra -outdir ${PY_MODULE_DIR} -c++ ${SWIG_MOD_INCLUDE_DIRS} ${i_srcs}
+    COMMAND ${SWIG_EXECUTABLE} -MM -python -keyword -module ${PY_MODULE} -Wextra -outdir ${PY_MODULE_DIR} -c++ ${SWIG_MOD_INCLUDE_DIRS} ${i_srcs}
     OUTPUT_VARIABLE swmm_dependencies
     RESULT_VARIABLE swmm_return_value
   )
@@ -2785,6 +2931,7 @@ function(_generate_swig_files swig_module)
     COMMAND
         ${env_cmd} --xml ${env_xml} ${SWIG_EXECUTABLE}
         -python
+        -keyword
         -module ${PY_MODULE}
         -Wextra
         -outdir ${PY_MODULE_DIR}
@@ -2794,32 +2941,41 @@ function(_generate_swig_files swig_module)
         ${i_srcs}
     DEPENDS
         ${i_srcs} ${swig_deps}
-    COMMENT "Generating SWIG binding: ${SWIG_EXECUTABLE} -python -module ${PY_MODULE} -Wextra -outdir ${PY_MODULE_DIR} -c++ ${SWIG_MOD_INCLUDE_DIRS} -o ${PY_MODULE_SWIG_SRC} ${i_srcs}"
+    COMMENT "Generating SWIG binding: ${SWIG_EXECUTABLE} -python -keyword -module ${PY_MODULE} -Wextra -outdir ${PY_MODULE_DIR} -c++ ${SWIG_MOD_INCLUDE_DIRS} -o ${PY_MODULE_SWIG_SRC} ${i_srcs}"
   )
 
   set_source_files_properties(${PY_MODULE_SWIG_SRC} PROPERTIES GENERATED TRUE)
 
   set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${i_srcs} ${swig_deps})
- 
+
   if(CXX_HAS_SUGGEST_OVERRIDE)
     set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
                  PROPERTY COMPILE_FLAGS " -Wno-suggest-override")
   endif()
-  
+
   if(CXX_HAS_CAST_FUNCTION_TYPE)
     set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
                  PROPERTY COMPILE_FLAGS " -Wno-cast-function-type")
   endif()
-  
+
   if(CXX_HAS_SHADOW)
     set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-shadow")
+                 PROPERTY COMPILE_FLAGS " -Wno-shadow=local")
+  endif()
+
+  if(CXX_HAS_NULL_DEREFERENCE)
+    set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-null-dereference")
+  endif()
+
+  if(CXX_HAS_NO_UNUSED_PARAMETER)
+    set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-unused-parameter")
   endif()
 
 
-
   install(FILES ${PY_MODULE_DIR}/${PY_MODULE}.py DESTINATION ${PYTHON_INSTALL_SUFFIX})
-  
+
 endfunction()
 
 #---------------------------------------------------------------------------------------------------
@@ -2859,9 +3015,9 @@ function(elements_add_swig_binding binding)
     endif()
     set_property(SOURCE ${s} PROPERTY CPLUSPLUS ON)
   endforeach()
-  
+
   set(PY_MODULE_SWIG_SRC ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${binding}PYTHON_wrap.cxx)
-  
+
   _generate_swig_files(${binding}
                        ${i_srcs}
                        OUTFILE ${PY_MODULE_SWIG_SRC}
@@ -2875,11 +3031,11 @@ function(elements_add_swig_binding binding)
   if(CXX_HAS_CAST_FUNCTION_TYPE)
     set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
                  PROPERTY COMPILE_FLAGS " -Wno-cast-function-type")
-  endif() 
+  endif()
 
   if(CXX_HAS_NO_SELF_ASSIGN)
     set_property(SOURCE ${PY_MODULE_SWIG_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-self-assign")    
+                 PROPERTY COMPILE_FLAGS " -Wno-self-assign")
   endif()
 
   if(CXX_HAS_NO_PARENTHESES_EQUALITY)
@@ -2900,14 +3056,14 @@ function(elements_add_swig_binding binding)
 
   set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
   set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.py)
-  
+
   if(NOT ("${SGS_HOST_OS}" STREQUAL "fc" AND (NOT SGS_HOST_OSVERS VERSION_LESS 30)))
-    if(PYTHON_VERSION_MAJOR VERSION_LESS 3)
+    if(Python_VERSION_MAJOR VERSION_LESS 3)
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyo)
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyc)
     endif()
   else()
-    if(SQUEEZED_INSTALL AND (PYTHON_VERSION_MAJOR VERSION_LESS 3)
+    if(SQUEEZED_INSTALL AND (Python_VERSION_MAJOR VERSION_LESS 3)
        AND "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyo)
       set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${binding}.pyc)
@@ -2931,7 +3087,7 @@ function(_generate_cython_cpp)
 
   find_package(Cython QUIET REQUIRED)
   CMAKE_PARSE_ARGUMENTS(ARG "" "OUTFILE;LINKER_LANGUAGE" "INCLUDE_DIRS;LINK_LIBRARIES" ${ARGN})
-  
+
   if("${ARG_OUTFILE}" STREQUAL "")
     message(FATAL_ERROR "_generate_cython_cpp: No OUTFILE defined")
   endif()
@@ -2955,7 +3111,7 @@ function(_generate_cython_cpp)
   if(cy_dirs)
     list(REMOVE_DUPLICATES cy_dirs)
   endif()
-  
+
   # pattern enabled recursion in non-system directories
   set(all_cy_dirs)
   foreach(_i ${cy_dirs})
@@ -2965,21 +3121,21 @@ function(_generate_cython_cpp)
       elements_recurse(hsubdir ${_i} PATTERN "*.px[di]")
       if(hsubdir)
         list(REMOVE_DUPLICATES hsubdir)
-        set(all_cy_dirs ${all_cy_dirs} ${hsubdir})    
+        set(all_cy_dirs ${all_cy_dirs} ${hsubdir})
       endif()
     endif()
-    set(all_cy_dirs ${all_cy_dirs} ${_i})    
+    set(all_cy_dirs ${all_cy_dirs} ${_i})
   endforeach()
   list(REMOVE_DUPLICATES all_cy_dirs)
-  
-  
+
+
   set(CYTHON_MOD_INCLUDE_DIRS)
   foreach(dir ${all_cy_dirs})
     set(CYTHON_MOD_INCLUDE_DIRS ${CYTHON_MOD_INCLUDE_DIRS} -I${dir})
-  endforeach()  
-  
-  
-  if (ARG_LINKER_LANGUAGE STREQUAL "CXX")
+  endforeach()
+
+
+  if ("${ARG_LINKER_LANGUAGE}" STREQUAL "CXX")
     set(linker_arg "--cplus")
   else()
     set(linker_arg "")
@@ -3006,35 +3162,35 @@ function(_generate_cython_cpp)
     set(version_arg "-3")
   else()
     set(version_arg)
-  endif()  
-    
+  endif()
+
   add_custom_command(
-    OUTPUT 
+    OUTPUT
         ${ARG_OUTFILE}
-    COMMAND 
+    COMMAND
         ${env_cmd} --xml ${env_xml} ${CYTHON_EXECUTABLE}
         ${linker_arg}
         ${CYTHON_MOD_INCLUDE_DIRS}
         ${version_arg}
-        ${annotate_arg} 
-        ${no_docstrings_arg} 
+        ${annotate_arg}
+        ${no_docstrings_arg}
         ${cython_debug_arg}
         ${CYTHON_FLAGS}
         --output-file ${ARG_OUTFILE}
         ${src}
-    DEPENDS 
+    DEPENDS
         ${src}
     COMMENT "Generating Cython module: ${CYTHON_EXECUTABLE} ${linker_arg} ${CYTHON_MOD_INCLUDE_DIRS} ${version_arg} ${annotate_arg} ${no_docstrings_arg} ${cython_debug_arg} ${CYTHON_FLAGS} --output-file ${ARG_OUTFILE}  ${srcs}"
     )
-  
-  set_source_files_properties(${ARG_OUTFILE} PROPERTIES GENERATED TRUE)
-  set_property(SOURCE ${ARG_OUTFILE} APPEND_STRING 
-               PROPERTY COMPILE_FLAGS " -fvisibility=default -UELEMENTS_HIDE_SYMBOLS")  
 
-  
+  set_source_files_properties(${ARG_OUTFILE} PROPERTIES GENERATED TRUE)
+  set_property(SOURCE ${ARG_OUTFILE} APPEND_STRING
+               PROPERTY COMPILE_FLAGS " -fvisibility=default -UELEMENTS_HIDE_SYMBOLS")
+
+
   if(CXX_HAS_CAST_FUNCTION_TYPE)
-    set_property(SOURCE ${ARG_OUTFILE} APPEND_STRING 
-                 PROPERTY COMPILE_FLAGS " -Wno-cast-function-type")  
+    set_property(SOURCE ${ARG_OUTFILE} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-cast-function-type")
   endif()
 
 endfunction()
@@ -3072,7 +3228,7 @@ function(elements_add_cython_module)
   endforeach()
 
   list(LENGTH pyx_module_sources nb_pyx)
-  
+
   if(${nb_pyx} GREATER 1)
     message(FATAL_ERROR "To many pyx files for the Cython module: ${pyx_module_sources}")
   endif()
@@ -3084,7 +3240,7 @@ function(elements_add_cython_module)
     message(WARNING "Cython module ${mod_name} (in ${package}) does not declare PUBLIC_HEADERS. Use the option NO_PUBLIC_HEADERS if it is intended.")
   endif()
 
-  if(ARG_LINKER_LANGUAGE STREQUAL "CXX")
+  if("${ARG_LINKER_LANGUAGE}" STREQUAL "CXX")
     set(PY_MODULE_CYTHON_SRC ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${mod_name}CYTHON_wrap.cxx)
   else()
     set(PY_MODULE_CYTHON_SRC ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${mod_name}CYTHON_wrap.c)
@@ -3111,6 +3267,11 @@ function(elements_add_cython_module)
                  PROPERTY COMPILE_FLAGS " -Wno-unused-function")
   endif()
 
+  if(CXX_HAS_NO_UNUSED_PARAMETER)
+    set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
+                 PROPERTY COMPILE_FLAGS " -Wno-unused-parameter")
+  endif()
+
   if(CXX_HAS_NO_UNNEEDED_INTERNAL_DECLARATION)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
                  PROPERTY COMPILE_FLAGS " -Wno-unneeded-internal-declaration")
@@ -3118,22 +3279,22 @@ function(elements_add_cython_module)
 
   if(CXX_HAS_NO_CXX17_EXTENSIONS)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-c++17-extensions")  
+                 PROPERTY COMPILE_FLAGS " -Wno-c++17-extensions")
   endif()
 
   if(CXX_HAS_NO_PARENTHESES_EQUALITY)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-parentheses-equality")  
+                 PROPERTY COMPILE_FLAGS " -Wno-parentheses-equality")
   endif()
 
   if(CXX_HAS_NO_CONSTANT_LOGICAL_OPERAND)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-constant-logical-operand")    
+                 PROPERTY COMPILE_FLAGS " -Wno-constant-logical-operand")
   endif()
 
   if(CXX_HAS_SHADOW)
     set_property(SOURCE ${PY_MODULE_CYTHON_SRC} APPEND_STRING
-                 PROPERTY COMPILE_FLAGS " -Wno-shadow")    
+                 PROPERTY COMPILE_FLAGS " -Wno-shadow=local")
   endif()
 
   if(CXX_HAS_CONVERSION)
@@ -3150,11 +3311,60 @@ function(elements_add_cython_module)
 
   set_target_properties(${mod_name} PROPERTIES PLAIN_MODULE TRUE)
   set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
-  
+
   elements_install_headers(${ARG_PUBLIC_HEADERS})
 
 endfunction()
 
+#---------------------------------------------------------------------------------------------------
+# elements_add_pybind11_module(module source1 source2 ...
+#                              LINK_LIBRARIES library1 library2 ...
+#                              INCLUDE_DIRS dir1 package2 ...
+#                              LINKER_LANGUAGE C|CXX)
+#
+# Create a pybind11 binary python module from the specified sources (glob patterns are allowed), linking
+# it with the libraries specified and adding the include directories to the search path. The sources
+# can be either *.i or *.cpp files. Their location is relative to the base of the Elements package
+# (module).
+#---------------------------------------------------------------------------------------------------
+function(elements_add_pybind11_module module)
+
+  CMAKE_PARSE_ARGUMENTS(ARG "" "LINKER_LANGUAGE" "LIBRARIES;LINK_LIBRARIES;INCLUDE_DIRS" ${ARGN})
+
+  elements_common_add_build(${ARG_UNPARSED_ARGUMENTS}
+                            LIBRARIES ${ARG_LIBRARIES}
+                            LINK_LIBRARIES ${ARG_LINK_LIBRARIES}
+                            INCLUDE_DIRS ${ARG_INCLUDE_DIRS})
+
+  # require Python libraries
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Development NumPy QUIET REQUIRED)
+
+  elements_include_directories(AFTER ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS})
+
+  find_package(pybind11)
+
+  pybind11_add_module(${module} ${srcs})
+
+  if(ARG_LINKER_LANGUAGE)
+    set_target_properties(${module} PROPERTIES LINKER_LANGUAGE ${ARG_LINKER_LANGUAGE})
+  endif()
+
+  target_link_libraries(${module} PRIVATE ${Python_LIBRARIES} ${ARG_LINK_LIBRARIES})
+
+  _elements_detach_debinfo(${module})
+
+  #----Installation details-------------------------------------------------------
+  install(TARGETS ${module} LIBRARY DESTINATION ${PYTHON_DYNLIB_INSTALL_SUFFIX} OPTIONAL)
+  set_target_properties(${module} PROPERTIES INSTALL_RPATH "$ORIGIN/../../${CMAKE_LIB_INSTALL_SUFFIX}")
+
+  get_property(_prefix TARGET ${module} PROPERTY PREFIX)
+  get_property(_suffix TARGET ${module} PROPERTY SUFFIX)
+
+  set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
+  set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_DYNLIB_OBJECTS ${_prefix}${module}${_suffix})
+
+
+endfunction()
 #---------------------------------------------------------------------------------------------------
 # elements_add_executable(<name>
 #                      source1 source2 ...
@@ -3167,23 +3377,39 @@ endfunction()
 #---------------------------------------------------------------------------------------------------
 function(elements_add_executable executable)
 
-  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL" "" "" ${ARGN})
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_INSTALL;NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "" ${ARGN})
 
   elements_common_add_build(${ARGN})
 
   add_executable(${executable} ${srcs})
-  target_link_libraries(${executable} ${ARG_LINK_LIBRARIES})
+  target_link_libraries(${executable} PRIVATE ${ARG_LINK_LIBRARIES})
   _elements_detach_debinfo(${executable})
 
   if (ELEMENTS_USE_EXE_SUFFIX)
     set_target_properties(${executable} PROPERTIES SUFFIX .exe)
     set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
   else()
-    set_target_properties(${executable} PROPERTIES BASENAME ${executable}.exe)
+    set_target_properties(${executable} PROPERTIES BASENAME ${executable})
+  endif()
+
+  set_target_properties(${executable} PROPERTIES  ENABLE_EXPORTS 1)
+
+
+  if (ARG_NO_CONFIG_FILE)
+    target_compile_definitions(${executable} PUBLIC NO_CONFIG_FILE)
+  endif()
+
+  if (ARG_NO_DEFAULT_CONF)
+    target_compile_definitions(${executable} PUBLIC NO_DEFAULT_CONF)
+  endif()
+
+
+  if(IWYU_FOUND)
+    set_target_properties(${executable} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE  "${IWYU_COMMAND}")
   endif()
 
   #----Installation details-------------------------------------------------------
-  
+
   if (NOT ARG_NO_INSTALL)
     install(TARGETS ${executable} EXPORT ${CMAKE_PROJECT_NAME}Exports RUNTIME DESTINATION bin OPTIONAL)
     install(EXPORT ${CMAKE_PROJECT_NAME}Exports DESTINATION ${CMAKE_INSTALL_SUFFIX} OPTIONAL)
@@ -3223,22 +3449,26 @@ function(elements_add_test_executable name)
   elements_get_package_name(package)
 
 
-  if(NOT ${${name}_TEST_EXEC_TYPE} STREQUAL "None")
-  
-    if (${${name}_TEST_EXEC_TYPE} STREQUAL "Boost")
+  if(NOT "${${name}_TEST_EXEC_TYPE}" STREQUAL "None")
+
+    if ("${${name}_TEST_EXEC_TYPE}" STREQUAL "Boost")
       find_package(Boost COMPONENTS unit_test_framework QUIET REQUIRED)
     else()
       find_package(${${name}_TEST_EXEC_TYPE} QUIET REQUIRED)
     endif()
-    
+
     if (NOT TARGET ${package}_tests_dir)
       add_custom_target(${package}_tests_dir
                         COMMAND  ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/tests
                         COMMENT "Generating The ${package}/tests directory" VERBATIM)
     endif()
-    
+
     set(testmain_file ${CMAKE_CURRENT_BINARY_DIR}/tests/${${name}_TEST_EXEC_TYPE}TestMain.cpp)
     set_source_files_properties(${testmain_file} PROPERTIES GENERATED TRUE)
+    if ("${${name}_TEST_EXEC_TYPE}" STREQUAL "Boost")
+      set_source_files_properties(${testmain_file} PROPERTIES COMPILE_DEFINITIONS_DEBUG "BOOST_TEST_TOOLS_UNDER_DEBUGGER")
+      set_source_files_properties(${srcs} PROPERTIES COMPILE_DEFINITIONS_DEBUG "BOOST_TEST_TOOLS_UNDER_DEBUGGER")
+    endif()
     if(NOT TARGET ${package}_${${name}_TEST_EXEC_TYPE}TestMain)
       add_custom_target(${package}_${${name}_TEST_EXEC_TYPE}TestMain
                         COMMAND ${${${name}_TEST_EXEC_TYPE}_testmain_cmd} --quiet ${package} ${testmain_file}
@@ -3246,13 +3476,13 @@ function(elements_add_test_executable name)
                         COMMENT "Generating the ${package} ${${name}_TEST_EXEC_TYPE}TestMain.cpp" VERBATIM)
       set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${testmain_file})
     endif()
-      
+
     set(INSTALL_OPT)
-      
+
     if(NOT INSTALL_TESTS)
       set(INSTALL_OPT "NO_INSTALL")
     endif()
-      
+
     if (NOT TARGET ${package}${${name}_TEST_EXEC_TYPE}Test)
       elements_add_library(${package}${${name}_TEST_EXEC_TYPE}Test ${testmain_file}
                            LINK_LIBRARIES ${${name}_TEST_EXEC_TYPE}
@@ -3261,7 +3491,7 @@ function(elements_add_test_executable name)
                            )
       add_dependencies(${package}${${name}_TEST_EXEC_TYPE}Test ${package}_${${name}_TEST_EXEC_TYPE}TestMain)
     endif()
-      
+
     elements_add_executable(${executable} ${srcs}
                             LINK_LIBRARIES ${ARG_LINK_LIBRARIES} ${${name}_TEST_EXEC_TYPE} ${package}${${name}_TEST_EXEC_TYPE}Test
                             INCLUDE_DIRS ${ARG_INCLUDE_DIRS} ${${name}_TEST_EXEC_TYPE}
@@ -3343,27 +3573,51 @@ function(elements_add_unit_test name)
         set(extra_env ${extra_env} -s ${var})
       endif()
     endforeach()
-    
+
     set(exec_argument)
-    if (${${name}_UNIT_TEST_TYPE} STREQUAL "Boost")
-      if(TEST_JUNIT_REPORT AND NOT (Boost_VERSION_STRING VERSION_LESS 1.63.0))
-        set(exec_argument --log_format=JUNIT --log_sink=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.JUnit.xml --log_level=all)
-      else()
-        set(exec_argument --log_format=XML --log_sink=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.xml --log_level=all)      
+
+    if(TEST_XML_REPORT)
+      if ("${${name}_UNIT_TEST_TYPE}" STREQUAL "Boost")
+        if(TEST_JUNIT_REPORT AND NOT (Boost_VERSION_STRING VERSION_LESS 1.63.0))
+          set(exec_argument --log_format=JUNIT --log_sink=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.JUnit.xml --log_level=all)
+        else()
+          set(exec_argument --log_format=XML --log_sink=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.xml --log_level=all)
+        endif()
       endif()
+    endif()
+
+    set(full_test_commandline)
+
+    if (USE_MEMORYCHECK)
+      separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
+      set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${executable}.${${name}_UNIT_TEST_TYPE}.memcheck.xml ${executable}${exec_suffix} ${exec_argument})
+    else()
+      set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${executable}${exec_suffix} ${exec_argument})
     endif()
 
     add_test(NAME ${package}.${name}
              WORKING_DIRECTORY ${${name}_UNIT_TEST_WORKING_DIRECTORY}
-             COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-             ${executable}${exec_suffix} ${exec_argument})
+             COMMAND ${full_test_commandline})
+
+    if(PRINT_TEST_COMMANDS)
+      message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+      string(REPLACE ";" " " full_test_commandline_string "${full_test_commandline}")
+      message(STATUS "${package}.${name} Test Command Line: ${full_test_commandline_string}")
+      message(STATUS "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+    endif()
+
+
 
     set_property(GLOBAL APPEND PROPERTY TEST_LIST ${package}.${name}:${executable}${exec_suffix})
 
+    string(REPLACE ";" ":" srcs_str ${srcs})
+
+    set_property(GLOBAL APPEND PROPERTY TEST_SRC_LIST "${package}.${name}:${executable}${exec_suffix}:${srcs_str}")
+
     set_property(TEST ${package}.${name} PROPERTY CMDLINE "${executable}${exec_suffix}")
     set_property(TEST ${package}.${name} APPEND PROPERTY LABELS UnitTest ${package} Binary)
-    
-    if(NOT ${${name}_UNIT_TEST_TYPE} STREQUAL "None")
+
+    if(NOT "${${name}_UNIT_TEST_TYPE}" STREQUAL "None")
       set_property(TEST ${package}.${name} APPEND PROPERTY LABELS ${${name}_UNIT_TEST_TYPE})
     endif()
 
@@ -3443,10 +3697,23 @@ function(elements_add_test name)
     endif()
   endforeach()
 
+  if (USE_MEMORYCHECK)
+    separate_arguments(memorycheck_command_options_list UNIX_COMMAND ${MEMORYCHECK_COMMAND_OPTIONS})
+    set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${MEMORYCHECK_COMMAND} ${memorycheck_command_options_list} --suppressions=${MEMORYCHECK_SUPPRESSIONS_FILE} --xml=yes --xml-file=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${name}.memcheck.xml ${cmdline})
+  else()
+    set(full_test_commandline ${env_cmd} ${extra_env} --xml ${env_xml} ${cmdline})
+  endif()
+
   add_test(NAME ${package}.${name}
            WORKING_DIRECTORY ${ARG_WORKING_DIRECTORY}
-           COMMAND ${env_cmd} ${extra_env} --xml ${env_xml}
-           ${cmdline})
+           COMMAND ${full_test_commandline})
+
+  if(PRINT_TEST_COMMANDS)
+    message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    string(REPLACE ";" " " full_test_commandline_string "${full_test_commandline}")
+    message(STATUS "${package}.${name} Test Command Line: ${full_test_commandline_string}")
+    message(STATUS "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+  endif()
 
   set_property(TEST ${package}.${name} APPEND PROPERTY LABELS ${package})
   set_property(TEST ${package}.${name} PROPERTY CMDLINE "${cmdline}")
@@ -3488,19 +3755,23 @@ endfunction()
 # To be used in case the header files do not have a library.
 #---------------------------------------------------------------------------------------------------
 function(elements_install_headers)
+
+  CMAKE_PARSE_ARGUMENTS(ARG "NO_EXIST_CHECK" "" "" ${ARGN})
+
   set(has_local_headers FALSE)
-  foreach(hdr_dir ${ARGN})
+  foreach(hdr_dir ${ARG_UNPARSED_ARGUMENTS})
     if(NOT IS_ABSOLUTE ${hdr_dir})
       set(full_hdr_dir ${CMAKE_CURRENT_SOURCE_DIR}/${hdr_dir})
     else()
       set(full_hdr_dir ${hdr_dir})
     endif()
-    if(IS_DIRECTORY ${full_hdr_dir})
+    if(ARG_NO_EXIST_CHECK)
       install(DIRECTORY ${hdr_dir}
               DESTINATION ${INCLUDE_INSTALL_SUFFIX}
               FILES_MATCHING
               PATTERN "*.h"
               PATTERN "*.icpp"
+              PATTERN "*.tpp"
               PATTERN "*.hpp"
               PATTERN "*.hxx"
               PATTERN "*.i"
@@ -3512,7 +3783,26 @@ function(elements_install_headers)
         set_property(GLOBAL APPEND PROPERTY REGULAR_INCLUDE_OBJECTS ${hdr_dir})
       endif()
     else()
-      message(FATAL_ERROR "No ${hdr_dir} directory for header files in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+      if(IS_DIRECTORY ${full_hdr_dir})
+        install(DIRECTORY ${hdr_dir}
+                DESTINATION ${INCLUDE_INSTALL_SUFFIX}
+                FILES_MATCHING
+                PATTERN "*.h"
+                PATTERN "*.icpp"
+                PATTERN "*.tpp"
+                PATTERN "*.hpp"
+                PATTERN "*.hxx"
+                PATTERN "*.i"
+                PATTERN "*.pxd"
+                PATTERN "CVS" EXCLUDE
+                PATTERN ".svn" EXCLUDE)
+        if(NOT IS_ABSOLUTE ${hdr_dir})
+          set(has_local_headers TRUE)
+          set_property(GLOBAL APPEND PROPERTY REGULAR_INCLUDE_OBJECTS ${hdr_dir})
+        endif()
+      else()
+        message(FATAL_ERROR "No ${hdr_dir} directory for header files in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+      endif()
     endif()
   endforeach()
   # flag the current directory as one that installs headers
@@ -3535,7 +3825,7 @@ endfunction()
 #                     )
 #
 # Add the python files in the directory as test. It collects the python test files
-# and add a test for the python test framework (py.test, nose or unittest)
+# and add a test for the python test framework (pytest, nose or unittest)
 #---------------------------------------------------------------------------------------------------
 function(add_python_test_dir)
 
@@ -3581,25 +3871,39 @@ function(add_python_test_dir)
 
   if(PYFRMK_TEST)
     set(PYFRMK_JUNIT_FILE_OPT)
-    set(PYFRMK_JUNIT_PREFIX_OPT)
-    if(PYFRMK_NAME STREQUAL "PyTest")
-        if(TEST_JUNIT_REPORT)
-          set(PYFRMK_JUNIT_FILE_OPT "--junit-xml=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${pytest_name}.JUnit.xml")
+    set(PYFRMK_COVERAGE_OPT)
+    if("${PYFRMK_NAME}" STREQUAL "PyTest")
+      if(TEST_JUNIT_REPORT)
+        set(PYFRMK_JUNIT_FILE_OPT --junit-xml=${PROJECT_BINARY_DIR}/Testing/Temporary/${package}.${pytest_name}.JUnit.xml)
+      endif()
+      if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
+        find_python_module(pytest_cov)
+        if(PY_PYTEST_COV)
+          set(PYFRMK_COVERAGE_OPT  --cov-report=xml:${PROJECT_BINARY_DIR}/cov/${PYFRMK_NAME}/coverage.xml --cov-report=html:${PROJECT_BINARY_DIR}/cov/${PYFRMK_NAME}/html)
+          set(PYFRMK_COVERAGE_OPT ${PYFRMK_COVERAGE_OPT} --cov-append)
         endif()
+        get_property(proj_python_package_list GLOBAL PROPERTY PROJ_PYTHON_PACKAGE_LIST)
+        foreach(p ${proj_python_package_list})
+          set(PYFRMK_COVERAGE_OPT ${PYFRMK_COVERAGE_OPT} --cov ${p})
+        endforeach()
+      endif()
     endif()
+
+    set(PYFRMK_COMMAND ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_COVERAGE_OPT} ${PYFRMK_EXTRA_OPTS} ${pysrcs})
+
     elements_add_test(${pytest_name}
-                      COMMAND ${PYFRMK_TEST} ${PYFRMK_JUNIT_FILE_OPT} ${PYFRMK_JUNIT_PREFIX_OPT} ${pysrcs}
+                      COMMAND  ${PYFRMK_COMMAND}
                       ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})
     set_property(TEST ${package}.${pytest_name} APPEND PROPERTY LABELS Python UnitTest ${PYFRMK_NAME})
     if(PYTEST_ARG_TIMEOUT)
       set_property(TEST ${package}.${pytest_name} PROPERTY TIMEOUT ${PYTEST_ARG_TIMEOUT})
     endif()
   else()
-    if(NOT PYTHON_VERSION_STRING VERSION_LESS "2.7")
+    if(NOT Python_VERSION VERSION_LESS "2.7")
       foreach(pytestsubdir ${PYTEST_ARG_UNPARSED_ARGUMENTS})
         set(pytest_name "${pytest_name}:${pytestsubdir}")
         elements_add_test(${pytest_name}
-                          COMMAND ${PYTHON_EXECUTABLE} -m unittest discover -s ${CMAKE_CURRENT_SOURCE_DIR}/${pytestsubdir} -p "${PYTEST_ARG_PATTERN}" 
+                          COMMAND ${Python_EXECUTABLE} -m unittest discover -s ${CMAKE_CURRENT_SOURCE_DIR}/${pytestsubdir} -p "${PYTEST_ARG_PATTERN}"
                           ENVIRONMENT ${PYTEST_ARG_ENVIRONMENT})
         set_property(TEST ${package}.${pytest_name} APPEND PROPERTY LABELS Python UnitTest)
         if(PYTEST_ARG_TIMEOUT)
@@ -3656,7 +3960,7 @@ function(elements_install_python_modules)
     # check for the presence of the __init__.py's and install them if needed
       file(GLOB sub-dir RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${pysubdir}/*)
       foreach(dir ${sub-dir})
-        if(NOT dir STREQUAL ${pysubdir}/.svn
+        if(NOT "${dir}" STREQUAL "${pysubdir}/.svn"
            AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${dir}
            AND NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/__init__.py)
           set(pyfile ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/__init__.py)
@@ -3672,7 +3976,7 @@ function(elements_install_python_modules)
         get_filename_component(modname ${dir} NAME)
         set_property(DIRECTORY APPEND PROPERTY has_python_modules ${modname})
         set_property(DIRECTORY PROPERTY module_has_python_dir yes)
-        if(NOT dir STREQUAL ${pysubdir}/.svn)
+        if(NOT "${dir}" STREQUAL "${pysubdir}/.svn")
           set_property(GLOBAL APPEND PROPERTY PROJ_PYTHON_PACKAGE_LIST ${CMAKE_CURRENT_SOURCE_DIR}/${dir})
           set_property(GLOBAL APPEND PROPERTY REGULAR_PYTHON_OBJECTS ${modname})
         endif()
@@ -3680,12 +3984,12 @@ function(elements_install_python_modules)
       set_property(GLOBAL APPEND PROPERTY PROJ_HAS_PYTHON TRUE)
       if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests/python)
         if(INSTALL_PY_MOD_TEST_TIMEOUT)
-          add_python_test_dir(tests/python 
-                              TIMEOUT ${INSTALL_PY_MOD_TEST_TIMEOUT} 
+          add_python_test_dir(tests/python
+                              TIMEOUT ${INSTALL_PY_MOD_TEST_TIMEOUT}
                               EXCLUDE ${INSTALL_PY_MOD_TEST_EXCLUDE}
                               ENVIRONMENT ${INSTALL_PY_MOD_TEST_ENVIRONMENT})
         else()
-          add_python_test_dir(tests/python 
+          add_python_test_dir(tests/python
                               EXCLUDE ${INSTALL_PY_MOD_TEST_EXCLUDE}
                               ENVIRONMENT ${INSTALL_PY_MOD_TEST_ENVIRONMENT})
         endif()
@@ -3740,32 +4044,74 @@ endfunction()
 #---------------------------------------------------------------------------------------------------
 # elements_install_aux_files()
 #
-# Declare that the package needs to install the content of the 'aux' directory.
+# - Declare that the package needs to install the content of the 'aux' directory.
+# - the WITH_CONFIGURE option configures (interpolates) first the files in the directory and puts the
+#   result in the build directory
 #---------------------------------------------------------------------------------------------------
 function(elements_install_aux_files)
 
-  # early check at configure time for the existence of the directory
-  if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux OR IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} OR IS_DIRECTORY ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
-    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux)
-      message(WARNING "The aux directory name in the ${CMAKE_CURRENT_SOURCE_DIR} location is dangerous. Please rename it to ${AUX_DIR_NAME}")
-    endif()
-    foreach(ad ${CMAKE_CURRENT_SOURCE_DIR}/aux ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
-      if(IS_DIRECTORY ${ad})
-        install(DIRECTORY ${ad}/
-               DESTINATION ${AUX_INSTALL_SUFFIX}
-               PATTERN "CVS" EXCLUDE
-               PATTERN ".svn" EXCLUDE
-               PATTERN "*~" EXCLUDE)
-        file(GLOB aux_list RELATIVE ${ad} ${ad}/*)
-        foreach(af ${aux_list})
-          set_property(GLOBAL APPEND PROPERTY REGULAR_AUX_OBJECTS ${af})
-        endforeach()
-        set_property(GLOBAL APPEND PROPERTY PROJ_HAS_AUX TRUE)
+  CMAKE_PARSE_ARGUMENTS(INSTALL_AUX "WITH_CONFIGURE" "" "" ${ARGN})
+
+  if(INSTALL_AUX_WITH_CONFIGURE)
+
+    # early check at configure time for the existence of the directory
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux OR IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME})
+      if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux)
+        message(WARNING "The aux directory name in the ${CMAKE_CURRENT_SOURCE_DIR} location is dangerous. Please rename it to ${AUX_DIR_NAME}")
       endif()
-    endforeach()
+      foreach(ad aux ${AUX_DIR_NAME})
+        set(full_ad ${CMAKE_CURRENT_SOURCE_DIR}/${ad})
+        set(full_build_ad ${CMAKE_BINARY_DIR}/${ad})
+        if(IS_DIRECTORY ${full_ad})
+          file(GLOB_RECURSE aux_list RELATIVE ${full_ad} ${full_ad}/*)
+          foreach(af ${aux_list})
+            if(NOT IS_DIRECTORY ${full_ad}/${af})
+              strip_template_extension(af_ne ${af})
+              configure_file("${full_ad}/${af}"
+                             "${full_build_ad}/${af_ne}"
+                             @ONLY)
+              set_property(GLOBAL APPEND PROPERTY REGULAR_AUX_OBJECTS ${af_ne})
+            endif()
+          endforeach()
+          install(DIRECTORY ${full_build_ad}/
+                 DESTINATION ${AUX_INSTALL_SUFFIX}
+                 PATTERN "CVS" EXCLUDE
+                 PATTERN ".svn" EXCLUDE
+                 PATTERN "*~" EXCLUDE)
+          set_property(GLOBAL APPEND PROPERTY PROJ_HAS_AUX TRUE)
+        endif()
+      endforeach()
+    else()
+      message(FATAL_ERROR "No ${AUX_DIR_NAME} directory to configurea in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+    endif()
+
   else()
-    message(FATAL_ERROR "No ${AUX_DIR_NAME} directory in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+
+    # early check at configure time for the existence of the directory
+    if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux OR IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} OR IS_DIRECTORY ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
+      if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/aux)
+        message(WARNING "The aux directory name in the ${CMAKE_CURRENT_SOURCE_DIR} location is dangerous. Please rename it to ${AUX_DIR_NAME}")
+      endif()
+      foreach(ad ${CMAKE_CURRENT_SOURCE_DIR}/aux ${CMAKE_CURRENT_SOURCE_DIR}/${AUX_DIR_NAME} ${CMAKE_BINARY_DIR}/${AUX_DIR_NAME})
+        if(IS_DIRECTORY ${ad})
+          install(DIRECTORY ${ad}/
+                 DESTINATION ${AUX_INSTALL_SUFFIX}
+                 PATTERN "CVS" EXCLUDE
+                 PATTERN ".svn" EXCLUDE
+                 PATTERN "*~" EXCLUDE)
+          file(GLOB aux_list RELATIVE ${ad} ${ad}/*)
+          foreach(af ${aux_list})
+            set_property(GLOBAL APPEND PROPERTY REGULAR_AUX_OBJECTS ${af})
+          endforeach()
+          set_property(GLOBAL APPEND PROPERTY PROJ_HAS_AUX TRUE)
+        endif()
+      endforeach()
+    else()
+      message(FATAL_ERROR "No ${AUX_DIR_NAME} directory in the ${CMAKE_CURRENT_SOURCE_DIR} location")
+    endif()
+
   endif()
+
 endfunction()
 
 #---------------------------------------------------------------------------------------------------
@@ -3830,6 +4176,7 @@ endfunction()
 macro(elements_install_cmake_modules)
   install(DIRECTORY cmake/
           DESTINATION ${CMAKE_INSTALL_SUFFIX}
+          USE_SOURCE_PERMISSIONS
           FILES_MATCHING
             PATTERN "*.cmake"
             PATTERN "*.in"
@@ -3854,7 +4201,7 @@ endmacro()
 macro(elements_generate_project_config_version_file)
   message(STATUS "Generating ${CMAKE_PROJECT_NAME}ConfigVersion.cmake")
 
-  if(NOT CMAKE_PROJECT_VERSION_PATCH STREQUAL "")
+  if(NOT "${CMAKE_PROJECT_VERSION_PATCH}" STREQUAL "")
     set(vers_id ${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH})
   else()
     set(vers_id ${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR})
@@ -3864,12 +4211,12 @@ macro(elements_generate_project_config_version_file)
   file(WRITE ${CMAKE_BINARY_DIR}/config/${CMAKE_PROJECT_NAME}ConfigVersion.cmake
 "set(PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 set(PACKAGE_VERSION ${vers_id})
-if(PACKAGE_NAME STREQUAL PACKAGE_FIND_NAME)
-  if(PACKAGE_VERSION STREQUAL PACKAGE_FIND_VERSION)
+if(\"\${PACKAGE_NAME}\" STREQUAL \"\${PACKAGE_FIND_NAME}\")
+  if(\"\${PACKAGE_VERSION}\" STREQUAL \"\${PACKAGE_FIND_VERSION}\")
     set(PACKAGE_VERSION_EXACT 1)
     set(PACKAGE_VERSION_COMPATIBLE 1)
     set(PACKAGE_VERSION_UNSUITABLE 0)
-  elseif(PACKAGE_FIND_VERSION STREQUAL \"\") # No explicit version requested.
+  elseif(\"\${PACKAGE_FIND_VERSION}\" STREQUAL \"\") # No explicit version requested.
     set(PACKAGE_VERSION_EXACT 0)
     set(PACKAGE_VERSION_COMPATIBLE 1)
     set(PACKAGE_VERSION_UNSUITABLE 0)
@@ -4043,9 +4390,11 @@ endfunction()
 # helper macro used by elements_generate_env_conf.
 #-------------------------------------------------------------------------------
 macro(_env_conf_pop_instruction instr lst)
-  #message(STATUS "_env_conf_pop_instruction ${lst} => ${${lst}}")
-  list(GET ${lst} 0 ${instr})
-  if(${instr} STREQUAL INCLUDE OR ${instr} STREQUAL UNSET OR ${instr} STREQUAL SEARCH_PATH)
+#  message(STATUS "_env_conf_pop_instruction ${lst} => ${${lst}}")
+  list(GET ${lst} 0 tmp_instr)
+  if(("${tmp_instr}" STREQUAL "INCLUDE")
+      OR ("${tmp_instr}" STREQUAL "UNSET")
+      OR ("${tmp_instr}" STREQUAL "SEARCH_PATH"))
     list(GET ${lst} 0 1 ${instr})
     list(REMOVE_AT ${lst} 0 1)
     # even if the command expects only one argument, ${instr} must have 3 elements
@@ -4073,17 +4422,17 @@ macro(_env_line cmd var val output)
     endif()
   endforeach()
 
-  if(${cmd} STREQUAL "SET")
+  if("${cmd}" STREQUAL "SET")
     set(${output} "<env:set variable=\"${var}\">${val_}</env:set>")
-  elseif(${cmd} STREQUAL "UNSET")
+  elseif("${cmd}" STREQUAL "UNSET")
     set(${output} "<env:unset variable=\"${var}\"></env:unset>")
-  elseif(${cmd} STREQUAL "PREPEND")
+  elseif("${cmd}" STREQUAL "PREPEND")
     set(${output} "<env:prepend variable=\"${var}\">${val_}</env:prepend>")
-  elseif(${cmd} STREQUAL "APPEND")
+  elseif("${cmd}" STREQUAL "APPEND")
     set(${output} "<env:append variable=\"${var}\">${val_}</env:append>")
-  elseif(${cmd} STREQUAL "REMOVE")
+  elseif("${cmd}" STREQUAL "REMOVE")
     set(${output} "<env:remove variable=\"${var}\">${val_}</env:remove>")
-  elseif(${cmd} STREQUAL "INCLUDE")
+  elseif("${cmd}" STREQUAL "INCLUDE")
     get_filename_component(inc_name ${var} NAME)
     get_filename_component(inc_path ${var} PATH)
     if(${inc_path})
@@ -4091,7 +4440,7 @@ macro(_env_line cmd var val output)
     else()
       set(${output} "<env:include>${inc_name}</env:include>")
     endif()
-  elseif(${cmd} STREQUAL "SEARCH_PATH")
+  elseif("${cmd}" STREQUAL "SEARCH_PATH")
     set(${output} "<env:search_path>${var}</env:search_path>")
   else()
     message(FATAL_ERROR "Unknown environment command ${cmd}")
@@ -4144,9 +4493,9 @@ function(elements_generate_env_conf filename)
 
   set(commands ${ARGN})
 
-  #message(STATUS "start - ${commands}")
+#  message(STATUS "start - ${commands}")
   while(commands)
-    #message(STATUS "iter - ${commands}")
+#    message(STATUS "iter - ${commands}")
     _env_conf_pop_instruction(instr commands)
     # ensure that the variables in the value are not expanded when passing the arguments
     string(REPLACE "\$" "\\\$" instr "${instr}")
@@ -4157,8 +4506,8 @@ function(elements_generate_env_conf filename)
   set(data "${data}</env:config>\n")
 
   get_filename_component(fn ${filename} NAME)
-  message(STATUS "Generating ${fn}")  
-  
+  message(STATUS "Generating ${fn}")
+
   file(WRITE ${filename} "${data}")
 endfunction()
 
@@ -4203,12 +4552,13 @@ macro(elements_external_project_environment)
     # Check that it is not a "Elements project" (the environment is included in a
     # different way in elements_generate_env_conf).
     list(FIND used_elements_projects ${pack} elements_project_idx)
-    if((NOT pack STREQUAL ElementsProject) AND (elements_project_idx EQUAL -1))
+    if((NOT "${pack}" STREQUAL "ElementsProject") AND (elements_project_idx EQUAL -1) AND (NOT "${pack}" STREQUAL "PythonModules"))
       message(STATUS "    ${pack}")
       # this is needed to get the non-cache variables for the packages
+
       find_package(${pack} QUIET)
 
-      if(pack STREQUAL PythonInterp OR pack STREQUAL PythonLibs)
+      if("${pack}" STREQUAL "PythonInterp" OR "${pack}" STREQUAL "PythonLibs" OR "${pack}" STREQUAL "Python")
         set(pack Python)
       endif()
       string(TOUPPER ${pack} _pack_upper)
@@ -4227,7 +4577,7 @@ macro(elements_external_project_environment)
       list(APPEND library_path2 ${${pack}_LIBRARY_DIR} ${${pack}_LIBRARY_DIRS})
       # Try the version with the name of the package uppercase (unless the
       # package name is already uppercase).
-      if(NOT pack STREQUAL _pack_upper)
+      if(NOT "${pack}" STREQUAL "${_pack_upper}")
         list(APPEND binary_path   ${${_pack_upper}_BINARY_PATH})
         list(APPEND python_path   ${${_pack_upper}_PYTHON_PATH})
         list(APPEND conf_path     ${${_pack_upper}_CONF_PATH})
@@ -4246,6 +4596,7 @@ macro(elements_external_project_environment)
   set(old_library_path ${library_path})
   set(library_path)
   set(lib_match_str "^(/usr|/usr/local)?/lib(32|64)?")
+  set(sysroot_lib_match_str "/sysroot/usr/lib(32|64)?")
   if(APPLE)
     if($ENV{MACPORT_LOCATION})
       set(lib_match_str "^(/usr|/usr/local|$ENV{MACPORT_LOCATION})?/lib(32|64)?")
@@ -4254,7 +4605,7 @@ macro(elements_external_project_environment)
     endif()
   endif()
   foreach(d ${old_library_path})
-    if(NOT d MATCHES ${lib_match_str})
+    if(NOT ((d MATCHES ${lib_match_str}) OR (d MATCHES ${sysroot_lib_match_str})  ))
       set(library_path ${library_path} ${d})
     endif()
   endforeach()
@@ -4363,7 +4714,7 @@ set(_IMPORT_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
 elements_include_directories(AFTER \${_IMPORT_PREFIX}/include)
 link_directories(AFTER \${_IMPORT_PREFIX}/${lib_install_suff})
 
-")      
+")
       endif()
 
 
@@ -4371,7 +4722,7 @@ link_directories(AFTER \${_IMPORT_PREFIX}/${lib_install_suff})
         file(APPEND ${pkg_exp_file} "add_library(${library} SHARED IMPORTED)\n")
         file(APPEND ${pkg_exp_file} "set_target_properties(${library} PROPERTIES\n")
 
-        foreach(pn REQUIRED_INCLUDE_DIRS REQUIRED_LIBRARIES)
+        foreach(pn INTERFACE_REQUIRED_INCLUDE_DIRS INTERFACE_REQUIRED_LIBRARIES)
           get_property(prop TARGET ${library} PROPERTY ${pn})
           if (prop)
             file(APPEND ${pkg_exp_file} "  ${pn} \"${prop}\"\n")
@@ -4380,9 +4731,9 @@ link_directories(AFTER \${_IMPORT_PREFIX}/${lib_install_suff})
 
         if(NOT CMAKE_VERSION VERSION_LESS 3.9.0)
 #          set(prop $<TARGET_FILE:${library}>)
-          get_property(prop TARGET ${library} PROPERTY BASENAME)        
+          get_property(prop TARGET ${library} PROPERTY BASENAME)
         else()
-          get_property(prop TARGET ${library} PROPERTY LOCATION)        
+          get_property(prop TARGET ${library} PROPERTY LOCATION)
           get_filename_component(prop ${prop} NAME)
         endif()
         file(APPEND ${pkg_exp_file} "  IMPORTED_SONAME \"${prop}\"\n")
@@ -4397,14 +4748,14 @@ link_directories(AFTER \${_IMPORT_PREFIX}/${lib_install_suff})
         file(APPEND ${pkg_exp_file} "set_target_properties(${executable} PROPERTIES\n")
 
         if(NOT CMAKE_VERSION VERSION_LESS 3.9.0)
-          get_property(prop TARGET ${executable} PROPERTY BASENAME)        
+          get_property(prop TARGET ${executable} PROPERTY BASENAME)
         else()
-          get_property(prop TARGET ${executable} PROPERTY LOCATION)        
+          get_property(prop TARGET ${executable} PROPERTY LOCATION)
           get_filename_component(prop ${prop} NAME)
         endif()
         file(APPEND ${pkg_exp_file} "  IMPORTED_LOCATION \"\${_IMPORT_PREFIX}/bin/${prop}\"\n")
 
-        file(APPEND ${pkg_exp_file} "  )\n")
+        file(APPEND ${pkg_exp_file} ")\n")
       endforeach()
 
       foreach(module ${exported_mods})
@@ -4493,7 +4844,7 @@ function(elements_generate_project_manifest filename project version)
       set(v *)
       if(PROJECT_DATA)
         list(GET PROJECT_DATA 0 next)
-        if(next STREQUAL VERSION)
+        if("${next}" STREQUAL "VERSION")
           list(GET PROJECT_DATA 1 v)
           list(REMOVE_AT PROJECT_DATA 0 1)
         endif()
@@ -4513,6 +4864,8 @@ endfunction()
 
 
 function(elements_add_python_program executable module)
+
+  cmake_parse_arguments(PYPROG "NO_CONFIG_FILE;NO_DEFAULT_CONF" "" "" ${ARGN})
 
   get_property(has_python_dir DIRECTORY PROPERTY module_has_python_dir)
 
@@ -4537,11 +4890,29 @@ function(elements_add_python_program executable module)
   get_directory_property(elements_module_name name)
   get_directory_property(elements_module_version version)
 
+  set(PYTHON_SCRIPT_VERSION ${Python_VERSION_MAJOR})
+  if(PYTHON_EXPLICIT_VERSION)
+    set(PYTHON_SCRIPT_VERSION ${PYTHON_EXPLICIT_VERSION})
+  endif()
+
+
+  set(PY_PROG_SCRIPT_EXTRA)
+  if(PYPROG_NO_CONFIG_FILE)
+    set(PY_PROG_SCRIPT_EXTRA ${PY_PROG_SCRIPT_EXTRA} --no-config-file)
+  endif()
+  if(PYPROG_NO_DEFAULT_CONF)
+    set(PY_PROG_SCRIPT_EXTRA ${PY_PROG_SCRIPT_EXTRA} --no-default-conf)
+  endif()
+
   add_custom_command(OUTPUT ${executable_file}
-                     COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_EXPLICIT_VERSION}" --module ${module} --outdir ${CMAKE_BINARY_DIR}/scripts --execname ${executable} --project-name ${CMAKE_PROJECT_NAME} --elements-module-name ${elements_module_name} --elements-module-version ${elements_module_version} --elements-default-loglevel=${ELEMENTS_DEFAULT_LOGLEVEL}
+                     COMMAND ${pythonprogramscript_cmd} --python-explicit-version="${PYTHON_SCRIPT_VERSION}"
+                             --module ${module} --outdir ${CMAKE_BINARY_DIR}/scripts --execname ${executable}
+                             --project-name ${CMAKE_PROJECT_NAME} --elements-module-name ${elements_module_name}
+                             --elements-module-version ${elements_module_version}
+                             --elements-default-loglevel=${ELEMENTS_DEFAULT_LOGLEVEL} ${PY_PROG_SCRIPT_EXTRA}
                      DEPENDS ${program_file})
 
-  string(REPLACE "." "_" python_program_target ${module})
+  string(REPLACE "." "_" python_program_target "${name}_${executable}")
   add_custom_target(${python_program_target} ALL DEPENDS ${executable_file})
   set_property(DIRECTORY APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${executable_file})
 

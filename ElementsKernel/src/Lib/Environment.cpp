@@ -1,66 +1,60 @@
 /**
  * @file Environment.cpp
- *
+ * @brief Implementation of the Environment functions
  * @date Jun 17, 2016
  * @author Hubert Degaudenzi
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
- * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
+ * Public Licence as published by the Free Software Foundation; either version 3.0 of the Licence, or (at your option)
  * any later version.
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public Licence for more
  * details.
  *
- * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * You should have received a copy of the GNU Lesser General Public Licence along with this library; if not, write to
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  */
 
 #include "ElementsKernel/Environment.h"
 
-#include <string>                            // for string
-#include <sstream>                           // for stringstream
-#include <stdexcept>                         // for out_of_range
-#include <algorithm>                         // for find
-#include <utility>                           // for move
-#include <map>                               // for map
+#include <algorithm>  // for find
+#include <map>        // for map
+#include <sstream>    // for stringstream
+#include <stdexcept>  // for out_of_range
+#include <string>     // for string
+#include <utility>    // for move
 
-#include <boost/format.hpp>                  // for format
+#include <boost/format.hpp>  // for format
 
-#include "ElementsKernel/System.h"           // for getEnv, setEnv, isEnvSet
+#include "ElementsKernel/System.h"  // for getEnv, setEnv, isEnvSet
 
+using std::endl;
+using std::ostream;
 using std::string;
 using std::stringstream;
-using std::ostream;
-using std::endl;
 
 namespace Elements {
 
-using System::unSetEnv;
-using System::setEnv;
 using System::getEnv;
 using System::isEnvSet;
+using System::setEnv;
+using System::unSetEnv;
 
-Environment::Variable::Variable(Environment& arg_env, const string& arg_index): m_env{arg_env}, m_index{arg_index} {
-}
+Environment::Variable::Variable(Environment& env, string index) : m_env{env}, m_index{std::move(index)} {}
 
-Environment::Variable::Variable(const Environment::Variable& other): m_env{other.m_env} {
-
+Environment::Variable::Variable(const Variable& other) : m_env{other.m_env} {
   checkCompatibility(other);
-
 }
 
-Environment::Variable::Variable(Environment::Variable&& other): m_env{std::move(other.m_env)} {
-
+Environment::Variable::Variable(Variable&& other) : m_env{other.m_env} {  // NOLINT(*-noexcept-move-constructor)
   checkCompatibility(other);
-
 }
 
-Environment::Variable& Environment::Variable::operator=(const Environment::Variable& other) {
-
+Environment::Variable& Environment::Variable::operator=(const Variable& other) {
   checkCompatibility(other);
 
   m_env = other.m_env;
@@ -68,15 +62,13 @@ Environment::Variable& Environment::Variable::operator=(const Environment::Varia
   return *this;
 }
 
-Environment::Variable& Environment::Variable::operator=(Environment::Variable&& other) {
-
+Environment::Variable& Environment::Variable::operator=(Variable&& other) {  // NOLINT(*-noexcept-move-constructor)
   checkCompatibility(other);
 
-  m_env = move(other.m_env);
+  m_env = other.m_env;
 
   return *this;
 }
-
 
 Environment::Variable& Environment::Variable::operator=(const string& arg_value) {
 
@@ -106,10 +98,9 @@ Environment::Variable& Environment::Variable::append(const string& arg_value) {
   return *this;
 }
 
-Environment::Variable& Environment::Variable::operator +=(const string& arg_value) {
+Environment::Variable& Environment::Variable::operator+=(const string& arg_value) {
 
   return append(arg_value);
-
 }
 
 Environment::Variable& Environment::Variable::prepend(const string& arg_value) {
@@ -119,15 +110,14 @@ Environment::Variable& Environment::Variable::prepend(const string& arg_value) {
   return *this;
 }
 
-Environment::Variable Environment::Variable::operator+(const string& arg_value) {
+Environment::Variable Environment::Variable::operator+(const string& arg_value) const {
 
-  Environment::Variable result(m_env, m_index);
+  Variable result(m_env, m_index);
 
   result.append(arg_value);
 
   return result;
 }
-
 
 const string& Environment::Variable::index() const {
   return m_index;
@@ -137,13 +127,13 @@ Environment& Environment::Variable::env() const {
   return m_env;
 }
 
-
+// ReSharper disable once CppDFAConstantFunctionResult
 string Environment::Variable::value() const {
 
-  return m_env.get().get(m_index, "");
-
+  return get(m_index, "");
 }
 
+// ReSharper disable once CppDFAConstantFunctionResult
 Environment::Variable::operator std::string() const {
   return value();
 }
@@ -153,37 +143,30 @@ bool Environment::Variable::empty() const {
 }
 
 bool Environment::Variable::exists() const {
-  return m_env.get().hasKey(m_index);
+  return hasKey(m_index);
 }
 
-void Environment::Variable::checkCompatibility(const Environment::Variable& other) {
+void Environment::Variable::checkCompatibility(const Variable& other) const {
 
   if (m_index != other.m_index) {
     stringstream error_buffer;
     error_buffer << "The \"" << other.m_index << "\" environment variable"
-                 << " cannot be copied to the \"" << m_index << "\" environment variable."
-                 << endl;
+                 << " cannot be copied to the \"" << m_index << "\" environment variable." << endl;
     throw std::invalid_argument(error_buffer.str());
   }
-
 }
-
 
 //----------------------------------------------------------------------------
 
-Environment::Environment(bool keep_same)
-  : m_old_values{}, m_keep_same{keep_same}, m_added_variables{} {
-
-}
+Environment::Environment(const bool keep_same) : m_keep_same{keep_same} {}
 
 Environment& Environment::restore() {
-
   for (const auto& v : m_added_variables) {
     unSetEnv(v);
   }
 
-  for (const auto& v : m_old_values) {
-    setEnv(v.first, v.second);
+  for (const auto& [key, value] : m_old_values) {
+    setEnv(key, value);
   }
 
   m_old_values = {};
@@ -191,58 +174,51 @@ Environment& Environment::restore() {
   return *this;
 }
 
-
 Environment::~Environment() {
   restore();
 }
 
 Environment::Variable Environment::operator[](const string& index) {
-
-  return Environment::Variable(*this, index);
-
+  return {*this, index};
 }
 
-const Environment::Variable Environment::operator[](const string& index) const {
-
-  return Environment::Variable(const_cast<Environment&>(*this), index);
-
+Environment::Variable Environment::operator[](const string& index) const {
+  return {const_cast<Environment&>(*this), index};
 }
 
-Environment& Environment::set(const string& index, const string& value) {
+Environment& Environment::set(const string& key, const string& value) {
 
-  if (m_old_values.find(index) == m_old_values.end()) {
-    if (hasKey(index)) {
-      if ((not m_keep_same) || (getEnv(index) != value)) {
-        m_old_values[index] = getEnv(index);
+  if (m_old_values.find(key) == m_old_values.end()) {
+    if (hasKey(key)) {
+      if (not m_keep_same || getEnv(key) != value) {
+        m_old_values[key] = getEnv(key);
       }
     } else {
-      m_added_variables.push_back(index);
+      m_added_variables.emplace_back(key);
     }
   }
 
-  setEnv(index, value);
+  setEnv(key, value);
 
   return *this;
-
 }
 
-Environment& Environment::unSet(const string& index) {
+Environment& Environment::unSet(const string& key) {
 
-  checkOutOfRange(index);
+  checkOutOfRange(key);
 
-  if (m_old_values.find(index) == m_old_values.end()) {
-    auto found_index = std::find(m_added_variables.begin(), m_added_variables.end(), index);
-    if (found_index != m_added_variables.end()) {
+  if (m_old_values.find(key) == m_old_values.end()) {
+    if (const auto found_index = std::find(m_added_variables.begin(), m_added_variables.end(), key);
+        found_index != m_added_variables.end()) {
       m_added_variables.erase(found_index);
     } else {
-      m_old_values[index] = getEnv(index);
+      m_old_values[key] = getEnv(key);
     }
   }
 
-  unSetEnv(index);
+  unSetEnv(key);
 
   return *this;
-
 }
 
 Environment& Environment::append(const string& index, const string& value) {
@@ -263,8 +239,8 @@ Environment& Environment::prepend(const string& index, const string& value) {
   return *this;
 }
 
-string Environment::get(const string& index, const string& default_value) const {
-  string value {default_value};
+string Environment::get(const string& index, const string& default_value) {
+  string value{default_value};
 
   if (hasKey(index)) {
     value = getEnv(index);
@@ -276,33 +252,29 @@ string Environment::get(const string& index, const string& default_value) const 
 bool Environment::hasKey(const string& index) {
 
   return isEnvSet(index);
-
 }
 
 void Environment::commit() {
 
-  m_old_values = {};
+  m_old_values      = {};
   m_added_variables = {};
-
 }
 
-string Environment::generateScript(Environment::ShellType type) const {
+string Environment::generateScript(const ShellType type) const {
 
-  using std::map;
   using boost::format;
+  using std::map;
 
-  stringstream script_text {};
+  stringstream script_text{};
 
-  map<ShellType, string> set_cmd {{ShellType::sh, "export %s=%s"},
-                                       {ShellType::csh, "setenv %s %s"}};
-  map<ShellType, string> unset_cmd {{ShellType::sh, "unset %s"},
-                                         {ShellType::csh, "unsetenv %s"}};
+  map<ShellType, string> set_cmd{{sh, "export %s=%s"}, {csh, "setenv %s %s"}};
+  map<ShellType, string> unset_cmd{{sh, "unset %s"}, {csh, "unsetenv %s"}};
 
-  for (const auto& v : m_old_values) {
-    if (hasKey(v.first)) {
-      script_text << format(set_cmd[type]) % v.first % get(v.first) << endl;
+  for (const auto& [key, value] : m_old_values) {
+    if (hasKey(key)) {
+      script_text << format(set_cmd[type]) % key % get(key) << endl;
     } else {
-      script_text << format(unset_cmd[type]) % v.first << endl;
+      script_text << format(unset_cmd[type]) % key << endl;
     }
   }
 
@@ -311,9 +283,7 @@ string Environment::generateScript(Environment::ShellType type) const {
   }
 
   return script_text.str();
-
 }
-
 
 void Environment::checkOutOfRange(const string& index) {
 
@@ -322,7 +292,6 @@ void Environment::checkOutOfRange(const string& index) {
     error_buffer << "The environment doesn't contain the " << index << " variable." << endl;
     throw std::out_of_range(error_buffer.str());
   }
-
 }
 
 ostream& operator<<(ostream& stream, const Environment::Variable& v) {
@@ -330,7 +299,6 @@ ostream& operator<<(ostream& stream, const Environment::Variable& v) {
   stream << v.value();
 
   return stream;
-
 }
 
 Environment::Variable operator+(const string& value, const Environment::Variable& other) {
@@ -340,7 +308,6 @@ Environment::Variable operator+(const string& value, const Environment::Variable
   result.prepend(value);
 
   return result;
-
 }
 
 }  // namespace Elements

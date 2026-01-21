@@ -1,21 +1,55 @@
-macro(include_guard)
-  get_filename_component(file_to_include ${CMAKE_CURRENT_LIST_FILE} NAME_WE)
-  string(TOUPPER ${file_to_include} file_to_include_upcase)
-  if(${file_to_include_upcase}_IS_INCLUDED)
-    return()
-  else()
-    set(${file_to_include_upcase}_IS_INCLUDED 1)
-    set(FULL_INCLUDE_FILE_LIST ${FULL_INCLUDE_FILE_LIST} ${file_to_include_upcase}_IS_INCLUDED)
-  endif()
-endmacro()
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
 
-include_guard()
+if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_LESS 3.1 OR USE_DEBUG_PRINT)
+  macro(include_guard)
+
+    set(_EXTRA_ARGS ${ARGN})
+    list(LENGTH _EXTRA_ARGS _EXTRA_ARGS_LENGTH)
+
+    set(GUARD_RANGE "GLOBAL")
+    if(_EXTRA_ARGS_LENGTH GREATER 0)
+      set(GUARD_RANGE ${ARGV0})
+    endif()
+
+
+    get_filename_component(file_to_include ${CMAKE_CURRENT_LIST_FILE} NAME_WE)
+    get_filename_component(file_to_include_dir ${CMAKE_CURRENT_LIST_FILE} DIRECTORY)
+    get_filename_component(file_to_include_name ${CMAKE_CURRENT_LIST_FILE} NAME)
+    string(TOUPPER ${file_to_include} file_to_include_upcase)
+    get_property(_full_list ${GUARD_RANGE} PROPERTY FULL_INCLUDE_FILE_LIST)
+    list (FIND _full_list "${file_to_include}" _index)
+    if (${_index} GREATER -1)
+      if(USE_DEBUG_PRINT)
+        message("${file_to_include} is already included")
+      endif()
+#      return()
+    else()
+      set_property(${GUARD_RANGE} APPEND PROPERTY FULL_INCLUDE_FILE_LIST "${file_to_include}")
+      if(USE_DEBUG_PRINT)
+        message("Including ${file_to_include_dir}/${file_to_include_name}")
+      endif()
+    endif()
+    get_property(_full_list ${GUARD_RANGE} PROPERTY FULL_INCLUDE_FILE_LIST)
+  endmacro()
+endif()
+
+include_guard(GLOBAL)
+
+set(version_regex "v?([0-9]+)[r.]([0-9]+)([p.]([0-9]+))?")
+set(full_version_regex "${version_regex}|HEAD.*")
 
 macro(reset_include_guards)
 
-  foreach(_s1 ${FULL_INCLUDE_FILE_LIST})
-    set(${_s1} 0)
-  endforeach()
+    set(_EXTRA_ARGS ${ARGN})
+    list(LENGTH _EXTRA_ARGS _EXTRA_ARGS_LENGTH)
+
+    set(GUARD_RANGE "GLOBAL")
+    if(_EXTRA_ARGS_LENGTH GREATER 0)
+      set(GUARD_RANGE ${ARGV0})
+    endif()
+
+
+  set_property(${GUARD_RANGE} PROPERTY FULL_INCLUDE_FILE_LIST2 "")
 
 endmacro()
 
@@ -80,7 +114,7 @@ endfunction()
 
 
 function(get_all_sys_includes inc_list)
-    
+
   set(full_list)
   foreach(d ${CMAKE_PREFIX_PATH})
     if(NOT "${d}" STREQUAL "/")
@@ -105,7 +139,7 @@ function(get_all_sys_includes inc_list)
   endif()
 
   set(${inc_list} ${full_list} PARENT_SCOPE)
-  
+
 endfunction()
 
 
@@ -115,7 +149,7 @@ function(is_sys_include is_sys dir)
   get_all_sys_includes(inc_list)
 
   list(FIND inc_list ${dir} _index)
-   
+
   if(_index GREATER -1)
     set(${is_sys} TRUE PARENT_SCOPE)
   endif()
@@ -197,6 +231,27 @@ function(split_filename_ext filename_ne filename_ext filename)
   set(${filename_ext} ${CMAKE_MATCH_2} PARENT_SCOPE)
 endfunction()
 
+
+function(strip_template_extension output_filename filename)
+
+  CMAKE_PARSE_ARGUMENTS(STRIP_TMPL "" "NAME" "" ${ARGN})
+
+  if(NOT STRIP_TMPL_NAME)
+    set(STRIP_TMPL_NAME "in")
+  endif()
+
+
+  split_filename_ext(filename_ne filename_ext ${filename})
+
+  if("${filename_ext}" STREQUAL "${STRIP_TMPL_NAME}")
+    set(${output_filename} ${filename_ne} PARENT_SCOPE)
+  else()
+    set(${output_filename} ${filename} PARENT_SCOPE)
+  endif()
+
+endfunction()
+
+
 function(find_file_to_configure template_file_name)
 
   CMAKE_PARSE_ARGUMENTS(TEMPLATE_CONF "" "OUTPUTDIR;OUTPUTNAME;FILETYPE" "PATHS;PATH_SUFFIXES" ${ARGN})
@@ -265,7 +320,7 @@ endmacro()
 macro(elements_recurse_dirs VAR)
   set(${VAR})
   foreach(fp ${ARGN})
-  
+
     file(GLOB_RECURSE files ${fp}/*)
     set(dir_list)
     foreach(file_path ${files})
@@ -273,14 +328,25 @@ macro(elements_recurse_dirs VAR)
       set(dir_list ${dir_list} ${dir_path})
     endforeach()
     list(REMOVE_DUPLICATES dir_list)
-    set(${VAR} ${${VAR}} ${dir_list})  
+    set(${VAR} ${${VAR}} ${dir_list})
   endforeach()
 endmacro()
+
+macro(elements_recurse_include_files VAR)
+  set(${VAR})
+  foreach(fp ${ARGN})
+    file(GLOB_RECURSE files ${fp}/*.[hH] ${fp}/*.hxx ${fp}/*.hpp)
+    if(files)
+      set(${VAR} ${${VAR}} ${files})
+    endif()
+  endforeach()
+endmacro()
+
 
 macro(elements_recurse_cython_include_dirs VAR)
   set(${VAR})
   foreach(fp ${ARGN})
-  
+
     file(GLOB_RECURSE files ${fp}/*.px[di])
     set(dir_list)
     foreach(file_path ${files})
@@ -290,21 +356,21 @@ macro(elements_recurse_cython_include_dirs VAR)
     if(dir_list)
       list(REMOVE_DUPLICATES dir_list)
     endif()
-    set(${VAR} ${${VAR}} ${dir_list})  
+    set(${VAR} ${${VAR}} ${dir_list})
   endforeach()
 endmacro()
 
 function(elements_recurse result)
 
   CMAKE_PARSE_ARGUMENTS(ARG "" "PATTERN" "" ${ARGN})
-    
-    
+
+
   if(NOT ARG_PATTERN)
     set(ARG_PATTERN "*")
   endif()
-  
+
   set(total_dir_list)
-  
+
   foreach(fp ${ARG_UNPARSED_ARGUMENTS})
     file(GLOB_RECURSE files ${fp}/${ARG_PATTERN})
     set(dir_list)
@@ -315,13 +381,13 @@ function(elements_recurse result)
     if(dir_list)
       list(REMOVE_DUPLICATES dir_list)
     endif()
-    set(total_dir_list ${total_dir_list} ${dir_list})  
+    set(total_dir_list ${total_dir_list} ${dir_list})
   endforeach()
-  
+
   if(total_dir_list)
     list(REMOVE_DUPLICATES total_dir_list)
   endif()
-  
+
   set(${result} ${total_dir_list} PARENT_SCOPE)
 
 endfunction()
@@ -385,7 +451,7 @@ endmacro(copy_dir)
 
 function(get_full_binary_list binary_tag binary_base full_list)
 
-  if(NOT binary_tag STREQUAL "")
+  if(NOT "${binary_tag}" STREQUAL "")
     list(APPEND the_list "${binary_tag}")
   endif()
 
@@ -613,7 +679,7 @@ function(get_project_from_file config_file project version dep_list)
   file(READ ${config_file} config_file_data)
   filter_comments(config_file_data)
 
-  if(cfg_file STREQUAL "CMakeLists.txt")
+  if("${cfg_file}" STREQUAL "CMakeLists.txt")
 
     string(REGEX MATCH "[ \t]*(elements_project)[ \t]*\\(([^)]+)\\)" match_use ${config_file_data})
     set(match_use ${CMAKE_MATCH_2})
@@ -678,7 +744,7 @@ function(check_project_version_from_file config_file project version match_found
 
   get_project_from_file(${config_file} file_project_name file_version_name file_project_dep_list)
 
-  if( (project STREQUAL file_project_name) AND (version STREQUAL file_version_name) )
+  if( ("${project}" STREQUAL "${file_project_name}") AND ("${version}" STREQUAL "${file_version_name}") )
     set(has_found TRUE)
   endif()
 
@@ -689,7 +755,7 @@ endfunction()
 
 
 function(get_rpm_dep_list project_use package_suffix squeezed_install output_var)
-  
+
   set(output_str_list)
 
   set(ARGN_ ${project_use})
@@ -715,28 +781,29 @@ function(get_rpm_dep_list project_use package_suffix squeezed_install output_var
 	set(output_str_list "${output_str_list}, ${other_project}_${other_project_version}")
       endif()
     endif()
-    
-    
+
+
     list(REMOVE_AT ARGN_ 0 1)
   endwhile()
 
-  if(NOT squeezed_install)
-    if(package_suffix STREQUAL "")
-      set(output_str_list "${output_str_list}, EuclidEnv")
-    endif()
-  endif()
-    
+# TODO: to renable with ElementsEnv for the non-backward compatible Elements version (6.0)
+#  if(NOT squeezed_install)
+#    if("${package_suffix}" STREQUAL "")
+#      set(output_str_list "${output_str_list}, EuclidEnv")
+#    endif()
+#  endif()
+
   set(${output_var} ${output_str_list} PARENT_SCOPE)
 
 endfunction()
 
 
 function(get_rpm_dep_lines project_use package_suffix squeezed_install line_prefix output_var)
-  
+
   set(output_str_lines)
 
   set(ARGN_ ${project_use})
-    
+
   while(ARGN_)
     list(LENGTH ARGN_ len)
     if(len LESS 2)
@@ -751,7 +818,7 @@ function(get_rpm_dep_lines project_use package_suffix squeezed_install line_pref
     else()
       set(other_proj_pack_name "${other_project}_${other_project_version}")
     endif()
-    
+
     if(package_suffix)
       set(other_proj_pack_name "${other_proj_pack_name}-${package_suffix}")
     endif()
@@ -763,7 +830,7 @@ function(get_rpm_dep_lines project_use package_suffix squeezed_install line_pref
     endif()
 
     if(line_prefix)
-      set(other_proj_pack_line "${line_prefix}: ${other_proj_pack_line}")  
+      set(other_proj_pack_line "${line_prefix}: ${other_proj_pack_line}")
     endif()
 
 
@@ -771,7 +838,7 @@ function(get_rpm_dep_lines project_use package_suffix squeezed_install line_pref
       set(output_str_lines "${other_proj_pack_line}")
     else()
       set(output_str_lines "${output_str_lines}
-${other_proj_pack_line}")    
+${other_proj_pack_line}")
     endif()
 
     list(REMOVE_AT ARGN_ 0 1)
@@ -782,42 +849,29 @@ ${other_proj_pack_line}")
 endfunction()
 
 function(get_rpm_sys_dep_lines dep_list line_prefix output_var)
-  
+
   set(output_str_lines)
-  
+
   list(REMOVE_DUPLICATES dep_list)
-  
+
   foreach(other_sys_pack_line ${dep_list})
 
     if(line_prefix)
-      set(other_sys_pack_line "${line_prefix}: ${other_sys_pack_line}")  
+      set(other_sys_pack_line "${line_prefix}: ${other_sys_pack_line}")
     endif()
-    
+
     if( "${output_str_lines}" STREQUAL "")
       set(output_str_lines "${other_sys_pack_line}")
     else()
       set(output_str_lines "${output_str_lines}
-${other_sys_pack_line}")    
+${other_sys_pack_line}")
     endif()
 
   endforeach()
-  
+
   set(${output_var} ${output_str_lines} PARENT_SCOPE)
 
 endfunction()
-
-function(get_arch_lib_dir output_var)
-
-  if(EXISTS /usr/lib64)
-    set(lib_name lib64)
-  else()
-    set(lib_name lib)
-  endif()
-
-  set(${output_var} ${lib_name} PARENT_SCOPE)
-
-endfunction()
-
 
 macro(print_all_variables)
   get_cmake_property(_variableNames VARIABLES)
@@ -830,16 +884,19 @@ endmacro()
 
 function(find_python_module module)
 
-    find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+    find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
 
-    string(TOUPPER ${module} module_upper)
+
+    string(TOUPPER ${module} module_upper_tmp)
+    string(REPLACE "." "_" module_upper ${module_upper_tmp})
+
     if(NOT PY_${module_upper})
-        if(ARGC GREATER 1 AND ARGV1 STREQUAL "REQUIRED")
+        if(ARGC GREATER 1 AND "${ARGV1}" STREQUAL "REQUIRED")
             set(${module}_FIND_REQUIRED TRUE)
         endif()
         # A module's location is usually a directory, but for binary modules
         # it's a .so file.
-        execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
+        execute_process(COMMAND "${Python_EXECUTABLE}" "-c"
             "import re, ${module}; print(re.compile('/__init__.py.*').sub('',${module}.__file__))"
             RESULT_VARIABLE _${module}_status
             OUTPUT_VARIABLE _${module}_location
@@ -867,21 +924,21 @@ function(elements_include_directories)
   foreach(d ${ELEMENTS_INC_UNPARSED_ARGUMENTS})
     set(_is_loc FALSE)
     starts_with_loc_include(_is_loc ${d})
-#    debug_print("${d} is loc: ${_is_loc}")
+#    debug_print("elements_include_directories --> ${d} is loc: ${_is_loc}")
     set(_is_this FALSE)
     starts_with_this_project(_is_this ${d})
-#    debug_print("${d} is this: ${_is_this}")
+#    debug_print("elements_include_directories --> ${d} is this: ${_is_this}")
 
     if(_is_this)
       set(_is_loc TRUE)
     endif()
-   
+
     set(use_sys FALSE)
     if(HIDE_SYSINC_WARNINGS)
       if(_is_loc)
         set(use_sys FALSE)
       else()
-        set(use_sys TRUE)      
+        set(use_sys TRUE)
       endif()
     else()
       set(use_sys FALSE)
@@ -891,7 +948,7 @@ function(elements_include_directories)
       if(_is_this)
         set(use_sys FALSE)
       else()
-        set(use_sys TRUE)      
+        set(use_sys TRUE)
       endif()
     endif()
 
@@ -938,7 +995,7 @@ function(find_first_file file_list first_file)
      if(EXISTS "${f}")
        set(first_f ${f})
        break()
-     endif()  
+     endif()
   endforeach()
 
   set(${first_file} ${first_f} PARENT_SCOPE)

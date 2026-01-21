@@ -18,26 +18,25 @@
 
 #include "ElementsKernel/Sleep.h"
 
-#include <thread>                     // for this_thread
-#include <chrono>                     // for chrono
-#include <cstdint>                    // for int64_t
+#include <chrono>   // for chrono
+#include <cstdint>  // for int64_t
+#include <thread>   // for this_thread
 
 using std::this_thread::sleep_for;
 
 namespace Elements {
 
-
 /** @brief Small variation on the sleep function for seconds sleep.
  * @author Hubert Degaudenzi
  */
-void normalSleep(int sec) {
+void normalSleep(const int sec) {
   sleep_for(std::chrono::seconds(sec));
 }
 
 /** @brief Small variation on the sleep function for nanoseconds sleep.
  * @author Hubert Degaudenzi
  */
-void nanoSleep(std::int64_t nsec) {
+void nanoSleep(const std::int64_t nsec) {
   sleep_for(std::chrono::nanoseconds(nsec));
 }
 

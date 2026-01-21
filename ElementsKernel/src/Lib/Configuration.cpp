@@ -1,6 +1,6 @@
 /**
  * @file Configuration.cpp
- *
+ * @brief Implementation of the Configuration functions
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *
@@ -22,49 +22,58 @@
 
 #include "ElementsKernel/Configuration.h"
 
-#include <algorithm>                      // for remove_if
-#include <iterator>
-#include <map>
-#include <string>                         // for string
-#include <vector>                         // for vector
+#include <algorithm>  // for remove_if
+#include <string>     // for string
+#include <vector>     // for vector
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
+#include "ElementsKernel/Path.h"    // for Path::VARIABLE, Path::Type
+#include "ElementsKernel/System.h"  // for DEFAULT_INSTALL_PREFIX
 
-#include "ElementsKernel/Path.h"          // for Path::VARIABLE, Path::Type
-#include "ElementsKernel/System.h"        // for DEFAULT_INSTALL_PREFIX
-
-                                          // for Path::getLocationsFromEnv
 using std::string;
-using boost::filesystem::path;
 
 namespace Elements {
+inline namespace Kernel {
 
 string getConfigurationVariableName() {
   return Path::VARIABLE.at(Path::Type::configuration);
 }
 
 // Instantiation of the most expected types
-template path getConfigurationPath(const path& file_name, bool raise_exception);
-template path getConfigurationPath(const string& file_name, bool raise_exception);
+template Path::Item getConfigurationPath(const Path::Item& file_name, bool raise_exception);
+template Path::Item getConfigurationPath(const string& file_name, bool raise_exception);
 
-std::vector<path> getConfigurationLocations(bool exist_only) {
+std::vector<Path::Item> getConfigurationLocations(const bool exist_only) {
 
-  auto location_list = Path::getLocationsFromEnv(Path::VARIABLE.at(Path::Type::configuration), exist_only);
+  auto location_list = getLocations(Path::Type::configuration, exist_only);
 
   // the search is extended to the default system /usr/share/conf
-  location_list.push_back(path(System::DEFAULT_INSTALL_PREFIX) / "share" / "conf");
+  location_list.emplace_back(Path::Item(System::DEFAULT_INSTALL_PREFIX) / "share" / "conf");
 
   if (exist_only) {
-    auto new_end = std::remove_if(location_list.begin(),
-                                  location_list.end(),
-                                  [](const path& p){
-                                     return (not boost::filesystem::exists(p));
-                                  });
+    const auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
+      return not exists(p);
+    });
     location_list.erase(new_end, location_list.end());
   }
 
   return location_list;
 }
 
+namespace Configuration {
+
+string getVariableName() {
+  return getConfigurationVariableName();
+}
+
+// instantiation of the most expected types
+template Path::Item getPath(const Path::Item& file_name, bool raise_exception);
+template Path::Item getPath(const std::string& file_name, bool raise_exception);
+
+std::vector<Path::Item> getLocations(const bool exist_only) {
+  return getConfigurationLocations(exist_only);
+}
+
+}  // namespace Configuration
+
+}  // namespace Kernel
 }  // namespace Elements

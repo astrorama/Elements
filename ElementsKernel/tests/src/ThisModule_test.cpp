@@ -21,14 +21,14 @@
 
 #include "ElementsKernel/ThisModule.h"
 
+#include <dlfcn.h>   // for Dl_info
+#include <libgen.h>  // for __xpg_basename, basename
+
 #include <boost/test/unit_test.hpp>
 
-#include <libgen.h>
+#include "ElementsKernel/ModuleInfo.h"  // for ModuleInfo, exeName
 
-
-using Elements::System::getThisModuleInfo;
-using Elements::System::getThisExecutableInfo;
-using Elements::System::exeName;
+namespace Elements {
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(ThisModule_test)
@@ -37,29 +37,27 @@ BOOST_AUTO_TEST_SUITE(ThisModule_test)
 BOOST_AUTO_TEST_CASE(ThisModuleName_test) {
 
   // Get the present module. Here this must be the test executable
-  BOOST_CHECK_EQUAL(getThisModuleInfo().name(), "ThisModule_test");
-
+  BOOST_CHECK_EQUAL(System::getThisModuleInfo().name(), "ThisModule_test");
 }
 
 BOOST_AUTO_TEST_CASE(ThisExeName_test) {
 
   // Get the present module. Here this must be the test executable
 
-  BOOST_CHECK_EQUAL(::basename(const_cast<char*>(exeName().c_str())), "ThisModule_test");
-
+  BOOST_CHECK_EQUAL(::basename(const_cast<char*>(System::exeName().c_str())), "ThisModule_test");
 }
 
 BOOST_AUTO_TEST_CASE(ThisModuleConversion_test) {
 
-  Dl_info info = getThisModuleInfo();
+  const Dl_info info = System::getThisModuleInfo();
 
   BOOST_CHECK_EQUAL(::basename(const_cast<char*>(info.dli_fname)), "ThisModule_test");
-
 }
-
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE_END()
 //-----------------------------------------------------------------------------
 //
 // End of the Boost tests
+
+}  // namespace Elements

@@ -16,9 +16,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-
 import os.path
-import py.test
+import pytest
 import unittest
 
 from ElementsKernel.Temporary import TempDir, TempEnv
@@ -26,8 +25,11 @@ from ElementsKernel.Temporary import TempDir, TempEnv
 from ElementsServices.DataSync import DataSync
 from ElementsServices.DataSync.IrodsSynchronizer import irodsIsInstalled
 from ElementsServices.DataSync.WebdavSynchronizer import webdavIsInstalled
+from ElementsServices.DataSync.DataSyncUtils import getWorkdirVariable
 
-from fixtures.ConfigFilesFixture import *
+from fixtures.ConfigFilesFixture import theDependencyConfig, theLocalFiles
+from fixtures.ConfigFilesFixture import aBadConnectionConfig, theWebdavFrConfig
+from fixtures.ConfigFilesFixture import theIrodsFrConfig
 
 
 class TestDataSync(unittest.TestCase):
@@ -36,25 +38,26 @@ class TestDataSync(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.m_top_dir = TempDir(prefix="DataSync_test")
         self.m_env = TempEnv()
-        self.m_env["WORKSPACE"] = os.path.join(self.m_top_dir.path(), "workspace")
-        
+        self.m_workdir_var = getWorkdirVariable()
+        self.m_env[self.m_workdir_var] = os.path.join(self.m_top_dir.path(), "workspace")
+
     def tearDown(self):
         unittest.TestCase.tearDown(self)
         del self.m_top_dir
 
-    def checkDownload(self, connectionConfig):
-        sync = DataSync(connectionConfig, theDependencyConfig())
+    def checkDownload(self, connection_config):
+        sync = DataSync(connection_config, theDependencyConfig())
         sync.download()
         for file in theLocalFiles():
             abs_path = sync.absolutePath(file)
             assert os.path.isfile(abs_path)
             os.remove(abs_path)
 
-    def checkFallback(self, fallbackConfig):
+    def checkFallback(self, fallback_config):
         sync = DataSync(aBadConnectionConfig(), theDependencyConfig())
-        with py.test.raises(Exception):
+        with pytest.raises(Exception):
             sync.download()
-        sync.downloadWithFallback(fallbackConfig)
+        sync.downloadWithFallback(fallback_config)
         for file in theLocalFiles():
             abs_path = sync.absolutePath(file)
             assert os.path.isfile(abs_path)

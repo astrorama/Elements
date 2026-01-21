@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -16,24 +16,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
-#include <vector>
-#include <boost/program_options.hpp>
+#include <cstddef>    // for size_t
+#include <exception>  // for exception
+#include <stdexcept>  // for runtime_error
+#include <string>     // for basic_string, allocator, string, operator==, operator+
+#include <vector>     // for vector
 
-#include "ElementsServices/DataSync/ConnectionConfiguration.h"
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include <boost/program_options.hpp>  // for value, typed_value, variables_map, options_description_easy_init, variable_value, notify, parse_config_file, store, options_description, program_options
 
-namespace ElementsServices {
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration, OverwritingPolicy, DataHost, UnknownHost
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for lower, valueIsListed, confFilePath, localWorkspacePrefix, path
+
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
 using std::string;
 
-ConnectionConfiguration::ConnectionConfiguration(const path& filename) {
+ConnectionConfiguration::ConnectionConfiguration(const path& filename) : host(WEBDAV), overwriting_policy(ABORT) {
   parseConfigurationFile(filename);
 }
 
 bool ConnectionConfiguration::overwritingAllowed() const {
-  return overwritingPolicy == OverwritingPolicy::OVERWRITE;
+  return overwriting_policy == OVERWRITE;
 }
 
 void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
@@ -42,72 +47,65 @@ void ConnectionConfiguration::parseConfigurationFile(const path& filename) {
   namespace po = boost::program_options;
 
   /* Declare options */
-  po::options_description options { };
-  options.add_options()
-      ("host", po::value<string>(),
-          "Hosting solution: iRODS or WebDAV (case insensitive)")
-      ("host-url", po::value<string>()->default_value(""),
-          "Host URL if needed")
-      ("user", po::value<string>()->default_value(""),
-          "User name if needed")
-      ("password", po::value<string>()->default_value(""),
-          "Password if needed")
-      ("overwrite", po::value<string>()->default_value("no"),
-          "Allow overwriting local files if they already exist")
-      ("distant-workspace", po::value<string>(),
-          "Path to distant repository workspace")
-      ("local-workspace", po::value<string>(),
-          "Path to local repository workspace")
-      ("tries", po::value<int>()->default_value(4),
-          "Number of download tries");
+  po::options_description options{};
+  options.add_options()("host", po::value<string>(), "Hosting solution: iRODS or WebDAV (case insensitive)")(
+      "host-url", po::value<string>()->default_value(""),
+      "Host URL if needed")("user", po::value<string>()->default_value(""), "User name if needed")(
+      "password", po::value<string>()->default_value(""), "Password if needed")(
+      "overwrite", po::value<string>()->default_value("no"), "Allow overwriting local files if they already exist")(
+      "distant-workspace", po::value<string>(), "Path to distant repository workspace")(
+      "local-workspace", po::value<string>(),
+      "Path to local repository workspace")("tries", po::value<int>()->default_value(4), "Number of download tries");
 
   /* Get config file path */
-  path abs_path = confFilePath(filename);
+  const path abs_path = confFilePath(filename);
 
   /* Read config file */
   po::variables_map vm;
   try {
-    po::store(po::parse_config_file<char>(abs_path.c_str(), options), vm);
-    po::notify(vm);
-  } catch (std::exception &e) {
-    throw e.what();
+    store(po::parse_config_file<char>(abs_path.c_str(), options), vm);
+    notify(vm);
+  } catch (std::exception& e) {
+    throw std::runtime_error("Error while reading configuration file: " + abs_path.string() + " - " + e.what());
   }
 
   /* Configure object */
   parseHost(vm["host"].as<string>());
-  hostUrl = vm["host-url"].as<string>();
-  user = vm["user"].as<string>();
+  host_url = vm["host-url"].as<string>();
+  user     = vm["user"].as<string>();
   password = vm["password"].as<string>();
   parseOverwritingPolicy(vm["overwrite"].as<string>());
-  distantRoot = vm["distant-workspace"].as<string>();
-  localRoot = localWorkspacePrefix() / vm["local-workspace"].as<string>();
-  tries = static_cast<size_t>(vm["tries"].as<int>());
-
+  distant_root = vm["distant-workspace"].as<string>();
+  local_root   = localWorkspacePrefix() / vm["local-workspace"].as<string>();
+  tries        = static_cast<std::size_t>(vm["tries"].as<int>());
 }
 
 void ConnectionConfiguration::parseHost(const string& name) {
-  const string uncased = lower(name);
-  if (uncased == "irods") {
-    host = DataHost::IRODS;
+  if (const string uncased = lower(name); uncased == "irods") {
+    host = IRODS;
   } else if (uncased == "webdav") {
-    host = DataHost::WEBDAV;
+    host = WEBDAV;
   } else {
     throw UnknownHost(name);
   }
 }
 
 void ConnectionConfiguration::parseOverwritingPolicy(const string& policy) {
-  const std::vector<string> overwriteAllowedOptions = { "true", "yes", "y" };
-  const std::vector<string> overwriteForbiddenOptions = { "false", "no", "n" };
-  string uncased = lower(policy);
-  if (valueIsListed(uncased, overwriteAllowedOptions)) {
-    overwritingPolicy = OverwritingPolicy::OVERWRITE;
-  } else if (valueIsListed(uncased, overwriteForbiddenOptions)) {
-    overwritingPolicy = OverwritingPolicy::ABORT;
+
+  using std::vector;
+
+  const vector<string> overwrite_allowed_options   = {"true", "yes", "y"};
+  const vector<string> overwrite_forbidden_options = {"false", "no", "n"};
+
+  if (const string uncased = lower(policy); valueIsListed(uncased, overwrite_allowed_options)) {
+    overwriting_policy = OVERWRITE;
+  } else if (valueIsListed(uncased, overwrite_forbidden_options)) {
+    overwriting_policy = ABORT;
   } else {
     throw std::runtime_error("I don't know this overwriting policy: " + policy);
   }
 }
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements

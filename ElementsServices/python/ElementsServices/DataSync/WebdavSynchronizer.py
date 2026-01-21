@@ -16,16 +16,17 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-import subprocess
+import subprocess  # nosec
+import shlex
 
-from .DataSynchronizer import *
+from .DataSynchronizer import DataSynchronizer
 
 
 def webdavIsInstalled ():
     """Check whether an iRODS client is installed.
     """
     try:
-        subprocess.check_call(shlex.split("wget -h"))
+        subprocess.check_call(shlex.split("wget -h"))  # nosec
         return True
     except OSError:
         return False
@@ -35,20 +36,15 @@ class WebdavSynchronizer (DataSynchronizer):
     """A data synchronizer for WebDAV hosts.
     """
 
-    def __init__ (self,
-            connection,
-            dependencies):
-        super(WebdavSynchronizer, self).__init__(connection, dependencies)
-
     def createDownloadCommand (self,
-            distantFile,
-            localFile):
+            distant_file,
+            local_file):
         user = self._connection.user
         password = self._connection.password
-        hostURL = self._connection.hostURL
+        hostURL = self._connection.host_url
         cmd = "wget --no-check-certificate "
         cmd += " --user=" + str(user)
         cmd += " --password=" + str(password)
-        cmd += " -O " + localFile + " " + str(hostURL) + "/" + distantFile
+        cmd += " -O " + local_file + " " + str(hostURL) + "/" + distant_file
         cmd += " --tries " + str(self._connection.tries)
         return cmd

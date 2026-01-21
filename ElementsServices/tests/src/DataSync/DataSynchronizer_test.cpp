@@ -16,12 +16,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include <map>  // for map
+
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
-#include "ElementsServices/DataSync/DataSynchronizer.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"     // for DataSync
+#include "ElementsServices/DataSync/DataSynchronizer.h"  // for DownloadFailed
 
-#include "fixtures/ConfigFilesFixture.h"
-#include "fixtures/MockDataSynchronizer.h"
+#include "fixtures/MockDataSynchronizer.h"  // for MockDataSynchronizer
 
 namespace DataSync = ElementsServices::DataSync;
 

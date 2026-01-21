@@ -1,8 +1,8 @@
-/*
+/**
  * UnitTestExample_test.cpp
  *
  *  Created on: Sep 22, 2015
- *      Author: fdubath
+ *      Author: Florian Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
@@ -19,67 +19,62 @@
  *
  */
 
-#include "ElementsExamples/UnitTestExample.h"  // Access the objects you want to test
+#include "ElementsExamples/UnitTestExample.h"
 
-#include <vector>                              // for vector
+#include <cstddef>  // for size_t
+#include <vector>   // for vector
 
-#include <boost/test/unit_test.hpp>            // Gives access to the unit test framework.
+#include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Exception.h"          // Exception
+#include "ElementsKernel/Exception.h"  // for Exception
 
-using std::vector;
 using Elements::Examples::UnitTestExample;
+using std::size_t;
+using std::vector;
 
 // Starts a test suite and name it.
 BOOST_AUTO_TEST_SUITE(UnitTestExample_test_suite)
 
-
 BOOST_AUTO_TEST_CASE(median_test) {
-  UnitTestExample tested_object {};
-  vector<vector<int>> input_vec {{1, 2, 3, 10, 101, 102},
-                                 {1, 2, 3, 11, 101, 102, 103},
-                                 {1, 2, 3, 10, 101, 102, 103, 500},
-                                 {1, 2, 3, 11, 101, 102, 103, 500, 501}
-                                };
-  vector<double> expected_result {6.5, 11, 55.5, 101};
+  const vector<vector<int>> input_vec{{1, 2, 3, 10, 101, 102},
+                                      {1, 2, 3, 11, 101, 102, 103},
+                                      {1, 2, 3, 10, 101, 102, 103, 500},
+                                      {1, 2, 3, 11, 101, 102, 103, 500, 501}};
+  const vector<double>      expected_result{6.5, 11, 55.5, 101};
 
   for (size_t test_id = 0; test_id < 4; ++test_id) {
+    UnitTestExample tested_object{};
     BOOST_CHECK_EQUAL(expected_result[test_id], tested_object.average(input_vec[test_id]));
   }
 }
 
-
 BOOST_AUTO_TEST_CASE(order_test) {
-  UnitTestExample tested_object{};
-  vector<int> input_vec_orderd {1, 2, 3, 11, 101, 102, 103};
-  vector<int> input_vec {103, 101, 2, 1, 3, 11, 102};
-  double expected_result {11};
+  UnitTestExample  tested_object{};
+  const vector     input_vec_ordered{1, 2, 3, 11, 101, 102, 103};
+  const vector     input_vec{103, 101, 2, 1, 3, 11, 102};
+  constexpr double expected_result{11};
 
-  BOOST_CHECK_EQUAL(expected_result, tested_object.average(input_vec_orderd));
+  BOOST_CHECK_EQUAL(expected_result, tested_object.average(input_vec_ordered));
   BOOST_CHECK_EQUAL(expected_result, tested_object.average(input_vec));
 }
 
-
 BOOST_AUTO_TEST_CASE(mean_test) {
-  UnitTestExample tested_object{};
-  vector<vector<int>> input_vec {{1}, {1, 2}, {1, 2, 4}, {1, 2, 4, 8},
-                                 {1, 2, 4, 8, 16}};
-  vector<double> expected_result {1.0, 1.5, 2.33333333333333333, 3.75, 6.2};
-  double local_tolerence {1e-10};
+  const vector<vector<int>> input_vec{{1}, {1, 2}, {1, 2, 4}, {1, 2, 4, 8}, {1, 2, 4, 8, 16}};
+  const vector              expected_result{1.0, 1.5, 2.33333333333333333, 3.75, 6.2};
 
   for (size_t test_id = 0; test_id < 5; ++test_id) {
-    BOOST_CHECK_CLOSE(expected_result[test_id], tested_object.average(input_vec[test_id]), local_tolerence);
+    constexpr double local_tolerance{1e-10};
+    UnitTestExample  tested_object{};
+    BOOST_CHECK_CLOSE(expected_result[test_id], tested_object.average(input_vec[test_id]), local_tolerance);
   }
 }
 
-
 BOOST_AUTO_TEST_CASE(exception_test) {
-  UnitTestExample tested_object{};
-  vector<int> input_vec {};
+  UnitTestExample   tested_object{};
+  const vector<int> input_vec{};
 
   BOOST_CHECK_THROW(tested_object.average(input_vec), Elements::Exception);
 }
-
 
 // Ends the test suite
 BOOST_AUTO_TEST_SUITE_END()

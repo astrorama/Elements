@@ -1,4 +1,5 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 #===============================================================================
 # Load elements_subdir macro here
 # Examples:
@@ -36,6 +37,7 @@ elements_add_library(ElementsServices src/lib/DataSync/*.cpp src/lib/*.cpp
                      LINK_LIBRARIES ElementsKernel
                      INCLUDE_DIRS ElementsKernel
                      PUBLIC_HEADERS ElementsServices)
+add_library(Elements::Services ALIAS ElementsServices)
 
 #===============================================================================
 # Declare the executables here
@@ -66,7 +68,7 @@ elements_add_unit_test(DataSynchronizer tests/src/DataSync/DataSynchronizer_test
                        EXECUTABLE ElementsServices_DataSynchronizer_test
                        LINK_LIBRARIES ElementsServices
                        TYPE Boost)
-elements_add_unit_test(DataSynchronizerMaker tests/src/DataSync/DataSynchronizerMaker_test.cpp 
+elements_add_unit_test(DataSynchronizerMaker tests/src/DataSync/DataSynchronizerMaker_test.cpp
                        EXECUTABLE ElementsServices_DataSynchronizerMaker_test
                        LINK_LIBRARIES ElementsServices
                        TYPE Boost)

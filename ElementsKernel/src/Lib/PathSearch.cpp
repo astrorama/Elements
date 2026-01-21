@@ -19,44 +19,42 @@
  *
  */
 
-#include "ElementsKernel/PathSearch.h"  // for SearchType, etc
+#include "ElementsKernel/PathSearch.h"
 
-#include <ostream>                      // for operator<<, basic_ostream, etc
-#include <string>                       // for string, char_traits
-#include <vector>                       // for vector
+#include <string>  // for allocator, string, basic_string
+#include <vector>  // for vector
 
-#include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>  // for is_any_ofF, is_any_of, split
+#include <boost/filesystem.hpp>        // for is_directory>
 
-#include "ElementsKernel/Exception.h"   // for Exception
-#include "ElementsKernel/System.h"
-#include "ElementsKernel/Logging.h"     // for the logger
+#include "ElementsKernel/Environment.h"  // for Environment
+#include "ElementsKernel/Logging.h"      // for Logging
+#include "ElementsKernel/Path.h"         // for Item
 
-using std::vector;
 using std::string;
+using std::vector;
 
-using boost::filesystem::path;
 using boost::filesystem::directory_iterator;
 using boost::filesystem::recursive_directory_iterator;
 
 namespace Elements {
+inline namespace Kernel {
 
 namespace {
-  auto log = Logging::getLogger("PathSearch");
+auto log = Logging::getLogger("PathSearch");
 }
 
 // template instantiations
 
-template vector<string> pathSearch<string, directory_iterator>(const string& searched_name, string directory);
-template vector<path> pathSearch<path, directory_iterator>(const string& searched_name, path directory);
+template vector<string>     pathSearch<string, directory_iterator>(const string& searched_name, string directory);
+template vector<Path::Item> pathSearch<Path::Item, directory_iterator>(const string& searched_name,
+                                                                       Path::Item    directory);
 template vector<string> pathSearch<string, recursive_directory_iterator>(const string& searched_name, string directory);
-template vector<path> pathSearch<path, recursive_directory_iterator>(const string& searched_name, path directory);
+template vector<Path::Item> pathSearch<Path::Item, recursive_directory_iterator>(const string& searched_name,
+                                                                                 Path::Item    directory);
 
-template vector<path> pathSearch(const string& searched_name, path directory,
-                                 SearchType search_type);
-template vector<string> pathSearch(const string& searched_name, string directory,
-                                   SearchType search_type);
-
+template vector<Path::Item> pathSearch(const string& searched_name, Path::Item directory, SearchType search_type);
+template vector<string>     pathSearch(const string& searched_name, string directory, SearchType search_type);
 
 /**
  * Iterate over the different directories included in the path-like environment variable, i.e.,
@@ -65,36 +63,36 @@ template vector<string> pathSearch(const string& searched_name, string directory
  *
  * and call pathSearch(...) for each of them
  */
-vector<path> pathSearchInEnvVariable(const string& file_name,
-                                     const string& path_like_env_variable,
-                                     SearchType search_type) {
+vector<Path::Item> pathSearchInEnvVariable(const string& file_name, const string& path_like_env_variable,
+                                           const SearchType search_type) {
   // Placeholder for the to-be-returned search result
-  vector<path> search_results { };
+  vector<Path::Item> search_results{};
 
   // get the multiple path from the environment variable
-  string multiple_path {};
-  if (not System::getEnv(path_like_env_variable.c_str(), multiple_path)) {
-    log.warn() << "Environment variable \"" << path_like_env_variable
-                  << "\" is not defined !";
+  string multiple_path{};
+
+  if (Environment::hasKey(path_like_env_variable)) {
+    Environment current_env;
+    multiple_path = current_env[path_like_env_variable];
+  } else {
+    log.warn() << "Environment variable \"" << path_like_env_variable << "\" is not defined !";
   }
 
   // Tokenize the path elements
   vector<string> path_elements;
-  boost::split(path_elements, multiple_path, boost::is_any_of(";:"));
+  split(path_elements, multiple_path, boost::is_any_of(";:"));
 
   // Loop over all path elements
-  for (string path_element : path_elements) {
+  for (const string& path_element : path_elements) {
     // Check if directory exists
     if (boost::filesystem::exists(path_element) && boost::filesystem::is_directory(path_element)) {
       // loop recursively inside directory
-      auto single_path_results = pathSearch(file_name,
-                                            path { path_element },
-                                            search_type);
-      search_results.insert(search_results.end(),
-                            single_path_results.cbegin(), single_path_results.cend());
+      auto single_path_results = pathSearch(file_name, Path::Item{path_element}, search_type);
+      search_results.insert(search_results.end(), single_path_results.cbegin(), single_path_results.cend());
     }
   }
   return search_results;
 }
 
+}  // namespace Kernel
 }  // namespace Elements

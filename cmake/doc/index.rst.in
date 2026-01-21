@@ -4,7 +4,7 @@
 @PROJECT_NAME@ Documentation
 ================================================================
 * @PROJECT_DESCRIPTION@
-* Version: @CMAKE_PROJECT_VERSION@ 
+* Version: @CMAKE_PROJECT_VERSION@
 
 Project Overview
 ================
@@ -15,15 +15,15 @@ Project Overview
 
    doc_project
 
+   @SPHINX_CMAKE_MODULES@
+
 Modules
 =======
 
 .. toctree::
    :maxdepth: 5
 
-   elements_modules
-
-.. @SPHINX_EL_MODULES@
+   @SPHINX_EL_MODULES@
 
 API Documentation
 =================
@@ -32,7 +32,7 @@ API Documentation
    :maxdepth: 5
 
    @SPHINX_CPP_MODULES@
-   
+
 Legacy
 ======
 
@@ -42,7 +42,4 @@ Legacy
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+@SPHINX_EL_INDICES@

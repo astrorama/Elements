@@ -1,3 +1,4 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
 # -*- cmake -*-
 
 if(NOT CLANG_FOUND)
@@ -6,7 +7,7 @@ if(NOT CLANG_FOUND)
 find_package(LLVM)
 
 find_program(CLANG_C_COMPILER
-             NAMES clang                 
+             NAMES clang
              HINTS ENV CLANG_INSTALL_DIR
              PATH_SUFFIXES bin
              DOC "Clang C Compiler")

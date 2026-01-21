@@ -49,7 +49,7 @@ echo "CMAKEFLAGS: ${CMAKEFLAGS}"
 
 
 # because the "-s" (standalone) option is used, this test script must work after the build only.
-# The install step is not needed when the created project have no dependency onto Elements and 
+# The install step is not needed when the created project have no dependency onto Elements and
 # its modules.
 
 cd ${User_area}

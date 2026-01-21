@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 # - Try to find FFTW.
 # Usage: find_package(FFTW [COMPONENTS [single double (long-double|long) threads (omp|openmp)]])
 #
@@ -28,17 +30,17 @@ if(NOT FFTW_FOUND)
   # Loop over each component.
   set(_libraries)
   foreach(_comp ${_components})
-    if(_comp STREQUAL "single")
+    if("${_comp}" STREQUAL "single")
       list(APPEND _libraries fftw3f)
-    elseif(_comp STREQUAL "double")
+    elseif("${_comp}" STREQUAL "double")
       list(APPEND _libraries fftw3)
-    elseif(_comp STREQUAL "long-double" OR _comp STREQUAL "long")
+    elseif("${_comp}" STREQUAL "long-double" OR "${_comp}" STREQUAL "long")
       list(APPEND _libraries fftw3l)
-    elseif(_comp STREQUAL "quad")
+    elseif("${_comp}" STREQUAL "quad")
       list(APPEND _libraries fftw3q)
-    elseif(_comp STREQUAL "threads")
+    elseif("${_comp}" STREQUAL "threads")
       set(_use_threads ON)
-    elseif(_comp STREQUAL "omp" OR _comp STREQUAL "openmp")
+    elseif("${_comp}" STREQUAL "omp" OR "${_comp}" STREQUAL "openmp")
       set(_use_omp ON)
     else()
       message(FATAL_ERROR "FindFFTW: unknown component `${_comp}' specified. "

@@ -34,32 +34,79 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_CONFIGURATION_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_CONFIGURATION_H_
 
-#include <string>                     // for string
-#include <vector>                     // for vector
-#include <boost/filesystem/path.hpp>  // for path
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include "ElementsKernel/Export.h"    // ELEMENTS_API
+#include "ElementsKernel/Export.h"  // ELEMENTS_API
+#include "ElementsKernel/Path.h"    // for Path::Item
 
 namespace Elements {
+inline namespace Kernel {
 
+/**
+ * @brief retrieve the variable name used for the configuration file lookup
+ * @ingroup ElementsKernel
+ * @return
+ *   the standard variable name: ELEMENTS_CONF_PATH
+ */
 ELEMENTS_API std::string getConfigurationVariableName();
 
+/// @brief retrieve the path to a configuration file
 template <typename T>
-ELEMENTS_API boost::filesystem::path getConfigurationPath(const T& file_name, bool raise_exception = true);
+ELEMENTS_API Path::Item getConfigurationPath(const T& file_name, bool raise_exception = true);
 
-// Instantiation of the most expected types
-extern template
-ELEMENTS_API boost::filesystem::path getConfigurationPath(const boost::filesystem::path& file_name,
-                                                          bool raise_exception);
-extern template
-ELEMENTS_API boost::filesystem::path getConfigurationPath(const std::string& file_name,
-                                                          bool raise_exception);
+/// Instantiation of the most expected types
+extern template ELEMENTS_API Path::Item getConfigurationPath(const Path::Item& file_name, bool raise_exception);
+extern template ELEMENTS_API Path::Item getConfigurationPath(const std::string& file_name, bool raise_exception);
 
-ELEMENTS_API std::vector<boost::filesystem::path> getConfigurationLocations(bool exist_only = false);
+/**
+ * @brief Retrieves a list of configuration file locations, optionally restricted to those that exist.
+ * @param exist_only A boolean flag. If true, only paths that exist on the filesystem will be included in the result.
+ * If false, all potential configuration locations will be returned.
+ * @return A vector of Path::Item objects representing the identified configuration locations.
+ */
+ELEMENTS_API std::vector<Path::Item> getConfigurationLocations(bool exist_only = false);
 
+namespace Configuration {
+
+/**
+ * @brief alias for the getAuxiliaryVariableName function
+ * @ingroup ElementsKernel
+ * @return same as getAuxiliaryVariableName
+ */
+ELEMENTS_API std::string getVariableName();
+
+/**
+ * @brief alias for the getAuxiliaryPath function
+ * @ingroup ElementsKernel
+ * @param file_name
+ *   file name of the configuration file to be found.
+ * @param raise_exception
+ *   enable the raising of an exception if the file is not found
+ * @return same as getAuxiliaryPath
+ */
+template <typename T>
+ELEMENTS_API Path::Item getPath(const T& file_name, bool raise_exception = true);
+
+// instantiation of the most expected types
+extern template ELEMENTS_API Path::Item getPath(const Path::Item& file_name, bool raise_exception);
+extern template ELEMENTS_API Path::Item getPath(const std::string& file_name, bool raise_exception);
+
+/**
+ * @brief alias for the getConfigurationLocations function
+ * @ingroup ElementsKernel
+ * @return same as getConfigurationLocations
+ */
+ELEMENTS_API std::vector<Path::Item> getLocations(bool exist_only = false);
+
+}  // namespace Configuration
+
+}  // namespace Kernel
 }  // namespace Elements
 
-#include "ElementsKernel/_impl/Configuration.icpp"
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_CONFIGURATION_IMPL_
+#include "ElementsKernel/_impl/Configuration.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_CONFIGURATION_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_CONFIGURATION_H_
 

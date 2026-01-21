@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -26,13 +26,13 @@
 
 #include "ElementsKernel/Export.h"
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
 #include "ElementsServices/DataSync/ConnectionConfiguration.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"
 #include "ElementsServices/DataSync/DependencyConfiguration.h"
 
-namespace ElementsServices {
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
-
 
 /**
  * @class DataSync
@@ -47,7 +47,6 @@ namespace DataSync {
 class ELEMENTS_API DataSync {
 
 public:
-
   /**
    * @brief Initialize the synchronizer with configuration files.
    *
@@ -57,12 +56,12 @@ public:
    * @param dependencyFile Path to the dependency configuration file
    * relative to the configuration directory.
    */
-  DataSync(path connectionFile, path dependencyFile);
+  DataSync(const path& connectionFile, const path& dependencyFile);
 
   /**
    * @brief Download the test data.
    */
-  void download();
+  void download() const;
 
   /**
    * @brief Download the test data and provide a fallback host
@@ -71,7 +70,7 @@ public:
    * @param connectionFile Path to the connection configuration file
    * of the fallback host relative to the configuration directory.
    */
-  void downloadWithFallback(path connectionFile);
+  void downloadWithFallback(const path& connectionFile);
 
   /**
    * @brief Get the absolute path to a local test file
@@ -84,24 +83,26 @@ public:
    *
    * On LODEEN, the prefix is empty.
    * On CODEEN, it is the job workspace which the user do not know.
-   * It can be set by the user through the $WORKSPACE environment variable.
+   * It can be set by the user through the variable name in the DATASYNC_WORKDIR_VAR
+   * or by the WORKSPACE environment variable if the later is empty.
    *
    * @warning This function must be used to access any data
    * downloaded by the DataSync tool.
    */
-  path absolutePath(path relativePath);
+  path absolutePath(const path& relativePath) const;
 
 private:
-
   ConnectionConfiguration m_connectionConfig;
-  path m_distantRoot;
-  path m_localRoot;
+  path                    m_distantRoot;
+  path                    m_localRoot;
   DependencyConfiguration m_dependencyConfig;
-
 };
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements
+
+namespace ElementsServices = Elements::Services;
 
 #endif  // ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_H_
 

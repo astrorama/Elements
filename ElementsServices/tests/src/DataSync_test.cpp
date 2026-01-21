@@ -16,13 +16,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include <exception>  // for exception
+
+#include <boost/filesystem/operations.hpp>  // for is_regular_file, remove
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
-#include "ElementsServices/DataSync.h"
-#include "ElementsServices/DataSync/IrodsSynchronizer.h"
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include "ElementsServices/DataSync.h"                     // for DataSync
+#include "ElementsServices/DataSync/DataSyncUtils.h"       // for path, DataSync
+#include "ElementsServices/DataSync/IrodsSynchronizer.h"   // for irodsIsInstalled
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"  // for webdavIsInstalled
 
-#include "DataSync/fixtures/ConfigFilesFixture.h"
+#include "DataSync/fixtures/ConfigFilesFixture.h"  // for theDependencyConfig, theIrodsFrConfig, theLocalFiles, theWebdavFrConfig, aBadConnectionConfig
 
 namespace DataSync = ElementsServices::DataSync;
 
@@ -34,8 +39,8 @@ BOOST_AUTO_TEST_SUITE(DataSync_test)
 
 //-----------------------------------------------------------------------------
 
-void checkDownload(path connectionConfig) {
-  auto sync = DataSync::DataSync(connectionConfig, theDependencyConfig());
+void checkDownload(const path& connection_config) {
+  const auto sync = DataSync::DataSync(connection_config, theDependencyConfig());
   sync.download();
   for (const auto& file : theLocalFiles()) {
     const path abs_path = sync.absolutePath(file);
@@ -44,10 +49,10 @@ void checkDownload(path connectionConfig) {
   }
 }
 
-void checkFallback(path fallbackConfig) {
+void checkFallback(const path& fallback_config) {
   auto sync = DataSync::DataSync(aBadConnectionConfig(), theDependencyConfig());
   BOOST_CHECK_THROW(sync.download(), std::exception);
-  sync.downloadWithFallback(fallbackConfig);
+  sync.downloadWithFallback(fallback_config);
   for (const auto& file : theLocalFiles()) {
     const path abs_path = sync.absolutePath(file);
     BOOST_CHECK(boost::filesystem::is_regular_file(abs_path));

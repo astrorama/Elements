@@ -1,0 +1,45 @@
+/**
+ * @file ElementsExamples/_impl/TemplateDataSourceUser.tpp
+ *
+ * @date 2015-09-23
+ * @author: Florian Dubath
+ *
+ * @copyright 2012-2020 Euclid Science Ground Segment
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// IWYU pragma: private, include "ElementsExamples/TemplatedDataSourceUser.h"
+#pragma once
+
+#ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
+#error "This file should not be included directly! Use ElementsExamples/TemplatedDataSourceUser.h instead"
+#else
+
+#include <cstddef>  // for std::size_t
+
+namespace Elements::Examples {
+
+template <typename T>
+double TemplatedDataSourceUser::sumRecords(const T& data_source) {
+  double      sum            = 0.;
+  std::size_t records_number = data_source.countRecords();
+  for (std::size_t index = 0; index < records_number; ++index) {
+    sum += data_source.getRecordValue(index);
+  }
+
+  return sum;
+}
+
+}  // namespace Elements::Examples
+
+#endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_

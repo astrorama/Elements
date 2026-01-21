@@ -18,9 +18,13 @@
 
 import os
 import shlex
-import subprocess
+import subprocess  # nosec
 
 from ElementsKernel.Configuration import getConfigurationPath
+
+DEFAULT_WORKDIR_VAR = "WORKSPACE"
+
+WORKDIR_VAR_VAR = "DATASYNC_WORKDIR_VAR"
 
 
 def dataSyncConfFilePath (filename):
@@ -32,7 +36,7 @@ def dataSyncConfFilePath (filename):
 def runCommandAndCaptureOutErr (cmd):
     """Execute a command and return its output and error messages.
     """
-    p = subprocess.Popen(
+    p = subprocess.Popen(# nosec
         shlex.split(cmd),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
@@ -40,20 +44,20 @@ def runCommandAndCaptureOutErr (cmd):
     return out.decode("utf-8"), err.decode("utf-8")
 
 
-def localDirExists (localDir):
+def localDirExists (local_dir):
     """Check whether a local directory exists.
     """
-    if not localDir:
+    if not local_dir:
         return True
-    if os.path.isdir(localDir):
+    if os.path.isdir(local_dir):
         return True
     return False
 
 
-def createLocalDirOf (localFile):
+def createLocalDirOf (local_file):
     """Create the parent directory for a local file.
     """
-    dir_name = os.path.dirname(localFile)
+    dir_name = os.path.dirname(local_file)
     if not localDirExists(dir_name):
         os.makedirs(dir_name)
 
@@ -63,16 +67,29 @@ def environmentVariable (name):
     """
     return os.environ.get(name, "")
 
+
+def getWorkdirVariable():
+    """ Get the variable holding the name of the workdir variable path
+    """
+
+    workdir_variable = DEFAULT_WORKDIR_VAR
+
+    if os.environ.get(WORKDIR_VAR_VAR, None):
+        workdir_variable = os.environ[WORKDIR_VAR_VAR]
+
+    return workdir_variable
+
+
 def localWorkspacePrefix ():
     """Get the prefix of the local workspace.
     """
-    codeenPrefix = 'WORKSPACE'
-    return environmentVariable(codeenPrefix)
+    codeen_prefix = getWorkdirVariable()
+    return environmentVariable(codeen_prefix)
 
 
 def concatenatePaths (chunks):
     """Concatenate path chunks into a single path.
     """
-    meaningfulChunks = [x for x in chunks if x]
-    joined = '/'.join(meaningfulChunks)
+    meaningful_chunks = [x for x in chunks if x]
+    joined = '/'.join(meaningful_chunks)
     return os.path.normpath(joined)

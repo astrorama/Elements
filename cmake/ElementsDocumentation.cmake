@@ -1,16 +1,29 @@
-include_guard()
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
+include_guard(GLOBAL)
 
   if(INSTALL_DOC)
     add_custom_target(doc ALL
                       COMMENT "Generating API documentation" VERBATIM)
   else()
     add_custom_target(doc
-                      COMMENT "Generating API documentation" VERBATIM)  
+                      COMMENT "Generating API documentation" VERBATIM)
   endif()
 
 #===========================================================================================================
 
   if(USE_DOXYGEN)
+
+  option(MERGE_HTML_DOC_TREES
+         "Merge the Doxygen and Sphinx HTML trees into a single one"
+         FALSE)
+
+  if(MERGE_HTML_DOC_TREES)
+    set(DOXYGEN_HTML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc/html)
+  else()
+    set(DOXYGEN_HTML_OUTPUT_DIR html)
+  endif()
+
 
 
   # Add Doxygen generation
@@ -22,15 +35,23 @@ include_guard()
     message(STATUS "Doxygen version: ${DOXYGEN_VERSION}")
 
     find_package(PlantUML QUIET)
-    
-    set(DOXYGEN_EXTRA_FILE_PATTERNS) 
+
+    if(NOT PLANTUML_JARFILE)
+      set(PLANTUML_JARFILE "")
+    endif()
+
+    set(DOXYGEN_EXTRA_FILE_PATTERNS)
     if(USE_PYTHON_DOXYGEN)
-        set(DOXYGEN_EXTRA_FILE_PATTERNS "*.py") 
+        set(DOXYGEN_EXTRA_FILE_PATTERNS "*.py")
     endif()
 
 
     if(USE_SPHINX)
-      set(DOX_LINK_TO_SPHINX "<tab type=\"user\" url=\"../../sphinx/html/index.html\" title=\"Sphinx\"/>")
+      if(MERGE_HTML_DOC_TREES)
+        set(DOX_LINK_TO_SPHINX "<tab type=\"user\" url=\"sphinx/index.html\" title=\"Sphinx\"/>")
+      else()
+        set(DOX_LINK_TO_SPHINX "<tab type=\"user\" url=\"../../sphinx/html/index.html\" title=\"Sphinx\"/>")
+      endif()
     else()
       set(DOX_LINK_TO_SPHINX "")
     endif()
@@ -48,13 +69,13 @@ include_guard()
            TRUE)
 
     if(DOXYGEN_WITH_CPPREFERENCE_LINKS)
-    
+
       find_file(GET_CPPREF_TAGS_SCRIPT
               get_cppreference_tags.cmake
               PATHS ${CMAKE_MODULE_PATH}
               PATH_SUFFIXES doc)
-    
-    
+
+
       # download Doxygen tags from cppreference.com
       add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/doc/doxygen/cppreference-doxygen-web.tag.xml
                          COMMAND ${CMAKE_COMMAND}
@@ -68,15 +89,15 @@ include_guard()
     endif()
 
     # Generation of the Doxygen Main Page
-    
+
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/doc/mainpage.dox)
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox)
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/doc/${PROJECT_NAME}.dox)
     list(APPEND maindox_list ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.dox)
 
-    set(maindox_file)    
+    set(maindox_file)
     find_first_file("${maindox_list}" maindox_file)
-    
+
     if(NOT maindox_file)
       message(STATUS "No doxygen main page (${maindox_list}) can be found.")
       find_file_to_configure(mainpage.dox.in
@@ -118,7 +139,15 @@ include_guard()
 #===========================================================================================================
 
 
-  if(USE_SPHINX AND (NOT PYTHON_EXPLICIT_VERSION STREQUAL 2))
+  if(USE_SPHINX AND (NOT "${PYTHON_EXPLICIT_VERSION}" STREQUAL "2"))
+
+  if(MERGE_HTML_DOC_TREES)
+    set(SPHINX_HTML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc/html/sphinx)
+  else()
+    set(SPHINX_HTML_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doc/sphinx/html)
+  endif()
+
+
 
   find_package(Sphinx REQUIRED)
   if(SPHINX_FOUND)
@@ -130,12 +159,7 @@ include_guard()
     if(NOT SPHINX_APIDOC_OPTIONS)
       set(SPHINX_APIDOC_OPTIONS "" CACHE STRING "Extra options to pass to sphinx-apidoc" FORCE)
     endif()
-    
-    if(USE_DOXYGEN AND DOXYGEN_FOUND AND USE_SPHINX_BREATHE)
-      set(APPEND_BREATHE_EXT "extensions.append('breathe')")
-    else()
-      set(APPEND_BREATHE_EXT "")
-    endif()
+
 
     # Generation of the main sphinx configuration file.
     find_file_to_configure(Sphinx_conf.py.in
@@ -144,9 +168,6 @@ include_guard()
                            OUTPUTNAME "conf.py"
                            PATHS ${CMAKE_MODULE_PATH}
                            PATH_SUFFIXES doc)
-
-    copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/doc ${PROJECT_BINARY_DIR}/doc/sphinx)
-
 
     if(DOXYGEN_FOUND AND USE_SPHINX_APIDOC AND USE_SPHINX_BREATHE)
 
@@ -167,10 +188,24 @@ include_guard()
 
     get_property(proj_python_package_list GLOBAL PROPERTY PROJ_PYTHON_PACKAGE_LIST)
 
+
+    if(EXTRA_SPHINX_FILES)
+      foreach (esf IN LISTS EXTRA_SPHINX_FILES)
+        if(EXISTS "${esf}")
+          file(COPY ${esf} DESTINATION ${PROJECT_BINARY_DIR}/doc/sphinx)
+        endif()
+      endforeach()
+    endif()
+
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/doc")
+      copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/doc ${PROJECT_BINARY_DIR}/doc/sphinx)
+    endif()
+
+
     add_custom_target(sphinx
-                      COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/html
+                      COMMAND  ${CMAKE_COMMAND} -E make_directory ${SPHINX_HTML_OUTPUT_DIR}
                       COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/_static
-                      COMMAND  ${SPHINX_BUILD_CMD} ${SPHINX_BUILD_OPTIONS} . ${_py_pack} html
+                      COMMAND  ${SPHINX_BUILD_CMD} ${SPHINX_BUILD_OPTIONS} -b html . ${SPHINX_HTML_OUTPUT_DIR}
                       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/sphinx
                       COMMENT "Generating Sphinx documentation" VERBATIM)
 
@@ -198,18 +233,56 @@ include_guard()
         endif()
 
     endforeach()
-    
+
+
+    set(EL_MODULE_INDEX)
+
+    foreach (_py_pack IN LISTS proj_python_package_list)
+
+      get_filename_component(_py_pack_short ${_py_pack} NAME)
+      get_filename_component(_py_pack_dir ${_py_pack} PATH)
+      get_filename_component(_py_pack_main ${_py_pack_dir} PATH)
+      get_filename_component(_el_pack_short ${_py_pack_main} NAME)
+
+      set(${_el_pack_short}_api_modules_line)
+
+      if(USE_SPHINX_APIDOC)
+        if(NOT TARGET sphinx_apidoc_${_py_pack_short})
+          file(GLOB_RECURSE _py_pack_dir_files LIST_DIRECTORIES false RELATIVE  ${_py_pack_dir} CONFIGURE_DEPENDS  ${_py_pack_dir}/*.py)
+          set(_py_pack_dir_files_full ${_py_pack_dir_files})
+          list(TRANSFORM _py_pack_dir_files_full PREPEND ${_py_pack_dir}/)
+
+          add_custom_command(
+            OUTPUT ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}/modules.rst
+            DEPENDS ${_py_pack_dir_files_full}
+            COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}
+            COMMAND  ${SPHINX_APIDOC_CMD} ${SPHINX_APIDOC_OPTIONS} -f -o ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short} ${_py_pack_dir}
+            COMMENT "Generating Sphinx API documentation for ${_py_pack_short}"
+            VERBATIM
+          )
+
+          add_custom_target(
+            sphinx_apidoc_${_py_pack_short}
+            DEPENDS  ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}/modules.rst
+          )
+
+          set(${_el_pack_short}_api_modules_line modules)
+          list(APPEND EL_MODULE_INDEX ${_el_pack_short})
+
+          add_dependencies(sphinx sphinx_apidoc_${_py_pack_short})
+
+        endif()
+      endif()
+
+    endforeach()
+
+
     # This is the list of Elements modules that do contains python packages
     if(SPHINX_ELEMENTS_PACK_LIST)
       list(REMOVE_DUPLICATES SPHINX_ELEMENTS_PACK_LIST)
     endif()
 
     get_property(proj_package_list GLOBAL PROPERTY PROJ_PACKAGE_LIST)
-
-    set(_api_modules_line)
-    if(USE_SPHINX_APIDOC)
-      set(_api_modules_line modules)
-    endif()
 
     #loop over all Elements module
     # this will create an <module>_index.rst for each of them
@@ -234,9 +307,9 @@ include_guard()
 
 
       if(USE_SPHINX_APIDOC)
-      set(SPHINX_THIS_APIDOC_MODULES ${SPHINX_${_el_pack_short}_APIDOC_MODULES})
+        set(SPHINX_THIS_APIDOC_MODULES ${SPHINX_${_el_pack_short}_APIDOC_MODULES})
 
-      set(SPHINX_THIS_PYTHON_PACKAGE "
+        set(SPHINX_THIS_PYTHON_PACKAGE "
 Python Package
 --------------
 
@@ -249,6 +322,12 @@ Python Package
 
       endif()
 
+
+      set(_api_modules_line)
+      if(USE_SPHINX_APIDOC)
+        set(_api_modules_line ${${_el_pack_short}_api_modules_line})
+      endif()
+
       find_file_to_configure(index_module.rst.in
                              FILETYPE "Sphinx index"
                              OUTPUTDIR "${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}"
@@ -257,48 +336,16 @@ Python Package
                              PATH_SUFFIXES doc)
 
 
-    if(NOT SPHINX_EL_MODULES)
-      set(SPHINX_EL_MODULES "${_el_pack_short}/index")
-    else()
-      set(SPHINX_EL_MODULES "${SPHINX_EL_MODULES}
+      if(NOT SPHINX_EL_MODULES)
+        set(SPHINX_EL_MODULES "${_el_pack_short}/index")
+      else()
+        set(SPHINX_EL_MODULES "${SPHINX_EL_MODULES}
    ${_el_pack_short}/index")
-    endif()
-    
-    endforeach()
-
-
-    foreach (_py_pack IN LISTS proj_python_package_list)
-
-      get_filename_component(_py_pack_short ${_py_pack} NAME)
-      get_filename_component(_py_pack_dir ${_py_pack} PATH)
-      get_filename_component(_py_pack_main ${_py_pack_dir} PATH)
-      get_filename_component(_el_pack_short ${_py_pack_main} NAME)
-
-      if(USE_SPHINX_APIDOC)
-        if(NOT TARGET sphinx_apidoc_${_py_pack_short})
-          add_custom_target(sphinx_apidoc_${_py_pack_short}
-                            COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short}
-                            COMMAND  ${SPHINX_APIDOC_CMD} ${SPHINX_APIDOC_OPTIONS} -o ${PROJECT_BINARY_DIR}/doc/sphinx/${_el_pack_short} ${_py_pack_dir}
-                            COMMENT "Generating Sphinx API documentation for ${_py_pack_short}" VERBATIM)
-
-          add_dependencies(sphinx sphinx_apidoc_${_py_pack_short})
-
-        endif()
       endif()
-      
-
 
     endforeach()
-  
 
-
-
-    find_file_to_configure(elements_modules.rst.in
-                           FILETYPE "List of Elements modules"
-                           OUTPUTDIR "${PROJECT_BINARY_DIR}/doc/sphinx"
-                           OUTPUTNAME "elements_modules.rst"
-                           PATHS ${CMAKE_MODULE_PATH}
-                           PATH_SUFFIXES doc)
+    # Generation of the cmake index.rst file for the cmake directory
 
 
 
@@ -306,15 +353,59 @@ Python Package
 
 
      if(USE_DOXYGEN AND DOXYGEN_FOUND)
-       set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../../doxygen/html/index.html>`_.")
+       if(MERGE_HTML_DOC_TREES)
+         set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../index.html>`_.")
+       else()
+         set(SPHINX_ORIGINAL_DOX "* The original Doxygen documentation can be accessed with `this link <../../doxygen/html/index.html>`_.")
+       endif()
      else()
        set(SPHINX_ORIGINAL_DOX "")
      endif()
 
 
+    find_file(sphinx_main_cmake_index_file
+              NAMES index.rst
+              PATHS ${CMAKE_CURRENT_SOURCE_DIR}
+              PATH_SUFFIXES cmake
+              NO_DEFAULT_PATH)
+
+    set(SPHINX_CMAKE_MODULES "")
+
+    if(sphinx_main_cmake_index_file)
+      configure_file(
+                     "${sphinx_main_cmake_index_file}"
+                     "${PROJECT_BINARY_DIR}/doc/sphinx/cmake/index.rst"
+                     COPYONLY
+                    )
+      set(SPHINX_CMAKE_MODULES "cmake/index")
+    else()
+
+       file(GLOB cm_list RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/*.cmake)
+       foreach(cm ${cm_list})
+          set(sphinx_cmake_module_lines "${sphinx_cmake_module_lines}
+.. cmake-module:: ../../../../${cm}")
+
+       endforeach()
+
+      find_file_to_configure(index_cmake.rst.in
+                             FILETYPE "Sphinx index"
+                             OUTPUTDIR "${PROJECT_BINARY_DIR}/doc/sphinx/cmake"
+                             OUTPUTNAME "index.rst"
+                             PATHS ${CMAKE_MODULE_PATH}
+                             PATH_SUFFIXES doc)
+
+      if(sphinx_cmake_module_lines)
+        set(SPHINX_CMAKE_MODULES "cmake/index")
+      endif()
+
+    endif()
+
+
+
+
     find_file(sphinx_main_project_index_file
               NAMES index.rst
-              PATHS ${CMAKE_SOURCE_DIR}
+              PATHS ${CMAKE_CURRENT_SOURCE_DIR}
               PATH_SUFFIXES doc
               NO_DEFAULT_PATH)
 
@@ -326,6 +417,21 @@ Python Package
                      COPYONLY
                     )
     else()
+      if(EL_MODULE_INDEX)
+        set(SPHINX_EL_INDICES "
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+"
+        )
+      else()
+        set(SPHINX_EL_INDICES "
+* :ref:`genindex`
+* :ref:`search`
+"
+        )
+      endif()
+
       find_file_to_configure(index.rst.in
                              FILETYPE "Sphinx index"
                              OUTPUTDIR "${PROJECT_BINARY_DIR}/doc/sphinx"
@@ -341,18 +447,27 @@ Python Package
 
   if(INSTALL_DOC)
 
-    install(DIRECTORY ${CMAKE_BINARY_DIR}/doc/
+    if(MERGE_HTML_DOC_TREES)
+      set(DOC_DIST_TREE ${CMAKE_BINARY_DIR}/doc/html/)
+    else()
+      set(DOC_DIST_TREE ${CMAKE_BINARY_DIR}/doc/)
+    endif()
+
+
+    install(DIRECTORY ${DOC_DIST_TREE}
             DESTINATION ${DOC_INSTALL_SUFFIX}
             PATTERN "CVS" EXCLUDE
             PATTERN ".svn" EXCLUDE
             PATTERN "*~" EXCLUDE)
 
-    foreach(_do ChangeLog README README.md)
+    foreach(_do ChangeLog CHANGELOG.md README README.md)
+      set(_do_file)
       find_file(_do_file
                 NAMES ${_do}
-                PATHS ${CMAKE_SOURCE_DIR}
+                PATHS ${CMAKE_CURRENT_SOURCE_DIR}
                 PATH_SUFFIXES doc
-                NO_DEFAULT_PATH)
+                NO_DEFAULT_PATH
+                NO_CACHE)
 
       if(_do_file)
           install(FILES ${_do_file}
@@ -361,5 +476,3 @@ Python Package
     endforeach()
 
   endif()
-  
-  

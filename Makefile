@@ -59,4 +59,3 @@ endif
 
 $(info Using the $(ELEMENTS_MAKE_LIB_FILE) make library)
 include $(ELEMENTS_MAKE_LIB_FILE)
-

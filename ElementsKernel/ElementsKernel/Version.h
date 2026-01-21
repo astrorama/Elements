@@ -26,17 +26,14 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_H_
 
-#include <string>                   // for string
 #include <cstdint>
+#include <string>  // for string
 
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 
 /// Mangle major, minor and patch version number into a single integer
-constexpr std::uint_least64_t CALC_PROJECT_VERSION(const std::uint_least64_t maj,
-                                                   const std::uint_least64_t min,
-                                                   const std::uint_least64_t pat) {
-  return (((maj) << 32) + ((min) << 16) + (pat));
-}
+constexpr std::uint_least64_t CALC_PROJECT_VERSION(const std::uint_least64_t maj, const std::uint_least64_t min,
+                                                   const std::uint_least64_t pat);
 
 namespace Elements {
 
@@ -44,8 +41,8 @@ namespace Elements {
  * @brief
  *    Function returning a version string extracted from SVN keywords
  * @details
- *    ElementsExample/ElementsProgramExample.cpp shows how to use this method to implement
- *    a getVersion in a prgram
+ *    ElementsExample/src/program/Program.cpp shows how to use this method to implement
+ *    a getVersion in a program
  * @ingroup ElementsKernel
  * @param svnUrl
  *    This is a string that can be filled with the HeadURL svn keywords. Writing
@@ -58,7 +55,7 @@ namespace Elements {
  *
  *    the svn keywords will be expanded upon the next commit if the svn
  *    client is instructed to do this with
- *       svn propset svn:keywords 'Id Revision HeadURL' ElementsProgramExample.cpp
+ *       svn propset svn:keywords 'Id Revision HeadURL' Program.cpp
  *
  * @return
  */
@@ -80,11 +77,13 @@ ELEMENTS_API std::string getVersionFromSvnKeywords(const std::string& svnUrl, co
  * @return
  *    The formatted string with the version numbers
  */
-ELEMENTS_API std::string getVersionString(const unsigned short major,
-                                          const unsigned short minor,
-                                          const unsigned short patch = 0);
+ELEMENTS_API std::string getVersionString(unsigned short major, unsigned short minor, unsigned short patch = 0);
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_IMPL_
+#include "ElementsKernel/_impl/Version.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_VERSION_H_
 

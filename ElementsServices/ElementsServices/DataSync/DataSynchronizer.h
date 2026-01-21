@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -34,7 +34,8 @@
 #include "ElementsServices/DataSync/DataSyncUtils.h"
 #include "ElementsServices/DataSync/DependencyConfiguration.h"
 
-namespace ElementsServices {
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
 /**
@@ -42,17 +43,12 @@ namespace DataSync {
  * @ingroup ElementsServices
  * @brief An exception raised when downloading fails.
  */
-class ELEMENTS_API DownloadFailed: public std::runtime_error {
+class ELEMENTS_API DownloadFailed final : public std::runtime_error {
 public:
-  virtual ~DownloadFailed() = default;
-  DownloadFailed(path distantFile, path localFile) :
-      std::runtime_error(
-          "Unable to download file: '"
-          + distantFile.string()
-          + "' as: '"
-          + localFile.string()
-          + "'.") {
-  }
+  ~DownloadFailed() override = default;
+  DownloadFailed(const path& distantFile, const path& localFile)
+      : std::runtime_error("Unable to download file: '" + distantFile.string() + "' as: '" + localFile.string() +
+                           "'.") {}
 };
 
 /**
@@ -65,42 +61,33 @@ public:
 class ELEMENTS_API DataSynchronizer {
 
 public:
-
   virtual ~DataSynchronizer() = default;
 
-  DataSynchronizer(
-      const ConnectionConfiguration& connection,
-      const DependencyConfiguration& dependency);
+  DataSynchronizer(const ConnectionConfiguration& connection, const DependencyConfiguration& dependency);
 
   void downloadAllFiles() const;
 
 protected:
+  bool fileShouldBeWritten(const path& localFile) const;
 
-  bool fileShouldBeWritten(path localFile) const;
+  static bool fileAlreadyExists(const path& localFile);
 
-  bool fileAlreadyExists(path localFile) const;
+  void downloadOneFile(const path& distantFile, const path& localFile) const;
 
-  void downloadOneFile(
-      path distantFile,
-      path localFile) const;
+  static bool hasBeenDownloaded(const path& distantFile, const path& localFile);
 
-  bool hasBeenDownloaded(
-      path distantFile,
-      path localFile) const;
-
-  virtual std::string createDownloadCommand(
-      path distantFile,
-      path localFile) const = 0;
+  virtual std::string createDownloadCommand(path distantFile, path localFile) const = 0;
 
 protected:
-
   ConnectionConfiguration m_connection;
-  std::map<path, path> m_fileMap;
-
+  std::map<path, path>    m_fileMap;
 };
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements
+
+namespace ElementsServices = Elements::Services;
 
 #endif  // ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DATASYNCHRONIZER_H_
 

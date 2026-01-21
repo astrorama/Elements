@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT PYXB_FOUND)
 
     find_program(PYXBGEN_EXECUTABLE pyxbgen
@@ -14,4 +16,3 @@ if (NOT PYXB_FOUND)
 
 
 endif (NOT PYXB_FOUND)
-

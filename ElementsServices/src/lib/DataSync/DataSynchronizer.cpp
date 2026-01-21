@@ -16,46 +16,48 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
-#include "ElementsKernel/Unused.h"
+#include "ElementsServices/DataSync/DataSynchronizer.h"  // for DataSynchronizer, DownloadFailed
 
-#include "ElementsServices/DataSync/DataSynchronizer.h"
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include <map>      // for map, operator!=, _Rb_tree_const_iterator
+#include <string>   // for string
+#include <utility>  // for pair
 
-namespace ElementsServices {
+#include "ElementsKernel/Unused.h"  // for ELEMENTS_UNUSED
+
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, createLocalDirOf, runCommandAndCaptureOutErr
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
+
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
-DataSynchronizer::DataSynchronizer(
-    const ConnectionConfiguration& connection,
-    const DependencyConfiguration& dependency) :
-        m_connection(connection), m_fileMap(dependency.fileMap()) {
-}
+DataSynchronizer::DataSynchronizer(const ConnectionConfiguration& connection, const DependencyConfiguration& dependency)
+    : m_connection(connection), m_fileMap(dependency.fileMap()) {}
 
 void DataSynchronizer::downloadAllFiles() const {
-  for (const auto& item : m_fileMap) {
-    const auto& localFile = item.first;
-    const auto& distantFile = item.second;
+  for (const auto& [fst, snd] : m_fileMap) {
+    const auto& localFile   = fst;
+    const auto& distantFile = snd;
     if (fileShouldBeWritten(localFile)) {
       downloadOneFile(distantFile, localFile);
     }
   }
 }
 
-bool DataSynchronizer::fileShouldBeWritten(path localFile) const {
+bool DataSynchronizer::fileShouldBeWritten(const path& localFile) const {
   if (not fileAlreadyExists(localFile)) {
     return true;
   }
   return m_connection.overwritingAllowed();
 }
 
-bool DataSynchronizer::fileAlreadyExists(path localFile) const {
-  return boost::filesystem::is_regular_file(localFile);
+bool DataSynchronizer::fileAlreadyExists(const path& localFile) {
+  return is_regular_file(localFile);
 }
 
-void DataSynchronizer::downloadOneFile(
-    path distantFile,
-    path localFile) const {
-  std::string command = createDownloadCommand(distantFile, localFile);
+void DataSynchronizer::downloadOneFile(const path& distantFile, const path& localFile) const {
+  const std::string command = createDownloadCommand(distantFile, localFile);
   createLocalDirOf(localFile);
   const auto outErr = runCommandAndCaptureOutErr(command);
   if (not hasBeenDownloaded(distantFile, localFile)) {
@@ -63,14 +65,13 @@ void DataSynchronizer::downloadOneFile(
   }
 }
 
-bool DataSynchronizer::hasBeenDownloaded(
-    ELEMENTS_UNUSED path distantFile,
-    path localFile) const {
-  if (not boost::filesystem::is_regular_file(localFile)) {
+bool DataSynchronizer::hasBeenDownloaded(ELEMENTS_UNUSED const path& distantFile, const path& localFile) {
+  if (not is_regular_file(localFile)) {
     return false;
   }
-  return boost::filesystem::file_size(localFile) > 0;
+  return file_size(localFile) > 0;
 }
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements

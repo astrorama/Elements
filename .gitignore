@@ -3,6 +3,8 @@
 # Building area
 /build
 /build.*
+/cmake-build-*
+/build_*
 
 # Install area
 /InstallArea
@@ -12,6 +14,7 @@
 /PAQA
 /.scannerwork
 .pytest_cache
+.checkquality.config
 
 #####=== System ===#####
 
@@ -48,11 +51,12 @@
 
 # PyCharm
 /.idea
+/.run
 
 ## VIM
 *.swp
 
-## Emacs 
+## Emacs
 *~
 /.projectile
 
@@ -63,6 +67,8 @@
 ## gnome builder
 /.buildconfig
 
+## VS Code
+/.vscode
 
 #####=== Python ===#####
 __pycache__/
@@ -79,7 +85,9 @@ gmon.out
 .ptp-sync
 .ptp-sync-folder
 .cache
-/PAQA
 /sonar-project.properties
 /.checkstyle
 /.pylintrc
+/.justfile
+/.eclipse-pmd
+/.zed

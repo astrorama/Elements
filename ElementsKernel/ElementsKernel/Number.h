@@ -26,9 +26,6 @@
 #ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_NUMBER_H_
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_NUMBER_H_
 
-#include <type_traits>              // for is_floating_point, is_integral
-#include <cmath>                    // for round
-
 #include "ElementsKernel/Export.h"  // ELEMENTS_API
 
 namespace Elements {
@@ -44,23 +41,14 @@ namespace Elements {
  * @return
  *   casted number
  */
-template<typename TargetType, typename SourceType>
-ELEMENTS_API TargetType numberCast(const SourceType& s) {
-
-  using std::is_floating_point;
-  using std::is_integral;
-  using std::round;
-
-  TargetType t = static_cast<TargetType>(s);
-
-  if (is_floating_point<SourceType>::value && is_integral<TargetType>::value) {
-    t = static_cast<TargetType>(round(s));
-  }
-
-  return t;
-}
+template <typename TargetType, typename SourceType>
+ELEMENTS_API TargetType numberCast(const SourceType& s);
 
 }  // namespace Elements
+
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_NUMBER_IMPL_
+#include "ElementsKernel/_impl/Number.tpp"  // IWYU pragma: export
+#undef ELEMENTSKERNEL_ELEMENTSKERNEL_NUMBER_IMPL_
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_NUMBER_H_
 

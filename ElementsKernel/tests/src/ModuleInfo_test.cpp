@@ -19,124 +19,103 @@
  *
  */
 
-#include "ElementsKernel/ModuleInfo.h"       // header file to test
+#include "ElementsKernel/ModuleInfo.h"
 
-#include <libgen.h>                          // for basename
+#include <libgen.h>  // for __xpg_basename, basename
 
-#include <iostream>
-#include <string>
+#include <string>  // for operator==, string
 
-#include <boost/test/unit_test.hpp>          // for the boost test macros
-#include <boost/filesystem.hpp>              // for boost/filesystem
+#include <boost/test/unit_test.hpp>  // for BOOST_PP_IIF_1, BOOST_PP_IIF_0, BOOST_PP_BOOL_0, BOOST_PP_BOOL_1, BOOST_PP_EXPR_IIF_1, BOOST_PP_FOR_CHECK_BOOST_PP_NIL, operator<<, BOOST_PP_DEC_1, BOOST_PP_TUPLE_ELEM_O_3, BOOST_PP_VARIADIC_ELEM_3, BOOST_PP_BOOL_2, BOOST_PP_DEC_2, BOOST_PP_FOR_0, BOOST_PP_SEQ_ELEM_0, BOOST_PP_COMPL_0, BOOST_PP_NOT_EQUAL_1, BOOST_PP_NOT_EQUAL_CHECK_BOOST_PP_NOT_EQUAL_1, BOOST_AUTO_TEST_CASE, BOOST_PP_DEC_128, BOOST_PP_DEC_16, BOOST_PP_DEC_3, BOOST_PP_DEC_32, BOOST_PP_DEC_4, BOOST_PP_DEC_64, BOOST_PP_DEC_8, BOOST_PP_FOR_1, BOOST_PP_FOR_127, BOOST_PP_FOR_15, BOOST_PP_FOR_3, BOOST_PP_FOR_31, BOOST_PP_FOR_63, BOOST_PP_FOR_7, BOOST_PP_NODE_ENTRY_256, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_2, BOOST_PP_SEQ_SIZE_BOOST_PP_SEQ_SIZE_3, BOOST_TEST_TOOL_PASS_ARGS0, BOOST_TEST_TOOL_PASS_PRED0, BOOST_CHECK_EQUAL, BOOST_CHECK, BOOST_TEST_TOOL_PASS_ARGS2, BOOST_TEST_TOOL_PASS_PRED2, BOOST_AUTO_TEST_SUITE, BOOST_AUTO_TEST_SUITE_END, BOOST_CHECK_NE
 
-#include "ElementsKernel/ThisModule.h"       // for getThisModuleInfo
+#include "ElementsKernel/ThisModule.h"  // for getThisModuleInfo
 
 using std::string;
 
-using Elements::System::ModuleInfo;
-using Elements::System::getThisModuleInfo;
+namespace Elements {
 
 BOOST_AUTO_TEST_SUITE(ModuleInfo_test)
 
 //-----------------------------------------------------------------------------
 struct ModuleInfo_Fixture {
 
-  ModuleInfo_Fixture() {
+  ModuleInfo_Fixture() = default;
 
-  }
-
-  ~ModuleInfo_Fixture() {
-
-  }
-
+  ~ModuleInfo_Fixture() = default;
 };
 
 //-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_CASE(GetExecutablePath_test) {
 
-  boost::filesystem::path exe_path = Elements::System::getExecutablePath();
+  const auto exe_path = System::getExecutablePath();
 
   BOOST_CHECK(exe_path.filename().string() == "ModuleInfo_test");
-
 }
 
 BOOST_AUTO_TEST_CASE(ExeName_test) {
 
-  boost::filesystem::path exe_path = Elements::System::getExecutablePath();
-  string name = Elements::System::exeName();
+  const auto    exe_path = System::getExecutablePath();
+  const string& name     = System::exeName();
 
   BOOST_CHECK_EQUAL(exe_path.string(), name);
-
 }
 
 BOOST_AUTO_TEST_CASE(SelfProc_test) {
 
-  auto proc_path = Elements::System::getSelfProc();
+  const auto proc_path = System::getSelfProc();
 
   BOOST_CHECK(not proc_path.empty());
-
 }
 
 BOOST_AUTO_TEST_CASE(libraryName_test) {
-  const ModuleInfo& info = getThisModuleInfo();
+  const System::ModuleInfo& info = System::getThisModuleInfo();
 
-  BOOST_CHECK_EQUAL(::basename(const_cast<char *>(info.libraryName().c_str())), "ModuleInfo_test");
-
+  BOOST_CHECK_EQUAL(::basename(const_cast<char*>(info.libraryName().c_str())), "ModuleInfo_test");
 }
 
 BOOST_AUTO_TEST_CASE(addresse_test) {
 
-  const ModuleInfo& info = getThisModuleInfo();
+  const System::ModuleInfo& info = System::getThisModuleInfo();
 
-  BOOST_CHECK_EQUAL(info.addresse(), static_cast<void*>(0));
-
+  BOOST_CHECK_EQUAL(info.addresse(), static_cast<void*>(nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(moduleName_test) {
 
-  auto module_name = Elements::System::moduleName();
+  const auto& module_name = System::moduleName();
 
   BOOST_CHECK_EQUAL(module_name, "libElementsKernel");
-
 }
 
 BOOST_AUTO_TEST_CASE(moduleNameFull_test) {
 
-  auto module_name_full = Elements::System::moduleNameFull();
+  const auto& module_name_full = System::moduleNameFull();
 
-  string module = ::basename(const_cast<char *>(module_name_full.c_str()));
+  string module = ::basename(const_cast<char*>(module_name_full.c_str()));
 
-  BOOST_CHECK_EQUAL(module.substr(static_cast<string::size_type>(0), module.find('.')),
-                    "libElementsKernel");
-
+  BOOST_CHECK_EQUAL(module.substr(0, module.find('.')), "libElementsKernel");
 }
-
 
 BOOST_AUTO_TEST_CASE(exeHandle_test) {
 
-  auto exe_handle = Elements::System::exeHandle();
+  const auto exe_handle = System::exeHandle();
 
-  BOOST_CHECK_NE(exe_handle, static_cast<void*>(0));
-
+  BOOST_CHECK_NE(exe_handle, static_cast<void*>(nullptr));
 }
 
 BOOST_AUTO_TEST_CASE(linkedModules_test) {
 
-  auto linked_modules = Elements::System::linkedModules();
+  const auto linked_modules = System::linkedModules();
 
-  BOOST_CHECK(linked_modules.size() > 0);
-
+  BOOST_CHECK(!linked_modules.empty());
 }
 
 BOOST_AUTO_TEST_CASE(linkedModulePaths_test) {
 
-  auto linked_module_path = Elements::System::linkedModulePaths();
+  const auto linked_module_path = System::linkedModulePaths();
 
-  BOOST_CHECK(linked_module_path.size() > 0);
-
+  BOOST_CHECK(!linked_module_path.empty());
 }
-
 
 BOOST_AUTO_TEST_SUITE_END()
 
@@ -146,7 +125,4 @@ BOOST_AUTO_TEST_SUITE_END()
 //
 //-----------------------------------------------------------------------------
 
-
-
-
-
+}  // namespace Elements

@@ -18,13 +18,12 @@
 
 struct WorkspaceFixture {
 
-  Elements::TempDir m_top_dir { "DataSync_test-%%%%%%%" };
+  Elements::TempDir m_top_dir{"DataSync_test-%%%%%%%"};
   Elements::TempEnv m_env;
 
   WorkspaceFixture();
-  ~WorkspaceFixture() = default;
+  virtual ~WorkspaceFixture() = default;
 };
-
 
 ElementsServices::DataSync::path theDependencyConfig();
 
@@ -32,7 +31,7 @@ std::vector<ElementsServices::DataSync::path> theLocalFiles();
 
 ElementsServices::DataSync::path theLocalWorkspace();
 
-ElementsServices::DataSync::path absPath(ElementsServices::DataSync::path relPath);
+ElementsServices::DataSync::path absPath(const ElementsServices::DataSync::path& relPath);
 
 ElementsServices::DataSync::path thePrefixedLocalWorkspace();
 

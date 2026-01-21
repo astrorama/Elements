@@ -27,45 +27,53 @@
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_TEMPORARY_H_
 
 #include <string>
-#include <boost/filesystem.hpp>
 
-#include "ElementsKernel/Export.h"                 // ELEMENTS_API
-#include "ElementsKernel/Environment.h"            // for Environment
+#include "ElementsKernel/Environment.h"  // for Environment
+#include "ElementsKernel/Export.h"       // ELEMENTS_API
+#include "ElementsKernel/Path.h"         // for Path::Item
 
 namespace Elements {
 
 /// The default environment variable name to keep the temporary object
-const std::string DEFAULT_TMP_KEEP_VAR {"KEEPTEMPDIR"};
+const std::string DEFAULT_TMP_KEEP_VAR{"KEEPTEMPDIR"};
 /// The default random creation motif
-const std::string DEFAULT_TMP_MOTIF {"%%%%-%%%%-%%%%-%%%%"};
+const std::string DEFAULT_TMP_MOTIF{"%%%%-%%%%-%%%%-%%%%"};
+/// Defualt max number of attempt to find a random path
+const int DEFAULT_TMP_MAX_TRIES{100};
+
+/**
+ * @brief Geenrate a unique random path according to to a pattern
+ * @ingroup ElementsKernel
+ * @param p
+ *  initial pattern
+ * @return the path random path stem
+ */
+ELEMENTS_API Path::Item uniquePath(Path::Item const& p         = DEFAULT_TMP_MOTIF,
+                                   const int         max_tries = DEFAULT_TMP_MAX_TRIES);
 
 class ELEMENTS_API TempPath {
 public:
-  explicit TempPath(const std::string& motif = DEFAULT_TMP_MOTIF,
-                    const std::string& keep_var = DEFAULT_TMP_KEEP_VAR);
+  explicit TempPath(std::string motif = DEFAULT_TMP_MOTIF, std::string keep_var = DEFAULT_TMP_KEEP_VAR);
   virtual ~TempPath();
-  boost::filesystem::path path() const;
+  Path::Item  path() const;
   std::string motif() const;
+
 private:
   const std::string m_motif;
-  boost::filesystem::path m_path;
+  Path::Item        m_path;
   const std::string m_keep_var;
 };
 
-
-class ELEMENTS_API TempDir : public TempPath {
+class ELEMENTS_API TempDir final : public TempPath {
 public:
-  explicit TempDir(const std::string& motif = DEFAULT_TMP_MOTIF,
-                   const std::string& keep_var = DEFAULT_TMP_KEEP_VAR);
-  virtual ~TempDir();
+  explicit TempDir(const std::string& motif = DEFAULT_TMP_MOTIF, const std::string& keep_var = DEFAULT_TMP_KEEP_VAR);
+  ~TempDir() override;
 };
 
-
-class ELEMENTS_API TempFile : public TempPath {
+class ELEMENTS_API TempFile final : public TempPath {
 public:
-  explicit TempFile(const std::string&  motif = DEFAULT_TMP_MOTIF,
-                    const std::string& keep_var = DEFAULT_TMP_KEEP_VAR);
-  virtual ~TempFile();
+  explicit TempFile(const std::string& motif = DEFAULT_TMP_MOTIF, const std::string& keep_var = DEFAULT_TMP_KEEP_VAR);
+  ~TempFile() override;
 };
 
 using TempEnv = Environment;

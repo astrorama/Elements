@@ -23,7 +23,7 @@
 
 #include <boost%(OSSEP)stest%(OSSEP)sunit_test.hpp>
 
-#include "%(MODULENAME)s%(OSSEP)s%(SUBDIR)s%(OSSEP)s%(CLASSNAME)s.h"
+#include "%(MODULENAME_SUBDIR)s%(OSSEP)s%(CLASSNAME)s.h"
 
 //-----------------------------------------------------------------------------
 
@@ -40,5 +40,3 @@ BOOST_AUTO_TEST_CASE( example_test ) {
 //-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_SUITE_END ()
-
-

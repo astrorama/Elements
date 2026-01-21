@@ -19,17 +19,17 @@
  *
  */
 
-#include "ElementsKernel/System.h"      // getEnv, isEnvSet
-
-#include <iostream>                     // for cout, endl
-#include <cstdlib>                      // for std::getenv
-#include <string>                       // for string
-#include <vector>
+#include <cstdlib>  // for getenv, setenv, unsetenv
+#include <string>   // for allocator, operator==, string
 
 #include <boost/test/unit_test.hpp>
 
+#include "ElementsKernel/System.h"  // for getEnv, isEnvSet, setEnv, unSetEnv
+
+using std::getenv;  // standard
 using std::string;
-using std::getenv;                      // standard
+
+namespace Elements {
 
 BOOST_AUTO_TEST_SUITE(GetEnv_test)
 
@@ -37,44 +37,43 @@ BOOST_AUTO_TEST_SUITE(GetEnv_test)
 
 BOOST_AUTO_TEST_CASE(Raw_test) {
 
-  string path_var {};
-  char* tmp = getenv("PATH");
-  if (tmp != NULL) {
+  string      path_var{};
+  const char* tmp = getenv("PATH");
+  if (tmp != nullptr) {
     path_var = tmp;
   }
 
   // check that the variable exists
-  BOOST_CHECK(tmp != NULL);
+  BOOST_CHECK(tmp != nullptr);
   // check that it is not empty
   BOOST_CHECK(not path_var.empty());
 
-  string not_existing_path {};
-  char* tmp_2 = getenv("Jlhjdji43k");
-  if (tmp_2 != NULL) {
+  string      not_existing_path{};
+  const char* tmp_2 = getenv("Jlhjdji43k");
+  if (tmp_2 != nullptr) {
     not_existing_path = tmp_2;
   }
 
   // check that the variable doesn't exist
-  BOOST_CHECK(tmp_2 == NULL);
+  BOOST_CHECK(tmp_2 == nullptr);
   // the value is also empty
   BOOST_CHECK(not_existing_path.empty());
-
 }
 
 BOOST_AUTO_TEST_CASE(RawEmpty_test) {
 
-  string var_name {"Dldoed7dja7c"};
+  const string var_name{"Dldoed7dja7c"};
 
   // create empty test env variable
   setenv(var_name.c_str(), "", 1);
 
-  string path_var {};
-  char* tmp = getenv(var_name.c_str());
-  if (tmp != NULL) {
+  string      path_var{};
+  const char* tmp = getenv(var_name.c_str());
+  if (tmp != nullptr) {
     path_var = tmp;
   }
   // check that the variable exists
-  BOOST_CHECK(tmp != NULL);
+  BOOST_CHECK(tmp != nullptr);
   // check that it is empty
   BOOST_CHECK(path_var.empty());
 
@@ -82,17 +81,16 @@ BOOST_AUTO_TEST_CASE(RawEmpty_test) {
   unsetenv(var_name.c_str());
 
   // the env variable has ceased to be
-  BOOST_CHECK(getenv(var_name.c_str()) == NULL);
+  BOOST_CHECK(getenv(var_name.c_str()) == nullptr);
 }
-
 
 BOOST_AUTO_TEST_CASE(StringWrap_test) {
 
-  using Elements::System::getEnv;
-  using Elements::System::isEnvSet;
+  using System::getEnv;
+  using System::isEnvSet;
 
-  const string name_var {"PATH"};
-  const string path_var = getenv("PATH");
+  const string name_var{"PATH"};
+  const string path_var  = getenv("PATH");
   const string path_var2 = getEnv(name_var);
   const string path_var3 = getEnv("PATH");
 
@@ -101,17 +99,16 @@ BOOST_AUTO_TEST_CASE(StringWrap_test) {
 
   BOOST_CHECK(isEnvSet("PATH"));
   BOOST_CHECK(isEnvSet(name_var));
-
 }
 
 BOOST_AUTO_TEST_CASE(EmptyEnv_test) {
 
-  using Elements::System::getEnv;
+  using System::getEnv;
 
-  string rnd_name {"Dldoed7dja7c"};
+  const string rnd_name{"Dldoed7dja7c"};
 
-  const string name_var {"PATH"};
-  string value_var {};
+  const string name_var{"PATH"};
+  string       value_var{};
 
   // the variable exists
   BOOST_CHECK(getEnv(name_var, value_var));
@@ -131,62 +128,60 @@ BOOST_AUTO_TEST_CASE(EmptyEnv_test) {
   BOOST_CHECK(value_var.empty());
   // destroy the empty test env variable
   unsetenv(rnd_name.c_str());
-
 }
 
 BOOST_AUTO_TEST_CASE(Set_test) {
 
-  using Elements::System::setEnv;
-  using Elements::System::isEnvSet;
-  using Elements::System::getEnv;
+  using System::getEnv;
+  using System::isEnvSet;
+  using System::setEnv;
 
-  string rnd_name {"Dldoed7dja7c"};
+  const string rnd_name{"Dldoed7dja7c"};
 
   BOOST_CHECK(not isEnvSet(rnd_name));
 
-  int r = setEnv(rnd_name, "");
+  const int r = setEnv(rnd_name, "");
 
   BOOST_CHECK(r == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
-  BOOST_CHECK(getEnv(rnd_name) == "");
+  BOOST_CHECK(getEnv(rnd_name).empty());
 
-  int r2 = setEnv(rnd_name, "toto", false);
+  const int r2 = setEnv(rnd_name, "toto", false);
 
   BOOST_CHECK(r2 == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
-  BOOST_CHECK(getEnv(rnd_name) == "");
+  BOOST_CHECK(getEnv(rnd_name).empty());
 
-  int r3 = setEnv(rnd_name, "titi");
+  const int r3 = setEnv(rnd_name, "titi");
 
   BOOST_CHECK(r3 == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
   BOOST_CHECK(getEnv(rnd_name) == "titi");
-
 }
 
 BOOST_AUTO_TEST_CASE(UnSet_test) {
 
-  using Elements::System::setEnv;
-  using Elements::System::isEnvSet;
-  using Elements::System::getEnv;
-  using Elements::System::unSetEnv;
+  using System::getEnv;
+  using System::isEnvSet;
+  using System::setEnv;
+  using System::unSetEnv;
 
-  string rnd_name {"Dldoed7dja7c"};
+  const string rnd_name{"Dldoed7dja7c"};
 
-  int r = setEnv(rnd_name, "");
+  const int r = setEnv(rnd_name, "");
 
   BOOST_CHECK(r == 0);
   BOOST_CHECK(isEnvSet(rnd_name));
   BOOST_CHECK(getEnv(rnd_name) == "");
 
-  int r2 = unSetEnv(rnd_name);
+  const int r2 = unSetEnv(rnd_name);
   BOOST_CHECK(r2 == 0);
   BOOST_CHECK(not isEnvSet(rnd_name));
   BOOST_CHECK(getEnv(rnd_name) == "");
-
 }
 
 //-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_SUITE_END()
 
+}  // namespace Elements

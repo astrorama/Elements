@@ -62,6 +62,10 @@ if [ ! -e $User_area/$project_name/$version/.gitignore ]; then
    echo "Error: <$User_area/$project_name/$version/.gitignore> file not found" 1>&2
    local_clean_exit 1
 fi
+if [ ! -e $User_area/$project_name/$version/.gitattributes ]; then
+   echo "Error: <$User_area/$project_name/$version/.gitattributes> file not found" 1>&2
+   local_clean_exit 1
+fi
 if [ ! -e $User_area/$project_name/$version/.editorconfig ]; then
   echo "Error: <$User_area/$project_name/$version/.editorconfig> file not found" 1>&2
   local_clean_exit 1
@@ -72,6 +76,26 @@ if [ ! -e $User_area/$project_name/$version/Makefile ]; then
 fi
 if [ ! -e $User_area/$project_name/$version/doc/mainpage.dox ]; then
    echo "Error: <$User_area/$project_name/$version/doc/mainpage.dox> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/doc/doc_project.rst ]; then
+   echo "Error: <$User_area/$project_name/$version/doc/doc_project.rst> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/.clang-format ]; then
+   echo "Error: <$User_area/$project_name/$version/.clang-format> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/.clang-format-ignore ]; then
+   echo "Error: <$User_area/$project_name/$version/.clang-ignore> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/CHANGELOG.md ]; then
+   echo "Error: <$User_area/$project_name/$version/CHANGELOG.md> file not found" 1>&2
+   local_clean_exit 1
+fi
+if [ ! -e $User_area/$project_name/$version/.pre-commit-config.yaml ]; then
+   echo "Error: <$User_area/$project_name/$version/.pre-commit-config.yaml> file not found" 1>&2
    local_clean_exit 1
 fi
 
@@ -150,4 +174,16 @@ if [ $? -ne 0 ]; then
    local_clean_exit 1
 fi
 
+# Test the visibility option
+project_name="ProjectVisibilityTest"
+version="1.0"
+
+CreateElementsProject $project_name $version -V --yes
+pattern="ELEMENTS_HIDE_SYMBOLS ON"
+result=$( grep "${pattern}" "${project_name}/${version}/CMakeLists.txt" )
+
+if [ $? -ne 0 ]; then
+   echo "Error: No < $pattern...etc...> pattern found in CMakeLists.txt in this <$project_name> project name!" 1>&2
+   local_clean_exit 1
+fi
 local_clean_exit 0

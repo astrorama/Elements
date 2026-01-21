@@ -1,6 +1,6 @@
 /**
  * @file Temporary.cpp
- *
+ * @brief Implementation of the Temporary classes
  * @date May 27, 2014
  * @author hubert degaudenzi
  *
@@ -21,56 +21,95 @@
 
 #include "ElementsKernel/Temporary.h"
 
-#include <string>
-#include <iostream>
+#include <filesystem>  // for operator/, ofstream, path>
+#include <fstream>     // for ofstream>
+#include <random>      // for random_device, mt19937, uniform_int_distribution
+#include <string>      // for string
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <utility>
 
-#include "ElementsKernel/Logging.h"
-#include "ElementsKernel/Environment.h"
+#include "ElementsKernel/Environment.h"  // for Environment
+#include "ElementsKernel/Logging.h"      // for Logging
+#include "ElementsKernel/Path.h"         // for Item
 
 using std::string;
+using std::filesystem::temp_directory_path;
+
+namespace fs = std::filesystem;
 
 namespace Elements {
 
 namespace {
-  auto log = Logging::getLogger();
+auto log = Logging::getLogger();
 }
 
-TempPath::TempPath(const string& arg_motif, const string& keep_var) :
-    m_motif(arg_motif), m_keep_var(keep_var) {
+inline std::string randomHexString(const std::size_t length) {
+  static std::random_device            rd;
+  static std::mt19937                  gen(rd());
+  static std::uniform_int_distribution dist(0, 15);
 
-  using boost::filesystem::temp_directory_path;
-  using boost::filesystem::unique_path;
+  static auto hex_chars = "0123456789abcdef";
+
+  std::string result;
+  result.reserve(length);
+  for (std::size_t i = 0; i < length; ++i)
+    result += hex_chars[dist(gen)];
+  return result;
+}
+
+Path::Item uniquePath(Path::Item const& model, const int max_tries) {
+
+  auto model_string = model.string();
+
+  if (model_string.empty())
+    model_string = DEFAULT_TMP_MOTIF;
+
+  string path_str;
+
+  for (int tries = 0; tries < max_tries; ++tries) {  // avoid infinite loops
+    path_str.clear();
+    for (char c : model_string) {
+      if (c == '%')
+        path_str += randomHexString(1);
+      else
+        path_str += c;
+    }
+    if (fs::path candidate = temp_directory_path() / path_str; !fs::exists(candidate))
+      return path_str;
+  }
+
+  throw std::runtime_error("unique_path: could not find unique path");
+}
+
+TempPath::TempPath(string motif, string keep_var)
+    : m_motif(std::move(motif)), m_path(temp_directory_path()), m_keep_var(std::move(keep_var)) {
 
   if (m_motif.find('%') == string::npos) {
-    log.warn() << "The '" << m_motif << "' motif is not random";
+    log.error() << "The '" << m_motif << "' motif is not random";
   }
 
-  if (m_motif != "") {
-    m_path = temp_directory_path() / unique_path(m_motif);
-  } else {
-    m_path = temp_directory_path() / unique_path();
+  auto pattern = m_motif;
+
+  if (pattern.empty()) {
+    log.warn() << "The motif has been replaced by \"" << DEFAULT_TMP_MOTIF << "\"";
+    pattern = DEFAULT_TMP_MOTIF;
   }
+
+  m_path /= uniquePath(Path::Item(pattern));
 }
 
 TempPath::~TempPath() {
 
-  Environment current;
-
-  if (not current.hasKey(m_keep_var)) {
-    log.debug() << "Automatic destruction of the " << path()
-                   << " temporary path";
-    boost::filesystem::remove_all(m_path);
+  if (Environment current; not Environment::hasKey(m_keep_var)) {
+    log.debug() << "Automatic destruction of the " << path() << " temporary path";
+    const auto file_number = remove_all(m_path);
+    log.debug() << "Number of files removed: " << file_number;
   } else {
-    log.info() << m_keep_var << " set: I do not remove the "
-                  << m_path.string() << " temporary path";
+    log.info() << m_keep_var << " set: I do not remove the " << m_path.string() << " temporary path";
   }
-
 }
 
-boost::filesystem::path TempPath::path() const {
+Path::Item TempPath::path() const {
   return m_path;
 }
 
@@ -78,29 +117,23 @@ string TempPath::motif() const {
   return m_motif;
 }
 
-TempDir::TempDir(const string& arg_motif, const string& keep_var) :
-    TempPath(arg_motif, keep_var) {
+TempDir::TempDir(const string& motif, const string& keep_var) : TempPath(motif, keep_var) {
 
   log.debug() << "Creation of the " << path() << " temporary directory";
 
-  boost::filesystem::create_directory(path());
-
+  create_directory(path());
 }
 
-TempDir::~TempDir() {
-}
+TempDir::~TempDir() = default;
 
-TempFile::TempFile(const string& arg_motif, const string& keep_var) :
-    TempPath(arg_motif, keep_var) {
+TempFile::TempFile(const string& motif, const string& keep_var) : TempPath(motif, keep_var) {
 
   log.debug() << "Creation of the " << path() << " temporary file";
 
-  boost::filesystem::ofstream ofs(path());
+  std::ofstream ofs(path());
   ofs.close();
-
 }
 
-TempFile::~TempFile() {
-}
+TempFile::~TempFile() = default;
 
 }  // namespace Elements

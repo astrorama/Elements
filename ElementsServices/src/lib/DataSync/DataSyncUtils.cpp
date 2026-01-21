@@ -16,82 +16,101 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <array>
-#include <cstdlib>
-#include <string>
-#include <vector>
-#include <utility>
-#include <algorithm>
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, checkCall, confFilePath, containsInThisOrder, createLocalDirOf, environmentVariable, getWorkdirVariable, localDirExists, localWorkspacePrefix, lower, runCommandAndCaptureOutErr
 
-#include "ElementsKernel/Configuration.h"
-#include "ElementsKernel/System.h"
+#include <algorithm>  // for transform
+#include <array>      // for array
+#include <cctype>     // for tolower
+#include <cstdio>     // for fgets, popen, BUFSIZ, pclose, FILE
+#include <cstdlib>    // for system
+#include <memory>     // for allocator, shared_ptr
+#include <stdexcept>  // for runtime_error
+#include <string>     // for string, operator+, basic_string, char_traits
+#include <utility>    // for make_pair, pair
+#include <vector>     // for vector
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include "ElementsKernel/Configuration.h"  // for getPath
+#include "ElementsKernel/Environment.h"    // for Environment
 
-namespace ElementsServices {
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
 using std::string;
 
-path confFilePath(path filename) {
-  return Elements::getConfigurationPath(filename);
+const string DEFAULT_WORKDIR_VAR{"WORKSPACE"};
+
+const string WORKDIR_VAR_VAR{"DATASYNC_WORKDIR_VAR"};
+
+path confFilePath(const path& filename) {
+  return Configuration::getPath(filename);
 }
 
-bool checkCall(string command) {
-  const int status = system(command.c_str());
+bool checkCall(const string& command) {
+  const string silent_command = command + " > /dev/null";
+  const int    status         = std::system(silent_command.c_str());
   return status == 0;
 }
 
-std::pair<string, string> runCommandAndCaptureOutErr(
-    string command) {
-  string out, err;
-  std::array<char, BUFSIZ> buffer;
-  std::shared_ptr<FILE> cmdpipe(popen(command.c_str(), "r"), pclose);
-  if (not cmdpipe) {
+std::pair<string, string> runCommandAndCaptureOutErr(const string& command) {
+  string                      out;
+  string                      err;
+  std::array<char, BUFSIZ>    buffer{};
+  const std::shared_ptr<FILE> command_pipe(popen(command.c_str(), "r"), pclose);
+  if (not command_pipe) {
     throw std::runtime_error(string("Unable to run command: ") + command);
   }
-  if (fgets(buffer.data(), BUFSIZ, cmdpipe.get()) != NULL) {
+  if (fgets(buffer.data(), BUFSIZ, command_pipe.get()) != nullptr) {
     out += buffer.data();
   }
   // @TODO get standard error
   return std::make_pair(out, err);
 }
 
-bool localDirExists(path localDir) {
-  return boost::filesystem::is_directory(localDir);
+bool localDirExists(const path& local_dir) {
+  return is_directory(local_dir);
 }
 
-void createLocalDirOf(path localFile) {
-  if (not localFile.has_parent_path()) {
+void createLocalDirOf(const path& local_file) {
+  if (not local_file.has_parent_path()) {
     return;
   }
-  const path dir = localFile.parent_path();
-  if (not localDirExists(dir)) {
-    boost::filesystem::create_directories(dir);
+  if (const path dir = local_file.parent_path(); not localDirExists(dir)) {
+    create_directories(dir);
   }
 }
 
-string environmentVariable(string name) {
-  return Elements::System::getEnv(name);  // Already returns "" if not found
+string environmentVariable(const string& name) {
+  return Environment::get(name);  // Already returns "" if not found
+}
+
+string getWorkdirVariable() {
+
+  string workdir_variable = DEFAULT_WORKDIR_VAR;
+
+  if (Environment current; not current[WORKDIR_VAR_VAR].empty()) {
+    workdir_variable = current[WORKDIR_VAR_VAR];
+  }
+
+  return workdir_variable;
 }
 
 path localWorkspacePrefix() {
-  const string codeenPrefix("WORKSPACE");
-  const string prefixEnvVariable(codeenPrefix);
-  return path(environmentVariable(prefixEnvVariable));
+  const string  workdir_variable = getWorkdirVariable();
+  const string& codeen_prefix(workdir_variable);
+  const string& prefix_env_variable(codeen_prefix);
+  return path{environmentVariable(prefix_env_variable)};
 }
 
 string lower(string text) {
   string uncased(text);
-  std::transform(text.begin(), text.end(), uncased.begin(), ::tolower);
+  std::transform(text.begin(), text.end(), uncased.begin(), tolower);
   return uncased;
 }
 
-bool containsInThisOrder(
-    string input,
-    std::vector<string> substrings) {
+bool containsInThisOrder(const string& input, const std::vector<string>& substrings) {
   string::size_type offset(0);
-  for (auto substr : substrings) {
+  for (const auto& substr : substrings) {
     offset = input.find(substr, offset);
     if (offset == string::npos) {
       return false;
@@ -101,4 +120,5 @@ bool containsInThisOrder(
 }
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements

@@ -17,21 +17,21 @@
 #
 
 """
-File: python/ElementsKernel/GetElementsFiles.py
+:file: ElementsKernel/GetElementsFiles.py
 
-Created on: 10/10/17
-Author: hubert
+:date: Created on: 10/10/17
+:author: Hubert Degaudenzi
 """
 
 import os
 import argparse
-import ElementsKernel.Logging as log
 
+from ElementsKernel import Logging
 from ElementsKernel import Path, Exit
-
 
 DEFAULT_TYPE = "executable"
 TYPES = [DEFAULT_TYPE, "library", "python", "configuration", "auxiliary"]
+
 
 def defineSpecificProgramOptions():
     """
@@ -61,14 +61,13 @@ def defineSpecificProgramOptions():
                         action="store_true",
                         help='Add the system internal paths to the environment for the lookup')
 
-
     parser.add_argument('-t', '--type',
                         default=DEFAULT_TYPE,
                         choices=TYPES,
                         help='The type of file to search for [default: %s]' % DEFAULT_TYPE)
 
-
     return parser
+
 
 def selfFilter(f_list, only_self):
     """
@@ -84,7 +83,6 @@ def selfFilter(f_list, only_self):
     return f_list
 
 
-
 def mainMethod(args):
     """
     @brief The "main" method.
@@ -92,7 +90,7 @@ def mainMethod(args):
     similar to a main (and it is why it is called mainMethod()).
     """
 
-    logger = log.getLogger('GetElementsFiles')
+    logger = Logging.getLogger('GetElementsFiles')
 
     exit_code = Exit.Code["OK"]
 
@@ -115,11 +113,9 @@ def mainMethod(args):
                 for f in files:
                     found_list.append(os.path.join(root, f))
 
-
     found_list = selfFilter(found_list, args.self)
 
     for f in found_list:
         print(f)
 
     return exit_code
-

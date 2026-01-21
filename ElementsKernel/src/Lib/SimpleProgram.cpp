@@ -21,22 +21,20 @@
 
 #include "ElementsKernel/SimpleProgram.h"
 
-#include <iostream>                             // for cerr
+#include <exception>  // for exception
+#include <iostream>   // for cerr
 
-#include <boost/filesystem/path.hpp>            // for path
-
-#include "ElementsKernel/Exit.h"                // for ExitCode
-#include "ElementsKernel/Unused.h"              // for ELEMENTS_UNUSED
-
-using boost::filesystem::path;
+#include "ElementsKernel/Exit.h"    // for ExitCode
+#include "ElementsKernel/Path.h"    // for Path::Item
+#include "ElementsKernel/Unused.h"  // for ELEMENTS_UNUSED
 
 namespace Elements {
 
-SimpleProgram::~SimpleProgram() {}
+SimpleProgram::~SimpleProgram() = default;
 
-ExitCode SimpleProgram::run(int argc, char** argv) noexcept {
+ExitCode SimpleProgram::run(const int argc, char* argv[]) noexcept {
 
-  ExitCode exit_code {ExitCode::OK};
+  ExitCode exit_code;
 
   setup(argc, argv);
 
@@ -45,34 +43,32 @@ ExitCode SimpleProgram::run(int argc, char** argv) noexcept {
 
   try {
     exit_code = main();
-  } catch (const std::exception & e) {
+  } catch (const std::exception& e) {
     cerr << "Exception has been thrown : " << e.what() << endl;
     exit_code = ExitCode::NOT_OK;
   } catch (...) {
-    cerr << "An unknown exception has been thrown"<< endl;
+    cerr << "An unknown exception has been thrown" << endl;
     exit_code = ExitCode::NOT_OK;
   }
 
   return exit_code;
 }
 
+void SimpleProgram::setup(ELEMENTS_UNUSED int argc, char* argv[]) {
 
-void SimpleProgram::setup(ELEMENTS_UNUSED int argc, char** argv) {
-
-  path prog_path {argv[0]};
+  const Path::Item prog_path{argv[0]};
 
   m_program_name = prog_path.filename();
   m_program_path = prog_path.parent_path();
 
   defineOptions();
-
 }
 
-const path& SimpleProgram::getProgramPath() const {
+const Path::Item& SimpleProgram::getProgramPath() const {
   return m_program_path;
 }
 
-const path& SimpleProgram::getProgramName() const {
+const Path::Item& SimpleProgram::getProgramName() const {
   return m_program_name;
 }
 

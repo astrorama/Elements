@@ -1,6 +1,6 @@
 /**
  * @file Off64Type.h
- *
+ * @brief This file is intended to iron out all the differences between different C++ standards for off64_t
  * @date 29 janv. 2019
  * @author Hubert Degaudenzi
  *
@@ -29,9 +29,8 @@
 
 #include <sys/types.h>
 #if defined(__APPLE__)
-#  include <sys/dtrace.h>
+#include <sys/dtrace.h>
 #endif
-
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_OFF64TYPE_H_
 

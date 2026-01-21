@@ -1,26 +1,27 @@
-"""
-@file ElementsKernel/AddPythonModule.py
-@author Nicolas Morisset
+#
+# Copyright (C) 2012-2020 Euclid Science Ground Segment
+#
+# This library is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation; either version 3.0 of the License, or (at your option)
+# any later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this library; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
 
-@date 01/07/15
+""" This script creates a new Elements python module
 
-@brief This script creates a new Elements python module
+:file: ElementsKernel/AddPythonModule.py
+:author: Nicolas Morisset
 
-@copyright: 2012-2020 Euclid Science Ground Segment
-
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free
-Software Foundation; either version 3.0 of the License, or (at your option)
-any later version.
-
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+:date: 2015-07-01
 
 """
 
@@ -34,7 +35,7 @@ from ElementsKernel import Logging
 
 from ElementsKernel import Exit
 
-logger = Logging.getLogger('AddPythonModule')
+LOGGER = Logging.getLogger(__name__)
 
 # Define constants
 CMAKE_LISTS_FILE = 'CMakeLists.txt'
@@ -42,6 +43,7 @@ PYTEST_TEMPLATE_FILE_IN = 'PythonTest_template.py.in'
 PYMODULE_TEMPLATE_FILE_IN = 'PythonModule_template.py.in'
 
 ################################################################################
+
 
 def createDirectories(module_dir, module_name):
     """
@@ -56,11 +58,12 @@ def createDirectories(module_dir, module_name):
 
 ################################################################################
 
+
 def updateCmakeListsFile(module_dir):
     """
     Update the CMakeList.txt file
     """
-    logger.info('Updating the <%s> file', CMAKE_LISTS_FILE)
+    LOGGER.info('Updating the <%s> file', CMAKE_LISTS_FILE)
     cmake_filename = os.path.join(module_dir, CMAKE_LISTS_FILE)
     ProjectCommonRoutines.addItemToCreationList(cmake_filename)
 
@@ -84,21 +87,22 @@ def updateCmakeListsFile(module_dir):
 
 ################################################################################
 
+
 def createPythonModule(module_dir, module_name, python_module_name):
     """
     Create the python module
     """
-    print ('module_dir ',module_dir, 'module_name ',module_name, 'python_module_name ',python_module_name)
+    print ('module_dir ', module_dir, 'module_name ', module_name, 'python_module_name ', python_module_name)
     createDirectories(module_dir, module_name)
     ProjectCommonRoutines.createPythonInitFile(os.path.join(module_dir, 'python', module_name, '__init__.py'))
     full_pymodule_name = os.path.join('python', module_name, python_module_name + '.py')
     pytest_name = os.path.join('tests', 'python', python_module_name + '_test.py')
-    target_locations = { 
+    target_locations = {
                        PYMODULE_TEMPLATE_FILE_IN: full_pymodule_name,
                        PYTEST_TEMPLATE_FILE_IN: pytest_name
                        }
 
-    configuration = {  "FILE":  full_pymodule_name,
+    configuration = {  "FILE": full_pymodule_name,
                        "FILETEST": pytest_name,
                        "DATE": time.strftime("%x"),
                        "AUTHOR": ProjectCommonRoutines.getAuthor(),
@@ -118,6 +122,7 @@ def createPythonModule(module_dir, module_name, python_module_name):
 
 ################################################################################
 
+
 def makeChecks(module_file_path, python_module_name):
     """
     Make some checks
@@ -128,6 +133,7 @@ def makeChecks(module_file_path, python_module_name):
     ProjectCommonRoutines.checkAuxFileExist(PYTEST_TEMPLATE_FILE_IN)
 
 ################################################################################
+
 
 def defineSpecificProgramOptions():
     """
@@ -149,14 +155,15 @@ This script creates an <Elements> python module at your current directory
 
 ################################################################################
 
+
 def mainMethod(args):
     """
     Main
     """
 
-    logger.info('#')
-    logger.info('#  Logging from the mainMethod() of the AddPythonModule script')
-    logger.info('#')
+    LOGGER.info('#')
+    LOGGER.info('#  Logging from the mainMethod() of the AddPythonModule script')
+    LOGGER.info('#')
 
     exit_code = Exit.Code["OK"]
 
@@ -166,10 +173,10 @@ def mainMethod(args):
         # Default is the current directory
         current_dir = os.getcwd()
 
-        logger.info('Current directory : %s', current_dir)
-        logger.info('')
+        LOGGER.info('Current directory : %s', current_dir)
+        LOGGER.info('')
 
-        # We absolutely need a Elements cmake file
+        # We absolutely need an Elements cmake file
         module_name = ProjectCommonRoutines.getElementsModuleName(current_dir)
 
         module_file_path = os.path.join(current_dir, 'python', module_name,
@@ -179,7 +186,7 @@ def mainMethod(args):
         # Create module
         createPythonModule(current_dir, module_name, python_module_name)
 
-        logger.info('< %s > python module successfully created in < %s >', python_module_name, module_file_path)
+        LOGGER.info('< %s > python module successfully created in < %s >', python_module_name, module_file_path)
         # Remove backup file
         ProjectCommonRoutines.deleteFile(os.path.join(current_dir, CMAKE_LISTS_FILE) + '~')
 
@@ -188,10 +195,10 @@ def mainMethod(args):
 
     except Exception as msg:
         if str(msg):
-            logger.error(msg)
-        logger.error('# Script aborted.')
+            LOGGER.error(msg)
+        LOGGER.error('# Script aborted.')
         exit_code = Exit.Code["NOT_OK"]
     else:
-        logger.info('# Script over.')
+        LOGGER.info('# Script over.')
 
     return exit_code

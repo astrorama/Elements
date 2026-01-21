@@ -27,16 +27,15 @@
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CLASSEXAMPLE_H_
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CLASSEXAMPLE_H_
 
-#include <string>                   // for std::string
-#include <vector>                   // for std::vector
-#include <memory>                   // for std::unique_ptr
+#include <memory>  // for std::unique_ptr
+#include <string>  // for std::string
+#include <vector>  // for std::vector
 
-#include <cstdint>                  // for std::int64_t
+#include <cstdint>  // for std::int64_t
 
 #include "ElementsKernel/Export.h"
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class ClassExample
@@ -45,11 +44,20 @@ namespace Examples {
  *    An class example
  * @details
  *    Our naming convention and coding standard are used in this example
+ * @startuml
+ * class ClassExample {
+ *  +ClassExample {static} factoryMethod()
+ *  +std::string& {static} getStaticString()
+ *  +double fundamentalTypeMethod(const double, const double) const
+ *  -double m_ra
+ *  -const std::string {static} s_static_string
+ *  -std::int64_t m_source_id
+ * }
+ * @enduml
  */
 class ELEMENTS_API ClassExample {
 
 public:
-
   /**
    * @brief
    *    Example factory method
@@ -63,8 +71,13 @@ public:
    */
   static ClassExample factoryMethod(const std::int64_t source_id, const double ra);
 
-  /*
-   * Getter to access the static private string
+  /**
+   * @brief
+   *    Retrieves the static string.
+   * @details
+   *    This method returns a reference to the static string member.
+   * @return
+   *    A constant reference to the static string.
    */
   static const std::string& getStaticString() {
     return s_static_string;
@@ -100,7 +113,7 @@ public:
    * @return
    *    The output of the method
    */
-  double fundamentalTypeMethod(const double input_variable) const;
+  static double fundamentalTypeMethod(const double input_variable);
 
   /**
    * @brief
@@ -118,7 +131,7 @@ public:
    * @throws
    *   EuclidException, if the second number is (close to) zero
    */
-  double divideNumbers(const double first, const double second) const;
+  static double divideNumbers(const double first, const double second);
 
   /**
    * @brief
@@ -134,7 +147,7 @@ public:
    * @param vector_unique_ptr
    *    Unique pointer to a vector object
    */
-  void passingUniquePointer(std::unique_ptr<std::vector<double>> vector_unique_ptr) const;
+  static void passingUniquePointer(const std::unique_ptr<std::vector<double>>& vector_unique_ptr);
 
   /**
    * @brief
@@ -149,7 +162,7 @@ public:
    * @param input_object
    *    a vector of double
    */
-  void passingObjectInGeneral(const std::vector<double>& input_object) const;
+  static void passingObjectInGeneral(const std::vector<double>& input_object);
 
   /**
    * Getter to access private sourceId
@@ -167,7 +180,6 @@ public:
   }
 
 private:
-
   /**
    * @brief Constructor
    *
@@ -180,23 +192,19 @@ private:
    * can be chosen via the factory.
    *
    */
-  ClassExample(const std::int64_t source_id, const double ra) :
-      m_source_id(source_id), m_ra(ra) {
-  }
+  ClassExample(const std::int64_t source_id, const double ra) : m_source_id(source_id), m_ra(ra) {}
 
   /// An example of a static string
-  static std::string s_static_string;
+  static const std::string s_static_string;
 
   /// Source ID as an example of a 64 bits integer
-  std::int64_t m_source_id { 0 };
+  std::int64_t m_source_id{0};
 
   /// Source right ascension
-  double m_ra { 0.0 };
-
+  double m_ra{0.0};
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_CLASSEXAMPLE_H_
 

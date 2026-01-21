@@ -18,6 +18,7 @@ else:
     raise RuntimeError("Locker only defined for nt and posix platforms")
 
 if os.name == 'nt':
+
     def lock(filename):
         """
         Lock first 10 bytes of a filename.
@@ -112,7 +113,6 @@ elif os.name == 'posix':
             # say something ?
             # print _id_()," failed to acquire the lock ..."
             _sleep()
-        return
 
     def unlock(filename):
         file_name = filename.name
@@ -130,11 +130,10 @@ elif os.name == 'posix':
         except OSError as e:
             if e.errno != errno.ENOENT:
                 raise
-        return
 
 import logging
 # Lock a file.
-#  The file for the lock is created if it doesn't exists and it the "temporary"
+#  The file for the lock is created if it doesn't exist and it the "temporary"
 #  argument is set to True it will also be deleted when the lock is not needed.
 #  The unlocking is done in the destructor (RAII pattern).
 

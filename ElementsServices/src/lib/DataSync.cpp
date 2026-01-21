@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -17,39 +17,40 @@
  */
 
 #include "ElementsServices/DataSync.h"
-#include "ElementsServices/DataSync/DataSynchronizer.h"
-#include "ElementsServices/DataSync/DataSynchronizerMaker.h"
 
-namespace ElementsServices {
+#include <exception>  // for exception
+
+#include "ElementsServices/DataSync/DataSynchronizer.h"       // for DataSynchronizer
+#include "ElementsServices/DataSync/DataSynchronizerMaker.h"  // for createSynchronizer
+
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
+DataSync::DataSync(const path& connectionFile, const path& dependencyFile)
+    : m_connectionConfig(connectionFile)
+    , m_distantRoot(m_connectionConfig.distant_root)
+    , m_localRoot(m_connectionConfig.local_root)
+    , m_dependencyConfig(m_distantRoot, m_localRoot, dependencyFile) {}
 
-DataSync::DataSync(path connectionFile, path dependencyFile) :
-    m_connectionConfig(connectionFile),
-    m_distantRoot(m_connectionConfig.distantRoot),
-    m_localRoot(m_connectionConfig.localRoot),
-    m_dependencyConfig(m_distantRoot, m_localRoot, dependencyFile) {
-}
-
-void DataSync::download() {
-  const auto& synchronizer = createSynchronizer(
-      m_connectionConfig,
-      m_dependencyConfig);
+void DataSync::download() const {
+  const auto& synchronizer = createSynchronizer(m_connectionConfig, m_dependencyConfig);
   synchronizer->downloadAllFiles();
 }
 
-void DataSync::downloadWithFallback(path connectionFile) {
+void DataSync::downloadWithFallback(const path& connectionFile) {
   try {
     download();
-  } catch (std::exception &e) {
+  } catch (std::exception&) {
     m_connectionConfig = ConnectionConfiguration(connectionFile);
     download();
   }
 }
 
-path DataSync::absolutePath(path relativePath) {
+path DataSync::absolutePath(const path& relativePath) const {
   return m_localRoot / relativePath;
 }
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements

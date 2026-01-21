@@ -1,6 +1,6 @@
 /**
  * @file Auxiliary.cpp
- *
+ * @brief Implementation of the Auxiliary functions
  * @date Feb 8, 2017
  * @author Hubert Degaudenzi
  *
@@ -22,52 +22,62 @@
 
 #include "ElementsKernel/Auxiliary.h"
 
-#include <algorithm>                   // for remove_if
-#include <iterator>
-#include <map>
-#include <string>                      // for string
-#include <vector>                      // for vector
+#include <algorithm>  // for remove_if
+#include <string>     // for string
+#include <vector>     // for vector
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
-#include "ElementsKernel/Path.h"       // for Type and VARIABLE
-#include "ElementsKernel/System.h"     // for DEFAULT_INSTALL_PREFIX
+#include "ElementsKernel/Path.h"    // for Type, Item, VARIABLE
+#include "ElementsKernel/System.h"  // for DEFAULT_INSTALL_PREFIX
 
 using std::string;
-using boost::filesystem::path;
 
 namespace Elements {
+inline namespace Kernel {
 
 string getAuxiliaryVariableName() {
   return Path::VARIABLE.at(Path::Type::auxiliary);
 }
 
 // instantiation of the most expected types
-template path getAuxiliaryPath(const path& file_name, bool raise_exception);
-template path getAuxiliaryPath(const string& file_name, bool raise_exception);
+template Path::Item getAuxiliaryPath(const Path::Item& file_name, bool raise_exception);
+template Path::Item getAuxiliaryPath(const string& file_name, bool raise_exception);
 
-std::vector<path> getAuxiliaryLocations(bool exist_only) {
+std::vector<Path::Item> getAuxiliaryLocations(const bool exist_only) {
 
   using System::DEFAULT_INSTALL_PREFIX;
 
-  auto location_list = Path::getLocationsFromEnv(Path::VARIABLE.at(Path::Type::auxiliary), exist_only);
+  auto location_list = getLocations(Path::Type::auxiliary, exist_only);
 
   // extended to /usr/share/aux{dir,}
-  location_list.push_back(path(DEFAULT_INSTALL_PREFIX) / "share" / "auxdir");
+  location_list.emplace_back(Path::Item(DEFAULT_INSTALL_PREFIX) / "share" / "auxdir");
   // for backward compatibility with the former convention
-  location_list.push_back(path(DEFAULT_INSTALL_PREFIX) / "share" / "aux");
+  location_list.emplace_back(Path::Item(DEFAULT_INSTALL_PREFIX) / "share" / "aux");
 
   if (exist_only) {
-    auto new_end = std::remove_if(location_list.begin(),
-                                  location_list.end(),
-                                  [](const path& p){
-                                     return (not boost::filesystem::exists(p));
-                                  });
+    const auto new_end = std::remove_if(location_list.begin(), location_list.end(), [](const Path::Item& p) {
+      return not exists(p);
+    });
     location_list.erase(new_end, location_list.end());
   }
 
   return location_list;
 }
 
+namespace Auxiliary {
+
+string getVariableName() {
+  return getAuxiliaryVariableName();
+}
+
+// instantiation of the most expected types
+template Path::Item getPath(const Path::Item& file_name, bool raise_exception);
+template Path::Item getPath(const std::string& file_name, bool raise_exception);
+
+std::vector<Path::Item> getLocations(const bool exist_only) {
+  return getAuxiliaryLocations(exist_only);
+}
+
+}  // namespace Auxiliary
+
+}  // namespace Kernel
 }  // namespace Elements

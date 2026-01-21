@@ -1,13 +1,63 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 elements_subdir(ElementsKernel)
 
-find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex)
+if(POLICY CMP0167)
+  # this policy is related to the Boost find_package
+  # please run "cmake --help-policy CMP0167" for more details
+  if(NOT CMAKE_VERSION VERSION_LESS 3.30) # i.e CMAKE_VERSION >= 3.30
+    cmake_policy(SET CMP0167 OLD)
+  endif()
+endif()
+
+find_package(Boost REQUIRED COMPONENTS filesystem thread program_options system regex unit_test_framework)
 find_package(Log4CPP REQUIRED)
 
+
 #---Libraries---------------------------------------------------------------
-elements_add_library(ElementsKernel src/Lib/*.cpp
+elements_add_library(ElementsKernel src/Lib/Auxiliary.cpp
+                                    src/Lib/Configuration.cpp
+                                    src/Lib/Environment.cpp
+                                    src/Lib/Exception.cpp
+                                    src/Lib/Logging.cpp
+                                    src/Lib/ModuleInfo.cpp
+                                    src/Lib/Path.cpp
+                                    src/Lib/PathSearch.cpp
+                                    src/Lib/Program.cpp
+                                    src/Lib/ProgramManager.cpp
+                                    src/Lib/Real.cpp
+                                    src/Lib/SimpleProgram.cpp
+                                    src/Lib/Sleep.cpp
+                                    src/Lib/Storage.cpp
+                                    src/Lib/System.cpp
+                                    src/Lib/Temporary.cpp
+                                    src/Lib/ThisModule.cpp
+                                    src/Lib/Version.cpp
                     LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP
                     INCLUDE_DIRS Boost Log4CPP
                     PUBLIC_HEADERS ElementsKernel)
+
+add_library(Elements::Kernel ALIAS ElementsKernel)
+
+find_package(GMock)
+if(GMOCK_FOUND)
+  elements_add_library(ElementsMock src/Lib/EnableGMock.cpp
+                      LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP GMock ElementsKernel
+                      INCLUDE_DIRS Boost Log4CPP GMock
+                      PUBLIC_HEADERS ElementsKernel)
+  add_library(Elements::Mock ALIAS ElementsMock)
+endif()
+
+find_package(TBB QUIET)
+if(TBB_FOUND)
+  elements_add_library(ElementsThreading src/Lib/Threading.cpp
+                      LINK_LIBRARIES ${CMAKE_DL_LIBS} Boost Log4CPP TBB::tbb ElementsKernel
+                      INCLUDE_DIRS Boost Log4CPP TBB::tbb
+                      PUBLIC_HEADERS ElementsKernel)
+  add_library(Elements::Threading ALIAS ElementsThreading)
+endif()
+
+
 
 #---Tests-------------------------------------------------------------------
 elements_add_unit_test(Real tests/src/Real_test.cpp
@@ -28,22 +78,22 @@ elements_add_unit_test(Logging tests/src/Logging_test.cpp
 # Path_test
 elements_add_unit_test(PathSearch tests/src/PathSearch_test.cpp
                        EXECUTABLE PathSearch_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 elements_add_unit_test(Path tests/src/Path_test.cpp
                        EXECUTABLE Path_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 elements_add_unit_test(Configuration tests/src/Configuration_test.cpp
                        EXECUTABLE BasicConfiguration_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 elements_add_unit_test(Auxiliary tests/src/Auxiliary_test.cpp
                        EXECUTABLE Auxiliary_test
-                       LINK_LIBRARIES ElementsKernel TYPE Boost 
+                       LINK_LIBRARIES ElementsKernel TYPE Boost
                        LABELS Path)
 
 #-----------------------
@@ -142,6 +192,32 @@ elements_add_unit_test(Exception tests/src/Exception_test.cpp
                        EXECUTABLE Exception_test
                        LINK_LIBRARIES ElementsKernel TYPE Boost)
 
+#-----------------------
+# Project_test
+elements_add_unit_test(Project tests/src/Project_test.cpp
+                       EXECUTABLE Project_test
+                       LINK_LIBRARIES ElementsKernel TYPE Boost)
+
+#-----------------------
+# Module_test
+elements_add_unit_test(Module tests/src/Module_test.cpp
+                       EXECUTABLE Module_test
+                       LINK_LIBRARIES ElementsKernel TYPE Boost)
+
+
+#-----------------------
+# OpenMP_test
+if(ELEMENTS_PARALLEL AND OPENMP_FOUND)
+  elements_add_unit_test(OpenMP tests/src/OpenMP_test.cpp
+                         EXECUTABLE OpenMP_test
+                         TYPE Boost
+                         LABELS OpenMP)
+endif()
+
+elements_add_unit_test(GLibCxxParallel tests/src/GLibCxxParallel_test.cpp
+                       EXECUTABLE GLibCxxParallel_test
+                       TYPE Boost)
+
 
 #if(ELEMENTS_HIDE_WARNINGS)
 #  if(UNIX)
@@ -154,8 +230,9 @@ elements_add_unit_test(Exception tests/src/Exception_test.cpp
 
 #---Python and Scripts ------------------------------------------------------------
 
-elements_install_python_modules()
+elements_install_scripts()
 
+elements_install_python_modules()
 
 elements_add_python_program(CreateElementsProject ElementsKernel.CreateProject)
 elements_add_python_program(AddElementsModule ElementsKernel.AddModule)
@@ -182,19 +259,19 @@ elements_add_test(AddPythonModule COMMAND addPythonModule_test LABELS Creation)
 elements_add_test(AddPythonProgram COMMAND addPythonProgram_test LABELS Creation)
 elements_add_test(AddScript COMMAND addScript_test LABELS Creation)
 
-elements_add_test(CreateDependentElementsProjects 
-                  COMMAND createDependentElementsProjects_test  
+elements_add_test(CreateDependentElementsProjects
+                  COMMAND createDependentElementsProjects_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
 
 elements_add_test(CheckElementsProjectsTree
-                  COMMAND checkElementsProjectsTree_test  
+                  COMMAND checkElementsProjectsTree_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
 
 if (NOT SQUEEZED_INSTALL)
   elements_add_test(CheckProjectDependencyFailure
-                    COMMAND checkProjectDependencyFailure_test  
+                    COMMAND checkProjectDependencyFailure_test
                     ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                     LABELS Creation)
 endif()
@@ -203,13 +280,37 @@ elements_add_test(HEADVersionProject
                   COMMAND HEADVersionProject_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
-                  
+
 elements_add_test(PatchVersionProject
                   COMMAND patchVersionProject_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation)
-                  
-elements_add_test(CMakeOverride 
-                  COMMAND cmakeOverride_test  
+
+elements_add_test(CMakeOverride
+                  COMMAND cmakeOverride_test
                   ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
                   LABELS Creation Override)
+
+elements_add_test(MissingElementsProjectVersion
+                  COMMAND missingElementsProjectVersion_test
+                  ENVIRONMENT CMAKE_PREFIX_PATH+=${CMAKE_SOURCE_DIR}/cmake
+                  TIMEOUT 300
+                  LABELS Creation)
+
+if(NOT "${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
+elements_add_test(SqueezedInstall COMMAND squeezedInstall_test
+                  ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR}
+                  LABELS Creation Meta Squeezed)
+
+find_package(Ninja)
+if(NINJA_FOUND)
+elements_add_test(SqueezedInstallWithNinja COMMAND squeezedInstall_test
+                  ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} CUSTOM_CMAKE_GENERATOR=Ninja
+                  LABELS Creation Meta Ninja Squeezed)
+endif()
+
+elements_add_test(CMakeIncludeGuards COMMAND squeezedInstall_test
+                  ENVIRONMENT ELEMENTS_SOURCE_DIR=${CMAKE_SOURCE_DIR} TESTCMAKEFLAGS=-DUSE_DEBUG_PRINT=ON
+                  LABELS Creation Meta Squeezed)
+
+endif()

@@ -1,7 +1,7 @@
 /**
  * @file TemplatedDataSourceUser.h
- *
- * @date Sep 23, 2015
+ * @brief Unit testing demonstration
+ * @date 2015-09-23
  * @author Florian Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -27,8 +27,7 @@
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_H_
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_H_
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class TemplatedDataSourceUser
@@ -36,31 +35,35 @@ namespace Examples {
  * @brief This class has been created to demonstrate unit testing. It manipulate
  * an object representing a DataSource using template to achieve polymorphism.
  */
-class TemplatedDataSourceUser{
+class TemplatedDataSourceUser {
 public:
-
   /**
-     * @brief Compute the sum of the values of the records stored into the provided
-     * DataSource
-     *
-     * @tparam T
-     * A type representing a DataSource. The type must declare the methods
-     * + size_t countRecords() const
-     * + double getRecordValue(size_t index) const
-     *
-     * @param data_source
-     * A reference to a DataSource object.
-     *
-     * @return The sum of the values of the records into the DataSource object
-     */
+   * @brief Compute the sum of the values of the records stored into the provided
+   * DataSource
+   *
+   * @tparam T
+   * A type representing a DataSource. The type must declare the methods
+   * + size_t countRecords() const
+   * + double getRecordValue(size_t index) const
+   *
+   * @param data_source
+   * A reference to a DataSource object.
+   *
+   * @return The sum of the values of the records into the DataSource object
+   */
   template <typename T>
-  double sumRecords(const T& data_source);
+  static double sumRecords(const T& data_source);
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
-#include "ElementsExamples/_impl/TemplatedDataSourceUser.icpp"
+/**
+ * @def ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
+ * @brief Macro to prevent the direct inclusion of the implementation file
+ */
+#define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
+#include "ElementsExamples/_impl/TemplatedDataSourceUser.tpp"  // IWYU pragma: export
+#undef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_IMPL_
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_TEMPLATEDDATASOURCEUSER_H_
 

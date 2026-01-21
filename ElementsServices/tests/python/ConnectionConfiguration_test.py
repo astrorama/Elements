@@ -21,6 +21,7 @@ import unittest
 
 from ElementsKernel.Temporary import TempDir, TempEnv
 from ElementsServices.DataSync import DataHost, ConnectionConfiguration
+from ElementsServices.DataSync.DataSyncUtils import getWorkdirVariable
 
 from fixtures.ConfigFilesFixture import theWebdavFrConfig, theNoOverwriteConfig, thePrefixedLocalWorkspace
 
@@ -31,12 +32,12 @@ class TestConnectionConfiguration(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.m_top_dir = TempDir(prefix="DataSync_test")
         self.m_env = TempEnv()
-        self.m_env["WORKSPACE"] = os.path.join(self.m_top_dir.path(), "workspace")
-        
+        self.m_workdir_var = getWorkdirVariable()
+        self.m_env[self.m_workdir_var] = os.path.join(self.m_top_dir.path(), "workspace")
+
     def tearDown(self):
         unittest.TestCase.tearDown(self)
         del self.m_top_dir
-
 
     def checkHostParsing(self, host, names):
         config = ConnectionConfiguration()
@@ -51,21 +52,21 @@ class TestConnectionConfiguration(unittest.TestCase):
 
     def test_overwritingPolicy(self):
         config = ConnectionConfiguration(theWebdavFrConfig())
-        configNoOverwrite = ConnectionConfiguration(theNoOverwriteConfig())
+        config_no_overwrite = ConnectionConfiguration(theNoOverwriteConfig())
         assert config.overwritingAllowed(), \
             "Overwrite should be allowed, but it is not"
-        assert not configNoOverwrite.overwritingAllowed(), \
+        assert not config_no_overwrite.overwritingAllowed(), \
             "Overwrite should not be allowed, but it is"
 
     def test_webdavFrConfig(self):
         config = ConnectionConfiguration(theWebdavFrConfig())
         assert config.host == DataHost.WEBDAV, \
             "Host shoud be WebDAV, but it is not"
-        assert config.overwritingPolicy, \
+        assert config.overwriting_policy, \
             "Overwrite should be allowed, but it is not"
-        assert config.distantRoot == "/euclid-fr/ct/mock_test_data", \
-            "Distant workspace path misread: " + confif.distantRoot
-        assert config.localRoot == thePrefixedLocalWorkspace(), \
-            "Local workspace path misread: " + config.localRoot
+        assert config.distant_root == "/euclid-fr/ct/mock_test_data", \
+            "Distant workspace path misread: " + config.distant_root
+        assert config.local_root == thePrefixedLocalWorkspace(), \
+            "Local workspace path misread: " + config.local_root
         assert config.tries == 8, \
             "Wrong number of tries: " + str(config.tries)

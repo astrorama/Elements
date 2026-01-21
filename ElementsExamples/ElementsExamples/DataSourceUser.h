@@ -1,7 +1,7 @@
 /**
- * @file DataSourceUser.h
+ * @file ElementsExamples/DataSourceUser.h
  *
- * @date Sep 23, 2015
+ * @date 2015-09-23
  * @author Florian Dubath
  *
  * @copyright 2012-2020 Euclid Science Ground Segment
@@ -27,12 +27,11 @@
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_DATASOURCEUSER_H_
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_DATASOURCEUSER_H_
 
-#include  <cstdlib>                 // for std::size_t
+#include <cstdlib>  // for std::size_t
 
 #include "ElementsKernel/Export.h"  // For ELEMENTS_API
 
-namespace Elements {
-namespace Examples {
+namespace Elements::Examples {
 
 /**
  * @class DataSourceInterface
@@ -43,7 +42,7 @@ namespace Examples {
  * @details
  * Note that as we test the call to this interface, no implementation is provided.
  */
-class DataSourceInterface {
+class ELEMENTS_API DataSourceInterface {
 
 public:
   /**
@@ -87,12 +86,10 @@ public:
    *
    * @return The sum of the values of the records into the DataSource object
    */
-  double sumRecords(const DataSourceInterface& data_source);
-
+  static double sumRecords(const DataSourceInterface& data_source);
 };
 
-}  // namespace Examples
-}  // namespace Elements
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_DATASOURCEUSER_H_
 

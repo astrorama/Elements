@@ -3,8 +3,8 @@ Module Overview <----------------- TO BE WRITTEN ------------------------>
 
 .. important:: Please edit ./ElementsKernel/doc/doc_module.rst to replace this section.
 
-.. The following sections can be replaced or updated. 
-   You may also use a toctree directive for sub documents. 
+.. The following sections can be replaced or updated.
+   You may also use a toctree directive for sub documents.
 
 Introduction
 ------------
@@ -16,7 +16,7 @@ What does it do?
 Architecture overview
 ---------------------
 
-Highlevel overview of the Module.
+High level overview of the Module.
 
 How is it done?
 

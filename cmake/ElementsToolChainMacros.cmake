@@ -1,8 +1,8 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.9)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
 
 include(ElementsUtils)
 
-include_guard()
+include_guard(GLOBAL)
 
 macro(preset_module_path_from_env)
 
@@ -55,6 +55,8 @@ endmacro()
 
 ## Initialize common variables.
 macro(init)
+  cmake_language(GET_MESSAGE_LOG_LEVEL current_message_log_level)
+  message(STATUS "Current log level: ${current_message_log_level}")
   preload_toolchain_module_path()
   if(NOT BINARY_TAG)
     include(SGSPlatform)
@@ -73,7 +75,7 @@ function(_internal_find_local_project projects_var project_uses_var config_file)
   string(REGEX MATCH "[ \t]*(elements_project)[ \t]*\\(([^)]+)\\)" match_use ${config_file_data})
   set(match_use ${CMAKE_MATCH_2})
 
-  if(match_use STREQUAL "")
+  if("${match_use}" STREQUAL "")
     message(FATAL_ERROR "${config_file} does not contain elements_project")
   endif()
 
@@ -105,7 +107,7 @@ function(_internal_find_installed_project projects_var project_uses_var config_f
   string(REGEX MATCH "[ \t]*(set[ \t]*\\([ \t]*)([^_])_USES[ \t]+([^)]+)\\)" match_use ${config_file_data})
   set(match_use ${CMAKE_MATCH_3})
 
-  if(match_use STREQUAL "")
+  if("${match_use}" STREQUAL "")
     message(FATAL_ERROR "${config_file} does not contain elements_project")
   endif()
 
@@ -150,15 +152,21 @@ function(_internal_find_projects projects_var config_file)
       get_filename_component(${upper_proj_name}_CONFIG_FILE ${config_file} ABSOLUTE CACHE)
     endif()
 
+    if(NOT ${upper_proj_name}_PROJECT_VERSION)
+      set(${upper_proj_name}_PROJECT_VERSION ${version_name} CACHE STRING "The project version")
+    endif()
+
+
+
     list(FIND collected_config2 ${${upper_proj_name}_CONFIG_FILE} conf_pos)
     if(conf_pos EQUAL -1)
       list(APPEND collected_config2 ${${upper_proj_name}_CONFIG_FILE})
     endif()
 
 
-    get_filename_component(cfg_file ${upper_proj_name}_CONFIG_FILE NAME)
+    get_filename_component(cfg_file ${${upper_proj_name}_CONFIG_FILE} NAME)
 
-    if(cfg_file STREQUAL "CMakeLists.txt")
+    if("${cfg_file}" STREQUAL "CMakeLists.txt")
       get_filename_component(${upper_proj_name}_ROOT_DIR ${${upper_proj_name}_CONFIG_FILE} PATH CACHE)
     else()
       get_filename_component(root_dir1 ${${upper_proj_name}_CONFIG_FILE} PATH)
@@ -173,6 +181,13 @@ function(_internal_find_projects projects_var config_file)
         # we extract two entries per iteration
         list(GET project_dep_list 0 name)
         list(GET project_dep_list 1 version)
+        if(NOT version MATCHES "^${full_version_regex}")
+          if(NOT version)
+            message(FATAL_ERROR "No project version specified for ${name}")
+          else()
+            message(FATAL_ERROR "${version} is not a version")
+          endif()
+        endif()
         list(REMOVE_AT project_dep_list 0 1)
         string(TOUPPER ${name} name_upper)
         # look for the configuration file of the project
@@ -297,6 +312,3 @@ endmacro()
 # find_projects(projects ${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt)
 #
 # set_paths_from_projects(${projects})
-
-
-

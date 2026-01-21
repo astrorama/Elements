@@ -32,18 +32,17 @@
 #define ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 
 // STL include files
-#include <vector>
-#include <typeinfo>
-#include <string>
 #include <memory>
-#include <climits>
+#include <string>
+#include <typeinfo>
+#include <vector>
 
 // Framework include files
-#include "ElementsKernel/Export.h"  // ELEMENTS_API
-#include "ElementsKernel/Unused.h"  // ELEMENTS_UNUSED
+#include "ElementsKernel/Export.h"     // ELEMENTS_API
+#include "ElementsKernel/Stringify.h"  // _str"
+#include "ElementsKernel/Unused.h"     // ELEMENTS_UNUSED
 
-namespace Elements {
-namespace System {
+namespace Elements::System {
 
 // --------------------------------------------------------------------------------------
 // various constants
@@ -53,51 +52,43 @@ namespace System {
  * @brief name of the shared dynamic library path
  */
 #if defined(__APPLE__)
-const std::string SHLIB_VAR_NAME { "DYLD_LIBRARY_PATH" };
+const std::string SHLIB_VAR_NAME{"DYLD_LIBRARY_PATH"};
 #else
-const std::string SHLIB_VAR_NAME { "LD_LIBRARY_PATH" };
+const std::string SHLIB_VAR_NAME{"LD_LIBRARY_PATH"};
 #endif
 
 /**
-* @brief constant that represent the common prefix of the libraries
-*/
-const std::string LIB_PREFIX { "lib" };
+ * @brief constant that represent the common prefix of the libraries
+ */
+const std::string LIB_PREFIX{"lib"};
 
 /**
  * @brief constant that represent the common extension of the libraries
  */
 #ifdef __APPLE__
-  const std::string LIB_EXTENSION { "dylib" };
+const std::string LIB_EXTENSION{"dylib"};
 #else
-  const std::string LIB_EXTENSION { "so" };
+const std::string LIB_EXTENSION{"so"};
 #endif
 
 /**
  * @brief  constant that represents the standard suffix of
  *   the libraries: usually "."+LIB_EXTENSION
  */
-const std::string LIB_SUFFIX { "." + LIB_EXTENSION };
+const std::string LIB_SUFFIX{"." + LIB_EXTENSION};
 
 /**
  * @brief alias for LIB_SUFFIX
  */
-const std::string SHLIB_SUFFIX { LIB_SUFFIX };
+const std::string SHLIB_SUFFIX{LIB_SUFFIX};
 
 /**
  * @brief constant for the canonical installation prefix
  * (on Linux and MacOSX at least)
  */
-const std::string DEFAULT_INSTALL_PREFIX { "/usr" };
+const std::string DEFAULT_INSTALL_PREFIX{"/usr"};
 
-#if defined(__OPTIMIZE__) && defined(__clang__)
-  const int STACK_OFFSET {1};
-#else
-# ifdef __APPLE__
-    const int STACK_OFFSET {4};
-# else
-    const int STACK_OFFSET {2};
-# endif
-#endif
+constexpr int STACK_OFFSET{2};
 
 #if defined(__linux__) || defined(__APPLE__)
 #define TEMPLATE_SPECIALIZATION
@@ -113,9 +104,17 @@ const std::string DEFAULT_INSTALL_PREFIX { "/usr" };
 
 #endif
 
+#ifdef __aarch64__
+#define Float128 _Float128
+#define Float128_str _str(_Float128)
+#else
+#define Float128 __float128
+#define Float128_str _str(__float128)
+#endif
 
 /// Definition of an image handle
-using ImageHandle = void*;
+using ImageHandle      = void*;
+using ConstImageHandle = const void*;
 /// Definition of the process handle
 using ProcessHandle = void*;
 /// Definition of the "generic" DLL entry point function
@@ -123,27 +122,23 @@ using EntryPoint = unsigned long (*)(const unsigned long iid, void** ppvObject);
 /// Definition of the "generic" DLL entry point function
 using Creator = void* (*)();
 
-
 /// Load dynamic link library
-ELEMENTS_API unsigned long loadDynamicLib(const std::string& name,
-    ImageHandle* handle);
+ELEMENTS_API unsigned long loadDynamicLib(const std::string& name, ImageHandle* handle);
 /// unload dynamic link library
 ELEMENTS_API unsigned long unloadDynamicLib(ImageHandle handle);
 /// Get a specific function defined in the DLL
-ELEMENTS_API unsigned long getProcedureByName(ImageHandle handle,
-    const std::string& name, EntryPoint* pFunction);
+ELEMENTS_API unsigned long getProcedureByName(ImageHandle handle, const std::string& name, EntryPoint* pFunction);
 /// Get a specific function defined in the DLL
-ELEMENTS_API unsigned long getProcedureByName(ImageHandle handle,
-    const std::string& name, Creator* pFunction);
+ELEMENTS_API unsigned long getProcedureByName(ImageHandle handle, const std::string& name, Creator* pFunction);
 /// Get last system known error
 ELEMENTS_API unsigned long getLastError();
 /// Get last system error as string
-ELEMENTS_API const std::string getLastErrorString();
+ELEMENTS_API std::string getLastErrorString();
 /// Retrieve error code as string for a given error
-ELEMENTS_API const std::string getErrorString(unsigned long error);
+ELEMENTS_API std::string getErrorString(unsigned long error);
 /// Get platform independent information about the class type
-ELEMENTS_API const std::string typeinfoName(const std::type_info&);
-ELEMENTS_API const std::string typeinfoName(const char*);
+ELEMENTS_API std::string typeinfoName(const std::type_info&);
+ELEMENTS_API std::string typeinfoName(const char*);
 /// Host name
 ELEMENTS_API const std::string& hostName();
 /// OS name
@@ -154,9 +149,9 @@ ELEMENTS_API const std::string& osVersion();
 ELEMENTS_API const std::string& machineType();
 /// get a particular environment variable
 ELEMENTS_API std::string getEnv(const std::string& var);
-/// get a particular environment variable, storing the value in the passed string if the
+/// get a particular environment variable, storing the value in the variable_value string if the
 /// variable is set. Returns true if the variable is set, false otherwise.
-ELEMENTS_API bool getEnv(const std::string& var, std::string &value);
+ELEMENTS_API bool getEnv(const std::string& variable_name, std::string& variable_value);
 /// get all environment variables
 ELEMENTS_API std::vector<std::string> getEnv();
 /// Set an environment variables.
@@ -164,21 +159,19 @@ ELEMENTS_API std::vector<std::string> getEnv();
 /// When overwrite is 0, the variable is not set if already present.
 /// Returns 0 on success, -1 on failure.
 /// See man 3 setenv.
-ELEMENTS_API int setEnv(const std::string &name, const std::string &value,
-                         bool overwrite = true);
+ELEMENTS_API int setEnv(const std::string& name, const std::string& value, bool overwrite = true);
 /// Simple wrap around unsetenv for strings
 ELEMENTS_API int unSetEnv(const std::string& name);
 /// Check if an environment variable is set or not.
-ELEMENTS_API bool isEnvSet(const std::string& var);
+ELEMENTS_API bool isEnvSet(const std::string& variable_name);
 
-ELEMENTS_API int backTrace(ELEMENTS_UNUSED std::shared_ptr<void*> addresses, ELEMENTS_UNUSED const int depth);
-ELEMENTS_API const std::vector<std::string> backTrace(const int depth, const int offset = 0);
+ELEMENTS_API int backTrace(ELEMENTS_UNUSED const std::shared_ptr<void*>& addresses, ELEMENTS_UNUSED const int depth);
+ELEMENTS_API std::vector<std::string> backTrace(const int depth, const int offset = 0);
 
-ELEMENTS_API bool getStackLevel(ELEMENTS_UNUSED void* addresses, ELEMENTS_UNUSED void*& addr,
+ELEMENTS_API bool getStackLevel(ELEMENTS_UNUSED const void* addresses, ELEMENTS_UNUSED void*& addr,
                                 ELEMENTS_UNUSED std::string& fnc, ELEMENTS_UNUSED std::string& lib);
 
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System
 
 #endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_SYSTEM_H_
 

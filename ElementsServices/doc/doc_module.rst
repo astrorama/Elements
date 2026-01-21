@@ -3,8 +3,8 @@ Module Overview <----------------- TO BE WRITTEN ------------------------>
 
 .. important:: Please edit ./@_el_pack_short@/doc/module.rst to replace this section.
 
-.. The following sections can be replaced or updated. 
-   You may also use a toctree directive for sub documents. 
+.. The following sections can be replaced or updated.
+   You may also use a toctree directive for sub documents.
 
 Introduction
 ------------

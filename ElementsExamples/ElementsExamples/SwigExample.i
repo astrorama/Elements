@@ -3,7 +3,7 @@
 %{
 
 #include "ElementsKernel/Export.h"
-#include "ElementsExamples/functionExample.h"
+#include "ElementsExamples/FunctionExample.h"
 #include "ElementsExamples/SwigClassExample.h"
 #include "ElementsExamples/ClassExample.h"
 
@@ -22,7 +22,7 @@ public:
       m_ra(ra), m_dec(dec) {
   }
 
-  virtual ~SwigClassExample() {} 
+  virtual ~SwigClassExample() {}
 
 
   double getRa () const;
@@ -33,7 +33,3 @@ public:
 
 } // namespace Examples
 } // namespace Elements
-
-
-
-

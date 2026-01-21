@@ -21,23 +21,18 @@
 
 #include "ElementsKernel/ThisModule.h"
 
-#include <cstddef>
-#include <dlfcn.h>
+#include <dlfcn.h>  // for dlopen, dlsym
 
 #include "ElementsKernel/FuncPtrCast.h"  // for FuncPtrCast
 #include "ElementsKernel/ModuleInfo.h"   // for ModuleInfo
 
-namespace Elements {
-namespace System {
-
+namespace Elements::System {
 
 const ModuleInfo& getThisExecutableInfo() {
   static ModuleInfo this_module;
   if (this_module.isEmpty()) {
-    void* handle = ::dlopen(nullptr, RTLD_LAZY);
-    if (nullptr != handle) {
-      void* func = ::dlsym(handle, "main");
-      if (nullptr != func) {
+    if (void* handle = dlopen(nullptr, RTLD_LAZY); nullptr != handle) {
+      if (void* func = dlsym(handle, "main"); nullptr != func) {
         this_module = ModuleInfo(FuncPtrCast<void*>(func));
       }
     }
@@ -46,6 +41,4 @@ const ModuleInfo& getThisExecutableInfo() {
   return this_module;
 }
 
-
-}  // namespace System
-}  // namespace Elements
+}  // namespace Elements::System

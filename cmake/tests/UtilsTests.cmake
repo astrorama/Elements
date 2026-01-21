@@ -42,7 +42,7 @@ debug_message(STATUS "------>  this is the mismatch (should be 1): ${mismatch}")
 
 debug_message(STATUS "======================================================================")
 
-set(this_path "/home/hubert/Work/Space/Euclid" "/opt/euclid")
+set(this_path "/home/hubert/Work/Space" "/opt")
 
 find_local_project(Elements 3.6 "${this_path}" proj_loc)
 
@@ -58,4 +58,3 @@ get_project_from_file(${CMAKE_SOURCE_DIR}/CMakeLists.txt project version dep_lis
 debug_message(STATUS "project ${project} ${version} ${dep_list}")
 
 debug_message(STATUS "===================${CMAKE_SOURCE_DIR}/InstallArea/x86_64-fc21-gcc49-dbg/BaseProjConfig.cmake")
-

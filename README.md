@@ -1,6 +1,6 @@
 [//]: # (@cond Doxygen_Suppress)
 
-[![Build Status](https://travis-ci.org/degauden/Elements.svg?branch=develop)](https://travis-ci.org/degauden/Elements)
+[![Build Status](https://travis-ci.org/astrorama/Elements.svg?branch=develop)](https://travis-ci.org/astrorama/Elements)
 
 [//]: # (@endcond)
 
@@ -16,8 +16,8 @@ These are the standard CMake build instruction.
 
 ```
 > mkdir build
-> cd build 
+> cd build
 > cmake -DCMAKE_INSTALL_PREFIX=/usr ..
-> make 
+> make
 > make install
 ```

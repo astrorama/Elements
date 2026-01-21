@@ -25,51 +25,49 @@
  * @{
  */
 
-#ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
-#define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
+#ifndef ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
+#define ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 
-#include <boost/filesystem/path.hpp>
-
-#include "ElementsKernel/Export.h"
-#include "ElementsKernel/Main.h"
+#include "ElementsKernel/Exit.h"     // for ExitCode
+#include "ElementsKernel/Export.h"   // for ELEMENTS_API
+#include "ElementsKernel/Logging.h"  // for Logging
+#include "ElementsKernel/Path.h"     // for Item
 
 namespace Elements {
 
-// Forward declaration. We don't need the definition right now.
-enum class ExitCode;
-
+/**
+ * @class SimpleProgram
+ * @brief Provides a framework for creating structured programs with customizable logic.
+ *
+ * SimpleProgram is a base class for defining programs that adhere to a specific execution
+ * structure. It manages program setup, execution, and offers a way to define program-specific
+ * functionality by overriding virtual methods.
+ */
 class ELEMENTS_API SimpleProgram {
 
 public:
-
-  ELEMENTS_API ExitCode run(int argc, char** argv) noexcept;
-  ELEMENTS_API const boost::filesystem::path& getProgramPath() const;
-  ELEMENTS_API const boost::filesystem::path& getProgramName() const;
-
+  ExitCode          run(int argc, char** argv) noexcept;
+  const Path::Item& getProgramPath() const;
+  const Path::Item& getProgramName() const;
 
 protected:
-
   SimpleProgram() = default;
   virtual ~SimpleProgram();
 
-  virtual ExitCode main() = 0;
-  virtual void defineOptions() = 0;
+  virtual ExitCode main()          = 0;
+  virtual void     defineOptions() = 0;
 
 private:
-
   void setup(int argc, char** argv);
 
 private:
-
-  boost::filesystem::path m_program_name;
-  boost::filesystem::path m_program_path;
-
+  Path::Item m_program_name;
+  Path::Item m_program_path;
 };
 
-/** @example ElementsExamples/src/program/AnotherSimpleProgramExample.cpp
+/** @example ElementsExamples/src/program/AnotherSimpleProgram.cpp
  * This is an example of how to use the SimpleProgram class.
  */
-
 
 }  // namespace Elements
 
@@ -84,14 +82,13 @@ private:
  * @param ELEMENTS_PROGRAM name of the main program class, derived from
  * the class Elements::SimpleProgram class.
  */
-#define MAIN(ELEMENTS_PROGRAM)         \
-  ELEMENTS_API int main(int argc, char* argv[])              \
-  { \
-    auto program = ELEMENTS_PROGRAM();\
-    Elements::ExitCode exit_code = program.run(argc, argv);   \
-    return static_cast<Elements::ExitCodeType>(exit_code);    \
+#define MAIN(ELEMENTS_PROGRAM)                                                                                         \
+  ELEMENTS_API int main(int argc, char* argv[]) {                                                                      \
+    auto               program   = ELEMENTS_PROGRAM();                                                                 \
+    Elements::ExitCode exit_code = program.run(argc, argv);                                                            \
+    return static_cast<Elements::ExitCodeType>(exit_code);                                                             \
   }
 
-#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLEPROGRAM_H_
+#endif  // ELEMENTSKERNEL_ELEMENTSKERNEL_SIMPLE_PROGRAM_H_
 
 /**@}*/

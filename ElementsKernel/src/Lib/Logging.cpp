@@ -2,7 +2,7 @@
  * @file Logging.cpp
  * @date January 13, 2014
  * @author Nikolaos Apostolakos
- *
+ * @brief Implementation of the Logging class
  * @copyright 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
@@ -18,99 +18,150 @@
  *
  */
 
-#include "ElementsKernel/Logging.h"              // for Logging, etc
+#include "ElementsKernel/Logging.h"
 
-#include <iostream>                              // for operator<<, stringstream, etc
-#include <map>                                   // for map
-#include <memory>                                // for unique_ptr
-#include <sstream>                               // for stringstream
-#include <string>                                // for char_traits, string
+#include <iostream>  // for cerr
+#include <map>       // for map, operator!=, _Rb_tree_const_iterator
+#include <memory>    // for unique_ptr, make_unique
+#include <sstream>   // for basic_ostream, operator<<, endl, stringstream
+#include <string>    // for char_traits, allocator, basic_string, operator<, operator<<, string
+#include <utility>   // for pair
 
-#include <boost/algorithm/string/case_conv.hpp>  // for to_upper
-#include <boost/filesystem/path.hpp>             // for path
+#include <boost/algorithm/string.hpp>  // for to_upper
 
-#include <log4cpp/Category.hh>                   // for Category
-#include <log4cpp/FileAppender.hh>               // for FileAppender
-#include <log4cpp/OstreamAppender.hh>            // for OstreamAppender
-#include <log4cpp/PatternLayout.hh>              // for PatternLayout
-#include <log4cpp/Priority.hh>                   // for Priority, Priority::::INFO, etc
+#include <log4cpp/Category.hh>         // for Category
+#include <log4cpp/FileAppender.hh>     // for FileAppender
+#include <log4cpp/OstreamAppender.hh>  // for OstreamAppender
+#include <log4cpp/PatternLayout.hh>    // for PatternLayout
+#include <log4cpp/Priority.hh>  // for Priority, Priority::INFO, Priority::DEBUG, Priority::ERROR, Priority::FATAL, Priority::WARN, Priority::NOTSET
 
-#include "ElementsKernel/Exception.h"   // for Exception
+#include "ElementsKernel/Compat.h"     // for NON_REDUNDANT_MOVE
+#include "ElementsKernel/Exception.h"  // for Exception
+#include "ElementsKernel/Exit.h"       // for ExitCode
+#include "ElementsKernel/Path.h"       // for Item
 
+namespace log4cpp {
+class Layout;
+}
+
+using log4cpp::Category;
+using log4cpp::Layout;
+using log4cpp::Priority;
 using std::string;
 using std::unique_ptr;
-using log4cpp::Category;
-using log4cpp::Priority;
-using log4cpp::Layout;
 
 namespace Elements {
 
-static const std::map<string, const int> LOG_LEVEL {{"FATAL", Priority::FATAL},
-                                                    {"ERROR", Priority::ERROR},
-                                                    {"WARN", Priority::WARN},
-                                                    {"INFO", Priority::INFO},
-                                                    {"DEBUG", Priority::DEBUG}};
+// clang-format off
+
+static const std::map<string, const int> LOG_LEVEL{
+  {"FATAL", Priority::FATAL},
+  {"ERROR", Priority::ERROR},
+  {"WARN",  Priority::WARN},
+  {"INFO",  Priority::INFO},
+  {"DEBUG", Priority::DEBUG}
+};
+
+// clang-format on
 
 unique_ptr<Layout> getLogLayout() {
-  log4cpp::PatternLayout* layout = new log4cpp::PatternLayout {};
+  auto layout = std::make_unique<log4cpp::PatternLayout>();
   layout->setConversionPattern("%d{%FT%T%Z} %c %5p : %m%n");
-  return unique_ptr<Layout>(layout);
+  return NON_REDUNDANT_MOVE(layout);
 }
 
-Logging::Logging(Category& log4cppLogger)
-    : m_log4cppLogger(log4cppLogger) { }
+Logging::Logging(Category& log4cppLogger) : m_log4cppLogger(log4cppLogger) {}
 
 Logging Logging::getLogger(const string& name) {
-  if (Category::getRoot().getAppender("console") == NULL) {
-    log4cpp::OstreamAppender* consoleAppender = new log4cpp::OstreamAppender {"console", &std::cerr};
-    consoleAppender->setLayout(getLogLayout().release());
-    Category::getRoot().addAppender(consoleAppender);
+  if (Category::getRoot().getAppender("console") == nullptr) {
+    auto console_appender = std::make_unique<log4cpp::OstreamAppender>("console", &std::cerr);
+    console_appender->setLayout(getLogLayout().release());
+    Category::getRoot().addAppender(console_appender.release());
     if (Category::getRoot().getPriority() == Priority::NOTSET) {
       Category::setRootPriority(Priority::INFO);
     }
   }
-  return Logging {Category::getInstance(name)};
+  return Logging{Category::getInstance(name)};
 }
-
 
 void Logging::setLevel(string level) {
   boost::to_upper(level);
-  auto it = LOG_LEVEL.find(level);
-  if ( it != LOG_LEVEL.end() ) {
+  if (const auto it = LOG_LEVEL.find(level); it != LOG_LEVEL.end()) {
     Category::setRootPriority(it->second);
   } else {
     std::stringstream error_buffer;
     error_buffer << "Unrecognized logging level: " << level << std::endl;
-    throw Exception(error_buffer.str());
+    throw Exception(error_buffer.str(), ExitCode::CONFIG);
   }
 }
 
-void Logging::setLogFile(const boost::filesystem::path& fileName) {
+void Logging::setLogFile(const Path::Item& fileName) {
   Category& root = Category::getRoot();
   root.removeAppender(root.getAppender("file"));
   if (fileName.has_filename()) {
-    log4cpp::FileAppender* fileAppender = new log4cpp::FileAppender("file", fileName.string());
-    fileAppender->setLayout(getLogLayout().release());
-    root.addAppender(fileAppender);
+    auto file_appender = std::make_unique<log4cpp::FileAppender>("file", fileName.string());
+    file_appender->setLayout(getLogLayout().release());
+    root.addAppender(file_appender.release());
   }
   root.setPriority(root.getPriority());
 }
 
-/// @cond Doxygen_Suppress
-Logging::LogMessageStream::LogMessageStream(Category& logger, P_log_func log_func)
-    : m_logger(logger), m_log_func{log_func} { }
-/// @endcond Doxygen_Suppress
-
-Logging::LogMessageStream::LogMessageStream(LogMessageStream&& other)
-    : m_logger(other.m_logger), m_log_func{other.m_log_func} { }
-
-Logging::LogMessageStream::LogMessageStream(const LogMessageStream& other)
-    : m_logger(other.m_logger), m_log_func{other.m_log_func} { }
-
-
-Logging::LogMessageStream::~LogMessageStream() {
-  (m_logger.*m_log_func) (m_message.str());
+void Logging::debug(const std::string& logMessage) const {
+  m_log4cppLogger.debug(logMessage);
 }
 
+Logging::LogMessageStream Logging::debug() const {
+  return LogMessageStream{m_log4cppLogger, &Category::debug};
+}
+
+void Logging::info(const std::string& logMessage) const {
+  m_log4cppLogger.info(logMessage);
+}
+
+Logging::LogMessageStream Logging::info() const {
+  return LogMessageStream{m_log4cppLogger, &Category::info};
+}
+
+void Logging::warn(const std::string& logMessage) const {
+  m_log4cppLogger.warn(logMessage);
+}
+
+Logging::LogMessageStream Logging::warn() const {
+  return LogMessageStream{m_log4cppLogger, &Category::warn};
+}
+
+void Logging::error(const std::string& logMessage) const {
+  m_log4cppLogger.error(logMessage);
+}
+Logging::LogMessageStream Logging::error() const {
+  return LogMessageStream{m_log4cppLogger, &Category::error};
+}
+
+void Logging::fatal(const std::string& logMessage) const {
+  m_log4cppLogger.fatal(logMessage);
+}
+
+Logging::LogMessageStream Logging::fatal() const {
+  return LogMessageStream{m_log4cppLogger, &Category::fatal};
+}
+
+void Logging::log(const Priority::Value level, const std::string& logMessage) const {
+  m_log4cppLogger.log(level, logMessage);
+}
+
+/// @cond Doxygen_Suppress
+Logging::LogMessageStream::LogMessageStream(Category& logger, const P_log_func log_func)
+    : m_logger(logger), m_log_func{log_func} {}
+/// @endcond Doxygen_Suppress
+
+Logging::LogMessageStream::LogMessageStream(LogMessageStream&& other) noexcept
+    : m_logger(other.m_logger), m_log_func{other.m_log_func} {}
+
+Logging::LogMessageStream::LogMessageStream(const LogMessageStream& other)
+    : m_logger(other.m_logger), m_log_func{other.m_log_func} {}
+
+Logging::LogMessageStream::~LogMessageStream() {
+  (m_logger.*m_log_func)(m_message.str());
+}
 
 }  // namespace Elements

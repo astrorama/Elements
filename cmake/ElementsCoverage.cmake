@@ -1,21 +1,39 @@
-include_guard()
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
+#[=======================================================================[.rst:
+ElementsCoverage
+-----------------
+
+This file implements the functions for the production of code instrumented
+for coverage.
+
+#]=======================================================================]
+
+
+include_guard(GLOBAL)
 
 
   add_custom_target(cov
                     COMMENT "Generating the coverage report" VERBATIM)
 
 
-if(CMAKE_BUILD_TYPE STREQUAL Coverage)
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Coverage")
 
   find_package(GenHTML QUIET)
 
   if(GENHTML_EXECUTABLE AND LCOV_EXECUTABLE)
 
+    set(LCOV_IGNORE_OPTS "")
+
+    if(LCOV_VERSION VERSION_GREATER_EQUAL "2.0")
+      set(LCOV_IGNORE_OPTS --ignore-errors mismatch,mismatch,empty,gcov,gcov,unused)
+    endif()
+
     add_custom_target(lcov_init ALL
-                    COMMAND ${LCOV_EXECUTABLE} --zerocounters --directory ${PROJECT_BINARY_DIR}
-                    COMMAND ${LCOV_EXECUTABLE} --directory ${PROJECT_BINARY_DIR} --initial --capture --output-file ${PROJECT_NAME}.info || exit "No gcno files"
-                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
-                    COMMENT "Initialize the coverage info" VERBATIM)
+                      COMMAND ${LCOV_EXECUTABLE} --zerocounters --directory ${PROJECT_BINARY_DIR}
+                      COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --directory ${PROJECT_BINARY_DIR} --initial --capture --output-file ${PROJECT_NAME}.info || exit "No gcno files"
+                      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
+                      COMMENT "Initialize the coverage info" VERBATIM)
 
     add_dependencies(lcov_init lcov_dir)
 
@@ -23,14 +41,22 @@ if(CMAKE_BUILD_TYPE STREQUAL Coverage)
                     COMMAND ;
                     COMMENT "Please run:make; make test; make cov in order to get the coverage reports"
                     )
+   if(NOT SQUEEZED_INSTALL)
+     add_custom_target(lcov
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --remove ${PROJECT_NAME}.info /usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/include/* ${ELEMENTS_BASE_PREFIX_DIR}/usr/include/* ${ELEMENTS_BASE_PREFIX_DIR}/lib/gcc/* ${ELEMENTS_BASE_PREFIX_DIR}/x86_64-conda* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
+                       COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
+                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
+                       COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
+   else()
+     add_custom_target(lcov
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
+                       COMMAND ${LCOV_EXECUTABLE} ${LCOV_IGNORE_OPTS} --remove ${PROJECT_NAME}.info /usr/include/* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
+                       COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
+                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
+                       COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
+    endif()
 
-
-    add_custom_target(lcov
-                      COMMAND ${LCOV_EXECUTABLE} --directory ${PROJECT_BINARY_DIR} --capture --output-file ${PROJECT_NAME}.info
-                      COMMAND ${LCOV_EXECUTABLE} --remove ${PROJECT_NAME}.info /usr/include/* */InstallArea/* ${BUILD_SUBDIR}/* ${PROJECT_BINARY_DIR}/* /usr/lib/gcc/* --output-file ${PROJECT_NAME}.info.cleaned
-                      COMMAND ${GENHTML_EXECUTABLE} -o html ${PROJECT_NAME}.info.cleaned
-                      WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/lcov
-                      COMMENT "Resetting code coverage counters to zero.\nProcessing code coverage counters" VERBATIM)
 
     add_dependencies(cov lcov)
 
@@ -38,7 +64,7 @@ if(CMAKE_BUILD_TYPE STREQUAL Coverage)
                       COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/cov/lcov
                       WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
                       COMMENT "Create the lcov output directory" VERBATIM)
-  
+
     add_dependencies(lcov lcov_dir)
 
     add_custom_command(TARGET lcov POST_BUILD
@@ -50,40 +76,61 @@ if(CMAKE_BUILD_TYPE STREQUAL Coverage)
 
     if(GCOVR_EXECUTABLE)
 
+      set(GCOVR_OPTIONS)
+      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="/usr/include/.*")
+      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${PROJECT_BINARY_DIR}/.*")
+      if(NOT SQUEEZED_INSTALL)
+        set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${ELEMENTS_BASE_PREFIX_DIR}/include/.*")
+        set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${ELEMENTS_BASE_PREFIX_DIR}/usr/include/.*")
+        set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${ELEMENTS_BASE_PREFIX_DIR}/lib/gcc/.*")
+        set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude="${ELEMENTS_BASE_PREFIX_DIR}/x86_64-conda.*")
+      endif()
+      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude=".*/InstallArea/.*")
+
+      if(GCOVR_EXCLUDE_UNREACHABLE)
+        set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude-unreachable-branches)
+      endif()
+
+      if(GCOVR_EXCLUDE_THROW)
+        set(GCOVR_OPTIONS ${GCOVR_OPTIONS} --exclude-throw-branches)
+      endif()
+
+      set(GCOVR_OPTIONS ${GCOVR_OPTIONS} ${GCOVR_EXTRA_OPTIONS})
+
       add_custom_target(gcovr
-                        COMMAND ${GCOVR_EXECUTABLE} -x -r ${CMAKE_SOURCE_DIR} --exclude=/usr/include/.* --exclude=${PROJECT_BINARY_DIR}/.* --exclude=.*/InstallArea/.* -o ${PROJECT_NAME}.xml
+                        COMMAND ${GCOVR_EXECUTABLE} -x -r ${CMAKE_SOURCE_DIR} ${GCOVR_OPTIONS} -o ${PROJECT_NAME}.xml
                         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/cov/gcovr
                         COMMENT "Produce Cobertura output" VERBATIM)
 
       add_dependencies(cov gcovr)
-    
+
       add_dependencies(lcov gcovr)
 
       add_custom_target(gcovr_dir
                         COMMAND  ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/cov/gcovr
                         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
                         COMMENT "Create the gcovr output directory" VERBATIM)
-  
+
       add_dependencies(gcovr gcovr_dir)
 
       add_custom_command(TARGET gcovr POST_BUILD
-                        COMMAND ;
+                        COMMAND ${CMAKE_COMMAND} -E true
                         COMMENT "===================================================================================================\nThe ./${BUILD_SUBDIR}/cov/gcovr/${PROJECT_NAME}.xml file contains the Cobertura XML report.\n===================================================================================================\n"
                         )
 
      endif()
    endif()
-   
+
    # The pytest directory has to be created at configure time
    find_python_module(pytest_cov)
-   if (PY_PYTEST_COV AND PYFRMK_NAME STREQUAL "PyTest")
+   if (PY_PYTEST_COV AND "${PYFRMK_NAME}" STREQUAL "PyTest")
      file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/cov/${PYFRMK_NAME})
    endif()
 
 else()
 
   add_custom_command(TARGET cov POST_BUILD
-                     COMMAND ;
+                     COMMAND ${CMAKE_COMMAND} -E true
                      COMMENT "=======================================================================\nPlease build in coverage mode in order to instrument the binaries.\n=======================================================================\n"
                     )
 
@@ -98,7 +145,7 @@ find_file(ctest2junit_xsl_file
           PATHS ${CMAKE_MODULE_PATH}
           PATH_SUFFIXES auxdir/test auxdir
           NO_DEFAULT_PATH)
-          
+
 add_custom_command(TARGET cov POST_BUILD
                    COMMAND ${ctest2junit_cmd} ${PROJECT_BINARY_DIR} ${ctest2junit_xsl_file}
                    )

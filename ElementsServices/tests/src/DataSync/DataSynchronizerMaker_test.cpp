@@ -17,14 +17,13 @@
  */
 
 /**
- * @file tests/src/DataSynchronizerMaker_test.cpp
+ * @file DataSynchronizerMaker_test.cpp
  * @date 04/13/18
  * @author user
  */
 
 #include <boost/test/unit_test.hpp>
-
-#include "ElementsServices/DataSync/DataSynchronizerMaker.h"
+#include <boost/test/unit_test_suite.hpp>
 
 //-----------------------------------------------------------------------------
 
@@ -40,5 +39,3 @@ BOOST_AUTO_TEST_CASE(missing_test) {
 //-----------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_SUITE_END()
-
-

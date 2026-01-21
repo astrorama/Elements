@@ -1,33 +1,37 @@
-"""
-@file ElementsKernel/Project.py
-@author Nicolas Morisset
+#
+# Copyright (C) 2012-2020 Euclid Science Ground Segment
+#
+# This library is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation; either version 3.0 of the License, or (at your option)
+# any later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this library; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
 
-@date 01/07/15
+""" This script will create a new Elements project
 
-This script will create a new Elements project
+:file: ElementsKernel/Project.py
+:author: Nicolas Morisset
 
-@copyright: 2012-2020 Euclid Science Ground Segment
+:date: 01/07/15
 
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free
-Software Foundation; either version 3.0 of the License, or (at your option)
-any later version.
-
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
 """
 
 import argparse
-import ElementsKernel.Logging as log
+
+from ElementsKernel import Logging
 from ElementsKernel import Project, ProjectCommonRoutines
 from ElementsKernel import Exit
+
 
 def defineSpecificProgramOptions():
     """
@@ -69,10 +73,8 @@ Note:
       needed to be copied.
             """
 
-    from argparse import RawTextHelpFormatter
-
     parser = argparse.ArgumentParser(description=description,
-                                     formatter_class=RawTextHelpFormatter)
+                                     formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('project_name', metavar='project-name', type=str,
                         help='Project name')
     parser.add_argument('project_version', metavar='project-version',
@@ -88,6 +90,8 @@ Note:
                         help='Erase the <project-version> directory if it does exists')
     parser.add_argument('-s', '--standalone', default=False, action="store_true",
                         help='Remove the implicit dependency onto the Elements project (expert only)')
+    parser.add_argument('-V', '--visibility', default=False, action="store_true",
+                        help="Add Element instructions for symbol visibility")
     parser.add_argument('-y', '--yes', default=False, action="store_true",
                         help='Answer <yes> by default to any question, useful when the script is called by another'\
                          'script')
@@ -96,14 +100,15 @@ Note:
 
 ################################################################################
 
+
 def mainMethod(args):
     """
     Main
     """
-    
+
     exit_code = Exit.Code["OK"]
-    
-    logger = log.getLogger('CreateElementsProject')
+
+    logger = Logging.getLogger('CreateElementsProject')
 
     logger.info('#')
     logger.info('#  Logging from the mainMethod() of the CreateElementsProject script')
@@ -117,6 +122,7 @@ def mainMethod(args):
     no_version_directory = args.no_version_directory
     standalone = args.standalone
     force_erase = args.erase
+    visibility = args.visibility
     answer_yes = args.yes
 
     logger.info('# Installation directory : %s', destination_path)
@@ -129,7 +135,7 @@ def mainMethod(args):
         Project.checkProjectExist(project_dir, no_version_directory, force_erase, answer_yes)
 
         # Create the project
-        Project.createProject(project_dir, proj_name, proj_version, dependant_projects, standalone)
+        Project.createProject(project_dir, proj_name, proj_version, dependant_projects, standalone, visibility)
 
         # Print all files created
         ProjectCommonRoutines.printCreationList()
@@ -143,6 +149,5 @@ def mainMethod(args):
         exit_code = Exit.Code["NOT_OK"]
     else:
         logger.info('# Script over.')
-
 
     return exit_code

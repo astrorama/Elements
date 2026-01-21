@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT TAR_FOUND)
 
     find_program(TAR_EXECUTABLE tar
@@ -14,4 +16,3 @@ if (NOT TAR_FOUND)
 
 
 endif (NOT TAR_FOUND)
-

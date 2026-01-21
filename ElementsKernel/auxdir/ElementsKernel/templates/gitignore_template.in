@@ -23,6 +23,10 @@
 *.out
 *.app
 
+# Unit test / coverage reports
+.coverage
+
+
 #---------------------
 # Python
 #---------------------
@@ -55,3 +59,15 @@ __pycache__/
 #--------------------
 *~
 *.swp
+
+#--------------------
+# Sonar Scanners
+#--------------------
+.scannerwork
+.sonar
+
+#-------------------------
+# Specific to checkQuality
+#-------------------------
+/PAQA
+.checkquality.config

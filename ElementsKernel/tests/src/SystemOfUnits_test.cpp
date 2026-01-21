@@ -18,15 +18,13 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "ElementsKernel/SystemOfUnits.h"  // The interface to test
+#include "ElementsKernel/SystemOfUnits.h"
 
-#include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test_suite.hpp>
-#include <boost/math/constants/constants.hpp>
+#include <boost/test/unit_test.hpp>
 
-#include "ElementsKernel/Real.h"   // for the isEqual function
+#include "ElementsKernel/Real.h"  // for isEqual
 
-using Elements::isEqual;
+namespace Elements {
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE(SystemOfUnits_test)
@@ -34,37 +32,38 @@ BOOST_AUTO_TEST_SUITE(SystemOfUnits_test)
 
 BOOST_AUTO_TEST_CASE(LuminousFlux_test) {
 
-  using Elements::Units::perMillion;
-  using Elements::Units::jansky;
-  using Elements::Units::microjansky;
+  using Units::jansky;
+  using Units::microjansky;
+  using Units::perMillion;
 
-  BOOST_CHECK(isEqual(microjansky, jansky*perMillion));
+  BOOST_CHECK(isEqual(microjansky, jansky * perMillion));
 }
 
 BOOST_AUTO_TEST_CASE(Illuminance_test) {
 
-  using Elements::Units::lux;
-  using Elements::Units::lumen;
-  using Elements::Units::meter2;
+  using Units::lumen;
+  using Units::lux;
+  using Units::meter2;
 
-  BOOST_CHECK(isEqual(lux, lumen/meter2));
+  BOOST_CHECK(isEqual(lux, lumen / meter2));
 }
 
 BOOST_AUTO_TEST_CASE(Misc_test) {
 
-  using Elements::Units::perCent;
-  BOOST_CHECK(isEqual(perCent, 1.0/100.0));
+  using Units::perCent;
+  BOOST_CHECK(isEqual(perCent, 1.0 / 100.0));
 
-  using Elements::Units::perThousand;
-  BOOST_CHECK(isEqual(perThousand, 1.0/1000.0));
+  using Units::perThousand;
+  BOOST_CHECK(isEqual(perThousand, 1.0 / 1000.0));
 
-  using Elements::Units::perMillion;
-  BOOST_CHECK(isEqual(perMillion, 1.0/1.0e6));
+  using Units::perMillion;
+  BOOST_CHECK(isEqual(perMillion, 1.0 / 1.0e6));
 }
-
 
 //-----------------------------------------------------------------------------
 BOOST_AUTO_TEST_SUITE_END()
 //-----------------------------------------------------------------------------
 //
 // End of the Boost tests
+
+}  // namespace Elements

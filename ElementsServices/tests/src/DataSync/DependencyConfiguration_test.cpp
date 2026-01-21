@@ -16,19 +16,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+#include "ElementsServices/DataSync/DependencyConfiguration.h"
+
+#include <algorithm>  // for find
+#include <string>     // for allocator, operator+, char_traits, string
+#include <vector>     // for vector
+
 #include <boost/test/unit_test.hpp>
-#include <vector>
-#include <string>
+#include <boost/test/unit_test_suite.hpp>
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, valueIsListed, DataSync
 
-#include "fixtures/DependencyConfigurationPublic.h"
-#include "fixtures/ConfigFilesFixture.h"
+#include "fixtures/ConfigFilesFixture.h"             // for theDependencyConfig, theLocalFiles, WorkspaceFixture
+#include "fixtures/DependencyConfigurationPublic.h"  // for DependencyConfigurationPublic
 
 namespace DataSync = ElementsServices::DataSync;
 
-using std::string;
 using DataSync::path;
+using std::string;
 
 //-----------------------------------------------------------------------------
 
@@ -38,11 +43,11 @@ BOOST_FIXTURE_TEST_SUITE(DependencyConfiguration_test, WorkspaceFixture)
 
 BOOST_AUTO_TEST_CASE(parse_line_without_alias_test) {
 
-  const path distant_root = "distant";
-  const path local_root = "local";
+  const path                    distant_root = "distant";
+  const path                    local_root   = "local";
   DependencyConfigurationPublic config(distant_root, local_root, theDependencyConfig());
-  const path distant_file = "test/some_file.fits";
-  const string line = distant_file.string();
+  const path                    distant_file = "test/some_file.fits";
+  const string&                 line         = distant_file.string();
   BOOST_CHECK(not config.lineHasAlias(line));
   config.parseLineWithoutAlias(line);
   const path found_distant_file = config.distantPathOf(local_root / distant_file);
@@ -50,13 +55,12 @@ BOOST_AUTO_TEST_CASE(parse_line_without_alias_test) {
 }
 
 BOOST_AUTO_TEST_CASE(parse_line_with_alias_test) {
-  const path distant_root = "distant";
-  const path local_root = "local";
+  const path                    distant_root = "distant";
+  const path                    local_root   = "local";
   DependencyConfigurationPublic config(distant_root, local_root, theDependencyConfig());
-  const path distant_file = "test/some_distant_file_v1.fits";
-  const path local_file = "test/some_local_file.fits";
-  const string line =
-      distant_file.string() + config.aliasSeparator() + local_file.string();
+  const path                    distant_file = "test/some_distant_file_v1.fits";
+  const path                    local_file   = "test/some_local_file.fits";
+  const string                  line         = distant_file.string() + config.aliasSeparator() + local_file.string();
   BOOST_CHECK(config.lineHasAlias(line));
   config.parseLineWithAlias(line);
   const path found_distant_file = config.distantPathOf(local_root / local_file);
@@ -64,8 +68,8 @@ BOOST_AUTO_TEST_CASE(parse_line_with_alias_test) {
 }
 
 BOOST_AUTO_TEST_CASE(conf_dependencies_test) {
-  DataSync::DependencyConfiguration config("", "", theDependencyConfig());
-  const auto found_files = config.localPaths();
+  const DataSync::DependencyConfiguration config("", "", theDependencyConfig());
+  const auto                              found_files = config.localPaths();
   BOOST_CHECK_EQUAL(found_files.size(), theLocalFiles().size());
   for (const auto& expected : theLocalFiles()) {
     BOOST_CHECK(DataSync::valueIsListed(expected, found_files));

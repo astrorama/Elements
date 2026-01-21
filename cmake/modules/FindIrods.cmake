@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT IRODS_FOUND)
 
     find_program(IGET_EXECUTABLE NAMES iget
@@ -20,5 +22,3 @@ if (NOT IRODS_FOUND)
 
 
 endif (NOT IRODS_FOUND)
-
-

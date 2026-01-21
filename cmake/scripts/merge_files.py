@@ -26,7 +26,7 @@ def mergeFiles(frag_file_names, merged_file_name, comment_char,
         # check if the destination directory exists
         path_to_file = os.path.split(merged_file_name)[0]
         if path_to_file and not os.path.isdir(path_to_file):
-            # if doesn't exist, create it
+            # if it doesn't exist, create it
             os.makedirs(path_to_file)
         open(merged_file_name, 'a')
 
@@ -77,6 +77,7 @@ def mergeFiles(frag_file_names, merged_file_name, comment_char,
         locker.unlock(merged_file)
 
     return 0
+
 
 if __name__ == "__main__":
 
@@ -152,9 +153,8 @@ if __name__ == "__main__":
         options.frag_file_names += args[:-1]
 
     sc = 1
-    if not options.frag_file_names or \
-       not options.merged_file_name:
-        str(parser.print_help() or "")
+    if not options.frag_file_names or not options.merged_file_name:
+        parser.print_help()
         print("*** ERROR ***", sys.argv)
         sys.exit(sc)
 
@@ -174,14 +174,13 @@ if __name__ == "__main__":
     else:
         globalLock = None
 
-    if True:  # try:
-        sc = mergeFiles(options.frag_file_names, options.merged_file_name,
-                        options.comment_char,
-                        do_merge=options.do_merge,
-                        ignore_missing=options.ignore_missing)
-        if not options.no_stamp:
-            for stamp in map(stampFileName, options.frag_file_names):
-                open(stamp, 'w')
+    sc = mergeFiles(options.frag_file_names, options.merged_file_name,
+                    options.comment_char,
+                    do_merge=options.do_merge,
+                    ignore_missing=options.ignore_missing)
+    if not options.no_stamp:
+        for stamp in map(stampFileName, options.frag_file_names):
+            open(stamp, 'w')
 
     del globalLock
 

@@ -1,0 +1,50 @@
+/**
+ * @file Rectangle.cpp
+ *
+ * @copyright 2012-2020 Euclid Science Ground Segment
+ *
+ * This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General
+ * Public License as published by the Free Software Foundation; either version 3.0 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+#include "ElementsExamples/Rectangle.h"
+
+namespace Elements::Examples {
+
+Rectangle::Rectangle(const int xl, const int yl, const int xu, const int yu) {
+  x0 = xl;
+  y0 = yl;
+  x1 = xu;
+  y1 = yu;
+}
+
+Rectangle::~Rectangle() = default;
+
+int Rectangle::getLength() const {
+  return x1 - x0;
+}
+
+int Rectangle::getHeight() const {
+  return y1 - y0;
+}
+
+int Rectangle::getArea() const {
+  return (x1 - x0) * (y1 - y0);
+}
+
+void Rectangle::move(const int dx, const int dy) {
+  x0 += dx;
+  y0 += dy;
+  x1 += dx;
+  y1 += dy;
+}
+
+}  // namespace Elements::Examples

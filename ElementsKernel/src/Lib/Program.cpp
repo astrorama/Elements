@@ -21,27 +21,25 @@
 
 #include "ElementsKernel/Program.h"
 
-#include <utility>                                       // for pair
-
-#include <boost/program_options/positional_options.hpp>  // for options_description
-
-using boost::program_options::options_description;
-using boost::program_options::positional_options_description;
+#include <utility>  // for pair
 
 namespace Elements {
 
-  options_description Program::defineSpecificProgramOptions() {
-    options_description config_desc("");
-    return config_desc;
-  }
+using OptionsDescription           = Program::OptionsDescription;
+using PositionalOptionsDescription = Program::PositionalOptionsDescription;
 
-  std::pair<options_description, positional_options_description> Program::defineProgramArguments() {
-    options_description desc("");
-    positional_options_description pos_desc;
+OptionsDescription Program::defineSpecificProgramOptions() {
+  OptionsDescription config_desc("");
+  return config_desc;
+}
 
-    return std::make_pair(desc, pos_desc);
-  }
+std::pair<OptionsDescription, PositionalOptionsDescription> Program::defineProgramArguments() {
+  OptionsDescription           desc("");
+  PositionalOptionsDescription pos_desc;
 
-  Program::~Program() = default;
+  return std::make_pair(desc, pos_desc);
+}
+
+Program::~Program() = default;
 
 }  // namespace Elements

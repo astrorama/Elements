@@ -1,47 +1,52 @@
-"""
-@file ElementsKernel/python/ElementsKernel/RemovePythonProgram.py
-@author Nicolas Morisset
+#
+# Copyright (C) 2012-2020 Euclid Science Ground Segment
+#
+# This library is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation; either version 3.0 of the License, or (at your option)
+# any later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this library; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
 
-@date 02/10/16
+""" This script will remove all files related to a python program
 
-This script will remove all files related to a python program
+:file: ElementsKernel/RemovePythonProgram.py
+:author: Nicolas Morisset
 
-@copyright: 2012-2020 Euclid Science Ground Segment
-
-This library is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free
-Software Foundation; either version 3.0 of the License, or (at your option)
-any later version.
-
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+:date: 02/10/16
 
 """
 
 import argparse
 import os
+
+from argparse import RawTextHelpFormatter
+
+try:
+    from builtins import input
+except ImportError:
+    from __builtin__ import input
+
 from ElementsKernel import ProjectCommonRoutines
 from ElementsKernel import ParseCmakeLists
 from ElementsKernel import Logging
 
 from ElementsKernel import Exit
 
-try:
-    from builtins import input
-except:
-    from __builtin__ import input
-
 CMAKE_LISTS_FILE = 'CMakeLists.txt'
 
-logger = Logging.getLogger('RemovePythonProgram')
+LOGGER = Logging.getLogger(__name__)
 
 ################################################################################
+
 
 def getAllFiles(program_name, module_directory, module_name):
     """
@@ -59,11 +64,12 @@ def getAllFiles(program_name, module_directory, module_name):
 
 ################################################################################
 
+
 def updateCmakeListsFile(module_dir, program_name):
     """
     Update the <CMakeLists.txt> file
     """
-    logger.info('Updating the <%s> file', CMAKE_LISTS_FILE)
+    LOGGER.info('Updating the <%s> file', CMAKE_LISTS_FILE)
     cmake_filename = os.path.join(module_dir, CMAKE_LISTS_FILE)
 
     # Cmake file already exist
@@ -84,6 +90,7 @@ def updateCmakeListsFile(module_dir, program_name):
 
 ################################################################################
 
+
 def defineSpecificProgramOptions():
     """
     Define program option(s)
@@ -94,7 +101,6 @@ def defineSpecificProgramOptions():
     name when calling the <AddPythonProgram> script. The <CMakeLists.txt> file
     is updated accordingly.
     """
-    from argparse import RawTextHelpFormatter
 
     parser = argparse.ArgumentParser(description=description,
                                      formatter_class=RawTextHelpFormatter)
@@ -105,16 +111,17 @@ def defineSpecificProgramOptions():
 
 ################################################################################
 
+
 def mainMethod(args):
     """
     Main
     """
 
-    logger.info('#')
-    logger.info('#  Logging from the mainMethod() of the RemovePythonProgram \
+    LOGGER.info('#')
+    LOGGER.info('#  Logging from the mainMethod() of the RemovePythonProgram \
     script ')
-    logger.info('#')
-    
+    LOGGER.info('#')
+
     exit_code = Exit.Code["OK"]
 
     program_name = args.program_name
@@ -122,33 +129,33 @@ def mainMethod(args):
     # Default is the current directory
     module_dir = os.getcwd()
 
-    logger.info('Current directory : %s', module_dir)
-    logger.info('')
+    LOGGER.info('Current directory : %s', module_dir)
+    LOGGER.info('')
 
     try:
-        # We absolutely need a Elements cmake file
+        # We absolutely need an Elements cmake file
         module_name = ProjectCommonRoutines.getElementsModuleName(module_dir)
 
         # Default is the current directory
         file_to_be_deleted = getAllFiles(program_name, module_dir, module_name)
         if file_to_be_deleted:
-            logger.info('File to be deleted:')
+            LOGGER.info('File to be deleted:')
             for elt_file in file_to_be_deleted:
-                logger.info(' --> %s', elt_file)
+                LOGGER.info(' --> %s', elt_file)
             response_key = input('Do you want to continue?(y/n, default: n)')
             if response_key.lower() == 'y':
                 ProjectCommonRoutines.removeFilesOnDisk(file_to_be_deleted)
                 updateCmakeListsFile(module_dir, program_name)
         else:
-            logger.info('No file found for deletion!')
-            logger.info('')
+            LOGGER.info('No file found for deletion!')
+            LOGGER.info('')
 
     except Exception as msg:
         if str(msg):
-            logger.error(msg)
-        logger.error('# Script aborted.')
+            LOGGER.error(msg)
+        LOGGER.error('# Script aborted.')
         exit_code = Exit.Code["NOT_OK"]
     else:
-        logger.info('# Script over.')
+        LOGGER.info('# Script over.')
 
     return exit_code

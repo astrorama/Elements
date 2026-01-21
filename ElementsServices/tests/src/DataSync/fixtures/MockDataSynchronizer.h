@@ -11,30 +11,25 @@
 #ifndef ELEMENTSSERVICES_TESTS_SRC_DATASYNC_FIXTURES_MOCKDATASYNCHRONIZER_H_
 #define ELEMENTSSERVICES_TESTS_SRC_DATASYNC_FIXTURES_MOCKDATASYNCHRONIZER_H_
 
-#include <string>
-#include <map>
+#include <map>     // for map
+#include <string>  // for string
 
-#include "ElementsServices/DataSync/DataSynchronizer.h"
+#include "ElementsServices/DataSync/DataSyncUtils.h"     // for path
+#include "ElementsServices/DataSync/DataSynchronizer.h"  // for DataSynchronizer
 
-#include "ConfigFilesFixture.h"
+#include "ConfigFilesFixture.h"  // for theDependencyConfig, theWebdavFrConfig, WorkspaceFixture
 
-struct MockDataSynchronizer : public ElementsServices::DataSync::DataSynchronizer, WorkspaceFixture {
+struct MockDataSynchronizer : ElementsServices::DataSync::DataSynchronizer, WorkspaceFixture {
 
   virtual ~MockDataSynchronizer() = default;
 
-  MockDataSynchronizer(
-      ElementsServices::DataSync::path connection = theWebdavFrConfig(),
-      ElementsServices::DataSync::path dependency = theDependencyConfig());
+  MockDataSynchronizer(const ElementsServices::DataSync::path& connection = theWebdavFrConfig(),
+                       const ElementsServices::DataSync::path& dependency = theDependencyConfig());
 
-  std::string createDownloadCommand(
-      ElementsServices::DataSync::path distantFile,
-      ElementsServices::DataSync::path localFile) const override;
+  std::string createDownloadCommand(ElementsServices::DataSync::path distant_file,
+                                    ElementsServices::DataSync::path local_file) const override;
 
   std::map<ElementsServices::DataSync::path, ElementsServices::DataSync::path> fileMap();
-
-
 };
 
-
 #endif  // ELEMENTSSERVICES_TESTS_SRC_DATASYNC_FIXTURES_MOCKDATASYNCHRONIZER_H_
-

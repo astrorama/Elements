@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -24,13 +24,17 @@
 #ifndef ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DEPENDENCYCONFIGURATION_H_
 #define ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DEPENDENCYCONFIGURATION_H_
 
-#include <map>
-#include <vector>
-#include <string>
+#include <cstddef>  // for size_t
+#include <map>      // for map
+#include <string>   // for string
+#include <vector>   // for vector
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-namespace ElementsServices {
+#include "ElementsServices/DataSync/DataSyncUtils.h"  // for path, Services
+
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
 /**
@@ -44,49 +48,45 @@ namespace DataSync {
 class ELEMENTS_API DependencyConfiguration {
 
 public:
-
   virtual ~DependencyConfiguration() = default;
 
-  DependencyConfiguration(
-      path distantRoot,
-      path localRoot,
-      path configFile);
+  DependencyConfiguration(path distantRoot, path localRoot, const path& configFile);
 
   std::map<path, path> fileMap() const;
 
-  path distantPathOf(path localFile) const;
+  path distantPathOf(const path& localFile) const;
 
-  size_t dependencyCount() const;
+  std::size_t dependencyCount() const;
 
   std::vector<path> distantPaths() const;
 
   std::vector<path> localPaths() const;
 
 protected:
+  void parseConfigurationFile(const path& filename);
 
-  void parseConfigurationFile(path filename);
-
-  void parseConfigurationLine(std::string line);
+  void parseConfigurationLine(const std::string& line);
 
   char aliasSeparator() const;
 
-  bool lineHasAlias(std::string line) const;
+  bool lineHasAlias(const std::string& line) const;
 
-  void parseLineWithAlias(std::string line);
+  void parseLineWithAlias(const std::string& line);
 
-  void parseLineWithoutAlias(std::string line);
+  void parseLineWithoutAlias(const std::string& line);
 
 private:
-
-  char m_aliasSeparator;
-  path m_distantRoot;
-  path m_localRoot;
+  char                 m_aliasSeparator;
+  path                 m_distantRoot;
+  path                 m_localRoot;
   std::map<path, path> m_fileMap;
-
 };
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements
+
+namespace ElementsServices = Elements::Services;
 
 #endif  // ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_DEPENDENCYCONFIGURATION_H_
 

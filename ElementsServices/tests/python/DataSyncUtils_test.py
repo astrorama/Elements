@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
-
 import os.path
 import unittest
 
@@ -30,8 +29,9 @@ class TestDataSyncUtils(unittest.TestCase):
         unittest.TestCase.setUp(self)
         self.m_top_dir = TempDir(prefix="DataSync_test")
         self.m_env = TempEnv()
-        self.m_env["WORKSPACE"] = os.path.join(self.m_top_dir.path(), "workspace")
-        
+        self.m_workdir_var = DataSyncUtils.getWorkdirVariable()
+        self.m_env[self.m_workdir_var] = os.path.join(self.m_top_dir.path(), "workspace")
+
     def tearDown(self):
         unittest.TestCase.tearDown(self)
         del self.m_top_dir
@@ -54,17 +54,17 @@ class TestDataSyncUtils(unittest.TestCase):
     def test_createLocalDirOf(self):
         the_dir = "/tmp/somewhere/some_temporary_test_data"
         the_filename = "some_test_file.txt"
-        the_path = DataSyncUtils.concatenatePaths([DataSyncUtils.localWorkspacePrefix(), 
+        the_path = DataSyncUtils.concatenatePaths([DataSyncUtils.localWorkspacePrefix(),
                                                   the_dir, the_filename])
         DataSyncUtils.createLocalDirOf(the_path)
-        assert os.path.isdir(DataSyncUtils.concatenatePaths([DataSyncUtils.localWorkspacePrefix(), 
+        assert os.path.isdir(DataSyncUtils.concatenatePaths([DataSyncUtils.localWorkspacePrefix(),
                                                             the_dir]))
-        os.rmdir(DataSyncUtils.concatenatePaths([DataSyncUtils.localWorkspacePrefix(), 
+        os.rmdir(DataSyncUtils.concatenatePaths([DataSyncUtils.localWorkspacePrefix(),
                                                 the_dir]))
 
     def test_localWorkspacePrefix(self):
         prefix_ev = DataSyncUtils.environmentVariable('NOPREFIX')
-        workspace_ev = DataSyncUtils.environmentVariable('WORKSPACE')
+        workspace_ev = DataSyncUtils.environmentVariable(self.m_workdir_var)
         prefix = DataSyncUtils.localWorkspacePrefix()
         if prefix_ev == '':
             assert prefix == workspace_ev

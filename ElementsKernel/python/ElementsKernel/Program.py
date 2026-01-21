@@ -1,15 +1,37 @@
+#
+# Copyright (C) 2012-2020 Euclid Science Ground Segment
+#
+# This library is free software; you can redistribute it and/or modify it under
+# the terms of the GNU Lesser General Public License as published by the Free
+# Software Foundation; either version 3.0 of the License, or (at your option)
+# any later version.
+#
+# This library is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this library; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+#
+
 """Main Program Class Module"""
 
 import importlib
 import os
 import sys
 import re
-import ElementsKernel.Logging as log
+from ElementsKernel import Logging
 import logging
 from ElementsKernel.Path import VARIABLE, SUFFIXES, joinPath, multiPathAppend
 from ElementsKernel.Environment import Environment
 from ElementsKernel.Configuration import getConfigurationPath, getConfigurationLocations
 from ElementsKernel import Exit
+from ElementsKernel import File
+
+SEP_LINE = "##########################################################"
+
 
 def str_to_bool(s):
     """Convert string to bool (in argparse context)."""
@@ -17,17 +39,23 @@ def str_to_bool(s):
         raise ValueError('Need bool; got %r' % s)
     return {'true': True, 'false': False}[s.lower()]
 
+
 class Program(object):
     """Main Program Class"""
+
     def __init__(self, app_module,
                  parent_project_version=None, parent_project_name=None,
                  parent_project_vcs_version=None,
                  elements_module_name=None, elements_module_version=None,
                  search_dirs=None, original_path="",
-                 elements_loglevel=logging.DEBUG):
+                 elements_loglevel=logging.DEBUG,
+                 use_config_file=True,
+                 use_default_conf=True):
         self._app_module = importlib.import_module(app_module)
-        self._logger = log.getLogger('ElementsProgram')
+        self._logger = Logging.getLogger('ElementsProgram')
         self._elements_loglevel = elements_loglevel
+        self._use_config_file = use_config_file
+        self._use_default_conf = use_default_conf
         self._parent_project_version = parent_project_version
         self._parent_project_name = parent_project_name
         self._parent_project_vcs_version = parent_project_vcs_version
@@ -42,16 +70,15 @@ class Program(object):
     def _setupLogging(arg_parser):
         options = arg_parser.parse_known_args()[0]
         if options.log_level:
-            log.setLevel(options.log_level.upper())
+            Logging.setLevel(options.log_level.upper())
         if options.log_file:
-            log.setLogFile(options.log_file)
+            Logging.setLogFile(options.log_file)
 
     def _findConfigFile(self):
         # Create the path which represents the package of the module (if any)
         rel_path = ''
         if '.' in self._app_module.__name__:
-            rel_path = self._app_module.__name__[
-                :self._app_module.__name__.index('.')]
+            rel_path = self._app_module.__name__[:self._app_module.__name__.index('.')]
             rel_path = rel_path.replace('.', os.sep)
         # Get the name of the executable, remove the prefix and change the
         # extension to .conf
@@ -61,10 +88,12 @@ class Program(object):
         else:
             rel_path = name
         conf_file = None
-        for conf_path in os.environ.get('ELEMENTS_CONF_PATH').split(os.pathsep):
-            if os.path.isfile(conf_path + os.sep + rel_path):
-                conf_file = conf_path + os.sep + rel_path
-                break
+
+        if self._use_default_conf:
+            for conf_path in os.environ.get('ELEMENTS_CONF_PATH').split(os.pathsep):
+                if os.path.isfile(conf_path + os.sep + rel_path):
+                    conf_file = conf_path + os.sep + rel_path
+                    break
         return conf_file
 
     def getDefaultConfigFile(self, program_name, module_name):
@@ -74,16 +103,15 @@ class Program(object):
         default_config_file = getConfigurationPath(conf_name, False)
 
         if not default_config_file:
-            self._logger.warn('The "%s" configuration file cannot be found in:', conf_name)
+            self._logger.warning('The "%s" configuration file cannot be found in:', conf_name)
             for l in getConfigurationLocations():
-                self._logger.warn(" %s", l)
+                self._logger.warning(" %s", l)
             if not module_name and '.' in self._app_module.__name__:
-                module_name = self._app_module.__name__[
-                    :self._app_module.__name__.index('.')]
+                module_name = self._app_module.__name__[:self._app_module.__name__.index('.')]
                 module_name = module_name.replace('.', os.sep)
             if module_name:
                 conf_name = os.sep.join([module_name, conf_name])
-                self._logger.warn('Trying "%s".', conf_name)
+                self._logger.warning('Trying "%s".', conf_name)
                 default_config_file = getConfigurationPath(conf_name, False)
 
         if not default_config_file:
@@ -101,7 +129,7 @@ class Program(object):
                                                     self._elements_module_name)
         conf = []
         if config_file:
-            with open(config_file) as f:
+            with File.nativeOpen(config_file) as f:
                 for line in f.readlines():
                     line = line.strip()
                     if line.startswith('#') or not '=' in line:
@@ -126,8 +154,9 @@ class Program(object):
         arg_parser = self._app_module.defineSpecificProgramOptions()
         # Add all the options which are common to all the programs
         group = arg_parser.add_argument_group('Generic Options')
-        group.add_argument(
-            '--config-file', help='Name of a configuration file')
+        if self._use_config_file:
+            group.add_argument(
+                '--config-file', help='Name of a configuration file')
         group.add_argument('--log-file', help='Name of a log file')
         group.add_argument(
             '--log-level', help='Log level: FATAL, ERROR, WARN, INFO (default), DEBUG')
@@ -136,7 +165,10 @@ class Program(object):
         # Setup the logging
         self._setupLogging(arg_parser)
         # Get the options from the config file
-        options = self._parseConfigFile(arg_parser)
+        if self._use_config_file:
+            options = self._parseConfigFile(arg_parser)
+        else:
+            options = []
         # Append any options passed by the user in the command line. Because they
         # are after the ones from the configuration file, they are going to
         # override them (argparse behavior)
@@ -168,10 +200,8 @@ class Program(object):
         return all_options, variable_to_option_name
 
     def _logHeader(self):
-        self._logger.log(self._elements_loglevel,
-                         "##########################################################")
-        self._logger.log(self._elements_loglevel,
-                         "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
+        self._logger.log(self._elements_loglevel, SEP_LINE)
         self._logger.log(self._elements_loglevel,
                          "#")
         self._logger.log(self._elements_loglevel,
@@ -183,23 +213,19 @@ class Program(object):
         self._logger.debug("#")
 
     def _logFooter(self):
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
         self._logger.log(self._elements_loglevel,
                          "#")
         self._logger.log(self._elements_loglevel,
             "#    Python program: %s stops ", self._app_module.__name__)
         self._logger.log(self._elements_loglevel,
                          "#")
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
+        self._logger.log(self._elements_loglevel, SEP_LINE)
 
     def _logAllOptions(self, args, names):
 
-        self._logger.log(self._elements_loglevel,
-            "##########################################################")
+        self._logger.log(self._elements_loglevel, SEP_LINE)
         self._logger.log(self._elements_loglevel, "#")
         self._logger.log(self._elements_loglevel, "# List of all program options")
         self._logger.log(self._elements_loglevel, "# ---------------------------")
@@ -208,9 +234,8 @@ class Program(object):
             self._logger.log(self._elements_loglevel, names[name] + ' = ' + str(value))
         self._logger.log(self._elements_loglevel, "#")
 
-
     def _logTheEnvironment(self):
-        self._logger.debug("##########################################################")
+        self._logger.debug(SEP_LINE)
         self._logger.debug("#")
         self._logger.debug("# Environment of the Run")
         self._logger.debug("# ---------------------------")
@@ -228,7 +253,6 @@ class Program(object):
         if self._parent_project_vcs_version:
             version += self._parent_project_vcs_version
         return version
-
 
     def _bootStrapEnvironment(self):
         self._program_path = os.path.dirname(os.path.realpath(sys.argv[0]))
@@ -259,7 +283,7 @@ class Program(object):
     def _tearDown(self, exit_code):
 
         if exit_code is not None:
-            self._logger.debug("# Exit Code: %d" % exit_code)
+            self._logger.debug("# Exit Code: %d", exit_code)
         self._logFooter()
 
     def getProgramName(self):
@@ -272,7 +296,7 @@ class Program(object):
         exit_code = Exit.Code["NOT_OK"]
         try:
             exit_code = self._app_module.mainMethod(args)
-        except:
+        except Exception:
             self._logger.exception(sys.exc_info()[1])
 
         self._tearDown(exit_code)

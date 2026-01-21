@@ -16,21 +16,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
-#include <vector>
-
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
-#include "fixtures/ConfigFilesFixture.h"
-#include "fixtures/ConnectionConfigurationPublic.h"
+#include <exception>  // for exception
+#include <string>     // for basic_string, allocator, string
+#include <vector>     // for vector
+
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration, DataHost, OverwritingPolicy
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for DataSync
+
+#include "fixtures/ConfigFilesFixture.h"  // for theWebdavFrConfig, theNoOverwriteConfig, thePrefixedLocalWorkspace, WorkspaceFixture
+#include "fixtures/ConnectionConfigurationPublic.h"  // for ConnectionConfigurationPublic
 
 namespace DataSync = ElementsServices::DataSync;
 
 using std::string;
 using std::vector;
 
-using DataSync::DataHost;
 using DataSync::ConnectionConfiguration;
+using DataSync::DataHost;
 
 //-----------------------------------------------------------------------------
 
@@ -38,7 +43,7 @@ BOOST_AUTO_TEST_SUITE(ConnectionConfiguration_test)
 
 //-----------------------------------------------------------------------------
 
-void checkHostParsing(DataHost host, vector<string> names) {
+void checkHostParsing(const DataHost host, const vector<string>& names) {
   ConnectionConfigurationPublic config;
   for (const auto& name : names) {
     config.parseHost(name);
@@ -47,27 +52,27 @@ void checkHostParsing(DataHost host, vector<string> names) {
 }
 
 BOOST_AUTO_TEST_CASE(host_parsing_test) {
-  const vector<string> irodsNames { "irods", "iRODS", "IRODS" };
-  const vector<string> webdavNames { "webdav", "WebDAV", "WEBDAV" };
-  const vector<string> unknownNames { "blob", "BLOB" };
+  const vector<string> irodsNames{"irods", "iRODS", "IRODS"};
+  const vector<string> webdavNames{"webdav", "WebDAV", "WEBDAV"};
+  const vector<string> unknownNames{"blob", "BLOB"};
   checkHostParsing(DataHost::IRODS, irodsNames);
   checkHostParsing(DataHost::WEBDAV, webdavNames);
   BOOST_CHECK_THROW(checkHostParsing(DataHost::IRODS, unknownNames), std::exception);
 }
 
 BOOST_AUTO_TEST_CASE(overwriting_policy_test) {
-  ConnectionConfiguration config(theWebdavFrConfig());
-  ConnectionConfiguration configNoOverwrite(theNoOverwriteConfig());
+  const ConnectionConfiguration config(theWebdavFrConfig());
+  const ConnectionConfiguration configNoOverwrite(theNoOverwriteConfig());
   BOOST_CHECK(config.overwritingAllowed());
   BOOST_CHECK(not configNoOverwrite.overwritingAllowed());
 }
 
 BOOST_FIXTURE_TEST_CASE(webdav_fr_config_test, WorkspaceFixture) {
-  ConnectionConfiguration config(theWebdavFrConfig());
+  const ConnectionConfiguration config(theWebdavFrConfig());
   BOOST_CHECK(config.host == DataHost::WEBDAV);
-  BOOST_CHECK(config.overwritingPolicy == DataSync::OverwritingPolicy::OVERWRITE);
-  BOOST_CHECK_EQUAL(config.distantRoot.string(), "/euclid-fr/ct/mock_test_data");
-  BOOST_CHECK_EQUAL(config.localRoot.string(), thePrefixedLocalWorkspace());
+  BOOST_CHECK(config.overwriting_policy == DataSync::OverwritingPolicy::OVERWRITE);
+  BOOST_CHECK_EQUAL(config.distant_root.string(), "/euclid-fr/ct/mock_test_data");
+  BOOST_CHECK_EQUAL(config.local_root.string(), thePrefixedLocalWorkspace());
   BOOST_CHECK_EQUAL(config.tries, 8);
 }
 

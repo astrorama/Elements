@@ -1,6 +1,9 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT SPHINX_FOUND)
 
-  find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
+
 
   # ----------------------------------------------------------------------------
   # default components to look for
@@ -52,4 +55,3 @@ if (NOT SPHINX_FOUND)
   unset(_SPHINX_REQUIRED_VARS)
 
 endif (NOT SPHINX_FOUND)
-

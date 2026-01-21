@@ -16,15 +16,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
-#include <vector>
+#include <string>  // for basic_string, allocator, string
+#include <vector>  // for vector
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/unit_test_suite.hpp>
 
-#include "ElementsServices/DataSync/DataSyncUtils.h"
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for containsInThisOrder, DataSync
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"       // for WebdavSynchronizer
 
-#include "fixtures/ConfigFilesFixture.h"
+#include "fixtures/ConfigFilesFixture.h"  // for theDependencyConfig, theWebdavFrConfig, WorkspaceFixture
 
 using std::string;
 
@@ -38,22 +41,18 @@ BOOST_FIXTURE_TEST_SUITE(WebdavSynchronizer_test, WorkspaceFixture)
 
 DataSync::WebdavSynchronizer createTestSynchronizer() {
   DataSync::ConnectionConfiguration connection(theWebdavFrConfig());
-  auto distant_root = connection.distantRoot;
-  auto local_root = connection.localRoot;
-  DataSync::DependencyConfiguration dependencies(
-      distant_root, local_root, theDependencyConfig());
-  return DataSync::WebdavSynchronizer(connection, dependencies);
+  const auto                        distant_root = connection.distant_root;
+  const auto                        local_root   = connection.local_root;
+  DataSync::DependencyConfiguration dependencies(distant_root, local_root, theDependencyConfig());
+  return {connection, dependencies};
 }
 
 BOOST_AUTO_TEST_CASE(webdavGetCmd_test) {
-  string distant_file = "src/distant_file.fits";
-  string local_file = "dst/local_file.fits";
-  auto synchronizer = createTestSynchronizer();
-  string cmd = synchronizer.createDownloadCommand(distant_file, local_file);
-  std::vector<string> chunks = {
-      "wget ", "-O",
-      local_file, distant_file,
-      "8" };
+  const string              distant_file = "src/distant_file.fits";
+  const string              local_file   = "dst/local_file.fits";
+  const auto                synchronizer = createTestSynchronizer();
+  const string              cmd          = synchronizer.createDownloadCommand(distant_file, local_file);
+  const std::vector<string> chunks       = {"wget ", "-O", local_file, distant_file, "8"};
   BOOST_CHECK(DataSync::containsInThisOrder(cmd, chunks));
 }
 

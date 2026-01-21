@@ -27,17 +27,22 @@
 #ifndef ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_MODULEINFO_H_
 #define ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_MODULEINFO_H_
 
-#include "ElementsKernel/Export.h"
-#include "ElementsKernel/ModuleInfo.h"
+#include "ElementsKernel/Export.h"  // for ELEMENTS_API
 
-namespace Elements {
-namespace Examples {
+namespace Elements::System {
+class ModuleInfo;
+}
 
+namespace Elements::Examples {
+
+/**
+ * Retrieves the module information.
+ *
+ * @return A reference to the `ModuleInfo` object associated with the system.
+ */
 ELEMENTS_API const System::ModuleInfo& getModuleInfo();
 
-}  // namespace Examples
-}  // namespace Elements
-
+}  // namespace Elements::Examples
 
 #endif  // ELEMENTSEXAMPLES_ELEMENTSEXAMPLES_MODULEINFO_H_
 

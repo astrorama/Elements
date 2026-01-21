@@ -239,35 +239,35 @@ class Test(unittest.TestCase):
         self.assertTrue(isinstance(control.var('loc2'), Variable.Scalar))
 
         control.declare('MY_PATH', 'list', False)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'MY_PATH', 'list', True)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'MY_PATH', 'scalar', True)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'MY_PATH', 'scalar', True)
 
         control.declare('loc', 'list', True)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'loc', 'list', False)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'loc', 'scalar', True)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'loc', 'scalar', True)
 
         control.declare('myVar2', 'scalar', False)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'myVar2', 'list', False)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'myVar2', 'list', True)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'myVar2', 'scalar', True)
 
         control.declare('loc2', 'scalar', True)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'loc2', 'list', False)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'loc2', 'list', True)
-        self.failUnlessRaises(
+        self.assertRaises(
             Variable.EnvError, control.declare, 'loc2', 'scalar', False)
 
     def testDelete(self):
@@ -574,8 +574,8 @@ class Test(unittest.TestCase):
         s.set("/some//strange/../nice/./location")
         assert s.value(as_string=True) == "/some/nice/location"
 
-        s.set("http://cern.ch")
-        assert s.value(as_string=True) == "http://cern.ch"
+        s.set("https://cern.ch")
+        assert s.value(as_string=True) == "https://cern.ch"
 
 if __name__ == "__main__":
     unittest.main()

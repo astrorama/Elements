@@ -1,19 +1,23 @@
-include_guard()
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
+include_guard(GLOBAL)
+
+include(GNUInstallDirs)
 
 include(SGSPlatform)
 include(ElementsBuildFlags)
 
 if(HIDE_SYSINC_WARNINGS)
-  set(CMAKE_NO_SYSTEM_FROM_IMPORTED FALSE)  
+  set(CMAKE_NO_SYSTEM_FROM_IMPORTED FALSE)
 else()
   set(CMAKE_NO_SYSTEM_FROM_IMPORTED TRUE)
 endif()
 
 if(NOT DEFINED SQUEEZED_INSTALL)
     set(SQUEEZED_INSTALL ON
-        CACHE STRING "Enable the squizzing of the installation into a prefix directory"
+        CACHE STRING "Enable the squeezing of the installation into a prefix directory"
         FORCE)
-    message(STATUS "Sets the default value for SQUEEZED_INSTALL to ${SQUEEZED_INSTALL}")     
+    message(STATUS "Sets the default value for SQUEEZED_INSTALL to ${SQUEEZED_INSTALL}")
 endif()
 
 # Install Area business
@@ -26,31 +30,47 @@ if(USE_LOCAL_INSTALLAREA)
 endif()
 
 
-
 if(NOT SQUEEZED_INSTALL)
 
   if(DEFINED ENV{SOFTWARE_BASE_VAR})
-    set(ELEMENTS_BASE_VAR "$ENV{SOFTWARE_BASE_VAR}" CACHE STRING "Elements Base Install Variable")
-    message(STATUS "SOFTWARE_BASE_VAR is in the environment: ${ELEMENTS_BASE_VAR}")
+    set(ELEMENTS_BASE_VAR "$ENV{SOFTWARE_BASE_VAR}" CACHE STRING "Elements Base Install Variable" FORCE)
+    message(STATUS "SOFTWARE_BASE_VAR is defined: Setting ELEMENTS_BASE_VAR to ${ELEMENTS_BASE_VAR_TMP}")
   else()
-    set(ELEMENTS_BASE_VAR "EUCLID_BASE" CACHE STRING "Elements Base Install Variable")
-    message(STATUS "SOFTWARE_BASE_VAR is not in the environment: falling back to ${ELEMENTS_BASE_VAR}")
+    set(ELEMENTS_BASE_VAR "" CACHE STRING "Elements Base Install Variable" FORCE)
+    message(STATUS "SOFTWARE_BASE_VAR is not defined")
   endif()
+  message(STATUS "The ELEMENTS_BASE_VAR is set to \"${ELEMENTS_BASE_VAR}\"")
 
 
-  if(DEFINED ENV{${ELEMENTS_BASE_VAR}})
-    set(ELEMENTS_BASE_DIR "$ENV{${ELEMENTS_BASE_VAR}}" CACHE STRING "Elements Base Install Directory from the ${ELEMENTS_BASE_VAR} env variable")
-    message(STATUS "${ELEMENTS_BASE_VAR} is in the environment: ${ELEMENTS_BASE_DIR}")
+  if(NOT ELEMENTS_BASE_VAR STREQUAL "")
+    if(DEFINED ENV{${ELEMENTS_BASE_VAR}})
+      if(NOT $ENV{${ELEMENTS_BASE_VAR}} STREQUAL "")
+        set(ELEMENTS_BASE_DIR "$ENV{${ELEMENTS_BASE_VAR}}" CACHE STRING "Elements Base Install Directory" FORCE)
+        message(STATUS "${ELEMENTS_BASE_VAR} is not empty: Setting ELEMENTS_BASE_DIR to \"${ELEMENTS_BASE_DIR_TMP}\"")
+      else()
+        set(ELEMENTS_BASE_DIR "/opt" CACHE STRING "Elements Base Install Directory" FORCE)
+        message(STATUS "${ELEMENTS_BASE_VAR} is empty. Setting ELEMENTS_BASE_DIR to default /opt")
+      endif()
+    else()
+      set(ELEMENTS_BASE_DIR "/opt" CACHE STRING "Elements Base Install Directory" FORCE)
+      message(STATUS "${ELEMENTS_BASE_VAR} is not defined. Setting ELEMENTS_BASE_DIR to default /opt")
+    endif()
   else()
-    set(ELEMENTS_BASE_DIR "/opt/euclid" CACHE STRING "Euclid Base Install Directory")
-    message(STATUS "${ELEMENTS_BASE_VAR} is not in the environment: using default ${ELEMENTS_BASE_DIR}")
+    set(ELEMENTS_BASE_DIR "/opt" CACHE STRING "Elements Base Install Directory" FORCE)
+    message(STATUS "ELEMENTS_BASE_VAR is empty. Setting ELEMENTS_BASE_DIR to default /opt")
   endif()
-  
+  message(STATUS "The ELEMENTS_BASE_DIR is set to \"${ELEMENTS_BASE_DIR}\"")
+
+  get_filename_component(ELEMENTS_BASE_PARENT_DIR ${ELEMENTS_BASE_DIR} PATH)
+  get_filename_component(ELEMENTS_BASE_PREFIX_DIR ${ELEMENTS_BASE_PARENT_DIR} PATH)
+
+
+
 endif()
 
 
 set(ELEMENTS_DATA_SUFFIXES DBASE;PARAM;EXTRAPACKAGES CACHE STRING
-    "List of (suffix) directories where to look for data packages.")
+    "List of (suffix) directories where to look for data packages." FORCE)
 
 if(NOT USE_LOCAL_INSTALLAREA)
   if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -65,31 +85,22 @@ message(STATUS "The installation location is ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "The squeezing of the installation is ${SQUEEZED_INSTALL}")
 
 set(lib_install_suff lib)
+set(bin_install_suff bin)
 
 if(SQUEEZED_INSTALL)
-  set(lib_install_suff lib64)
-  if(SGS_ARCH STREQUAL x86_64)
-    if(EXISTS /usr/lib64)
-      set(lib_install_suff lib64)
-    else()
-      set(lib_install_suff lib)
-    endif()
-  else()
-    if(EXISTS /usr/lib32)
-      set(lib_install_suff lib32)
-    else()
-      set(lib_install_suff lib)
-    endif()
-  endif()
+
+  set(lib_install_suff ${CMAKE_INSTALL_LIBDIR})
+  set(bin_install_suff ${CMAKE_INSTALL_BINDIR})
+
 endif()
 
-set(CMAKE_LIB_INSTALL_SUFFIX ${lib_install_suff} CACHE STRING "Suffix for the install directory of the libraries")
-set(CMAKE_BIN_INSTALL_SUFFIX bin CACHE STRING "Suffix for the install directory of the binaries")
+set(CMAKE_LIB_INSTALL_SUFFIX ${lib_install_suff} CACHE STRING "Suffix for the install directory of the libraries" FORCE)
+set(CMAKE_BIN_INSTALL_SUFFIX ${bin_install_suff} CACHE STRING "Suffix for the install directory of the binaries" FORCE)
 
 
 
 if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE STRING
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_BIN_INSTALL_SUFFIX} CACHE STRING
 	   "Single build output directory for all executables" FORCE)
 endif()
 if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
@@ -98,34 +109,36 @@ if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
 endif()
 
 
-set(CONF_DIR_NAME "conf" CACHE STRING "Name of the configuration files directory")
-set(AUX_DIR_NAME "auxdir" CACHE STRING "Name of the auxiliary files directory")
-set(MAKE_DIR_NAME "make" CACHE STRING "Name of the make files directory")
-set(DOC_DIR_NAME "doc" CACHE STRING "Name of the documentation directory")
+set(CONF_DIR_NAME "conf" CACHE STRING "Name of the configuration files directory" FORCE)
+set(AUX_DIR_NAME "auxdir" CACHE STRING "Name of the auxiliary files directory" FORCE)
+set(MAKE_DIR_NAME "make" CACHE STRING "Name of the make files directory" FORCE)
+set(DOC_DIR_NAME "doc" CACHE STRING "Name of the documentation directory" FORCE)
 
-set(INCLUDE_INSTALL_SUFFIX include)
+set(INCLUDE_INSTALL_SUFFIX include CACHE STRING "Final suffix for the install directory of the header files" FORCE)
+set(BIN_INSTALL_SUFFIX ${CMAKE_BIN_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the binaries" FORCE)
+set(LIB_INSTALL_SUFFIX ${CMAKE_LIB_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the libraries" FORCE)
+
+
 if(SQUEEZED_INSTALL)
-  set(BIN_INSTALL_SUFFIX bin)
-  set(SCRIPT_INSTALL_SUFFIX bin)
-  set(CONF_INSTALL_SUFFIX share/${CONF_DIR_NAME})
-  set(AUX_INSTALL_SUFFIX share/${AUX_DIR_NAME})
-  set(CMAKE_INSTALL_SUFFIX ${CMAKE_LIB_INSTALL_SUFFIX}/cmake/ElementsProject)
-  set(CMAKE_CONFIG_INSTALL_SUFFIX ${CMAKE_INSTALL_SUFFIX})
-  set(CMAKE_CONFIG_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SUFFIX})
-  set(XML_INSTALL_SUFFIX ${CMAKE_INSTALL_SUFFIX})
-  set(MAKE_INSTALL_SUFFIX share/Elements/${MAKE_DIR_NAME})
-  set(DOC_INSTALL_SUFFIX share/${DOC_DIR_NAME}/${CMAKE_PROJECT_NAME})
+  set(SCRIPT_INSTALL_SUFFIX ${BIN_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the scripts" FORCE)
+  set(CONF_INSTALL_SUFFIX ${CMAKE_INSTALL_DATAROOTDIR}/${CONF_DIR_NAME} CACHE STRING "Final suffix for the install directory of the conf files" FORCE)
+  set(AUX_INSTALL_SUFFIX ${CMAKE_INSTALL_DATAROOTDIR}/${AUX_DIR_NAME} CACHE STRING "Final suffix for the install directory of the aux files" FORCE)
+  set(CMAKE_INSTALL_SUFFIX ${CMAKE_LIB_INSTALL_SUFFIX}/cmake/ElementsProject CACHE STRING "Final suffix for the install directory of the cmake files" FORCE)
+  set(CMAKE_CONFIG_INSTALL_SUFFIX ${CMAKE_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the cmake config files" FORCE)
+  set(CMAKE_CONFIG_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_SUFFIX} CACHE STRING "Final prefix for the install directory of the cmake config files" FORCE)
+  set(XML_INSTALL_SUFFIX ${CMAKE_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the xml files" FORCE)
+  set(MAKE_INSTALL_SUFFIX ${CMAKE_INSTALL_DATAROOTDIR}/Elements/${MAKE_DIR_NAME} CACHE STRING "Final suffix for the install directory of the make files" FORCE)
+  set(DOC_INSTALL_SUFFIX ${CMAKE_INSTALL_DOCDIR} CACHE STRING "Final suffix for the install directory of the doc files" FORCE)
 else()
-  set(BIN_INSTALL_SUFFIX bin)
-  set(SCRIPT_INSTALL_SUFFIX scripts)
-  set(CONF_INSTALL_SUFFIX ${CONF_DIR_NAME})
-  set(AUX_INSTALL_SUFFIX ${AUX_DIR_NAME})
-  set(CMAKE_INSTALL_SUFFIX cmake)
-  set(CMAKE_CONFIG_INSTALL_SUFFIX .)
-  set(CMAKE_CONFIG_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
-  set(XML_INSTALL_SUFFIX .)
-  set(MAKE_INSTALL_SUFFIX ${MAKE_DIR_NAME})
-  set(DOC_INSTALL_SUFFIX ${DOC_DIR_NAME})
+  set(SCRIPT_INSTALL_SUFFIX scripts CACHE STRING "Final suffix for the install directory of the scripts" FORCE)
+  set(CONF_INSTALL_SUFFIX ${CONF_DIR_NAME} CACHE STRING "Final suffix for the install directory of the conf files" FORCE)
+  set(AUX_INSTALL_SUFFIX ${AUX_DIR_NAME} CACHE STRING "Final suffix for the install directory of the aux files" FORCE)
+  set(CMAKE_INSTALL_SUFFIX cmake CACHE STRING "Final suffix for the install directory of the cmake files" FORCE)
+  set(CMAKE_CONFIG_INSTALL_SUFFIX . CACHE STRING "Final suffix for the install directory of the cmake config files" FORCE)
+  set(CMAKE_CONFIG_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX} CACHE STRING "Final prefix for the install directory of the cmake config files" FORCE)
+  set(XML_INSTALL_SUFFIX . CACHE STRING "Final suffix for the install directory of the xml files" FORCE)
+  set(MAKE_INSTALL_SUFFIX ${MAKE_DIR_NAME} CACHE STRING "Final suffix for the install directory of the make files" FORCE)
+  set(DOC_INSTALL_SUFFIX ${DOC_DIR_NAME} CACHE STRING "Final suffix for the install directory of the doc files" FORCE)
 endif()
 
 #------------------------------------------------------------------------------------------------
@@ -161,35 +174,51 @@ endif()
 
 #python business
 
-set(PYTHON_INSTALL_SUFFIX python)
-set(PYTHON_DYNLIB_INSTALL_SUFFIX python/lib-dynload)
+set(PYTHON_INSTALL_SUFFIX python CACHE STRING "Final suffix for the install directory of the python files" FORCE)
+set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the python binary files" FORCE)
 
 if(SQUEEZED_INSTALL)
 
-  find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
+  find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
 
-  execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
+  execute_process(COMMAND "${Python_EXECUTABLE}" "-c"
                   "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"
-                  OUTPUT_VARIABLE PYTHON_INSTALL_SUFFIX
+                  OUTPUT_VARIABLE custom_python_install_suffix
                   ERROR_QUIET
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-
-  get_filename_component(python_install_suffix_parent ${PYTHON_INSTALL_SUFFIX} DIRECTORY)
-
-  set(PYTHON_DYNLIB_INSTALL_SUFFIX ${python_install_suffix_parent}/lib-dynload)
+  set(PYTHON_INSTALL_SUFFIX ${custom_python_install_suffix} CACHE STRING "Final suffix for the install directory of the python files" FORCE)
+  set(PYTHON_DYNLIB_INSTALL_SUFFIX ${PYTHON_INSTALL_SUFFIX} CACHE STRING "Final suffix for the install directory of the python binary files" FORCE)
 
 endif()
 
-get_arch_lib_dir(that_arch)
 
-file(TO_CMAKE_PATH "$ENV{CMAKE_PREFIX_PATH}" current_cmake_prefix_path)
+IF(DEFINED ENV{CMAKE_PREFIX_PATH})
+  file(TO_CMAKE_PATH "$ENV{CMAKE_PREFIX_PATH}" current_env_cmake_prefix_path)
+  set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${current_env_cmake_prefix_path})
+  set(current_cmake_prefix_path ${current_cmake_prefix_path} ${current_env_cmake_prefix_path})
+endif()
+
+if(CMAKE_PREFIX_PATH)
+  list(REMOVE_DUPLICATES CMAKE_PREFIX_PATH)
+endif()
+
+message(DEBUG "ENV CMAKE_PREFIX_PATH:    $ENV{CMAKE_PREFIX_PATH}")
+message(DEBUG "    CMAKE_PREFIX_PATH:    ${CMAKE_PREFIX_PATH}")
+
+
+
+set(current_cmake_prefix_path ${CMAKE_PREFIX_PATH})
 
 set(ELEMENTS_DEFAULT_SEARCH_PATH)
-foreach(_ds ${current_cmake_prefix_path})  
-  list(APPEND ELEMENTS_DEFAULT_SEARCH_PATH ${_ds}/${that_arch}/cmake/ElementsProject)
+foreach(_ds ${current_cmake_prefix_path})
+  list(APPEND ELEMENTS_DEFAULT_SEARCH_PATH ${_ds}/${CMAKE_LIB_INSTALL_SUFFIX}/cmake/ElementsProject)
+  message(STATUS "Adding ${_ds}/${CMAKE_LIB_INSTALL_SUFFIX}/cmake/ElementsProject to the default search path")
 endforeach()
-set(ELEMENTS_USR_SEARCH_PATH /usr/${that_arch}/cmake/ElementsProject)
+
+set(ELEMENTS_USR_SEARCH_PATH /usr/${CMAKE_LIB_INSTALL_SUFFIX}/cmake/ElementsProject)
+message(STATUS "Adding /usr/${CMAKE_LIB_INSTALL_SUFFIX}/cmake/ElementsProject to the default search path")
+
 
 file(TO_CMAKE_PATH "$ENV{XDG_DATA_DIRS}" data_dirs)
 if(data_dirs)
@@ -204,7 +233,7 @@ endif()
 list(APPEND data_paths /usr/share)
 list(REMOVE_DUPLICATES data_paths)
 
-set(DATA_MODULE_PATH ${data_paths} CACHE STRING "List of base directories where to look for data packages.")
+set(DATA_MODULE_PATH ${data_paths} CACHE STRING "List of base directories where to look for data packages." FORCE)
 
 set(SPEC_LIBDIR "%{_prefix}/${CMAKE_LIB_INSTALL_SUFFIX}")
 set(SPEC_PYDIR "%{_prefix}/${PYTHON_INSTALL_SUFFIX}")
@@ -221,4 +250,3 @@ set(SPEC_XMLDIR "%{_prefix}/${XML_INSTALL_SUFFIX}")
 foreach(_do LIB PY PYDYN SCRIPTS CMAKE MAKE CONF AUX DOC XML)
   dir_strip_end(SPEC_${_do}DIR)
 endforeach()
-

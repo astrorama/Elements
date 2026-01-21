@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT GCOVR_FOUND)
 
     find_package(GCov)
@@ -20,4 +22,3 @@ if (NOT GCOVR_FOUND)
 
 
 endif (NOT GCOVR_FOUND)
-

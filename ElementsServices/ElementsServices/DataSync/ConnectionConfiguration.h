@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2012-2020 Euclid Science Ground Segment
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -30,7 +30,8 @@
 
 #include "ElementsServices/DataSync/DataSyncUtils.h"
 
-namespace ElementsServices {
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
 /**
@@ -38,14 +39,16 @@ namespace DataSync {
  * @brief The test data hosting solution.
  */
 enum DataHost {
-  IRODS, WEBDAV,
+  IRODS,
+  WEBDAV,
 };
 
 /**
  * @brief The overwriting policy if the local file already exists.
  */
 enum OverwritingPolicy {
-  ABORT, OVERWRITE,
+  ABORT,
+  OVERWRITE,
 };
 
 /**
@@ -53,15 +56,12 @@ enum OverwritingPolicy {
  * @ingroup ElementsServices
  * @brief Exception raised when a hosting solution is not supported by the tool.
  */
-class ELEMENTS_API UnknownHost: public std::runtime_error {
+class ELEMENTS_API UnknownHost final : public std::runtime_error {
 public:
-  virtual ~UnknownHost() = default;
-  UnknownHost() :
-      std::runtime_error("I don't know this hosting solution!") {
-  }
-  explicit UnknownHost(const std::string& hostName):
-      std::runtime_error("I don't know this hosting solution: " + hostName) {
-  }
+  ~UnknownHost() override = default;
+  UnknownHost() : std::runtime_error("I don't know this hosting solution!") {}
+  explicit UnknownHost(const std::string& hostName)
+      : std::runtime_error("I don't know this hosting solution: " + hostName) {}
 };
 
 /**
@@ -75,13 +75,12 @@ public:
 class ELEMENTS_API ConnectionConfiguration {
 
 public:
-
   virtual ~ConnectionConfiguration() = default;
 
   /**
    * @brief Create a dependency configuration by reading a configuration file.
    */
-  explicit ConnectionConfiguration(const path& configFile);
+  explicit ConnectionConfiguration(const path& filename);
 
   /**
    * @brief Check whether existing local files can be overwritten.
@@ -89,7 +88,6 @@ public:
   bool overwritingAllowed() const;
 
 protected:
-
   void parseConfigurationFile(const path& filename);
 
   void parseHost(const std::string& name);
@@ -97,20 +95,21 @@ protected:
   void parseOverwritingPolicy(const std::string& policy);
 
 public:
-
-  DataHost host;
-  std::string hostUrl;
-  std::string user;
-  std::string password;
-  OverwritingPolicy overwritingPolicy;
-  size_t tries;
-  path distantRoot;
-  path localRoot;
-
+  DataHost          host;
+  std::string       host_url;
+  std::string       user;
+  std::string       password;
+  OverwritingPolicy overwriting_policy;
+  size_t            tries{};
+  path              distant_root;
+  path              local_root;
 };
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements
+
+namespace ElementsServices = Elements::Services;
 
 #endif  // ELEMENTSSERVICES_ELEMENTSSERVICES_DATASYNC_CONNECTIONCONFIGURATION_H_
 

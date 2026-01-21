@@ -16,39 +16,43 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include <string>
+#include "ElementsServices/DataSync/WebdavSynchronizer.h"  // for WebdavSynchronizer, webdavIsInstalled
 
-#include "ElementsServices/DataSync/WebdavSynchronizer.h"
+#include <stdexcept>  // for runtime_error
+#include <string>     // for allocator, operator+, char_traits, to_string, string
 
-namespace ElementsServices {
+#include "ElementsServices/DataSync/ConnectionConfiguration.h"  // for ConnectionConfiguration
+#include "ElementsServices/DataSync/DataSyncUtils.h"            // for checkCall, path
+#include "ElementsServices/DataSync/DataSynchronizer.h"         // for DataSynchronizer
+#include "ElementsServices/DataSync/DependencyConfiguration.h"  // for DependencyConfiguration
+
+namespace Elements {
+inline namespace Services {
 namespace DataSync {
 
 bool webdavIsInstalled() {
-  return checkCall ("wget -h");
+  return checkCall("wget -h");
 }
 
-WebdavSynchronizer::WebdavSynchronizer(
-    const ConnectionConfiguration& connection,
-    const DependencyConfiguration& dependency) :
-        DataSynchronizer(connection, dependency) {
+WebdavSynchronizer::WebdavSynchronizer(const ConnectionConfiguration& connection,
+                                       const DependencyConfiguration& dependency)
+    : DataSynchronizer(connection, dependency) {
   if (not webdavIsInstalled()) {
-    throw std::runtime_error(
-        "You are trying to use WebDAV, "
-        "but it does not seem to be installed.");
+    throw std::runtime_error("You are trying to use WebDAV, "
+                             "but it does not seem to be installed.");
   }
 }
 
-std::string WebdavSynchronizer::createDownloadCommand(
-    path distantFile,
-    path localFile) const {
+std::string WebdavSynchronizer::createDownloadCommand(const path distant_file, const path local_file) const {
   std::string cmd = "wget --no-check-certificate ";
   cmd += " --user=" + m_connection.user;
   cmd += " --password=" + m_connection.password;
-  cmd += " -O " + localFile.string();
-  cmd += " " + m_connection.hostUrl + "/" + distantFile.string();
+  cmd += " -O " + local_file.string();
+  cmd += " " + m_connection.host_url + "/" + distant_file.string();
   cmd += " --tries " + std::to_string(m_connection.tries);
   return cmd;
 }
 
 }  // namespace DataSync
-}  // namespace ElementsServices
+}  // namespace Services
+}  // namespace Elements

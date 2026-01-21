@@ -1,15 +1,17 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if (NOT NOSE_FOUND)
 
-    find_package(PythonInterp ${PYTHON_EXPLICIT_VERSION})
-    
+    find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
+
     set(explicit_nose)
     if(PYTHON_EXPLICIT_VERSION)
       set(explicit_nose nosetests-${PYTHON_EXPLICIT_VERSION})
     endif()
-    
-    
-    if(PYTHONINTERP_FOUND)
-        get_filename_component(_python_path ${PYTHON_EXECUTABLE} PATH)
+
+
+    if(Python_Interpreter_FOUND)
+        get_filename_component(_python_path ${Python_EXECUTABLE} PATH)
         find_program(NOSE_EXECUTABLE
                      NAMES ${explicit_nose} nosetests
                      HINTS ${_python_path})
@@ -30,4 +32,3 @@ if (NOT NOSE_FOUND)
 
 
 endif (NOT NOSE_FOUND)
-

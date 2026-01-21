@@ -1,3 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.20..4.0)
+
 if(NOT GMOCK_FOUND)
 
 find_path(GMOCK_INCLUDE_DIR gmock/gmock.h
@@ -29,4 +31,14 @@ set(GMOCK_INCLUDE_DIRS ${GMOCK_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS} )
 list(REMOVE_DUPLICATES GMOCK_LIBRARIES)
 list(REMOVE_DUPLICATES GMOCK_INCLUDE_DIRS)
 
+endif()
+
+if(GMOCK_FOUND AND NOT TARGET GMock::gmock)
+  add_library(GMock::gmock IMPORTED INTERFACE)
+  target_include_directories(GMock::gmock SYSTEM INTERFACE "${GMOCK_INCLUDE_DIRS}")
+  target_link_libraries(GMock::gmock INTERFACE "${GMOCK_LIBRARIES}")
+  # Display the imported target for the user to know
+  if(NOT ${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+    message(STATUS "  Import target: GMock::gmock")
+ endif()
 endif()
