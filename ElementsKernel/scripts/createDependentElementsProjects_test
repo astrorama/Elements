@@ -49,7 +49,7 @@ echo "BINARY_TAG: ${BINARY_TAG}"
 echo "User_area ${User_area}"
 echo "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}"
 
-
+echo "Make program $(which make)"
 
 cd ${tmploc} || local_clean_exit 1
 
