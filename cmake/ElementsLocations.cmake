@@ -182,7 +182,7 @@ if(SQUEEZED_INSTALL)
   find_package(Python ${PYTHON_EXPLICIT_VERSION} COMPONENTS Interpreter)
 
   execute_process(COMMAND "${Python_EXECUTABLE}" "-c"
-                  "from distutils.sysconfig import get_python_lib; print(get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}').replace('${CMAKE_INSTALL_PREFIX}/',''))"
+                  "import sys, sysconfig; print(sysconfig.get_path('platlib').replace(sys.prefix +'/local/',''))"
                   OUTPUT_VARIABLE custom_python_install_suffix
                   ERROR_QUIET
                   OUTPUT_STRIP_TRAILING_WHITESPACE)
