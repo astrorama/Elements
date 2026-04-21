@@ -588,12 +588,41 @@ if(NOT ELEMENTS_FLAGS_SET)
   endif()
 
 
-  set(CMAKE_CXX_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS} -fno-omit-frame-pointer"
+
+  check_cxx_compiler_flag(-fno-omit-frame-pointer CXX_HAS_NO_OMIT_FRAME_POINTER)
+  check_c_compiler_flag(-fno-omit-frame-pointer C_HAS_NO_OMIT_FRAME_POINTER)
+
+  check_cxx_compiler_flag(-mno-omit-leaf-frame-pointer CXX_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+  check_c_compiler_flag(-mno-omit-leaf-frame-pointer C_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+
+  set(CMAKE_CXX_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS}"
       CACHE STRING "Flags used by the compiler during Debug builds."
       FORCE)
+  if(CXX_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Debug builds."
+        FORCE)
+  endif()
+  if(CXX_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Debug builds."
+        FORCE)
+  endif()
+
   set(CMAKE_C_FLAGS_DEBUG "-g${DEBUG_FORMAT}${DEBUG_LEVEL} ${EXTRA_DEBUG_ARGS} -fno-omit-frame-pointer"
       CACHE STRING "Flags used by the compiler during Debug builds."
       FORCE)
+  if(C_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Debug builds."
+        FORCE)
+  endif()
+  if(C_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Debug builds."
+        FORCE)
+  endif()
+
   if(OPT_DEBUG)
     check_cxx_compiler_flag(-Og CXX_HAS_MINUS_OG)
     if(CXX_HAS_MINUS_OG)
@@ -610,12 +639,33 @@ if(NOT ELEMENTS_FLAGS_SET)
   endif()
 
 
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL} -fno-omit-frame-pointer"
+  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL}"
       CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
       FORCE)
-  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL} -fno-omit-frame-pointer"
+  if(CXX_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
+        FORCE)
+  endif()
+  if(CXX_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
+        FORCE)
+  endif()
+
+  set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g${DEBUG_FORMAT}${DEBUG_LEVEL}"
       CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
       FORCE)
+  if(C_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
+        FORCE)
+  endif()
+  if(C_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during Release with Debug Info builds."
+        FORCE)
+  endif()
 
   if(CXX_HAS_LTO)
     set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-flto ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}"
@@ -626,20 +676,62 @@ if(NOT ELEMENTS_FLAGS_SET)
         FORCE)
   endif()
 
-  set(CMAKE_CXX_FLAGS_COVERAGE "--coverage -fno-omit-frame-pointer"
+  set(CMAKE_CXX_FLAGS_COVERAGE "--coverage"
       CACHE STRING "Flags used by the compiler during coverage builds."
       FORCE)
-  set(CMAKE_C_FLAGS_COVERAGE "--coverage -fno-omit-frame-pointer"
+  if(CXX_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_COVERAGE} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during coverage builds."
+        FORCE)
+  endif()
+  if(CXX_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_COVERAGE} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during coverage builds."
+        FORCE)
+  endif()
+
+  set(CMAKE_C_FLAGS_COVERAGE "--coverage"
       CACHE STRING "Flags used by the compiler during coverage builds."
       FORCE)
+  if(C_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_COVERAGE} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during coverage builds."
+        FORCE)
+  endif()
+  if(C_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_COVERAGE "${CMAKE_C_FLAGS_COVERAGE} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during coverage builds."
+        FORCE)
+  endif()
 
   # @todo Check why the -D_GLIBCXX_PROFILE cannot be used with Boost.
-  set(CMAKE_CXX_FLAGS_PROFILE "-g -pg -fno-omit-frame-pointer"
+  set(CMAKE_CXX_FLAGS_PROFILE "-g -pg"
       CACHE STRING "Flags used by the compiler during profile builds."
       FORCE)
-  set(CMAKE_C_FLAGS_PROFILE "-g -pg -fno-omit-frame-pointer"
+  if(CXX_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_PROFILE} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during profile builds."
+        FORCE)
+  endif()
+  if(CXX_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_PROFILE} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during profile builds."
+        FORCE)
+  endif()
+
+  set(CMAKE_C_FLAGS_PROFILE "-g -pg"
       CACHE STRING "Flags used by the compiler during profile builds."
       FORCE)
+  if(C_HAS_NO_OMIT_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_PROFILE "${CMAKE_C_FLAGS_PROFILE} -fno-omit-frame-pointer"
+        CACHE STRING "Flags used by the compiler during profile builds."
+        FORCE)
+  endif()
+  if(C_HAS_NO_OMIT_LEAF_FRAME_POINTER)
+    set(CMAKE_C_FLAGS_PROFILE "${CMAKE_C_FLAGS_PROFILE} -mno-omit-leaf-frame-pointer"
+        CACHE STRING "Flags used by the compiler during profile builds."
+        FORCE)
+  endif()
 
   # The others are already marked as 'advanced' by CMake, these are custom.
   mark_as_advanced(CMAKE_C_FLAGS_COVERAGE CMAKE_CXX_FLAGS_COVERAGE
