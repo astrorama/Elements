@@ -5,7 +5,6 @@ assert sys.version_info >= (2, 6), "Python 2.6 required"
 
 import logging
 
-
 __all__ = []
 
 # Prepare the search path for environment XML files
@@ -129,6 +128,9 @@ class Script(object):
         parser.add_option("--py",
                           action="store_const", const="py", dest="shell",
                           help="Print the environment as Python dictionary.")
+        parser.add_option("--json",
+                          action="store_const", const="json", dest="shell",
+                          help="Print the environment as JSON dictionary.")
 
         parser.add_option('--verbose', action='store_const',
                           const=logging.INFO, dest='log_level',
@@ -143,6 +145,7 @@ class Script(object):
         parser.disable_interspersed_args()
         parser.set_defaults(actions=[],
                             ignore_environment=False,
+                            json=False,
                             log_level=logging.WARNING)
 
         self.parser = parser
@@ -187,7 +190,7 @@ class Script(object):
 
         # apply all the actions
         for action, args in self.opts.actions:
-            f=getattr(control, action)
+            f = getattr(control, action)
             f(*args)
             # apply(getattr(control, action), args)
 
@@ -221,8 +224,11 @@ class Script(object):
         if self.opts.shell == 'py':
             from pprint import pprint
             pprint(self.env)
+        elif self.opts.shell == 'json':
+            import json
+            print(json.dumps(self.env, indent=2))
         else:
-            template = {'sh':  "export %s='%s'",
+            template = {'sh': "export %s='%s'",
                         'csh': "setenv %s '%s'"}.get(self.opts.shell, "%s=%s")
             for nv in sorted(self.env.items()):
                 print(template % nv)
