@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.6] - 22035-04-29
+
+### Removed
+- Remove unused boost::filesystem includes and is_regular usage from tests
+    - Clean up redundant includes in Auxiliary, Configuration, and Path tests
+    - Remove unused is_regular and is_regular_file checks
+    - Simplify boost::filesystem usage to only required functions
+    - Improve code clarity and maintainability in test files
+
 
 ## [6.3.5] - 2025-12-11
 
