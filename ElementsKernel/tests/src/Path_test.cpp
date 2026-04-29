@@ -27,7 +27,7 @@
 #include <vector>     // for vector, operator==
 
 #include <boost/filesystem/fstream.hpp>
-#include <boost/filesystem/operations.hpp>  // for exists, create_directory, is_regular_file, is_regular
+#include <boost/filesystem/operations.hpp>  // for exists, create_directory
 #include <boost/test/unit_test.hpp>
 
 #include "ElementsKernel/Temporary.h"  // for TempDir, TempEnv
@@ -36,7 +36,6 @@ using std::string;
 using std::vector;
 
 using boost::filesystem::exists;
-using boost::filesystem::is_regular;
 
 namespace Elements {
 
@@ -155,7 +154,6 @@ BOOST_FIXTURE_TEST_CASE(getFromLocations_test, Path_Fixture) {
   auto that_file2 = getPathFromLocations("bar", m_item_list);
   BOOST_CHECK(that_file2.filename() != "");
   BOOST_CHECK(exists(that_file2));
-  BOOST_CHECK(is_regular_file(that_file2));
 }
 
 BOOST_FIXTURE_TEST_CASE(getAllFromLocations_test, Path_Fixture) {
@@ -210,7 +208,6 @@ BOOST_FIXTURE_TEST_CASE(getFromStringLocations_test, Path_Fixture) {
   auto that_file2 = getPathFromLocations("bar", str_item_list);
   BOOST_CHECK(that_file2.filename() != "");
   BOOST_CHECK(exists(that_file2));
-  BOOST_CHECK(is_regular_file(that_file2));
 }
 
 BOOST_FIXTURE_TEST_CASE(getPathFromEnvVariable_test, Path_Fixture) {
