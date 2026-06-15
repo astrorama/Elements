@@ -16,10 +16,10 @@ find_package(ElementsProject)
 include(ElementsDefaults)
 
 # Declare project name and version
-elements_project(Elements 6.3.6 DESCRIPTION "A C++ base framework for the Euclid Software.")
+elements_project(Elements 6.3.7 DESCRIPTION "A C++ base framework for the Euclid Software.")
 
 # This test does not really fit in a subdirectory.
 
 add_python_test_dir(cmake/scripts/EnvConfig PREFIX cmake.EnvConfig PATTERN "Test*.py")
-
+OB61;8203;1c
 #print_all_variables()
