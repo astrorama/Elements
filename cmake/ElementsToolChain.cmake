@@ -7,6 +7,8 @@ message(STATUS "----------------------------------------------------------------
 message(STATUS "                  --- ElementsToolChain ---                            ")
 message(STATUS "-----------------------------------------------------------------------")
 
+message(STATUS "CMAKE_VERSION: ${CMAKE_VERSION}")
+
 if (CMAKE_GENERATOR MATCHES "Ninja")
     file(
         WRITE "${CMAKE_BINARY_DIR}/GNUMakeRulesOverwrite.cmake"
