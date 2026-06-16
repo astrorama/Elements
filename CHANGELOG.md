@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [6.3.7] - 2026-06-16
+
+### Fixed
+- Fix the backward compatibility with interface variable for CMake version
+  before 3.19.
+
+
 ## [6.3.6] - 2026-04-29
 
 ### Removed
