@@ -52,7 +52,7 @@ jobs:
         id: build
         uses: astrorama/actions/elements-build-rpm@v3.5
       - name: Upload RPM to repository
-        uses: astrorama/actions/upload-rpm@v3.4
+        uses: astrorama/actions/upload-rpm@feature/move_to_astromatic
         if: ${{ github.repository_owner == 'astrorama' }}
         env:
           REPOSITORY_USER: ${{ secrets.REPOSITORY_USER }}
